@@ -1,18 +1,9 @@
 from django.conf.urls.defaults import patterns, include, url
 
-# Uncomment the next two lines to enable the admin:
-# from django.contrib import admin
-# admin.autodiscover()
-
-urlpatterns = patterns('',
-                       (r'^$', 'webgames.diggems.views.new_game'),
-    # Examples:
-    # url(r'^$', 'webgames.views.home', name='home'),
-    # url(r'^webgames/', include('webgames.foo.urls')),
-
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
-    # url(r'^admin/', include(admin.site.urls)),
-)
+urlpatterns = patterns (
+    '',
+    (r'^game/(?P<game_id>\d+)/move/$', 'diggems.views.move'),
+    (r'^game/(?P<game_id>\d+)/join/$', 'diggems.views.join_game'),
+    (r'^game/(?P<game_id>\d+)/$', 'diggems.views.game'),
+    (r'^$', 'diggems.views.new_game'),
+ )

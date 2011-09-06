@@ -1,0 +1,22 @@
+<html>
+<header>
+<title>DigGems</title>
+<script type="text/javascript">
+// <![CDATA[
+var params = {
+'state': {{ state }},
+'channel': '{{ channel }}'{% if mine %},
+'mine': '{{ mine }}'{% endif %}
+};
+// ]]>
+</script>
+<script type="text/javascript" src="/static/game.js"></script>
+</header>
+<body>
+<canvas id="game_canvas" width="415" height="415">
+Atualize seu navegador.
+</canvas>
+<p id="message">{% if token %}Send <a href="{% url diggems.views.join_game game_id %}?token={{ token }}">this url</a> to your buddy for him to join this game.<br />
+{% endif %}</p>
+</body>
+</html>
