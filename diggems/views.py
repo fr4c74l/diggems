@@ -76,7 +76,7 @@ def game(request, game_id):
     else:
         masked = mine_mask_encoded(game.mine)
         if masked.count('?') != 256:
-            data['mine'] = mine_mask_encoded(game.mine)
+            data['mine'] = masked
 
     return render_to_response('game.html', data)
 
