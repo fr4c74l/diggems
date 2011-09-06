@@ -69,6 +69,7 @@ def game(request, game_id):
         data['channel'] = game.p2.channel
     else:
         return HttpResponseForbidden()
+    data['player'] = player
 
     if game.state == 0: # Uninitialized game
         data['token'] = game.token
@@ -92,7 +93,7 @@ def move(request, game_id):
         n = int(request.GET['n'])
         if not (0 <= m <= 15 and 0 <= n <= 15):
             raise ValueError
-    except ValueError:
+    except:
         return HttpResponseBadRequest()
 
     mine = mine_decode(game.mine)
