@@ -57,17 +57,10 @@ function draw_square(m, n) {
     function draw() { ctx.fillRect(x0,y0,25,25); }
 
     tile = idx(m, n)
-    if((tile >= 0 && tile <= 8) || tile == 'r' || tile == 'b') {
+    if(tile >= 0 && tile <= 8) {
 	ctx.fillStyle = 'rgb(255,216,161)';
 	draw();
-	if(tile == 'r' || tile == 'b') {
-	    ctx.fillStyle = (tile == 'b') ? 'rgb(50,50,200)' : 'rgb(200,50,50)';
-	    ctx.beginPath();
-	    ctx.arc(x0+12.5, y0+12.5, 5, 0, Math.PI*2, true);
-	    ctx.closePath();
-	    ctx.fill();
-	}
-	else if(tile > 0) {
+	if(tile > 0) {
 	    ctx.fillStyle = TEXT_COLOR[tile-1];
 	    ctx.fillText(tile, x0 + 12.5, y0 + 12.5);
 	}
@@ -75,6 +68,14 @@ function draw_square(m, n) {
     else {
 	ctx.fillStyle = 'rgb(227,133,0)';
 	draw();
+
+	if(tile == 'r' || tile == 'b') {
+	    ctx.fillStyle = (tile == 'b') ? 'rgb(50,50,200)' : 'rgb(200,50,50)';
+	    ctx.beginPath();
+	    ctx.arc(x0+12.5, y0+12.5, 5, 0, Math.PI*2, true);
+	    ctx.closePath();
+	    ctx.fill();
+	}
     }
 }
 
@@ -101,7 +102,7 @@ function on_click(ev) {
 	if (request.readyState == 4) { 
 	    if(request.status == 200) {
 		var parser = /(\d+),(\d+):(.)/;
-		var changes = request.responseText.split(' ');
+		var changes = request.responseText.split('\n');
 		for(var i = 0; i < changes.length; ++i) {
 		    var res = parser.exec(changes[i]);
 		    if(res) {

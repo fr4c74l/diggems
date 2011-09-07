@@ -103,8 +103,8 @@ def move(request, game_id):
         if mine[m][n] < 10:
             old = mine[m][n]
             mine[m][n] += 10
-            if player == '2':
-                mine[m][n] += 1
+            if mine[m][n] == 19 and player == '2':
+                mine[m][n] = 20
             revealed.append((m, n, tile_mask(mine[m][n])))
             if old == 0:
                 for_each_surrounding(m, n, reveal)
