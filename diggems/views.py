@@ -60,7 +60,8 @@ def join_game(request, game_id):
 def game(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
 
-    data = {'state': game.state}
+    data = {'state': game.state,
+            'game_id': game_id}
 
     player = request.session.get(game.id, '0')
     if player == '1':
@@ -73,7 +74,6 @@ def game(request, game_id):
 
     if game.state == 0: # Uninitialized game
         data['token'] = game.token
-        data['game_id'] = game_id
     else:
         masked = mine_mask_encoded(game.mine)
         if masked.count('?') != 256:
@@ -103,7 +103,7 @@ def move(request, game_id):
         if mine[m][n] < 10:
             old = mine[m][n]
             mine[m][n] += 10
-            if player == 2:
+            if player == '2':
                 mine[m][n] += 1
             revealed.append((m, n, tile_mask(mine[m][n])))
             if old == 0:

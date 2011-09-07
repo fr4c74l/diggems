@@ -1,7 +1,8 @@
 var ctx;
+var mine = Array();
 
 function idx(m, n) {
-    return params.mine[m*16 + n]
+    return mine[m*16 + n]
 }
 
 /*
@@ -67,7 +68,7 @@ function draw_square(m, n) {
 	    ctx.fill();
 	}
 	else if(tile > 0) {
-	    ctx.fillStyle = TEXT_COLOR[tile];
+	    ctx.fillStyle = TEXT_COLOR[tile-1];
 	    ctx.fillText(tile, x0 + 12.5, y0 + 12.5);
 	}
     }
@@ -78,8 +79,7 @@ function draw_square(m, n) {
 }
 
 function on_click(ev) {
-    /*
-    if(ev.button != 0)
+    if(ev.button != 0 || params.player != params.state)
 	return;
 
     var m;
@@ -93,18 +93,36 @@ function on_click(ev) {
     m = Math.floor(m / 26);
     n = Math.floor(n / 26);
 
-    function reveal(m, n) {
-	if(map[m][n].visible)
-	    return;
+    // TODO: indicate activity
 
-	map[m][n].visible = true;
-	var count = draw_square(m, n);
-	if(count === 0)
-	    for_each_neighbor(m, n, reveal);
-    }
-
-    reveal(m, n);
-    */
+    var request = new XMLHttpRequest();
+    request.open('GET', '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n, true);
+    request.onreadystatechange = function(ev){
+	if (request.readyState == 4) { 
+	    if(request.status == 200) {
+		var parser = /(\d+),(\d+):(.)/;
+		var changes = request.responseText.split(' ');
+		for(var i = 0; i < changes.length; ++i) {
+		    var res = parser.exec(changes[i]);
+		    if(res) {
+			var m = parseInt(res[1]);
+			var n = parseInt(res[2]);
+			if(i == 0) {
+			    var me = params.player == 1 ? 'r' : 'b';
+			    if(res[3] != me)
+				params.state == (params.player % 2) + 1;
+			}
+			// TODO: validate data
+			mine[m*16 + n] = res[3];
+			draw_square(m, n);
+		    }
+		}
+	    }
+	    // TODO: else: treat error
+	    // TODO: stop activity indication
+	}
+    };
+    request.send(null);
 }
 
 function init() {
@@ -121,9 +139,10 @@ function init() {
     ctx.textBaseline = "middle";
 
     if(!params.mine) {
-	params.mine = '';
 	for(var i = 0; i < 256; ++i)
-	    params.mine += '?';
+	    mine[i] = '?';
+    } else {
+	mine = params.mine.split('');
     }
 
     // Draw map
