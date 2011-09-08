@@ -55,6 +55,7 @@ def join_game(request, game_id):
     game.state = 1
     game.save()
 
+    post_update(game.p1.channel, str(game.state))
     return HttpResponseRedirect('/game/' + game_id)
 
 def game(request, game_id):
@@ -130,6 +131,6 @@ def move(request, game_id):
     else:
         other = game.p1
 
-    result = 'm\n'.join(map(lambda x: '%d,%d:%c\n' % x, revealed))
+    result = str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
     post_update(other.channel, result)
-    return HttpResponse(result)
+    return HttpResponse(result, mimetype='text/plain')

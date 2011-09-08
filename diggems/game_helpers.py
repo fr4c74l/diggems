@@ -1,6 +1,9 @@
 import itertools
 import random
+import httplib
 import radix64
+
+EVENT_SERVER = '127.0.0.1'
 
 def tile_encode(tile):
     return chr(tile + 10)
@@ -46,12 +49,33 @@ def for_each_surrounding(m, n, func):
 def gen_token():
     return radix64.encode(random.getrandbits(132))
 
-# Stubs:
+# Event dealing:
 def create_channel():
-    return gen_token()
+    channel = gen_token()
+    try:
+        conn = httplib.HTTPConnection(EVENT_SERVER)
+        conn.request('PUT', '/ctrl_event?id=' + channel,
+                     headers={'Content-Length': 0})
+        resp = conn.getresponse()
+    except:
+        pass # TODO: log error
+
+    return channel
 
 def delete_channel(channel):
-    pass
+    try:
+        conn = httplib.HTTPConnection(EVENT_SERVER)
+        conn.request('DELETE', '/ctrl_event?id=' + channel)
+        resp = conn.getresponse()
+    except:
+        pass # TODO: log error
 
 def post_update(channel, msg):
-    pass
+    try:
+        conn = httplib.HTTPConnection(EVENT_SERVER)
+        conn.request('POST', '/ctrl_event?id=' + channel, msg,
+                     headers={'Content-Type': 'text/plain'})
+        resp = conn.getresponse()
+    except:
+        pass # TODO: log error
+
