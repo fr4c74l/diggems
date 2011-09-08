@@ -89,6 +89,13 @@ def move(request, game_id):
     if (not 1 <= game.state <= 2) or str(game.state) != player:
         return HttpResponseForbidden()
 
+    if player == '1':
+        me = game.p1
+        other = game.p2
+    else:
+        me = game.p2
+        other = game.p1
+
     try:
         m = int(request.GET['m'])
         n = int(request.GET['n'])
@@ -98,22 +105,42 @@ def move(request, game_id):
         return HttpResponseBadRequest()
 
     mine = mine_decode(game.mine)
-    revealed = []
 
+    if request.GET.get('bomb', 'n') == 'y':
+        if not me.has_bomb:
+            return HttpResponseBadRequest()
+        me.has_bomb = False
+        me.save()
+        m0 = max(m-2, 0)
+        m5 = min(m+2, 15)
+        to_reveal = itertools.product(xrange(max(m-2,0),
+                                                 min(m+3, 16)),
+                                          xrange(max(n-2,0),
+                                                 min(n+3, 16)))
+        bomb_used = True
+    else:
+        to_reveal = [(m, n)]
+        bomb_used = False
+
+    revealed = []
     def reveal(m, n):
-        if mine[m][n] < 10:
-            old = mine[m][n]
-            mine[m][n] += 10
-            if mine[m][n] == 19 and player == '2':
-                mine[m][n] = 20
-            revealed.append((m, n, tile_mask(mine[m][n])))
-            if old == 0:
-                for_each_surrounding(m, n, reveal)
-    reveal(m, n)
+        if mine[m][n] >= 10:
+            return
+
+        old = mine[m][n]
+        mine[m][n] += 10
+        if mine[m][n] == 19 and player == '2':
+            mine[m][n] = 20
+        revealed.append((m, n, tile_mask(mine[m][n])))
+        if old == 0:
+            for_each_surrounding(m, n, reveal)
+
+    for m, n in to_reveal:
+        reveal(m, n)
 
     if revealed and revealed[0]:
         m, n, s = revealed[0]
-        if mine[m][n] <= 18:
+        if mine[m][n] <= 18 or bomb_used:
             game.state = (game.state % 2) + 1
 
     new_mine = mine_encode(mine)
@@ -125,11 +152,6 @@ def move(request, game_id):
 
     game.mine = new_mine
     game.save()
-
-    if player == '1':
-        other = game.p2
-    else:
-        other = game.p1
 
     result = str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
     post_update(other.channel, result)
