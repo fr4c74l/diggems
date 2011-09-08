@@ -71,8 +71,7 @@ function set_state(state) {
     }
     else if(state == 3 || state == 4) {
 	msg = 'Fim de jogo. ';
-	state -= 2;
-	if(state == params.player)
+	if((state - 2) == params.player)
 	    msg += 'Você venceu!';
 	else
 	    msg += 'Você perdeu.';
@@ -104,6 +103,9 @@ function handle_event(msg) {
 }
 
 function register_event() {
+    if(params.state >= 3 || register_event.last_status == 410)
+	return; // Game is over
+
     event_request.open('GET', '/event?id='+ params.channel, true);
     if(register_event.etag)
 	event_request.setRequestHeader('If-None-Match', register_event.etag);
@@ -111,6 +113,7 @@ function register_event() {
 	event_request.setRequestHeader('If-Modified-Since', register_event.last_modified);
     event_request.onreadystatechange = function(ev){
 	if (event_request.readyState == 4) {
+	    register_event.last_status == event_request.status;
 	    if(event_request.status == 200) {
 		register_event.error_count = 0;
 		register_event.etag = event_request.getResponseHeader('Etag')

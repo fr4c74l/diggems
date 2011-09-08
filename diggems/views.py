@@ -148,11 +148,16 @@ def move(request, game_id):
     point_p2 = new_mine.count(tile_encode(20))
 
     if point_p1 >= 26 or point_p2 >= 26:
-        pass # TODO: Game Over
+        game.state = int(player) + 2
 
     game.mine = new_mine
     game.save()
 
     result = str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
+
     post_update(other.channel, result)
+    if game.state >= 3:
+        delete_channel(game.p1.channel)
+        delete_channel(game.p2.channel)
+        
     return HttpResponse(result, mimetype='text/plain')
