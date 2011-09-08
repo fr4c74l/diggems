@@ -120,7 +120,7 @@ function register_event() {
 		register_event();
 	    }
 	    else {
-		// If this is the first error, try again righ away
+		// If this is the first error, try again right away
 		// If not, delay some time before trying again
 		if(register_event.error_count)
 		    register_event.error_count = Math.min(register_event.error_count + 1, 10);
