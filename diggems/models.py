@@ -1,9 +1,9 @@
 from django.db import models
 
 class Player(models.Model):
-    channel = models.CharField(max_length=22)
+    channel = models.CharField(max_length=22, unique=True)
     has_bomb = models.BooleanField(default=True)
-    last_seen = models.DateTimeField()
+    last_seen = models.DateTimeField(auto_now=True)
 
 class Game(models.Model):
     mine = models.CharField(max_length=256)

@@ -50,8 +50,7 @@ def gen_token():
     return radix64.encode(random.getrandbits(132))
 
 # Event dealing:
-def create_channel():
-    channel = gen_token()
+def create_channel(channel):
     try:
         conn = httplib.HTTPConnection(EVENT_SERVER)
         conn.request('PUT', '/ctrl_event?id=' + channel,
@@ -59,8 +58,6 @@ def create_channel():
         resp = conn.getresponse()
     except:
         pass # TODO: log error
-
-    return channel
 
 def delete_channel(channel):
     try:

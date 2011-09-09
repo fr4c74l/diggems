@@ -4,6 +4,7 @@ from game_helpers import *
 from models import *
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
+from django.db import IntegrityError
 
 def new_game(request):
     mine = [[0] * 16 for i in xrange(16)]
@@ -22,9 +23,13 @@ def new_game(request):
             for_each_surrounding(m, n, inc_count)
 
     p1 = Player()
-    p1.channel = create_channel()
-    p1.last_seen = datetime.datetime.now()
-    p1.save()
+    while True:
+        try:
+            p1.channel = gen_token()
+            p1.save()
+        except IntegrityError:
+            continue
+        break
 
     game = Game()
     game.mine = mine_encode(mine)
@@ -46,10 +51,15 @@ def join_game(request, game_id):
         return HttpResponseForbidden()
 
     request.session[game.id] = '2'
+
     p2 = Player()
-    p2.channel = create_channel()
-    p2.last_seen = datetime.datetime.now()
-    p2.save()
+    while True:
+        try:
+            p2.channel = gen_token()
+            p2.save()
+        except IntegrityError:
+            continue
+        break
 
     game.p2 = p2
     game.state = 1
@@ -83,6 +93,8 @@ def game(request, game_id):
         if masked.count('?') != 256:
             data['mine'] = masked
 
+    me.save()
+
     return render_to_response('game.html', data)
 
 def move(request, game_id):
@@ -113,7 +125,6 @@ def move(request, game_id):
         if not me.has_bomb:
             return HttpResponseBadRequest()
         me.has_bomb = False
-        me.save()
         m0 = max(m-2, 0)
         m5 = min(m+2, 15)
         to_reveal = itertools.product(xrange(max(m-2,0),
@@ -153,14 +164,20 @@ def move(request, game_id):
     if point_p1 >= 26 or point_p2 >= 26:
         game.state = int(player) + 2
 
-    game.mine = new_mine
-    game.save()
-
     result = str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
 
     post_update(other.channel, result)
-    if game.state >= 3:
+    if game.state >= 3: # Game is over
         delete_channel(game.p1.channel)
         delete_channel(game.p2.channel)
-        
+        game.p1.delete()
+        game.p2.delete()
+        game.p1 = None
+        game.p2 = None
+    else:
+        me.save()
+
+    game.mine = new_mine
+    game.save()
+
     return HttpResponse(result, mimetype='text/plain')
