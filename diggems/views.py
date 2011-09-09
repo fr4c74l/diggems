@@ -66,11 +66,14 @@ def game(request, game_id):
 
     player = request.session.get(game.id, '0')
     if player == '1':
-        data['channel'] = game.p1.channel
+        me = game.p1
     elif player == '2':
-        data['channel'] = game.p2.channel
+        me = game.p2
     else:
         return HttpResponseForbidden()
+
+    data['bomb_used'] = not me.has_bomb
+    data['channel'] = me.channel
     data['player'] = player
 
     if game.state == 0: # Uninitialized game

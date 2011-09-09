@@ -3,8 +3,46 @@ var mine = Array();
 var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
 
+// Bomb things:
+var bomb = {
+    'allowed': false,
+    'active': false
+};
+
+/* Displays the bomb if it is to be shown. */
+function display_bomb() {
+    var visible = !params.bomb_used && bomb.allowed;
+ 
+    document.getElementById('bomb')
+	.style.setProperty('visibility',
+			   visible ? 'visible' : 'hidden', null);
+}
+
+function toggle_bomb(ev) {
+    var button = document.getElementById('bomb');
+
+    if(params.bomb_used || !bomb.allowed) {
+	bomb.active = false;
+	display_bomb();
+	return;
+    }
+
+    // TODO: marker over the bomb area
+    //var canvas =  document.getElementById('game_canvas');
+
+    if(!bomb.active) {
+	bomb.active = true;
+	button.style.setProperty('background-color', 'red', null);
+	//toggle_bomb.move_event = canvas.addEventListener('move', on_click, false);
+    }
+    else {
+	bomb.active = false;
+	button.style.setProperty('background-color', 'green', null);
+    }
+}
+
 function idx(m, n) {
-    return mine[m*16 + n]
+    return mine[m*16 + n];
 }
 
 function draw_square(m, n) {
@@ -55,6 +93,13 @@ function update_points() {
 	else if(mine[i] == 'b')
 	    ++p2;
     }
+
+    if(params.player == 1)
+	bomb.allowed = p2 > p1;
+    else
+	bomb.allowed = p1 > p2;
+
+    display_bomb();
 
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
@@ -159,11 +204,21 @@ function on_click(ev) {
 
     // TODO: indicate activity
 
-    move_request.open('GET', '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n, true);
+    var url = '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n;
+    var bombed = false;
+    if(bomb.active) {
+	url += '&bomb=y';
+	bombed = true;
+    }
+    move_request.open('GET', url, true);
     move_request.onreadystatechange = function(ev){
 	if (move_request.readyState == 4) {
 	    if(move_request.status == 200) {
 		handle_event(move_request.responseText);
+		if(bombed) {
+		    params.bomb_used = true;
+		    toggle_bomb();
+		}
 	    }
 	    // TODO: else: treat error
 	    // TODO: stop activity indication
@@ -173,8 +228,8 @@ function on_click(ev) {
 }
 
 function init() {
-    var elem = document.getElementById('game_canvas');
-    if (!elem || !elem.getContext) {
+    var canvas = document.getElementById('game_canvas');
+    if (!canvas || !canvas.getContext) {
 	// Panic return
 	// TODO: add friendly message explaining why IE sucks
 	return;
@@ -187,7 +242,7 @@ function init() {
 	mine = params.mine.split('');
     }
 
-    ctx = elem.getContext('2d');
+    ctx = canvas.getContext('2d');
     ctx.font = "17pt Arial, Helvetica, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -205,7 +260,8 @@ function init() {
     register_event();
 
     // Wait for user
-    elem.addEventListener('click', on_click, false);
+    canvas.addEventListener('click', on_click, false);
+    document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
 }
 
 window.addEventListener('load', init, false);
