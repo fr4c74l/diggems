@@ -37,20 +37,20 @@ def new_game(request):
     game.p1 = p1
     game.save()
 
-    request.session[game.id] = '1'
+    request.session[game.token] = '1'
 
     return HttpResponseRedirect('/game/' + str(game.id))
 
 def join_game(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
 
-    if request.session.get(game.id, '0') in ('1', '2'):
+    if request.session.get(game.token, '0') in ('1', '2'):
         return HttpResponseRedirect('/game/' + str(game.id))
 
     if game.state != 0 or request.GET['token'] != game.token:
         return HttpResponseForbidden()
 
-    request.session[game.id] = '2'
+    request.session[game.token] = '2'
 
     p2 = Player()
     while True:
@@ -74,7 +74,7 @@ def game(request, game_id):
     data = {'state': game.state,
             'game_id': game_id}
 
-    player = request.session.get(game.id, '0')
+    player = request.session.get(game.token, '0')
     if player == '1':
         me = game.p1
     elif player == '2':
@@ -99,7 +99,7 @@ def game(request, game_id):
 
 def move(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
-    player = request.session.get(game.id, '0')
+    player = request.session.get(game.token, '0')
 
     if (not 1 <= game.state <= 2) or str(game.state) != player:
         return HttpResponseForbidden()
@@ -128,9 +128,9 @@ def move(request, game_id):
         m0 = max(m-2, 0)
         m5 = min(m+2, 15)
         to_reveal = itertools.product(xrange(max(m-2,0),
-                                                 min(m+3, 16)),
-                                          xrange(max(n-2,0),
-                                                 min(n+3, 16)))
+                                             min(m+3, 16)),
+                                      xrange(max(n-2,0),
+                                             min(n+3, 16)))
         bomb_used = True
     else:
         to_reveal = [(m, n)]
@@ -164,20 +164,16 @@ def move(request, game_id):
     if point_p1 >= 26 or point_p2 >= 26:
         game.state = int(player) + 2
 
+    game.mine = new_mine
+    game.save()
+
     result = str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
 
     post_update(other.channel, result)
     if game.state >= 3: # Game is over
-        delete_channel(game.p1.channel)
-        delete_channel(game.p2.channel)
         game.p1.delete()
         game.p2.delete()
-        game.p1 = None
-        game.p2 = None
     else:
         me.save()
-
-    game.mine = new_mine
-    game.save()
 
     return HttpResponse(result, mimetype='text/plain')
