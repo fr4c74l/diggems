@@ -6,6 +6,9 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
 from django.db import IntegrityError
 
+def index(request):
+    return render_to_response('index.html')
+
 def new_game(request):
     mine = [[0] * 16 for i in xrange(16)]
 
