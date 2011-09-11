@@ -4,22 +4,33 @@
 </header>
 <body>
 <div id="fb-root"></div>
-<script src="http://connect.facebook.net/en_US/all.js"></script>
+<script src="//connect.facebook.net/pt_BR/all.js"></script>
 <script>
   FB.init({
-  appId: '264111940275149', status: true,
-  cookie: true, xfbml: true,
-  // channelURL: 'http://WWW.MYDOMAIN.COM/channel.html',
-  oauth: true,
+  appId: '{{ fb_app_id }}', status: true,
+  cookie: true, oauth: true,
+  channelURL: 'http://vella.no-ip.org/fb/channel/',
   });
 </script>
-<div id="fb-root"></div>
-<script>(function(d){
-  var js, id = 'facebook-jssdk'; if (d.getElementById(id)) {return;}
-  js = d.createElement('script'); js.id = id; js.async = true;
-  js.src = "//connect.facebook.net/en_US/all.js#appId=264111940275149&xfbml=1";
-  d.getElementsByTagName('head')[0].appendChild(js);
-}(document));</script>
-<fb:login-button show-faces="true" width="200">Login via Facebook</fb:login-button>
+<script>
+function fb_login() {
+FB.ui(
+  {
+    method: 'oauth',
+    redirect_uri: 'http://vella.no-ip.org/fb/auth/',
+    state: '{{ guestid }}',
+    response_type: 'code'
+  },
+  function(response) {
+    if (response && ! response.error) {
+      alert(response.access_token);
+    } else {
+      alert('Falhou.');
+    }
+  }
+);
+}
+</script>
+<a onclick="fb_login()">Login via Facebook</a>
 </body>
 </html>

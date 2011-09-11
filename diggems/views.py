@@ -1,13 +1,37 @@
 import itertools
 import datetime
+from wsgiref.handlers import format_date_time
+from time import mktime
+
 from game_helpers import *
 from models import *
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
 from django.db import IntegrityError
 
+# TODO: make this to be passed automatically to the rendering contexts
+fb_app_id = '264111940275149'
+
+def fb_channel(request):
+    resp = HttpResponse('<script src="//connect.facebook.net/pt_BR/all.js"></script>')
+    secs = 60*60*24*365
+    resp['Pragma'] = 'public'
+    resp['Cache-Control'] = 'max-age=' + str(secs)
+    far_future = (datetime.datetime.now() + datetime.timedelta(seconds=secs))
+    resp['Expires'] = format_date_time(mktime(far_future.timetuple()))
+    return resp
+
+def fb_auth(request):
+    pass # TODO: to be continued
+
 def index(request):
-    return render_to_response('index.html')
+    guestid = request.session.get('guest_id')
+    if not guestid:
+        guestid = gen_token()
+        request.session['guest_id'] = guestid
+
+    return render_to_response('index.html',
+                              {'fb_app_id': fb_app_id, 'guestid': guestid})
 
 def new_game(request):
     mine = [[0] * 16 for i in xrange(16)]

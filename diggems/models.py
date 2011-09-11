@@ -1,5 +1,10 @@
 from django.db import models
+from django.contrib.auth.models import User
 from game_helpers import delete_channel
+
+class UserProfile(models.Model):
+    user = models.OneToOneField(User)
+    facebook_id = models.IntegerField(blank=True, null=True)
 
 class Player(models.Model):
     channel = models.CharField(max_length=22, unique=True)
