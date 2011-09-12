@@ -31,6 +31,20 @@ FB.ui(
 );
 }
 </script>
-<a onclick="fb_login()">Login via Facebook</a>
+<a onclick="//fb_login()">Login via Facebook</a>
+
+<h1>Novo Jogo</h1>
+<form action="new_game/" method="post">{% csrf_token %}
+Jogo privado <input type="checkbox" name="private" value="1" /><br />
+<input type="submit" value="Criar!" />
+</form>{% if games %}
+
+<h1>Seus Jogos</h1>{% for g in games %}
+<ul>
+    <li><a href="game/{{ g.id }}/">Jogo {{ g.id }}</a></li>
+    <li>{% if g.private %}Privado{% else %}Público{% endif %}</li>{% if g.state = 0 %}
+    <li>Aguardando outro jogador</li>{% else %}
+    <li>Em andamento</li>{% endif %}
+</ul>{% endfor %}{% endif %}
 </body>
 </html>

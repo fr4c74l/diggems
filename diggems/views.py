@@ -30,8 +30,11 @@ def index(request):
         guestid = gen_token()
         request.session['guest_id'] = guestid
 
+    playing_now = Game.objects.filter(token__in=request.session.keys()) \
+        .filter(state__lte=2)
+
     return render_to_response('index.html',
-                              {'fb_app_id': fb_app_id, 'guestid': guestid})
+                              {'fb_app_id': fb_app_id, 'guestid': guestid, 'games': playing_now})
 
 def new_game(request):
     mine = [[0] * 16 for i in xrange(16)]
@@ -62,6 +65,7 @@ def new_game(request):
     game.mine = mine_encode(mine)
     game.token = gen_token()
     game.p1 = p1
+    game.private = bool(request.REQUEST.get('private', default=False))
     game.save()
 
     request.session[game.token] = '1'
