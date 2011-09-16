@@ -1,15 +1,15 @@
+# Based on code given in:
+# http://stackoverflow.com/questions/561486/how-to-convert-an-integer-to-the-shortest-url-safe-string-in-python/561704#561704
 # From user "Miles" of StackOverflow
+# Is this public domain? I am not sure...
 
 import string
 ALPHABET = string.ascii_uppercase + string.ascii_lowercase + \
            string.digits + '-_'
 ALPHABET_REVERSE = dict((c, i) for (i, c) in enumerate(ALPHABET))
 BASE = len(ALPHABET)
-SIGN_CHARACTER = '$'
 
 def encode(n):
-    if n < 0:
-        return SIGN_CHARACTER + num_encode(-n)
     s = []
     while True:
         n, r = divmod(n, BASE)

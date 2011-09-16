@@ -1,3 +1,6 @@
+# Copyright 2011 Lucas Clemente Vella
+# Software under Affero GPL license, see LICENSE.txt
+
 from django.db import models
 from django.contrib.auth.models import User
 from game_helpers import delete_channel

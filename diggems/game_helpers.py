@@ -1,3 +1,6 @@
+# Copyright 2011 Lucas Clemente Vella
+# Software under Affero GPL license, see LICENSE.txt
+
 import itertools
 import random
 import httplib

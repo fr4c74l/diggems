@@ -1,3 +1,6 @@
+# Copyright 2011 Lucas Clemente Vella
+# Software under Affero GPL license, see LICENSE.txt
+
 import itertools
 import datetime
 from wsgiref.handlers import format_date_time

@@ -1,3 +1,6 @@
+// Copyright 2011 Lucas Clemente Vella
+// Software distributed under Affero GPL, see http://gnu.org/licenses/agpl.txt
+
 var ctx;
 var mine = Array();
 var move_request = new XMLHttpRequest();
