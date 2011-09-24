@@ -23,7 +23,7 @@ FB.ui(
   {
     method: 'oauth',
     redirect_uri: 'http://vella.no-ip.org/fb/auth/',
-    state: '{{ guestid }}',
+    state: '{{ guest_id }}',
     response_type: 'code'
   },
   function(response) {
@@ -39,7 +39,7 @@ FB.ui(
 <a onclick="//fb_login()">Login via Facebook</a>
 
 <h1>Novo Jogo</h1>
-<form action="new_game/" method="post">{% csrf_token %}
+<form action="new_game/" method="post">
 Jogo privado <input type="checkbox" name="private" value="1" /><br />
 <input type="submit" value="Criar!" />
 </form>{% if games %}

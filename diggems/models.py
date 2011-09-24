@@ -3,12 +3,15 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-from game_helpers import delete_channel
+from game_helpers import delete_channel, gen_token
 
 class UserProfile(models.Model):
+    id = models.CharField(max_length=22, primary_key=True)
     user = models.OneToOneField(User, blank=True, null=True, unique=True)
     facebook_id = models.IntegerField(blank=True, null=True, unique=True)
-    last_seen = models.DateTimeField(auto_now=True)
+    last_seen = models.DateTimeField(auto_now=True, db_index=True)
+
+    @staticmethod
     def get(request):
         is_auth = request.user.is_authenticated()
         user_id = request.session.get('user_id')
@@ -26,21 +29,15 @@ class UserProfile(models.Model):
             if not user_id:
                 # New guest user, create a temporary guest profile
                 prof = UserProfile()
+                prof.id = gen_token()
                 request.session['user_id'] = prof.id
         else:
             # Authenticated by us
             prof = request.user.userprofile
-            # Now we check for unusual situations
-            if not prof:
-                # Probably a new user: is authenticated, but have no
-                # related UserProfile. Create one for him.
-                prof = UserProfile(user=request.user)
+
+            # Authenticated user should not have user_id
             if user_id:
-                # Just authenticated, has an old UserProfile to be merged
-                try:
-                    old_prof = UserProfile.objects.get(id=user_id)
-                except UserProfile.DoesNotExist:
-                    del request.session['user_id']
+                del request.session['user_id']
 
         prof.save()
         return prof
@@ -62,9 +59,9 @@ class Game(models.Model):
     p1 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p1')
     p2 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p2')
     def what_player(self, user):
-        if self.p1.user == user:
-            return 1
-        elif self.p2.user == user:
-            return 2
+        if self.p1 and self.p1.user == user:
+            return (1, self.p1, self.p2)
+        elif self.p2 and self.p2.user == user:
+            return (2, self.p2, self.p1)
         else:
             return None

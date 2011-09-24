@@ -10,7 +10,8 @@ from game_helpers import *
 from models import *
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
-from django.db import IntegrityError
+from django.db import IntegrityError, transaction
+from django.db.models import Q
 
 # TODO: make this to be passed automatically to the rendering contexts
 fb_app_id = '264111940275149'
@@ -28,18 +29,23 @@ def fb_auth(request):
     pass # TODO: to be continued
 
 def index(request):
-    guestid = request.session.get('guest_id')
-    if not guestid:
-        guestid = gen_token()
-        request.session['guest_id'] = guestid
+    profile = UserProfile.get(request)
 
-    playing_now = Game.objects.filter(token__in=request.session.keys()) \
-        .filter(state__lte=2)
+    playing_now = Game.objects.filter(Q(p1__user=profile) |
+                                      Q(p2__user=profile))
 
     return render_to_response('index.html',
-                              {'fb_app_id': fb_app_id, 'guestid': guestid, 'games': playing_now})
+                              {'fb_app_id': fb_app_id,
+                               'guest_id': profile.id,
+                               'games': playing_now})
 
+@transaction.commit_on_success
 def new_game(request):
+    if request.method != 'POST':
+        return HttpResponseForbidden()
+
+    profile = UserProfile.get(request)
+
     mine = [[0] * 16 for i in xrange(16)]
 
     indexes = list(itertools.product(xrange(16), repeat=2))
@@ -55,14 +61,9 @@ def new_game(request):
                     mine[m][n] += 1
             for_each_surrounding(m, n, inc_count)
 
-    p1 = Player()
-    while True:
-        try:
-            p1.channel = gen_token()
-            p1.save()
-        except IntegrityError:
-            continue
-        break
+    p1 = Player(user=profile)
+    p1.channel = gen_token()
+    p1.save()
 
     game = Game()
     game.mine = mine_encode(mine)
@@ -71,29 +72,22 @@ def new_game(request):
     game.private = bool(request.REQUEST.get('private', default=False))
     game.save()
 
-    request.session[game.token] = '1'
-
     return HttpResponseRedirect('/game/' + str(game.id))
 
+@transaction.commit_on_success
 def join_game(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
+    profile = UserProfile.get(request)
 
-    if request.session.get(game.token, '0') in ('1', '2'):
+    if game.what_player(profile):
         return HttpResponseRedirect('/game/' + str(game.id))
 
-    if game.state != 0 or request.GET['token'] != game.token:
+    if game.state != 0 or request.REQUEST.get('token') != game.token:
         return HttpResponseForbidden()
 
-    request.session[game.token] = '2'
-
-    p2 = Player()
-    while True:
-        try:
-            p2.channel = gen_token()
-            p2.save()
-        except IntegrityError:
-            continue
-        break
+    p2 = Player(user=profile)
+    p2.channel = gen_token()
+    p2.save()
 
     game.p2 = p2
     game.state = 1
@@ -105,16 +99,13 @@ def join_game(request, game_id):
 def game(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
 
+    pdata = game.what_player(UserProfile.get(request))
+    if not pdata:
+        return HttpResponseForbidden()
+    player, me, other = pdata
+
     data = {'state': game.state,
             'game_id': game_id}
-
-    player = request.session.get(game.token, '0')
-    if player == '1':
-        me = game.p1
-    elif player == '2':
-        me = game.p2
-    else:
-        return HttpResponseForbidden()
 
     data['bomb_used'] = not me.has_bomb
     data['channel'] = me.channel
@@ -133,17 +124,12 @@ def game(request, game_id):
 
 def move(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
-    player = request.session.get(game.token, '0')
 
-    if (not 1 <= game.state <= 2) or str(game.state) != player:
+    pdata = game.what_player(UserProfile.get(request))
+    if not pdata or pdata[0] != game.state:
         return HttpResponseForbidden()
 
-    if player == '1':
-        me = game.p1
-        other = game.p2
-    else:
-        me = game.p2
-        other = game.p1
+    player, me, other = pdata
 
     try:
         m = int(request.GET['m'])
@@ -155,7 +141,7 @@ def move(request, game_id):
 
     mine = mine_decode(game.mine)
 
-    if request.GET.get('bomb', 'n') == 'y':
+    if request.GET.get('bomb') == 'y':
         if not me.has_bomb:
             return HttpResponseBadRequest()
         me.has_bomb = False
@@ -177,7 +163,7 @@ def move(request, game_id):
 
         old = mine[m][n]
         mine[m][n] += 10
-        if mine[m][n] == 19 and player == '2':
+        if mine[m][n] == 19 and player == 2:
             mine[m][n] = 20
         revealed.append((m, n, tile_mask(mine[m][n])))
         if old == 0:
@@ -186,7 +172,7 @@ def move(request, game_id):
     for m, n in to_reveal:
         reveal(m, n)
 
-    if revealed and revealed[0]:
+    if revealed:
         m, n, s = revealed[0]
         if mine[m][n] <= 18 or bomb_used:
             game.state = (game.state % 2) + 1
@@ -196,7 +182,7 @@ def move(request, game_id):
     point_p2 = new_mine.count(tile_encode(20))
 
     if point_p1 >= 26 or point_p2 >= 26:
-        game.state = int(player) + 2
+        game.state = player + 2
 
     game.mine = new_mine
     game.save()
