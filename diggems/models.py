@@ -33,7 +33,7 @@ class UserProfile(models.Model):
                 request.session['user_id'] = prof.id
         else:
             # Authenticated by us
-            prof = request.user.userprofile
+            prof = request.user.get_profile()
 
             # Authenticated user should not have user_id
             if user_id:
