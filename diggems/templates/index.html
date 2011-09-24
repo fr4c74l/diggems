@@ -10,32 +10,13 @@ Software under Affero GPL license, see LICENSE.txt
 <body>
 <div id="fb-root"></div>
 <script src="//connect.facebook.net/pt_BR/all.js"></script>
+<script src="/static/login.js"></script>
 <script>
   FB.init({
   appId: '{{ fb_app_id }}', status: true,
   cookie: true, oauth: true,
   channelURL: 'http://vella.no-ip.org/fb/channel/',
   });
-</script>
-<script>
-function fb_login() {
-FB.ui(
-  {
-    client_id: '{{ fb_app_id }}',
-    method: 'oauth',
-    redirect_uri: 'http://vella.no-ip.org/fb/auth/',
-    state: '{{ guest_id }}',
-    response_type: 'code'
-  },
-  function(response) {
-    if (response && ! response.error) {
-      alert(response.access_token);
-    } else {
-      alert('Falhou.');
-    }
-  }
-);
-}
 </script>
 <a onclick="fb_login()">Login via Facebook</a>
 
