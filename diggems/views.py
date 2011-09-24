@@ -26,7 +26,8 @@ def fb_channel(request):
     return resp
 
 def fb_auth(request):
-    pass # TODO: to be continued
+    # TODO: To be continued
+    return HttpResponse()
 
 def index(request):
     profile = UserProfile.get(request)

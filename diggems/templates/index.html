@@ -21,6 +21,7 @@ Software under Affero GPL license, see LICENSE.txt
 function fb_login() {
 FB.ui(
   {
+    client_id: '{{ fb_app_id }}',
     method: 'oauth',
     redirect_uri: 'http://vella.no-ip.org/fb/auth/',
     state: '{{ guest_id }}',
@@ -36,7 +37,7 @@ FB.ui(
 );
 }
 </script>
-<a onclick="//fb_login()">Login via Facebook</a>
+<a onclick="fb_login()">Login via Facebook</a>
 
 <h1>Novo Jogo</h1>
 <form action="new_game/" method="post">
