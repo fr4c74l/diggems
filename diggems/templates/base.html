@@ -15,7 +15,7 @@ Software under Affero GPL license, see LICENSE.txt
   FB.init({
   appId: '{{ FB_APP_ID }}',
   status: true, cookie: true, oauth: true,
-  channelURL: 'http://vella.no-ip.org/fb/channel/',
+  channelURL: '{{ PROTOCOL }}://vella.no-ip.org/fb/channel/',
   });
 </script>
 <a onclick="fb_login()">Login via Facebook</a>
