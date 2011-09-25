@@ -1,0 +1,24 @@
+{% comment %}
+
+Copyright 2011 Lucas Clemente Vella
+Software under Affero GPL license, see LICENSE.txt
+
+{% endcomment %}<html>
+<header>
+<title>DigGems: {% block title %}{% endblock %}</title>
+</header>
+<body>
+<div id="fb-root"></div>
+<script src="//connect.facebook.net/pt_BR/all.js"></script>
+<script src="/static/login.js"></script>
+<script>
+  FB.init({
+  appId: '{{ FB_APP_ID }}',
+  status: true, cookie: true, oauth: true,
+  channelURL: 'http://vella.no-ip.org/fb/channel/',
+  });
+</script>
+<a onclick="fb_login()">Login via Facebook</a>
+{% block content %}{% endblock %}
+</body>
+</html>

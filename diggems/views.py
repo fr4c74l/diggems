@@ -12,9 +12,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
-
-# TODO: make this to be passed automatically to the rendering contexts
-fb_app_id = '264111940275149'
+from django.template import RequestContext
 
 def fb_channel(request):
     resp = HttpResponse('<script src="//connect.facebook.net/pt_BR/all.js"></script>')
@@ -36,9 +34,8 @@ def index(request):
                                       Q(p2__user=profile))
 
     return render_to_response('index.html',
-                              {'fb_app_id': fb_app_id,
-                               'guest_id': profile.id,
-                               'games': playing_now})
+                              {'games': playing_now},
+                              context_instance=RequestContext(request))
 
 @transaction.commit_on_success
 def new_game(request):
@@ -121,7 +118,8 @@ def game(request, game_id):
 
     me.save()
 
-    return render_to_response('game.html', data)
+    return render_to_response('game.html', data,
+                              context_instance=RequestContext(request))
 
 def move(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
