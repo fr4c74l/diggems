@@ -1,0 +1,5 @@
+{
+  "uid": "{{ fb.uid|addslashes }}",
+  "access_token": "{{ fb.access_token|addslashes }}",
+  "name": "{{ fb.name|addslashes }}"
+}

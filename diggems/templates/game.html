@@ -9,12 +9,12 @@ Software under Affero GPL license, see LICENSE.txt
 {% block content %}
 <script>
 var params = {
-'game_id': {{ game_id }},
-'state': {{ state }},
-'player': {{ player }},
-'channel': '{{ channel }}'{% if mine %},
-'mine': '{{ mine }}'{% endif %}{% if bomb_used %},
-'bomb_used': true{% endif %}
+"game_id": {{ game_id }},
+"state": {{ state }},
+"player": {{ player }},
+"channel": "{{ channel }}"{% if mine %},
+"mine": "{{ mine }}"{% endif %}{% if bomb_used %},
+"bomb_used": true{% endif %}
 };
 </script>
 <script src="/static/game.js"></script>

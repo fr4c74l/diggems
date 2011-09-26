@@ -5,11 +5,22 @@ from django.db import models
 from django.contrib.auth.models import User
 from game_helpers import delete_channel, gen_token
 
+class FacebookCache(models.Model):
+    uid = models.CharField(max_length=30, unique=True)
+    name = models.CharField(max_length=100)
+    access_token = models.CharField(max_length=500)
+    expires = models.DateTimeField()
+
 class UserProfile(models.Model):
     id = models.CharField(max_length=22, primary_key=True)
     user = models.OneToOneField(User, blank=True, null=True, unique=True)
-    facebook_id = models.IntegerField(blank=True, null=True, unique=True)
+    facebook = models.OneToOneField(FacebookCache, blank=True,
+                                       null=True, unique=True)
     last_seen = models.DateTimeField(auto_now=True, db_index=True)
+
+    def merge(self, other):
+        Player.objects.filter(user=other).update(user=self)
+        other.delete()
 
     @staticmethod
     def get(request):

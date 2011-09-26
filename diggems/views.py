@@ -3,16 +3,33 @@
 
 import itertools
 import datetime
+import urllib2
+import json
 from wsgiref.handlers import format_date_time
 from time import mktime
 
 from game_helpers import *
 from models import *
-from django.shortcuts import get_object_or_404, render_to_response
+from django.shortcuts import get_object_or_404
 from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
-from django.template import RequestContext
+from django.template import Context, RequestContext, loader
+
+FB_APP_ID = '264111940275149'
+
+def render_with_extra(template_name, data, request, user):
+    t = loader.get_template(template_name)
+    c = Context(data)
+    if request.is_secure():
+        protocol = 'https'
+    else:
+        protocol = 'http'
+    extra = {'FB_APP_ID': FB_APP_ID,
+             'PROTOCOL': protocol,
+             'fb': user.facebook}
+    c.update(extra)
+    return HttpResponse(t.render(c))
 
 def fb_channel(request):
     resp = HttpResponse('<script src="//connect.facebook.net/pt_BR/all.js"></script>')
@@ -23,8 +40,63 @@ def fb_channel(request):
     resp['Expires'] = format_date_time(mktime(far_future.timetuple()))
     return resp
 
-def fb_auth(request):
-    # TODO: To be continued
+@transaction.commit_on_success
+def fb_login(request):
+    token = request.POST.get('token')
+    expires = request.POST.get('expires')
+    if not (token and expires):
+        return HttpResponseBadRequest()
+
+    expires = (datetime.datetime.now() +
+                  datetime.timedelta(seconds=(int(expires) - 10)))
+
+    # TODO: this must be done asyncronuosly...
+    req = urllib2.urlopen('https://graph.facebook.com/me?access_token=' + token)
+    # TODO, THIS IS VERY IMPORTANT: Verify and validate SSL certificate.
+    fb_user = json.load(req)
+    fb, created = FacebookCache.objects.get_or_create(uid=fb_user['id'], defaults={'name': fb_user['name'], 'access_token': token, 'expires': expires})
+    if not created:
+        fb.name = fb_user['name']
+        fb.access_token = token
+        fb.expires = expires
+        fb.save()
+
+    old_user_id = request.session.get('user_id')
+    try:
+        profile = UserProfile.objects.get(facebook=fb)
+        if old_user_id and old_user_id != profile.id:
+            try:
+                old_profile = UserProfile.objects.get(pk=old_user_id)
+                if not old_profile.user and not old_profile.facebook:
+                    profile.merge(old_profile)
+            except UserProfile.DoesNotExist:
+                pass
+
+    except UserProfile.DoesNotExist:
+        try:
+            profile = UserProfile.objects.get(pk=old_user_id)
+            if not profile.user and not profile.facebook:
+                profile.facebook = fb
+            else:
+                profile = UserProfile(id=gen_token(), facebook=fb)
+        except UserProfile.DoesNotExist:
+            profile = UserProfile(id=gen_token(), facebook_id=fb_user.id)
+    profile.save()
+
+    request.session['user_id'] = profile.id
+
+    t = loader.get_template('auth_fb.json')
+    c = Context({'fb': fb})
+    return HttpResponse(t.render(c), mimetype='application/json')
+
+@transaction.commit_on_success
+def fb_logout(request):
+    profile = UserProfile.get(request)
+    if profile.user or profile.facebook:
+        profile = UserProfile(id=gen_token())
+        profile.save()
+        request.session['user_id'] = profile.id
+
     return HttpResponse()
 
 def index(request):
@@ -33,9 +105,8 @@ def index(request):
     playing_now = Game.objects.filter(Q(p1__user=profile) |
                                       Q(p2__user=profile))
 
-    return render_to_response('index.html',
-                              {'games': playing_now},
-                              context_instance=RequestContext(request))
+    return render_with_extra('index.html', {'games': playing_now},
+                             request, profile)
 
 @transaction.commit_on_success
 def new_game(request):
@@ -62,6 +133,7 @@ def new_game(request):
     p1 = Player(user=profile)
     p1.channel = gen_token()
     p1.save()
+    create_channel(p1.channel)
 
     game = Game()
     game.mine = mine_encode(mine)
@@ -86,6 +158,7 @@ def join_game(request, game_id):
     p2 = Player(user=profile)
     p2.channel = gen_token()
     p2.save()
+    create_channel(p2.channel)
 
     game.p2 = p2
     game.state = 1
@@ -97,7 +170,8 @@ def join_game(request, game_id):
 def game(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
 
-    pdata = game.what_player(UserProfile.get(request))
+    profile = UserProfile.get(request)
+    pdata = game.what_player(profile)
     if not pdata:
         return HttpResponseForbidden()
     player, me, other = pdata
@@ -118,8 +192,7 @@ def game(request, game_id):
 
     me.save()
 
-    return render_to_response('game.html', data,
-                              context_instance=RequestContext(request))
+    return render_with_extra('game.html', data, request, profile)
 
 def move(request, game_id):
     game = get_object_or_404(Game, pk=game_id)

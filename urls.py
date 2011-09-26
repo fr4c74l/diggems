@@ -8,5 +8,6 @@ urlpatterns = patterns (
     (r'^new_game/$', 'diggems.views.new_game'),
     (r'^$', 'diggems.views.index'),
     (r'^fb/channel/', 'diggems.views.fb_channel'),
-    (r'^fb/auth/', 'diggems.views.fb_auth'),
+    (r'^fb/login/', 'diggems.views.fb_login'),
+    (r'^fb/logout/', 'diggems.views.fb_logout'),
  )
