@@ -29,6 +29,6 @@ Atualize seu navegador.
 <p id="message">{% if token %}Envie <a href="{% url diggems.views.join_game game_id %}?token={{ token }}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
 {% endif %}</p>
 <p>Pontuação:<br />
-Jogador Vermelho {% if player == '1' %}(você){% endif %}: <span id="p1_pts">0</span><br />
-Jogador Azul {% if player == '2' %}(você){% endif %}: <span id="p2_pts">0</span></p>
+Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />
+Jogador Azul {% if player == 2 %}(você){% endif %}: <span id="p2_pts">0</span></p>
 {% endblock %}
