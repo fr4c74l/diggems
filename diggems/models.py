@@ -2,6 +2,7 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 from django.db import models
+from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
 from game_helpers import delete_channel, gen_token
 
@@ -58,9 +59,11 @@ class Player(models.Model):
     has_bomb = models.BooleanField(default=True)
     last_seen = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(UserProfile)
-    def delete(self, *args, **kwargs):
-        delete_channel(self.channel)
-        super(Player, self).delete(*args, **kwargs)
+
+def delete_player_channel(sender, **kwargs):
+    delete_channel(kwargs['instance'].channel)
+
+pre_delete.connect(delete_player_channel, sender=Player)
 
 class Game(models.Model):
     private = models.BooleanField()
