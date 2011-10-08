@@ -134,10 +134,15 @@ function set_state(state) {
 function handle_event(msg) {
     var parser = /(\d+),(\d+):(.)/;
     var changes = msg.split('\n');
+    var seq_num = parseInt(changes[0]);
 
-    set_state(parseInt(changes[0]));
+    if(seq_num <= params.seq_num)
+	return;
+    params.seq_num = seq_num;
 
-    for(var i = 1; i < changes.length; ++i) {
+    set_state(parseInt(changes[1]));
+
+    for(var i = 2; i < changes.length; ++i) {
 	var res = parser.exec(changes[i]);
 	if(res) {
 	    var m = parseInt(res[1]);
@@ -157,15 +162,14 @@ function register_event() {
     event_request.open('GET', '/event?id='+ params.channel, true);
     if(register_event.etag)
 	event_request.setRequestHeader('If-None-Match', register_event.etag);
-    if(register_event.last_modified)
-	event_request.setRequestHeader('If-Modified-Since', register_event.last_modified);
+    event_request.setRequestHeader('If-Modified-Since', params.last_change);
     event_request.onreadystatechange = function(ev){
 	if (event_request.readyState == 4) {
 	    register_event.last_status == event_request.status;
 	    if(event_request.status == 200) {
 		register_event.error_count = 0;
 		register_event.etag = event_request.getResponseHeader('Etag')
-		register_event.last_modified = event_request.getResponseHeader('Last-Modified')
+		params.last_change = event_request.getResponseHeader('Last-Modified')
 
 		handle_event(event_request.responseText);
 		register_event();
@@ -204,6 +208,9 @@ function on_click(ev) {
 
     m = Math.floor(m / 26);
     n = Math.floor(n / 26);
+
+    if(!bomb.active && mine[m*16 + n] != '?')
+	return;
 
     // TODO: indicate activity
 

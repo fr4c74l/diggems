@@ -164,7 +164,7 @@ def join_game(request, game_id):
     game.state = 1
     game.save()
 
-    post_update(game.p1.channel, str(game.state))
+    post_update(game.p1.channel, str(game.seq_num) + '\n' + str(game.state))
     return HttpResponseRedirect('/game/' + game_id)
 
 def game(request, game_id):
@@ -177,7 +177,9 @@ def game(request, game_id):
     player, me, other = pdata
 
     data = {'state': game.state,
-            'game_id': game_id}
+            'game_id': game_id,
+            'seq_num': game.seq_num,
+            'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())) }
 
     data['bomb_used'] = not me.has_bomb
     data['channel'] = me.channel
@@ -244,10 +246,12 @@ def move(request, game_id):
     for m, n in to_reveal:
         reveal(m, n)
 
-    if revealed:
-        m, n, s = revealed[0]
-        if mine[m][n] <= 18 or bomb_used:
-            game.state = (game.state % 2) + 1
+    if not revealed:
+        return HttpResponseBadRequest()
+
+    m, n, s = revealed[0]
+    if mine[m][n] <= 18 or bomb_used:
+        game.state = (game.state % 2) + 1
 
     new_mine = mine_encode(mine)
     point_p1 = new_mine.count(tile_encode(19))
@@ -259,7 +263,7 @@ def move(request, game_id):
     game.mine = new_mine
     game.save()
 
-    result = str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
+    result = str(game.seq_num) + '\n' + str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
 
     post_update(other.channel, result)
     if game.state >= 3: # Game is over

@@ -11,6 +11,8 @@ Software under Affero GPL license, see LICENSE.txt
 var params = {
 "game_id": {{ game_id }},
 "state": {{ state }},
+"seq_num": {{ seq_num }},
+"last_change": "{{ last_change }}",
 "player": {{ player }},
 "channel": "{{ channel }}"{% if mine %},
 "mine": "{{ mine }}"{% endif %}{% if bomb_used %},

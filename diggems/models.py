@@ -66,9 +66,15 @@ class Game(models.Model):
     private = models.BooleanField()
     mine = models.CharField(max_length=256)
     state = models.SmallIntegerField(default=0)
+    seq_num = models.IntegerField(default=0)
     token = models.CharField(max_length=22, unique=True)
     p1 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p1')
     p2 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p2')
+
+    def save(self, *args, **kwargs):
+        self.seq_num = self.seq_num + 1
+        super(Game, self).save(*args, **kwargs)
+
     def what_player(self, user):
         if self.p1 and self.p1.user == user:
             return (1, self.p1, self.p2)
