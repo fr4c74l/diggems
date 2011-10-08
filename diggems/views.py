@@ -54,12 +54,17 @@ def fb_login(request):
     req = urllib2.urlopen('https://graph.facebook.com/me?access_token=' + token)
     # TODO, THIS IS VERY IMPORTANT: Verify and validate SSL certificate.
     fb_user = json.load(req)
-    fb, created = FacebookCache.objects.get_or_create(uid=fb_user['id'], defaults={'name': fb_user['name'], 'access_token': token, 'expires': expires})
-    if not created:
-        fb.name = fb_user['name']
-        fb.access_token = token
-        fb.expires = expires
-        fb.save()
+    print fb_user
+
+    try:
+        fb = FacebookCache.objects.get(uid=fb_user['id'])
+    except FacebookCache.DoesNotExist:
+        fb = FacebookCache(uid=fb_user['id'])
+
+    fb.name = fb_user['name']
+    fb.access_token = token
+    fb.expires = expires
+    fb.save()
 
     old_user_id = request.session.get('user_id')
     try:

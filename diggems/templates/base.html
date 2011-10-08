@@ -23,9 +23,9 @@ Software under Affero GPL license, see LICENSE.txt
 </script>
 <script src="/static/login.js"></script>
 <div id="auth_header">
-<span id="auth_fb_button" style="visibility:hidden" onclick="fb_login()">Login via Facebook</span>
-<div id="auth_logged" style="visibility:hidden">
-<span id="auth_username"></span>
+<span id="auth_fb_button" {% if fb %}style="visibility:hidden"{% endif %} onclick="fb_login()">Login via Facebook</span>
+<div id="auth_logged" {% if not fb %}style="visibility:hidden"{% endif %}>
+Olá, <span id="auth_username">{% if fb %}{{ fb.name }}{% endif %}</span>
 <span onclick="fb_logout()">Logout</span>
 </div>
 </div>

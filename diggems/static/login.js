@@ -2,7 +2,7 @@
 // Software distributed under Affero GPL, see http://gnu.org/licenses/agpl.txt
 
 /* Return XmlHttpRequest object ready for POST. */
-function get_post_request(url) {
+function new_post_request(url) {
     var request = new XMLHttpRequest();
     request.open('POST', url, true);
     request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -16,7 +16,7 @@ function auth_render() {
     var logged = document.getElementById('auth_logged');
 
     if(auth.fb) {
-	username.innerHTML = ('Olá ' + auth.fb.name);
+	username.innerHTML = auth.fb.name;
 
 	fb_button.style.setProperty('visibility', 'hidden', null);
 	logged.style.setProperty('visibility', 'visible', null);
@@ -30,7 +30,7 @@ function auth_render() {
  * correct auth information. */
 function server_fb_login(fb_login)
 {
-    var request = get_post_request('/fb/login/')
+    var request = new_post_request('/fb/login/')
     request.onreadystatechange = function(ev){
 	if (request.readyState == 4) {
 	    if(request.status == 200) {
@@ -53,7 +53,7 @@ function server_fb_login(fb_login)
 function server_fb_logout()
 {
     auth.fb = null;
-    var request = get_post_request('fb/logout/');
+    var request = new_post_request('fb/logout/');
     request.send();
     auth_render();
 }
