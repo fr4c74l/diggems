@@ -2,6 +2,7 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 from django.db import models
+from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
 from game_helpers import delete_channel, gen_token
@@ -21,6 +22,8 @@ class UserProfile(models.Model):
 
     def merge(self, other):
         Player.objects.filter(user=other).update(user=self)
+        # Can't allow someone to play against itself
+        Game.objects.filter(p1__user__exact=F('p2__user')).delete()
         other.delete()
 
     @staticmethod
