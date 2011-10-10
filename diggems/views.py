@@ -8,13 +8,14 @@ import json
 from wsgiref.handlers import format_date_time
 from time import mktime
 
-from game_helpers import *
-from models import *
 from django.shortcuts import get_object_or_404
 from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader
+from game_helpers import *
+from models import *
+from https_conn import secure_url_opener
 
 FB_APP_ID = '264111940275149'
 
@@ -50,11 +51,15 @@ def fb_login(request):
     expires = (datetime.datetime.now() +
                   datetime.timedelta(seconds=(int(expires) - 10)))
 
-    # TODO: this must be done asyncronuosly...
-    req = urllib2.urlopen('https://graph.facebook.com/me?access_token=' + token)
-    # TODO, THIS IS VERY IMPORTANT: Verify and validate SSL certificate.
-    fb_user = json.load(req)
-    print fb_user
+    # TODO: this ideally must be done asyncronuosly...
+
+    # TODO: Fix this damn secure connection that can not verify Facebook's
+    # certificate...
+    #url_opener = secure_url_opener()
+    #res = url_opener.open('https://graph.facebook.com/me?access_token=' + token)
+    res = urllib2.urlopen('https://graph.facebook.com/me?access_token=' + token)
+    fb_user = json.load(res)
+    res.close()
 
     try:
         fb = FacebookCache.objects.get(uid=fb_user['id'])
