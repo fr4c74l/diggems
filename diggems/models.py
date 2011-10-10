@@ -68,7 +68,7 @@ pre_delete.connect(delete_player_channel, sender=Player)
 class Game(models.Model):
     private = models.BooleanField()
     mine = models.CharField(max_length=256)
-    state = models.SmallIntegerField(default=0)
+    state = models.SmallIntegerField(default=0, db_index=True)
     seq_num = models.IntegerField(default=0)
     token = models.CharField(max_length=22, unique=True)
     p1 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p1')

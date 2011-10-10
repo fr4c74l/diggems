@@ -8,17 +8,23 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% block title %}Index{% endblock %}
 {% block content %}
-<h1>Novo Jogo</h1>
-<form action="new_game/" method="post">
-Jogo privado <input type="checkbox" name="private" value="1" /><br />
-<input type="submit" value="Criar!" />
-</form>{% if games %}
-
-<h1>Seus Jogos</h1>{% for g in games %}
+{% if your_games %}<h1>Seus Jogos</h1>{% for g in your_games %}
 <ul>
     <li><a href="game/{{ g.id }}/">Jogo {{ g.id }}</a></li>
     <li>{% if g.private %}Privado{% else %}Público{% endif %}</li>{% if g.state = 0 %}
     <li>Aguardando outro jogador</li>{% else %}
     <li>Em andamento</li>{% endif %}
-</ul>{% endfor %}{% endif %}
+</ul>{% endfor %}
+
+{% endif %}{% if new_games %}<h1>Jogos Por Começar</h1>{% for g in new_games %}
+<ul>
+    <li>Contra {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</li>
+    <li><a href="game/{{ g.id }}/join/?token={{ g.token }}">Juntar-se!</a></li>
+</ul>{% endfor %}
+
+{% endif %}<h1>Novo Jogo</h1>
+<form action="new_game/" method="post">
+Jogo privado <input type="checkbox" name="private" value="1" /><br />
+<input type="submit" value="Criar!" />
+</form>
 {% endblock %}

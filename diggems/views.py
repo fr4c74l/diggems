@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
@@ -115,8 +116,24 @@ def index(request):
     playing_now = Game.objects.filter(Q(p1__user=profile) |
                                       Q(p2__user=profile))
 
-    return render_with_extra('index.html', {'games': playing_now},
-                             request, profile)
+    chosen = Game.objects.filter(state__exact=0).exclude(p1__user__exact=profile).order_by('?')[:5]
+    new_games = []
+    for game in chosen:
+        info = {'id': game.id, 'token': game.token}
+        player = game.p1.user
+        if player.facebook:
+            info['op_name'] = player.facebook.name
+            info['op_picture'] = ('https://graph.facebook.com/'
+                                  + player.facebook.uid
+                                  + '/picture')
+        else:
+            # TODO: internationalization
+            info['op_name'] = 'jogador anônimo'
+
+        new_games.append(info)
+
+    context = {'your_games': playing_now, 'new_games': new_games}
+    return render_with_extra('index.html', context, request, profile)
 
 @transaction.commit_on_success
 def new_game(request):
