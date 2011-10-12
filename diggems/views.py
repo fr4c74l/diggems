@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
@@ -8,13 +9,14 @@ import json
 from wsgiref.handlers import format_date_time
 from time import mktime
 
-from game_helpers import *
-from models import *
 from django.shortcuts import get_object_or_404
 from django.http import *
 from django.db import IntegrityError, transaction
-from django.db.models import Q
+from django.db.models import Q, F
 from django.template import Context, RequestContext, loader
+from game_helpers import *
+from models import *
+from https_conn import secure_url_opener
 
 FB_APP_ID = '264111940275149'
 
@@ -50,16 +52,25 @@ def fb_login(request):
     expires = (datetime.datetime.now() +
                   datetime.timedelta(seconds=(int(expires) - 10)))
 
-    # TODO: this must be done asyncronuosly...
-    req = urllib2.urlopen('https://graph.facebook.com/me?access_token=' + token)
-    # TODO, THIS IS VERY IMPORTANT: Verify and validate SSL certificate.
-    fb_user = json.load(req)
-    fb, created = FacebookCache.objects.get_or_create(uid=fb_user['id'], defaults={'name': fb_user['name'], 'access_token': token, 'expires': expires})
-    if not created:
-        fb.name = fb_user['name']
-        fb.access_token = token
-        fb.expires = expires
-        fb.save()
+    # TODO: this ideally must be done asyncronuosly...
+
+    # TODO: Fix this damn secure connection that can not verify Facebook's
+    # certificate...
+    #url_opener = secure_url_opener()
+    #res = url_opener.open('https://graph.facebook.com/me?access_token=' + token)
+    res = urllib2.urlopen('https://graph.facebook.com/me?access_token=' + token)
+    fb_user = json.load(res)
+    res.close()
+
+    try:
+        fb = FacebookCache.objects.get(uid=fb_user['id'])
+    except FacebookCache.DoesNotExist:
+        fb = FacebookCache(uid=fb_user['id'])
+
+    fb.name = fb_user['name']
+    fb.access_token = token
+    fb.expires = expires
+    fb.save()
 
     old_user_id = request.session.get('user_id')
     try:
@@ -105,8 +116,24 @@ def index(request):
     playing_now = Game.objects.filter(Q(p1__user=profile) |
                                       Q(p2__user=profile))
 
-    return render_with_extra('index.html', {'games': playing_now},
-                             request, profile)
+    chosen = Game.objects.filter(state__exact=0, private__exact=False).exclude(p1__user__exact=profile).order_by('?')[:5]
+    new_games = []
+    for game in chosen:
+        info = {'id': game.id, 'token': game.token}
+        player = game.p1.user
+        if player.facebook:
+            info['op_name'] = player.facebook.name
+            info['op_picture'] = ('https://graph.facebook.com/'
+                                  + player.facebook.uid
+                                  + '/picture')
+        else:
+            # TODO: internationalization
+            info['op_name'] = 'jogador anônimo'
+
+        new_games.append(info)
+
+    context = {'your_games': playing_now, 'new_games': new_games}
+    return render_with_extra('index.html', context, request, profile)
 
 @transaction.commit_on_success
 def new_game(request):
@@ -254,10 +281,9 @@ def move(request, game_id):
         game.state = (game.state % 2) + 1
 
     new_mine = mine_encode(mine)
-    point_p1 = new_mine.count(tile_encode(19))
-    point_p2 = new_mine.count(tile_encode(20))
+    points = [new_mine.count(tile_encode(19)), new_mine.count(tile_encode(20))]
 
-    if point_p1 >= 26 or point_p2 >= 26:
+    if points[0] >= 26 or points[1] >= 26:
         game.state = player + 2
 
     game.mine = new_mine
@@ -267,6 +293,13 @@ def move(request, game_id):
 
     post_update(other.channel, result)
     if game.state >= 3: # Game is over
+        remaining = 51 - points[0] - points[1]
+        points[0 if points[0] > points[1] else 1] += remaining
+
+        inc_score(game.p1.user, points[0])
+        inc_score(game.p2.user, points[1])
+
+        # TODO: decide what to do with this game that is no longer accessible
         game.p1.delete()
         game.p2.delete()
     else:

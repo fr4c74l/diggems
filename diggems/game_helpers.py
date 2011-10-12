@@ -1,12 +1,15 @@
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
+import urllib2
 import itertools
 import random
 import httplib
 import radix64
+from django.core.cache import cache
 
 EVENT_SERVER = '127.0.0.1'
+FB_APP_KEY = '8a9260360907fd0cdffc1deafeb16b24'
 
 def tile_encode(tile):
     return chr(tile + 10)
@@ -51,6 +54,36 @@ def for_each_surrounding(m, n, func):
 
 def gen_token():
     return radix64.encode(random.getrandbits(132))
+
+def inc_score(user, ammount):
+    u.total_score = F('total_score') + p
+    u.save()
+    u = UserProfile.objects.get(pk=u.pk)
+
+    def publish_score():
+        if u.facebook:
+            # Publish score...
+            # TODO: verify HTTPS
+            # TODO: make it asyncronous
+            app_token = cache.get('app_token')
+            if not app_token:
+                try:
+                    app_token = urllib2.urlopen('https://graph.facebook.com/oauth/access_token?client_id=' + FB_APP_ID + '&client_secret=' + FB_APP_KEY + '&grant_type=client_credentials').read()
+                    cache.set('app_token', app_token, 3600)
+                except urllib2.HTTPError:
+                    # TODO: Log error before returning...
+                    return
+            # There is a small chance that a race condition will make the score
+            # stored at Facebook to be inconsistent. But since it is temporary
+            # until the next game play, the risk seems acceptable.
+            urllib2.urlopen('https://graph.facebook.com/' + u.facebook.uid + '/scores', 'score=' + str(u.total_score) + '&' + app_token).read()
+
+    try:
+        publish_score()
+    except urllib2.HTTPError:
+        # App access token must have expired, try just once more
+        cache.delete('app_token')
+        publish_score()
 
 # Event dealing:
 def create_channel(channel):
