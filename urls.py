@@ -10,4 +10,8 @@ urlpatterns = patterns (
     (r'^fb/channel/', 'diggems.views.fb_channel'),
     (r'^fb/login/', 'diggems.views.fb_login'),
     (r'^fb/logout/', 'diggems.views.fb_logout'),
+
+    # Error views:
+    (r'^error/404$', 'django.views.defaults.page_not_found'),
+    (r'^error/500$', 'django.views.defaults.server_error'),
  )
