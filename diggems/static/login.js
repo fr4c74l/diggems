@@ -85,7 +85,8 @@ function fb_logout() {
 
 /* Button callback to initiate client side login process via Facebook. */
 function fb_login() {
-    FB.login(on_fb_login);
+    FB.login(on_fb_login,
+	     {"scope": "publish_actions"});
 }
 
 /* Initial check of login status. */

@@ -12,7 +12,7 @@ from time import mktime
 from django.shortcuts import get_object_or_404
 from django.http import *
 from django.db import IntegrityError, transaction
-from django.db.models import Q
+from django.db.models import Q, F
 from django.template import Context, RequestContext, loader
 from game_helpers import *
 from models import *
@@ -281,10 +281,9 @@ def move(request, game_id):
         game.state = (game.state % 2) + 1
 
     new_mine = mine_encode(mine)
-    point_p1 = new_mine.count(tile_encode(19))
-    point_p2 = new_mine.count(tile_encode(20))
+    points = [new_mine.count(tile_encode(19)), new_mine.count(tile_encode(20))]
 
-    if point_p1 >= 26 or point_p2 >= 26:
+    if points[0] >= 26 or points[1] >= 26:
         game.state = player + 2
 
     game.mine = new_mine
@@ -294,6 +293,13 @@ def move(request, game_id):
 
     post_update(other.channel, result)
     if game.state >= 3: # Game is over
+        remaining = 51 - points[0] - points[1]
+        points[0 if points[0] > points[1] else 1] += remaining
+
+        inc_score(game.p1.user, points[0])
+        inc_score(game.p2.user, points[1])
+
+        # TODO: decide what to do with this game that is no longer accessible
         game.p1.delete()
         game.p2.delete()
     else:
