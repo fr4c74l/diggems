@@ -114,6 +114,7 @@ INSTALLED_APPS = (
     'django.contrib.sessions',
     'django.contrib.sites',
     'django.contrib.staticfiles',
+    'diggems',
 )
 
 # A sample logging configuration. The only tangible logging
