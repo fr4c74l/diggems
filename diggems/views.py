@@ -12,13 +12,11 @@ from time import mktime
 from django.shortcuts import get_object_or_404
 from django.http import *
 from django.db import IntegrityError, transaction
-from django.db.models import Q, F
+from django.db.models import Q
 from django.template import Context, RequestContext, loader
 from game_helpers import *
 from models import *
 from https_conn import secure_url_opener
-
-FB_APP_ID = '264111940275149'
 
 def render_with_extra(template_name, data, request, user):
     t = loader.get_template(template_name)
