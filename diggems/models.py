@@ -1,11 +1,11 @@
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
+import game_helpers
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
-from game_helpers import delete_channel, gen_token
 
 class FacebookCache(models.Model):
     uid = models.CharField(max_length=30, unique=True)
@@ -48,7 +48,7 @@ class UserProfile(models.Model):
             if not user_id:
                 # New guest user, create a temporary guest profile
                 prof = UserProfile()
-                prof.id = gen_token()
+                prof.id = game_helpers.gen_token()
                 request.session['user_id'] = prof.id
         else:
             # Authenticated by us
@@ -68,7 +68,7 @@ class Player(models.Model):
     user = models.ForeignKey(UserProfile)
 
 def delete_player_channel(sender, **kwargs):
-    delete_channel(kwargs['instance'].channel)
+    game_helpers.delete_channel(kwargs['instance'].channel)
 
 pre_delete.connect(delete_player_channel, sender=Player)
 
