@@ -1,0 +1,347 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.47 r22583"
+   width="34.201256"
+   height="30.728809"
+   sodipodi:docname="bomb.svg">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <linearGradient
+       inkscape:collect="always"
+       id="linearGradient4001">
+      <stop
+         style="stop-color:#ffffff;stop-opacity:1;"
+         offset="0"
+         id="stop4003" />
+      <stop
+         style="stop-color:#ffffff;stop-opacity:0;"
+         offset="1"
+         id="stop4005" />
+    </linearGradient>
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       id="perspective10" />
+    <filter
+       inkscape:collect="always"
+       id="filter5172"
+       x="-0.061249997"
+       width="1.1224999"
+       y="-0.11529412"
+       height="1.2305882"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.21568628"
+         id="feGaussianBlur5174" />
+    </filter>
+    <inkscape:perspective
+       id="perspective3723"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <inkscape:perspective
+       id="perspective3751"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       inkscape:collect="always"
+       id="filter3795"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.065034309"
+         id="feGaussianBlur3797" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3831"
+       x="-0.11041824"
+       width="1.2208365"
+       y="-0.11041824"
+       height="1.2208365"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.072965322"
+         id="feGaussianBlur3833" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3847"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.049172282"
+         id="feGaussianBlur3849" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3939"
+       x="-0.11280123"
+       width="1.2256025"
+       y="-0.11280123"
+       height="1.2256025"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.46673258"
+         id="feGaussianBlur3941" />
+    </filter>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4001"
+       id="radialGradient4007"
+       cx="7.0252099"
+       cy="14.211432"
+       fx="7.0252099"
+       fy="14.211432"
+       r="4.4354115"
+       gradientTransform="matrix(1,0,0,0.90610361,0,1.3344022)"
+       gradientUnits="userSpaceOnUse" />
+    <inkscape:perspective
+       id="perspective4021"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 0.5 : 1"
+       sodipodi:type="inkscape:persp3d" />
+    <filter
+       inkscape:collect="always"
+       id="filter4047"
+       x="-0.56248319"
+       width="2.1249664"
+       y="-0.56483668"
+       height="2.1296732"
+       color-interpolation-filters="sRGB">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="2.9710996"
+         id="feGaussianBlur4049" />
+    </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter4099"
+       x="-0.13316612"
+       width="1.2663322"
+       y="-0.15573665"
+       height="1.3114733">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="0.40445412"
+         id="feGaussianBlur4101" />
+    </filter>
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1024"
+     inkscape:window-height="695"
+     id="namedview4"
+     showgrid="false"
+     inkscape:zoom="3.3467043"
+     inkscape:cx="11.227709"
+     inkscape:cy="32.283801"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="layer4" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer4"
+     inkscape:label="shadow"
+     style="display:none">
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none;display:inline;filter:url(#filter4047)"
+       id="path2822-3"
+       sodipodi:cx="14.103241"
+       sodipodi:cy="13.937575"
+       sodipodi:rx="6.3385353"
+       sodipodi:ry="6.3121247"
+       d="m 20.441776,13.937575 a 6.3385353,6.3121247 0 1 1 -12.6770703,0 6.3385353,6.3121247 0 1 1 12.6770703,0 z"
+       transform="matrix(1.2696122,0,0,0.3957336,-1.1038201,19.295886)"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb_shadow.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer3"
+     inkscape:label="wick"
+     style="display:inline"
+     transform="translate(4.7836173,1.447419)"
+     sodipodi:insensitive="true">
+    <path
+       style="fill:none;stroke:#d2c28d;stroke-width:1;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0;display:inline;filter:url(#filter5172)"
+       d="m 12.686135,5.0043943 0.105641,-1.0564208 0.730433,-0.9443722 1.320529,-1.3733493 1.954382,-0.3697479 1.927971,0.3961586 1.373349,1.0564225 1.003602,1.1092437 c 0,0 -0.141086,0.496299 0.132052,0.8187276 0.06923,0.081719 0.184875,0.5018006 0.184875,0.5018006 l -1e-6,-1.0036015 L 20.9964,3.3469387 20.468189,2.5018007 18.61945,1.2340937 16.849942,0.99639852 15.054024,1.1548619 l -1.109244,0.845138 -1.056424,1.0564226 -0.47539,0.8979592 -0.132053,1.0564226 0.405222,-0.00641 z"
+       id="path3606"
+       sodipodi:nodetypes="ccccccccscccccccccccc"
+       transform="matrix(1.2018841,0,0,1.2332607,-2.5648816,-1.4291087)"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer1"
+     inkscape:label="fire"
+     transform="translate(8.8462384,0)"
+     sodipodi:insensitive="true">
+    <path
+       sodipodi:type="star"
+       style="fill:#ffff1b;fill-opacity:1;fill-rule:evenodd;stroke:none;filter:url(#filter3847)"
+       id="path2905"
+       sodipodi:sides="16"
+       sodipodi:cx="18.189537"
+       sodipodi:cy="6.0243139"
+       sodipodi:r1="0.8056376"
+       sodipodi:r2="0.1731229"
+       sodipodi:arg1="-0.17756487"
+       sodipodi:arg2="0.018784666"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 18.982507,5.8820115 18.362629,6.0275658 18.976603,6.1963003 18.348209,6.0935578 18.850875,6.4844056 18.309632,6.1490081 18.624464,6.7024662 18.252772,6.1854748 18.331839,6.8172843 18.186285,6.1974063 18.017551,6.8113798 18.120293,6.182986 17.729445,6.6856516 18.064843,6.1444093 17.511385,6.4592408 18.028376,6.0875492 17.396567,6.1666163 18.016445,6.0210621 17.402471,5.8523276 18.030865,5.95507 17.528199,5.5642222 18.069442,5.8996197 17.75461,5.3461616 18.126302,5.863153 18.047235,5.2313436 18.192789,5.8512216 18.361523,5.2372481 18.258781,5.8656419 18.649629,5.3629762 18.314231,5.9042186 18.867689,5.589387 18.350698,5.9610787 18.982507,5.8820115 z"
+       transform="matrix(5.6719555,0,0,5.4694787,-84.056275,-27.402654)"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+    <path
+       sodipodi:type="star"
+       style="fill:#ffad1b;fill-opacity:1;fill-rule:evenodd;stroke:none;filter:url(#filter3831)"
+       id="path2905-7"
+       sodipodi:sides="16"
+       sodipodi:cx="18.189537"
+       sodipodi:cy="6.0243139"
+       sodipodi:r1="0.8056376"
+       sodipodi:r2="0.1731229"
+       sodipodi:arg1="-0.17756487"
+       sodipodi:arg2="0.018784666"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 18.982507,5.8820115 18.362629,6.0275658 18.976603,6.1963003 18.348209,6.0935578 18.850875,6.4844056 18.309632,6.1490081 18.624464,6.7024662 18.252772,6.1854748 18.331839,6.8172843 18.186285,6.1974063 18.017551,6.8113798 18.120293,6.182986 17.729445,6.6856516 18.064843,6.1444093 17.511385,6.4592408 18.028376,6.0875492 17.396567,6.1666163 18.016445,6.0210621 17.402471,5.8523276 18.030865,5.95507 17.528199,5.5642222 18.069442,5.8996197 17.75461,5.3461616 18.126302,5.863153 18.047235,5.2313436 18.192789,5.8512216 18.361523,5.2372481 18.258781,5.8656419 18.649629,5.3629762 18.314231,5.9042186 18.867689,5.589387 18.350698,5.9610787 18.982507,5.8820115 z"
+       transform="matrix(5.1071939,0,0,4.9248779,-73.793844,-24.173064)"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+    <path
+       sodipodi:type="star"
+       style="fill:#d10707;fill-opacity:1;fill-rule:evenodd;stroke:none;filter:url(#filter3795)"
+       id="path2905-7-1"
+       sodipodi:sides="16"
+       sodipodi:cx="18.189537"
+       sodipodi:cy="6.0243139"
+       sodipodi:r1="0.8056376"
+       sodipodi:r2="0.1731229"
+       sodipodi:arg1="-0.17756487"
+       sodipodi:arg2="0.018784666"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 18.982507,5.8820115 18.362629,6.0275658 18.976603,6.1963003 18.348209,6.0935578 18.850875,6.4844056 18.309632,6.1490081 18.624464,6.7024662 18.252772,6.1854748 18.331839,6.8172843 18.186285,6.1974063 18.017551,6.8113798 18.120293,6.182986 17.729445,6.6856516 18.064843,6.1444093 17.511385,6.4592408 18.028376,6.0875492 17.396567,6.1666163 18.016445,6.0210621 17.402471,5.8523276 18.030865,5.95507 17.528199,5.5642222 18.069442,5.8996197 17.75461,5.3461616 18.126302,5.863153 18.047235,5.2313436 18.192789,5.8512216 18.361523,5.2372481 18.258781,5.8656419 18.649629,5.3629762 18.314231,5.9042186 18.867689,5.589387 18.350698,5.9610787 18.982507,5.8820115 z"
+       transform="matrix(3.0718176,0,0,2.9621602,-36.556068,-12.296216)"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+  </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer2"
+     inkscape:label="bomb"
+     style="display:inline"
+     transform="translate(4.7836173,1.447419)"
+     sodipodi:insensitive="true">
+    <path
+       sodipodi:type="arc"
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:none"
+       id="path2822"
+       sodipodi:cx="14.103241"
+       sodipodi:cy="13.937575"
+       sodipodi:rx="6.3385353"
+       sodipodi:ry="6.3121247"
+       d="m 20.441776,13.937575 a 6.3385353,6.3121247 0 1 1 -12.6770703,0 6.3385353,6.3121247 0 1 1 12.6770703,0 z"
+       transform="matrix(1.3111696,0,0,1.3111696,-6.1182249,-4.1205111)"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+    <rect
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke:#000000;stroke-width:0.5;stroke-linecap:butt;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none"
+       id="rect3604"
+       width="3.0033398"
+       height="1.2297895"
+       x="10.972983"
+       y="5.2507105"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+    <path
+       sodipodi:type="arc"
+       style="fill:#818181;fill-opacity:0.60305343;fill-rule:evenodd;stroke:none;filter:url(#filter3939)"
+       id="path3851"
+       sodipodi:cx="-5.3877549"
+       sodipodi:cy="-26.302374"
+       sodipodi:rx="4.7411604"
+       sodipodi:ry="3.9249716"
+       d="M -0.64659452,-26.302374 A 4.7411604,3.9249716 0 1 1 -5.7686914,-30.214656"
+       transform="matrix(0.1237371,-1.4997115,1.6713255,0.13789651,55.080267,8.0145251)"
+       sodipodi:start="0"
+       sodipodi:end="4.6319556"
+       sodipodi:open="true"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+    <path
+       sodipodi:type="arc"
+       style="fill:url(#radialGradient4007);fill-opacity:1;fill-rule:evenodd;stroke:none;filter:url(#filter4099)"
+       id="path3943"
+       sodipodi:cx="7.0252099"
+       sodipodi:cy="14.211432"
+       sodipodi:rx="3.6446579"
+       sodipodi:ry="3.1164465"
+       d="m 10.669868,14.211432 a 3.6446579,3.1164465 0 1 1 -7.2893159,0 3.6446579,3.1164465 0 1 1 7.2893159,0 z"
+       transform="matrix(1.1791777,0,0,1.4117301,0.90229891,-9.9985385)"
+       inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/bomb.png"
+       inkscape:export-xdpi="123"
+       inkscape:export-ydpi="123" />
+  </g>
+</svg>

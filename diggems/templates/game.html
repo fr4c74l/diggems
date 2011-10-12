@@ -19,18 +19,21 @@ var params = {
 "bomb_used": true{% endif %}
 };
 </script>
-<script src="/static/game.js"></script>
-</header>
+<script src="/static/js/game.js"></script>
+
 <body>
 <div id="game_area">
 <canvas id="game_canvas" width="415" height="415">
 Atualize seu navegador.
 </canvas>
 </div>
-<div id="bomb" style="visibility:hidden; border:2px solid red; width:60px; text-align:center; color:white; background-color:green" >Bum!</div>
+
+<div id="bomb" style="visibility:hidden;" ></div>
+<div class="clr"></div>
 <p id="message">{% if token %}Envie <a href="{% url diggems.views.join_game game_id %}?token={{ token }}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
 {% endif %}</p>
 <p>Pontuação:<br />
 Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />
 Jogador Azul {% if player == 2 %}(você){% endif %}: <span id="p2_pts">0</span></p>
+
 {% endblock %}

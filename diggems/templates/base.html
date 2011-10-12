@@ -6,6 +6,7 @@ Software under Affero GPL license, see LICENSE.txt
 {% endcomment %}<html>
 <header>
 <title>DigGems: {% block title %}{% endblock %}</title>
+<link rel="stylesheet" media="screen" type="text/css" href="/static/css/style.css" /></link>
 </header>
 <body>
 <div id="fb-root"></div>
@@ -21,7 +22,7 @@ Software under Affero GPL license, see LICENSE.txt
   "channelURL": "{{ PROTOCOL }}://vella.no-ip.org/fb/channel/",
   });
 </script>
-<script src="/static/login.js"></script>
+<script src="/static/js/login.js"></script>
 <div id="auth_header">
 <span id="auth_fb_button" style="visibility:hidden" onclick="fb_login()">Login via Facebook</span>
 <div id="auth_logged" style="visibility:hidden">
