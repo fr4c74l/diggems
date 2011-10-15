@@ -7,11 +7,12 @@ var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
 
 var images = {};
-var fps = 30;
+var fps = 60;
 var inc = 0.4;
 var direction = 1;
 var dy = 0;
 var dmax = 10;
+var t = 0.01;
 
 // Bomb things:
 var bomb = {
@@ -51,67 +52,62 @@ function toggle_bomb(ev) {
 }
 
 function idx(m, n) {
-    return mine[m*16 + n];
+  return mine[m*16 + n];
 }
 
-/*Draw the GEMS images
-function draw_gem(tile,x0,y0){
-	var gem_img = new Image();
-	gem_img.onload = function() {
-		ctx.drawImage(gem_img, x0 + 2.5, y0 + 2.5 - dy,20,20);
-		//setInterval(anim_gem, 1000 / FPS);
-	}
-	gem_img.src = (tile == 'b') ? "/static/images/saphire.png" : "/static/images/ruby.png";
-}*/
-
 function load_img(name) {
-    images[name] = new Image();
-    images[name].src = "/static/images/" + name + ".png";
+  images[name] = new Image();
+  images[name].src = "/static/images/" + name + ".png";
 }
 
 function drawShadow(cx, cy, width, height) {
-    ctx.beginPath();
-    ctx.moveTo(cx, cy - height/2);
-    ctx.bezierCurveTo(
-    cx + width/2, cy - height/2,
-    cx + width/2, cy + height/2,
-    cx, cy + height/2);
-    ctx.bezierCurveTo(
-    cx - width/2, cy + height/2,
-    cx - width/2, cy - height/2,
-    cx, cy - height/2);
-    ctx.fillStyle = "black";
-    ctx.fill();
-    ctx.closePath();
+  ctx.beginPath();
+  ctx.moveTo(cx, cy - height/2);
+  ctx.bezierCurveTo(
+  cx + width/2, cy - height/2,
+  cx + width/2, cy + height/2,
+  cx, cy + height/2);
+  ctx.bezierCurveTo(
+  cx - width/2, cy + height/2,
+  cx - width/2, cy - height/2,
+  cx, cy - height/2);
+  ctx.fillStyle = "black";
+  ctx.fill();
+  ctx.closePath();
 }
 
 function draw_gem(name) {
-    ctx.drawImage(images[name], x0 + 2.5, y0 + 2.5, 20, 20);
+  ctx.drawImage(images[name], x0 + 2.5, y0 + 2.5, 20, 20);
 }
 
 function update_anim(name) {
-    // control
-    if (direction === 1) {
-        dy -= inc;
-        if (dy < -dmax) {
-          direction = -1;
-        }
-    } else {
-        dy += inc;
-        if(dy > dmax) {
-          direction = 1;
-        }
+  // control
+  if (direction === 1) {
+    dy -= inc;
+    t -= 0.01;
+    if (dy < -dmax) {
+      direction = -1;
     }
-//    ctx.save();
-    //canvas.width = canvas.width; //FIXME: clear ???
-    // shadow
-    //drawShadow(x0 + 11.5, y0 + 20, 15 - dy, 6);
-    // redraw image
-    ctx.drawImage(images[name], x0 + 2.5, y0 + 2.5 -dy, 20, 20);
-//    ctx.restore();
+  } else {
+    dy += inc;
+    t += 0.01;
+    if(dy > dmax) {
+      direction = 1;
+    }
+  }
+  //clear_canvas(); //FIXME: clear ???
+  //ctx.translate(canvas.width/2, canvas.height/2);
+  ctx.save()
+  //ctx.scale(1-(t/2),1+t);
+  // redraw image
+  ctx.drawImage(images[name], x0 + 2.5, y0 + 2.5 -dy, 20, 20);
+  ctx.restore();
+  // shadow
+  //drawShadow(x0, y0 + 16, 15 - dy, 6);
 }
 
-function draw_square(m, n) {
+
+function draw_square(m,n) {
   var TEXT_COLOR = [
   'rgb(0,0,255)',
   'rgb(0,160,0)',
@@ -122,12 +118,13 @@ function draw_square(m, n) {
   'rgb(160,,160)',
   'rgb(0,0,0)'
   ];
-  // x0 and y0 need to be global :P
+
   x0 = m * 26;
   y0 = n * 26;
+  tile = idx(m, n);
+
   function draw() { ctx.fillRect(x0,y0,25,25); }
 
-  tile = idx(m, n);
   if(tile >= 0 && tile <= 8) {
     ctx.fillStyle = 'rgb(139,121,94)';
     draw();
@@ -141,15 +138,30 @@ function draw_square(m, n) {
       ctx.fillStyle = 'rgb(139,121,94)';
       draw();
       (tile == 'b') ? name="saphire" : name="ruby";
-      var anim_interval = setInterval(update_anim, 1000 / fps, name);
+//      anim_interval = setInterval(update_anim, 1000 / fps, name);
 //FIXME: comenta a linha de cima e descomenta a de baixo para so aparecer as imagens
-//      (tile == 'b') ? draw_gem("saphire") : draw_gem("ruby");
+      (tile == 'b') ? draw_gem("saphire") : draw_gem("ruby");
     }
     else {
       ctx.fillStyle = 'rgb(155,205,155)';
       draw();
     }
   }
+}
+
+function cleartimer(){
+  if (window.anim_interval) 
+    clearInterval(anim_interval);
+}
+
+function clear_canvas() {
+  // Store the current transformation matrix
+  ctx.save();
+  // Use the identity matrix while clearing the canvas
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Restore the transform
+  ctx.restore();
 }
 
 function update_points() {
@@ -216,7 +228,7 @@ function handle_event(msg) {
       var n = parseInt(res[2]);
       // TODO: validate data
       mine[m*16 + n] = res[3];
-      draw_square(m, n);
+      draw_square(m,n);
       update_points();
     }
   }
@@ -259,6 +271,27 @@ function register_event() {
     }
   }
   event_request.send(null);
+}
+
+function mousemove(ev) {
+  var m;
+  var n;
+  m = ev.clientX + document.body.scrollLeft +
+document.documentElement.scrollLeft - this.offsetLeft;
+  n = ev.clientY + document.body.scrollTop +
+      document.documentElement.scrollTop - this.offsetTop;
+  m = Math.floor(m / 26);
+  n = Math.floor(n / 26);
+  ctx.save();
+  ctx.fillStyle = 'rgb(155,255,155)';
+  ctx.fillRect(m*26,n*26,25,25);
+  ctx.restore();
+
+ctx.save();
+  ctx.fillStyle = 'black';
+  ctx.font = "bold 12px sans-serif";
+  ctx.fillText("Mouse position: m:" + m + " n: " + n, 40, 200);
+ctx.restore();
 }
 
 function on_click(ev) {
@@ -305,54 +338,54 @@ document.documentElement.scrollLeft - this.offsetLeft;
 }
 
 function init() {
-    var canvas = document.getElementById('game_canvas');
-    if (!canvas || !canvas.getContext) {
-	// Panic return
-	// TODO: add friendly message explaining why IE sucks
-	return;
+  var canvas = document.getElementById('game_canvas');
+  if (!canvas || !canvas.getContext) {
+  // Panic return
+  // TODO: add friendly message explaining why IE sucks
+    return;
+  }
+
+  if(!params.mine) {
+    for(var i = 0; i < 256; ++i)
+      mine[i] = '?';
+  } else {
+    mine = params.mine.split('');
+  }
+
+  ctx = canvas.getContext('2d');
+  ctx.font = "17pt Arial, Helvetica, sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+/*  ctx.shadowOffsetX = 1;
+  ctx.shadowOffsetY = 1;
+  ctx.shadowBlur = 1;
+  ctx.shadowColor = "black";*/
+
+  // Load Images
+  load_img("saphire");
+  load_img("ruby");
+
+  // Draw map
+  for(var i = 0; i < 16; ++i)
+    for(var j = 0; j < 16; ++j){
+      draw_square(i,j);
     }
 
-    if(!params.mine) {
-	for(var i = 0; i < 256; ++i)
-	    mine[i] = '?';
-    } else {
-	mine = params.mine.split('');
-    }
-    // clear canvas
-//    ctx.clearRect(0, 0, canvas.width, canvas.height);
+  // Put display in current state
+  set_state(params.state);
+  update_points();
 
-    ctx = canvas.getContext('2d');
-    ctx.font = "17pt Arial, Helvetica, sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+  // Receive updates from server
+  register_event();
 
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 1;
-    ctx.shadowBlur = 1;
-    ctx.shadowColor = "black";
-
-    // Load Images
-    load_img("saphire");
-    load_img("ruby");
-
-    // Draw map
-    for(var i = 0; i < 16; ++i)
-			for(var j = 0; j < 16; ++j)
-				draw_square(i, j);
-
-    // Put display in current state
-    set_state(params.state);
-    update_points();
-
-    // Receive updates from server
-    register_event();
-
-    // Wait for user
-    canvas.addEventListener('click', on_click, false);
-    document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
-    //TODO: de tempo em tempo aplicar efeito de luz nas gemas
-    //setInterval(draw,100); 
+  // Wait for user
+  canvas.addEventListener('click', on_click, false);
+  //TODO: hover the tiles on mouse move
+  //canvas.addEventListener('mousemove',mousemove,false);
+  document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
+  //TODO: de tempo em tempo aplicar efeito de luz nas gemas
+  //setInterval(draw,100); 
 
 }
-
 window.addEventListener('load', init, false);

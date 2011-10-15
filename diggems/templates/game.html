@@ -21,13 +21,11 @@ var params = {
 </script>
 <script src="/static/js/game.js"></script>
 
-<body>
 <div id="game_area">
 <canvas id="game_canvas" width="415" height="415">
 Atualize seu navegador.
 </canvas>
 </div>
-
 <div id="bomb" style="visibility:hidden;" ></div>
 <div class="clr"></div>
 <p id="message">{% if token %}Envie <a href="{% url diggems.views.join_game game_id %}?token={{ token }}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />

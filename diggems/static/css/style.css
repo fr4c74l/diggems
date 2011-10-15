@@ -9,10 +9,14 @@
 }
 
 canvas {
-  border:3px solid #ccc;
+  border: 3px solid #fff;
   display: block;
   margin-left: auto;
   margin-right: auto;
+  position: relative;
+  -webkit-border-radius:5px;
+  -webkit-box-shadow: #000 0 0 2px;
+  -webkit-transition: -webkit-transform .2s ease-in-out, -webkit-box-shadow .2s ease-in;
 }
 
 #bomb {
@@ -23,31 +27,6 @@ canvas {
 }
 
 #bomb:hover{
-	background: url(../images/bomb_up.png) no-repeat left top ;
+  background: url(../images/bomb_up.png) no-repeat left top ; 
 }
 
-#flickr_badge_uber_wrapper{
-	width: 550px;
-	position: relative;
-	display: block;
-	margin: 0 auto;
-	margin-top: 100px;
-}
-.flickr_badge_image{
-	float: left;
-}
-.flickr_badge_image img{
-	margin: 10px;
-	border: 3px solid #fff;
-	display: block;
-	position: relative;
-	-webkit-border-radius:5px;
-	-webkit-box-shadow: #000 0 0 2px;
-	-webkit-transition: -webkit-transform .2s ease-in-out, -webkit-box-shadow .2s ease-in;
-
-}
-.flickr_badge_image img:hover{
-	-webkit-transform:scale(1.2);
-	z-index: 10;
-	-webkit-box-shadow: #666 0 5px 10px;
-}
