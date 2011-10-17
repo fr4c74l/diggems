@@ -92,7 +92,7 @@ def inc_score(user, ammount):
 def create_channel(channel):
     try:
         conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('PUT', '/ctrl_event?id=' + channel,
+        conn.request('PUT', '/ctrl_event/' + channel,
                      headers={'Content-Length': 0})
         resp = conn.getresponse()
     except:
@@ -101,7 +101,7 @@ def create_channel(channel):
 def delete_channel(channel):
     try:
         conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('DELETE', '/ctrl_event?id=' + channel)
+        conn.request('DELETE', '/ctrl_event/' + channel)
         resp = conn.getresponse()
     except:
         pass # TODO: log error
@@ -109,7 +109,7 @@ def delete_channel(channel):
 def post_update(channel, msg):
     try:
         conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('POST', '/ctrl_event?id=' + channel, msg,
+        conn.request('POST', '/ctrl_event/' + channel, msg,
                      headers={'Content-Type': 'text/plain'})
         resp = conn.getresponse()
     except:

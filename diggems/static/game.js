@@ -159,7 +159,7 @@ function register_event() {
     if(params.state >= 3 || register_event.last_status == 410)
 	return; // Game is over
 
-    event_request.open('GET', '/event?id='+ params.channel, true);
+    event_request.open('GET', '/event/'+ params.channel, true);
     if(register_event.etag)
 	event_request.setRequestHeader('If-None-Match', register_event.etag);
     event_request.setRequestHeader('If-Modified-Since', params.last_change);
