@@ -13,10 +13,10 @@ var params = {
 "state": {{ state }},
 "seq_num": {{ seq_num }},
 "last_change": "{{ last_change }}",
-"player": {{ player }},
 "channel": "{{ channel }}"{% if mine %},
-"mine": "{{ mine }}"{% endif %}{% if bomb_used %},
-"bomb_used": true{% endif %}
+"mine": "{{ mine }}"{% endif %}{% if player %},
+"player": {{ player }}{% if bomb_used %},
+"bomb_used": true{% endif %}{% endif %}
 };
 </script>
 <script src="/static/game.js"></script>
@@ -28,7 +28,8 @@ Atualize seu navegador.
 </canvas>
 </div>
 <div id="bomb" style="visibility:hidden; border:2px solid red; width:60px; text-align:center; color:white; background-color:green" >Bum!</div>
-<p id="message">{% if token %}Envie <a href="{% url diggems.views.join_game game_id %}?token={{ token }}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
+{% if not player %}<p>Modo espectador.</p>
+{% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url diggems.views.join_game game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
 {% endif %}</p>
 <p>Pontuação:<br />
 Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />

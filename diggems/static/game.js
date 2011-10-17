@@ -111,21 +111,32 @@ function update_points() {
 // TODO: localization
 function set_state(state) {
     var msg;
-    if(state == params.player) {
-	msg = 'Sua vez!';
-    }
-    else if(state == 1 || state == 2) {
-	msg = '';
-    }
-    else if(state == 3 || state == 4) {
-	msg = 'Fim de jogo. ';
-	if((state - 2) == params.player)
-	    msg += 'Você venceu!';
+    if(params.player) {
+	if(state == params.player) {
+	    msg = 'Sua vez!';
+	}
+	else if(state == 1 || state == 2) {
+	    msg = '';
+	}
+	else if(state == 3 || state == 4) {
+	    msg = 'Fim de jogo. ';
+	    if((state - 2) == params.player)
+		msg += 'Você venceu!';
+	    else
+		msg += 'Você perdeu.';
+	}
 	else
-	    msg += 'Você perdeu.';
+	    return; // What else can I do?
+    } else {
+	// Spectator mode.
+	var state_msgs =
+	    ['',
+	     'Vez do vermelho.',
+	     'Vez do azul.',
+	     'Vermelho venceu.',
+	     'Azul venceu.'];
+	msg = state_msgs[state];
     }
-    else
-	return; // What else can I do?
 
     document.getElementById('message').innerHTML = msg;
     params.state = state;
@@ -224,7 +235,7 @@ function on_click(ev) {
     move_request.onreadystatechange = function(ev){
 	if (move_request.readyState == 4) {
 	    if(move_request.status == 200) {
-		handle_event(move_request.responseText);
+		// TODO: find a more reliable way to know if the bomb was used
 		if(bombed) {
 		    params.bomb_used = true;
 		    toggle_bomb();
@@ -269,9 +280,11 @@ function init() {
     // Receive updates from server
     register_event();
 
-    // Wait for user
-    canvas.addEventListener('click', on_click, false);
-    document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
+    if(params.player) { // Not a spectator
+	// Wait for user
+	canvas.addEventListener('click', on_click, false);
+	document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
+    }
 }
 
 window.addEventListener('load', init, false);

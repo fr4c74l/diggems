@@ -114,10 +114,10 @@ def index(request):
     playing_now = Game.objects.filter(Q(p1__user=profile) |
                                       Q(p2__user=profile))
 
-    chosen = Game.objects.filter(state__exact=0, private__exact=False).exclude(p1__user__exact=profile).order_by('?')[:5]
+    chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:5]
     new_games = []
     for game in chosen:
-        info = {'id': game.id, 'token': game.token}
+        info = {'id': game.id}
         player = game.p1.user
         if player.facebook:
             info['op_name'] = player.facebook.name
@@ -156,16 +156,16 @@ def new_game(request):
             for_each_surrounding(m, n, inc_count)
 
     p1 = Player(user=profile)
-    p1.channel = gen_token()
     p1.save()
-    create_channel(p1.channel)
 
     game = Game()
     game.mine = mine_encode(mine)
-    game.token = gen_token()
+    if request.REQUEST.get('private', default=False):
+        game.token = gen_token()
+    game.channel = gen_token()
     game.p1 = p1
-    game.private = bool(request.REQUEST.get('private', default=False))
     game.save()
+    create_channel(game.channel)
 
     return HttpResponseRedirect('/game/' + str(game.id))
 
@@ -177,47 +177,44 @@ def join_game(request, game_id):
     if game.what_player(profile):
         return HttpResponseRedirect('/game/' + str(game.id))
 
-    if game.state != 0 or request.REQUEST.get('token') != game.token:
+    if game.state != 0 or (game.token and
+                           request.REQUEST.get('token') != game.token):
         return HttpResponseForbidden()
 
     p2 = Player(user=profile)
-    p2.channel = gen_token()
     p2.save()
-    create_channel(p2.channel)
 
     game.p2 = p2
     game.state = 1
     game.save()
 
-    post_update(game.p1.channel, str(game.seq_num) + '\n' + str(game.state))
+    post_update(game.channel, str(game.seq_num) + '\n' + str(game.state))
     return HttpResponseRedirect('/game/' + game_id)
 
 def game(request, game_id):
+    # TODO: maybe control who can watch a game
     game = get_object_or_404(Game, pk=game_id)
-
-    profile = UserProfile.get(request)
-    pdata = game.what_player(profile)
-    if not pdata:
-        return HttpResponseForbidden()
-    player, me, other = pdata
 
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
-            'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())) }
+            'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
+            'channel': game.channel}
 
-    data['bomb_used'] = not me.has_bomb
-    data['channel'] = me.channel
-    data['player'] = player
+    profile = UserProfile.get(request)
+    pdata = game.what_player(profile)
+    if pdata:
+        my_number, me = pdata
+        data['bomb_used'] = not me.has_bomb
+        data['player'] = my_number
+        me.save()
 
-    if game.state == 0: # Uninitialized game
+    if game.state == 0 and game.token: # Uninitialized private game
         data['token'] = game.token
     else:
         masked = mine_mask_encoded(game.mine)
         if masked.count('?') != 256:
             data['mine'] = masked
-
-    me.save()
 
     return render_with_extra('game.html', data, request, profile)
 
@@ -228,7 +225,7 @@ def move(request, game_id):
     if not pdata or pdata[0] != game.state:
         return HttpResponseForbidden()
 
-    player, me, other = pdata
+    player, me = pdata
 
     try:
         m = int(request.GET['m'])
@@ -289,7 +286,7 @@ def move(request, game_id):
 
     result = str(game.seq_num) + '\n' + str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
 
-    post_update(other.channel, result)
+    post_update(game.channel, result)
     if game.state >= 3: # Game is over
         remaining = 51 - points[0] - points[1]
         points[0 if points[0] > points[1] else 1] += remaining
@@ -303,4 +300,4 @@ def move(request, game_id):
     else:
         me.save()
 
-    return HttpResponse(result, mimetype='text/plain')
+    return HttpResponse()

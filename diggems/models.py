@@ -62,22 +62,16 @@ class UserProfile(models.Model):
         return prof
 
 class Player(models.Model):
-    channel = models.CharField(max_length=22, unique=True)
     has_bomb = models.BooleanField(default=True)
     last_seen = models.DateTimeField(auto_now=True)
     user = models.ForeignKey(UserProfile)
 
-def delete_player_channel(sender, **kwargs):
-    game_helpers.delete_channel(kwargs['instance'].channel)
-
-pre_delete.connect(delete_player_channel, sender=Player)
-
 class Game(models.Model):
-    private = models.BooleanField()
     mine = models.CharField(max_length=256)
     state = models.SmallIntegerField(default=0, db_index=True)
     seq_num = models.IntegerField(default=0)
-    token = models.CharField(max_length=22, unique=True)
+    token = models.CharField(max_length=22, blank=True, null=True)
+    channel = models.CharField(max_length=22, unique=True)
     p1 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p1')
     p2 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p2')
 
@@ -87,8 +81,13 @@ class Game(models.Model):
 
     def what_player(self, user):
         if self.p1 and self.p1.user == user:
-            return (1, self.p1, self.p2)
+            return (1, self.p1)
         elif self.p2 and self.p2.user == user:
-            return (2, self.p2, self.p1)
+            return (2, self.p2)
         else:
             return None
+
+def delete_game_channel(sender, **kwargs):
+    game_helpers.delete_channel(kwargs['instance'].channel)
+
+pre_delete.connect(delete_game_channel, sender=Game)
