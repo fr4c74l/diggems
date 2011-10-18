@@ -51,6 +51,31 @@ function toggle_bomb(ev) {
   }
 }
 
+// Class Tile
+function Tile(x0,y0) {
+  this.x = x0;
+  this.y = y0;
+}
+
+Tile.prototype.draw = function(name, hover) {
+  if(hover)
+    ctx.drawImage(images[name+"_on"], this.x + 2.5, this.y + 2.5, 20, 20);
+  else
+    ctx.drawImage(images[name+"_off"], this.x + 2.5, this.y + 2.5, 20, 20);
+};
+
+function create_tile_matrix(r,c) {
+  var i;
+  var j;
+  var m = new Array(r);
+  for (i=0; i < r; ++i) {
+    m[i] = new Array(c);
+    for (j=0; j < c; ++j)
+      m[i][j] = new Tile(i,j);
+  }
+  return(m);
+}
+
 function idx(m, n) {
   return mine[m*16 + n];
 }
@@ -76,8 +101,8 @@ function drawShadow(cx, cy, width, height) {
   ctx.closePath();
 }
 
-function draw_gem(name) {
-  ctx.drawImage(images[name], x0 + 2.5, y0 + 2.5, 20, 20);
+function draw_tile(name, x, y, w, h) {
+  ctx.drawImage(images[name], x, y, w, h);
 }
 
 function update_anim(name) {
@@ -135,12 +160,12 @@ function draw_square(m,n) {
   }
   else {
     if(tile == 'r' || tile == 'b') {
-      ctx.fillStyle = 'rgb(139,121,94)';
+      ctx.fillStyle = 'rgb(109,101,74)';
       draw();
       (tile == 'b') ? name="saphire" : name="ruby";
 //      anim_interval = setInterval(update_anim, 1000 / fps, name);
 //FIXME: comenta a linha de cima e descomenta a de baixo para so aparecer as imagens
-      (tile == 'b') ? draw_gem("saphire") : draw_gem("ruby");
+      (tile == 'b') ? draw_tile("saphire", x0 + 2.5, y0 + 2.5, 20, 20) : draw_tile("ruby", x0 + 2.5, y0 + 2.5, 20, 20);
     }
     else {
       ctx.fillStyle = 'rgb(155,205,155)';
@@ -357,12 +382,13 @@ function init() {
   ctx.textAlign = "center";
   ctx.textBaseline = "middle";
 
-/*  ctx.shadowOffsetX = 1;
+  ctx.shadowOffsetX = 1;
   ctx.shadowOffsetY = 1;
   ctx.shadowBlur = 1;
-  ctx.shadowColor = "black";*/
+  ctx.shadowColor = "black";
 
   // Load Images
+//  load_img("grass1");
   load_img("saphire");
   load_img("ruby");
 
