@@ -6,9 +6,12 @@ import itertools
 import random
 import httplib
 import radix64
+import models
 from django.core.cache import cache
+from django.db.models import F
 
 EVENT_SERVER = '127.0.0.1'
+FB_APP_ID = '264111940275149'
 FB_APP_KEY = '8a9260360907fd0cdffc1deafeb16b24'
 
 def tile_encode(tile):
@@ -56,12 +59,12 @@ def gen_token():
     return radix64.encode(random.getrandbits(132))
 
 def inc_score(user, ammount):
-    u.total_score = F('total_score') + p
-    u.save()
-    u = UserProfile.objects.get(pk=u.pk)
+    user.total_score = F('total_score') + ammount
+    user.save()
+    user = models.UserProfile.objects.get(pk=user.pk)
 
     def publish_score():
-        if u.facebook:
+        if user.facebook:
             # Publish score...
             # TODO: verify HTTPS
             # TODO: make it asyncronous
@@ -76,7 +79,7 @@ def inc_score(user, ammount):
             # There is a small chance that a race condition will make the score
             # stored at Facebook to be inconsistent. But since it is temporary
             # until the next game play, the risk seems acceptable.
-            urllib2.urlopen('https://graph.facebook.com/' + u.facebook.uid + '/scores', 'score=' + str(u.total_score) + '&' + app_token).read()
+            urllib2.urlopen('https://graph.facebook.com/' + user.facebook.uid + '/scores', 'score=' + str(user.total_score) + '&' + app_token).read()
 
     try:
         publish_score()
@@ -89,7 +92,7 @@ def inc_score(user, ammount):
 def create_channel(channel):
     try:
         conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('PUT', '/ctrl_event?id=' + channel,
+        conn.request('PUT', '/ctrl_event/' + channel,
                      headers={'Content-Length': 0})
         resp = conn.getresponse()
     except:
@@ -98,7 +101,7 @@ def create_channel(channel):
 def delete_channel(channel):
     try:
         conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('DELETE', '/ctrl_event?id=' + channel)
+        conn.request('DELETE', '/ctrl_event/' + channel)
         resp = conn.getresponse()
     except:
         pass # TODO: log error
@@ -106,7 +109,7 @@ def delete_channel(channel):
 def post_update(channel, msg):
     try:
         conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('POST', '/ctrl_event?id=' + channel, msg,
+        conn.request('POST', '/ctrl_event/' + channel, msg,
                      headers={'Content-Type': 'text/plain'})
         resp = conn.getresponse()
     except:
