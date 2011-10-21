@@ -6,6 +6,7 @@ import itertools
 import datetime
 import urllib2
 import json
+import ssl
 from wsgiref.handlers import format_date_time
 from time import mktime
 
@@ -52,13 +53,15 @@ def fb_login(request):
 
     # TODO: this ideally must be done asyncronuosly...
 
-    # TODO: Fix this damn secure connection that can not verify Facebook's
-    # certificate...
-    #url_opener = secure_url_opener()
-    #res = url_opener.open('https://graph.facebook.com/me?access_token=' + token)
-    res = urllib2.urlopen('https://graph.facebook.com/me?access_token=' + token)
-    fb_user = json.load(res)
-    res.close()
+    try:
+        url_opener = secure_url_opener()
+        res = url_opener.open('https://graph.facebook.com/me?access_token=' + token)
+        fb_user = json.load(res)
+        res.close()
+    except ssl.SSLError:
+        # TODO: Log this error? What to do when Facebook
+        # connection has been compromised?
+        return HttpResponseServerError()
 
     try:
         fb = FacebookCache.objects.get(uid=fb_user['id'])

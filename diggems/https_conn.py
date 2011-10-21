@@ -1,7 +1,7 @@
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
-# Code taken from:
+# Code mostly taken from:
 # http://thejosephturner.com/blog/2011/03/19/https-certificate-verification-in-python-with-urllib2/
 
 import socket
@@ -23,7 +23,7 @@ class VerifiedHTTPSConnection(httplib.HTTPSConnection):
                                     self.key_file,
                                     self.cert_file,
                                     cert_reqs=ssl.CERT_REQUIRED,
-                                    ca_certs='DigiCertHighAssuranceEVRootCA.crt')
+                                    ca_certs='entrust_ssl_ca.cer')
 
 # wraps https connections with ssl certificate verification
 class VerifiedHTTPSHandler(urllib2.HTTPSHandler):
