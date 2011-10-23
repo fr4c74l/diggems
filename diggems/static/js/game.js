@@ -7,12 +7,6 @@ var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
 
 var images = {};
-var fps = 60;
-var inc = 0.4;
-var direction = 1;
-var dy = 0;
-var dmax = 10;
-var t = 0.01;
 
 // Bomb things:
 var bomb = {
@@ -74,89 +68,27 @@ Tile.prototype.draw = function() {
 	'rgb(160,,160)',
 	'rgb(0,0,0)'
     ];
-
     if(this.s >= 0 && this.s <= 8) {
-	this.blit('tile_off');
+	this.blit('tile_clicked');
 	if(this.s > 0) {
 	    ctx.fillStyle = TEXT_COLOR[this.s-1];
 	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
 	}
     }
     else {
-	this.blit('tile_on');
+	this.blit('tile');
 
 	if(this.s == 'r' || this.s == 'b') {
 	    this.blit((this.s == 'b') ? "saphire" : "ruby");
-//      anim_interval = setInterval(update_anim, 1000 / fps, name);
-//FIXME: animation bugged
 	}
     }
 };
+
 
 function load_img(name) {
   var img = new Image();
   img.src = "/static/images/" + name + ".png";
   images[name] = img;
-}
-
-function drawShadow(cx, cy, width, height) {
-  ctx.beginPath();
-  ctx.moveTo(cx, cy - height/2);
-  ctx.bezierCurveTo(
-  cx + width/2, cy - height/2,
-  cx + width/2, cy + height/2,
-  cx, cy + height/2);
-  ctx.bezierCurveTo(
-  cx - width/2, cy + height/2,
-  cx - width/2, cy - height/2,
-  cx, cy - height/2);
-  ctx.fillStyle = "black";
-  ctx.fill();
-  ctx.closePath();
-}
-
-function draw_tile(name, x, y, w, h) {
-  ctx.drawImage(images[name], x, y, w, h);
-}
-
-function update_anim(name) {
-  // control
-  if (direction === 1) {
-    dy -= inc;
-    t -= 0.01;
-    if (dy < -dmax) {
-      direction = -1;
-    }
-  } else {
-    dy += inc;
-    t += 0.01;
-    if(dy > dmax) {
-      direction = 1;
-    }
-  }
-  //clear_canvas(); //FIXME: clear ???
-  ctx.save();
-  //ctx.scale(1-(t/2),1+t);
-  // redraw image
-  ctx.drawImage(images[name], x0 + 2.5, y0 + 2.5 -dy, 20, 20);
-  ctx.restore();
-  // shadow
-  //drawShadow(x0, y0 + 16, 15 - dy, 6);
-}
-
-function cleartimer(){
-  if (window.anim_interval) 
-    clearInterval(anim_interval);
-}
-//FIXME: clear only one tile
-function clear_canvas() {
-  // Store the current transformation matrix
-  ctx.save();
-  // Use the identity matrix while clearing the canvas
-  ctx.setTransform(1, 0, 0, 1, 0, 0);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  // Restore the transform
-  ctx.restore();
 }
 
 function update_points() {
@@ -279,27 +211,6 @@ function register_event() {
     event_request.send(null);
 }
 
-function mousemove(ev) {
-  var m;
-  var n;
-  m = ev.clientX + document.body.scrollLeft +
-document.documentElement.scrollLeft - this.offsetLeft;
-  n = ev.clientY + document.body.scrollTop +
-      document.documentElement.scrollTop - this.offsetTop;
-  m = Math.floor(m / 26);
-  n = Math.floor(n / 26);
-  ctx.save();
-  ctx.fillStyle = 'rgb(155,255,155)';
-  ctx.fillRect(m*26,n*26,25,25);
-  ctx.restore();
-
-ctx.save();
-  ctx.fillStyle = 'black';
-  ctx.font = "bold 12px sans-serif";
-  ctx.fillText("Mouse position: m:" + m + " n: " + n, 40, 200);
-ctx.restore();
-}
-
 function on_click(ev) {
     if(ev.button != 0 || params.player != params.state)
 	return;
@@ -362,10 +273,10 @@ function init() {
     for(var i = 0; i < 256; ++i)
       mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
 
-    ctx = canvas.getContext('2d');
-    ctx.font = "17pt Arial, Helvetica, sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
+  ctx = canvas.getContext('2d');
+  ctx.font = "17pt Arial, Helvetica, sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
 
   ctx.shadowOffsetX = 1;
   ctx.shadowOffsetY = 1;
@@ -373,8 +284,8 @@ function init() {
   ctx.shadowColor = "black";
 
   // Load Images
-  load_img("tile_on");
-  load_img("tile_off");
+  load_img("tile");
+  load_img("tile_clicked");
   load_img("saphire");
   load_img("ruby");
 
@@ -394,8 +305,6 @@ function init() {
     if(params.player) { // Not a spectator
 	// Wait for user
 	canvas.addEventListener('click', on_click, false);
-	//TODO: hover the tiles on mouse move
-	//canvas.addEventListener('mousemove',mousemove,false);
 	document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
     }
 }
