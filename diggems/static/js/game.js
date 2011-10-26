@@ -284,10 +284,6 @@ function init() {
     ctx.shadowBlur = 1;
     ctx.shadowColor = "black";
 
-    // Load Images
-    load_img("saphire");
-    load_img("ruby");
-
     // Draw map
     for(var i = 0; i < 16; ++i)
 	for(var j = 0; j < 16; ++j)
@@ -306,5 +302,9 @@ function init() {
 	document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
     }
 }
+
+// Load Images
+load_img("saphire");
+load_img("ruby");
 
 window.addEventListener('load', init, false);
