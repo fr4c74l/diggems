@@ -53,10 +53,6 @@ function Tile(x0,y0) {
   this.y = y0*26;
 }
 
-Tile.prototype.blit = function(file) {
-    ctx.drawImage(images[file], this.x, this.y);
-}
-
 Tile.prototype.draw = function() {
     var TEXT_COLOR = [
 	'rgb(0,0,255)',
@@ -68,27 +64,32 @@ Tile.prototype.draw = function() {
 	'rgb(160,,160)',
 	'rgb(0,0,0)'
     ];
+
     if(this.s >= 0 && this.s <= 8) {
-	this.blit('tile_clicked');
+	ctx.fillStyle = 'rgb(255,216,161)';
+	ctx.fillRect(this.x, this.y, 25, 25);
 	if(this.s > 0) {
 	    ctx.fillStyle = TEXT_COLOR[this.s-1];
 	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
 	}
     }
+    else if(this.s == 'r' || this.s == 'b') {
+	ctx.fillStyle = 'rgb(227,133,0)';
+	ctx.fillRect(this.x, this.y, 25, 25);
+	var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
+	ctx.drawImage(icon, this.x, this.y);
+    }
     else {
-	this.blit('tile');
-
-	if(this.s == 'r' || this.s == 'b') {
-	    this.blit((this.s == 'b') ? "saphire" : "ruby");
-	}
+	ctx.fillStyle = 'rgb(227,133,0)';
+	ctx.fillRect(this.x, this.y, 25, 25);
     }
 };
 
 
 function load_img(name) {
-  var img = new Image();
-  img.src = "/static/images/" + name + ".png";
-  images[name] = img;
+    var img = new Image();
+    img.src = "/static/images/" + name + ".png";
+    images[name] = img;
 }
 
 function update_points() {
@@ -262,38 +263,35 @@ function init() {
 	return;
     }
 
-  mine = new Array(16);
-  for (var i=0; i < 16; ++i) {
-    mine[i] = new Array(16);
-    for (var j=0; j < 16; ++j)
-      mine[i][j] = new Tile(i,j);
-  }
-
-  if(params.mine)
-    for(var i = 0; i < 256; ++i)
-      mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
-
-  ctx = canvas.getContext('2d');
-  ctx.font = "17pt Arial, Helvetica, sans-serif";
-  ctx.textAlign = "center";
-  ctx.textBaseline = "middle";
-
-  ctx.shadowOffsetX = 1;
-  ctx.shadowOffsetY = 1;
-  ctx.shadowBlur = 1;
-  ctx.shadowColor = "black";
-
-  // Load Images
-  load_img("tile");
-  load_img("tile_clicked");
-  load_img("saphire");
-  load_img("ruby");
-
-  // Draw map
-  for(var i = 0; i < 16; ++i)
-    for(var j = 0; j < 16; ++j){
-      mine[i][j].draw();
+    mine = new Array(16);
+    for (var i=0; i < 16; ++i) {
+	mine[i] = new Array(16);
+	for (var j=0; j < 16; ++j)
+	    mine[i][j] = new Tile(i,j);
     }
+
+    if(params.mine)
+	for(var i = 0; i < 256; ++i)
+	    mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
+
+    ctx = canvas.getContext('2d');
+    ctx.font = "17pt Arial, Helvetica, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    ctx.shadowOffsetX = 1;
+    ctx.shadowOffsetY = 1;
+    ctx.shadowBlur = 1;
+    ctx.shadowColor = "black";
+
+    // Load Images
+    load_img("saphire");
+    load_img("ruby");
+
+    // Draw map
+    for(var i = 0; i < 16; ++i)
+	for(var j = 0; j < 16; ++j)
+	    mine[i][j].draw();
 
     // Put display in current state
     set_state(params.state);
