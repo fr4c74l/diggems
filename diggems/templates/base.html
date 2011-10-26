@@ -3,10 +3,12 @@
 Copyright 2011 Lucas Clemente Vella
 Software under Affero GPL license, see LICENSE.txt
 
-{% endcomment %}<html>
-<header>
+{% endcomment %}
+<html>
+<head>
 <title>DigGems: {% block title %}{% endblock %}</title>
-</header>
+<link rel="stylesheet" media="screen" type="text/css" href="/static/css/style.css" />
+</head>
 <body>
 <div id="fb-root"></div>
 <script src="//connect.facebook.net/pt_BR/all.js"></script>
@@ -21,7 +23,7 @@ Software under Affero GPL license, see LICENSE.txt
   "channelURL": "{{ PROTOCOL }}://vella.no-ip.org/fb/channel/",
   });
 </script>
-<script src="/static/login.js"></script>
+<script src="/static/js/login.js"></script>
 <div id="auth_header">
 <span id="auth_fb_button" {% if fb %}style="visibility:hidden"{% endif %} onclick="fb_login()">Login via Facebook</span>
 <div id="auth_logged" {% if not fb %}style="visibility:hidden"{% endif %}>

@@ -2,9 +2,11 @@
 // Software distributed under Affero GPL, see http://gnu.org/licenses/agpl.txt
 
 var ctx;
-var mine = Array();
+var mine;
 var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
+
+var images = {};
 
 // Bomb things:
 var bomb = {
@@ -44,11 +46,18 @@ function toggle_bomb(ev) {
     }
 }
 
-function idx(m, n) {
-    return mine[m*16 + n];
+// Class Tile
+function Tile(x0,y0) {
+  this.s = '?';
+  this.x = x0*26;
+  this.y = y0*26;
 }
 
-function draw_square(m, n) {
+Tile.prototype.blit = function(file) {
+    ctx.drawImage(images[file], this.x, this.y);
+}
+
+Tile.prototype.draw = function() {
     var TEXT_COLOR = [
 	'rgb(0,0,255)',
 	'rgb(0,160,0)',
@@ -59,43 +68,40 @@ function draw_square(m, n) {
 	'rgb(160,,160)',
 	'rgb(0,0,0)'
     ];
-    var x0 = m * 26;
-    var y0 = n * 26;
-    function draw() { ctx.fillRect(x0,y0,25,25); }
-
-    tile = idx(m, n)
-    if(tile >= 0 && tile <= 8) {
-	ctx.fillStyle = 'rgb(255,216,161)';
-	draw();
-	if(tile > 0) {
-	    ctx.fillStyle = TEXT_COLOR[tile-1];
-	    ctx.fillText(tile, x0 + 12.5, y0 + 12.5);
+    if(this.s >= 0 && this.s <= 8) {
+	this.blit('tile_clicked');
+	if(this.s > 0) {
+	    ctx.fillStyle = TEXT_COLOR[this.s-1];
+	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
 	}
     }
     else {
-	ctx.fillStyle = 'rgb(227,133,0)';
-	draw();
+	this.blit('tile');
 
-	if(tile == 'r' || tile == 'b') {
-	    ctx.fillStyle = (tile == 'b') ? 'rgb(50,50,200)' : 'rgb(200,50,50)';
-	    ctx.beginPath();
-	    ctx.arc(x0+12.5, y0+12.5, 5, 0, Math.PI*2, true);
-	    ctx.closePath();
-	    ctx.fill();
+	if(this.s == 'r' || this.s == 'b') {
+	    this.blit((this.s == 'b') ? "saphire" : "ruby");
 	}
     }
+};
+
+
+function load_img(name) {
+  var img = new Image();
+  img.src = "/static/images/" + name + ".png";
+  images[name] = img;
 }
 
 function update_points() {
     var p1 = 0;
     var p2 = 0;
 
-    for(var i = 0; i < 256; ++i) {
-	if(mine[i] == 'r')
-	    ++p1;
-	else if(mine[i] == 'b')
-	    ++p2;
-    }
+    for(var i = 0; i < 16; ++i) 
+	for(var j = 0; j < 16; ++j){
+	    if(mine[i][j].s == 'r')
+		++p1;
+	    else if(mine[i][j].s == 'b')
+		++p2;
+	}
 
     if(params.player == 1)
 	bomb.allowed = p2 > p1;
@@ -159,8 +165,8 @@ function handle_event(msg) {
 	    var m = parseInt(res[1]);
 	    var n = parseInt(res[2]);
 	    // TODO: validate data
-	    mine[m*16 + n] = res[3];
-	    draw_square(m, n);
+	    mine[m][n].s = res[3];
+	    mine[m][n].draw();
 	    update_points();
 	}
     }
@@ -220,7 +226,7 @@ function on_click(ev) {
     m = Math.floor(m / 26);
     n = Math.floor(n / 26);
 
-    if(!bomb.active && mine[m*16 + n] != '?')
+    if(!bomb.active && mine[m][n].s != '?')
 	return;
 
     // TODO: indicate activity
@@ -256,22 +262,38 @@ function init() {
 	return;
     }
 
-    if(!params.mine) {
-	for(var i = 0; i < 256; ++i)
-	    mine[i] = '?';
-    } else {
-	mine = params.mine.split('');
+  mine = new Array(16);
+  for (var i=0; i < 16; ++i) {
+    mine[i] = new Array(16);
+    for (var j=0; j < 16; ++j)
+      mine[i][j] = new Tile(i,j);
+  }
+
+  if(params.mine)
+    for(var i = 0; i < 256; ++i)
+      mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
+
+  ctx = canvas.getContext('2d');
+  ctx.font = "17pt Arial, Helvetica, sans-serif";
+  ctx.textAlign = "center";
+  ctx.textBaseline = "middle";
+
+  ctx.shadowOffsetX = 1;
+  ctx.shadowOffsetY = 1;
+  ctx.shadowBlur = 1;
+  ctx.shadowColor = "black";
+
+  // Load Images
+  load_img("tile");
+  load_img("tile_clicked");
+  load_img("saphire");
+  load_img("ruby");
+
+  // Draw map
+  for(var i = 0; i < 16; ++i)
+    for(var j = 0; j < 16; ++j){
+      mine[i][j].draw();
     }
-
-    ctx = canvas.getContext('2d');
-    ctx.font = "17pt Arial, Helvetica, sans-serif";
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    // Draw map
-    for(var i = 0; i < 16; ++i)
-	for(var j = 0; j < 16; ++j)
-	    draw_square(i, j);
 
     // Put display in current state
     set_state(params.state);
