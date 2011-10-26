@@ -26,7 +26,7 @@ var params = {
 Atualize seu navegador.
 </canvas>
 </div>
-<div id="bomb" style="visibility:hidden;" ></div>
+<img id="bomb" style="visibility:hidden;" src="/static/images/bomb.png" />
 <div class="clr"></div>
 {% if not player %}<p>Modo espectador.</p>
 {% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url diggems.views.join_game game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />

@@ -42,7 +42,7 @@ function toggle_bomb(ev) {
     }
     else {
 	bomb.active = false;
-	button.style.setProperty('background-color', 'green', null);
+	button.style.removeProperty('background-color');
     }
 }
 
