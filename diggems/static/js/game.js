@@ -74,10 +74,10 @@ Tile.prototype.draw = function() {
 	}
     }
     else if(this.s == 'r' || this.s == 'b') {
-	ctx.fillStyle = 'rgb(227,133,0)';
+	ctx.fillStyle = 'rgb(251,170,56)';
 	ctx.fillRect(this.x, this.y, 25, 25);
 	var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
-	ctx.drawImage(icon, this.x, this.y);
+	ctx.drawImage(icon, this.x + 2, this.y + 5);
     }
     else {
 	ctx.fillStyle = 'rgb(227,133,0)';
