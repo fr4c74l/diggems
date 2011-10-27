@@ -7,6 +7,7 @@ var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
 
 var images = {};
+var last_click = [null, null];
 
 // Bomb things:
 var bomb = {
@@ -83,6 +84,19 @@ Tile.prototype.draw = function() {
 	ctx.fillStyle = 'rgb(227,133,0)';
 	ctx.fillRect(this.x, this.y, 25, 25);
     }
+
+    var MARK_COLOR = [
+	'rgb(255,0,0)',
+	'rgb(0,0,255)'
+    ];
+
+    for(var i = 1; i <= 2; ++i) {
+	if(last_click[i] == this) {
+	    ctx.strokeStyle = MARK_COLOR[i-1];
+	    ctx.strokeRect(this.x + 2, this.y + 2, 21, 21);
+	    break;
+	}
+    }
 };
 
 
@@ -158,19 +172,27 @@ function handle_event(msg) {
 	return;
     params.seq_num = seq_num;
 
-    set_state(parseInt(changes[1]));
-
     for(var i = 2; i < changes.length; ++i) {
 	var res = parser.exec(changes[i]);
 	if(res) {
 	    var m = parseInt(res[1]);
 	    var n = parseInt(res[2]);
-	    // TODO: validate data
+
+	    if(m < 0 || m > 15 || n < 0 || n > 15)
+		continue; // Invalid answer; what else can I do?
+
 	    mine[m][n].s = res[3];
+	    if(i == 2 && (params.state == 1 || params.state == 2)) {
+		var previous = last_click[params.state];
+		last_click[params.state] = mine[m][n];
+		if(previous)
+		    previous.draw();
+	    }
 	    mine[m][n].draw();
-	    update_points();
 	}
     }
+    set_state(parseInt(changes[1]));
+    update_points();
 }
 
 function register_event() {
@@ -274,11 +296,18 @@ function init() {
 	for(var i = 0; i < 256; ++i)
 	    mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
 
+    // Text presets
     ctx = canvas.getContext('2d');
     ctx.font = "17pt Arial, Helvetica, sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
 
+    // Strokes presets
+    ctx.lineJoin = 'round';
+    ctx.lineWidth = 3;
+
+    // Shadows presets
+    // TODO: Fix buggy shadows drawing...
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 1;
     ctx.shadowBlur = 1;
