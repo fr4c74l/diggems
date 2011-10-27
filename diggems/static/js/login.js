@@ -53,7 +53,7 @@ function server_fb_login(fb_login)
 function server_fb_logout()
 {
     auth.fb = null;
-    var request = new_post_request('fb/logout/');
+    var request = new_post_request('/fb/logout/');
     request.send();
     auth_render();
 }
