@@ -33,5 +33,5 @@ class VerifiedHTTPSHandler(urllib2.HTTPSHandler):
     def https_open(self, req):
         return self.do_open(self.specialized_conn_class, req)
 
-def secure_url_opener():
-    return urllib2.build_opener(VerifiedHTTPSHandler())
+https_opener = urllib2.build_opener(VerifiedHTTPSHandler())
+

@@ -9,6 +9,7 @@ import radix64
 import models
 from django.core.cache import cache
 from django.db.models import F
+from https_conn import https_opener
 
 EVENT_SERVER = '127.0.0.1'
 FB_APP_ID = '264111940275149'
@@ -66,12 +67,12 @@ def inc_score(user, ammount):
     def publish_score():
         if user.facebook:
             # Publish score...
-            # TODO: verify HTTPS
+            # TODO: log Facebook connection error, but do not raise exception
             # TODO: make it asyncronous
             app_token = cache.get('app_token')
             if not app_token:
                 try:
-                    app_token = urllib2.urlopen('https://graph.facebook.com/oauth/access_token?client_id=' + FB_APP_ID + '&client_secret=' + FB_APP_KEY + '&grant_type=client_credentials').read()
+                    app_token = https_opener.open('https://graph.facebook.com/oauth/access_token?client_id=' + FB_APP_ID + '&client_secret=' + FB_APP_KEY + '&grant_type=client_credentials').read()
                     cache.set('app_token', app_token, 3600)
                 except urllib2.HTTPError:
                     # TODO: Log error before returning...
@@ -79,7 +80,7 @@ def inc_score(user, ammount):
             # There is a small chance that a race condition will make the score
             # stored at Facebook to be inconsistent. But since it is temporary
             # until the next game play, the risk seems acceptable.
-            urllib2.urlopen('https://graph.facebook.com/' + user.facebook.uid + '/scores', 'score=' + str(user.total_score) + '&' + app_token).read()
+            https_opener.open('https://graph.facebook.com/' + user.facebook.uid + '/scores', 'score=' + str(user.total_score) + '&' + app_token).read()
 
     try:
         publish_score()

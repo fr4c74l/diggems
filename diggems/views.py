@@ -17,7 +17,7 @@ from django.db.models import Q
 from django.template import Context, RequestContext, loader
 from game_helpers import *
 from models import *
-from https_conn import secure_url_opener
+from https_conn import https_opener
 
 def render_with_extra(template_name, data, request, user):
     t = loader.get_template(template_name)
@@ -54,8 +54,7 @@ def fb_login(request):
     # TODO: this ideally must be done asyncronuosly...
 
     try:
-        url_opener = secure_url_opener()
-        res = url_opener.open('https://graph.facebook.com/me?access_token=' + token)
+        res = https_opener.open('https://graph.facebook.com/me?access_token=' + token)
         fb_user = json.load(res)
         res.close()
     except ssl.SSLError:
