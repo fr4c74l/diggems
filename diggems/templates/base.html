@@ -24,12 +24,13 @@ Software under Affero GPL license, see LICENSE.txt
   });
 </script>
 <script src="/static/js/login.js"></script>
-<div id="auth_header">
+<div id="user_header">
 <span id="auth_fb_button" {% if fb %}style="visibility:hidden"{% endif %} onclick="fb_login()">Login via Facebook</span>
 <div id="auth_logged" {% if not fb %}style="visibility:hidden"{% endif %}>
 Olá, <span id="auth_username">{% if fb %}{{ fb.name }}{% endif %}</span>
 <span onclick="fb_logout()">Logout</span>
 </div>
+Escore acumulado: {{stats.score}} Vitórias: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}% dos jogos terminados){% endif %}
 </div>
 {% block content %}{% endblock %}
 </body>

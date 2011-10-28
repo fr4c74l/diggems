@@ -26,9 +26,18 @@ def render_with_extra(template_name, data, request, user):
         protocol = 'https'
     else:
         protocol = 'http'
+
+    try:
+        win_ratio = (float(user.games_won) / user.games_finished) * 100.0
+    except ZeroDivisionError:
+        win_ratio = None
+
     extra = {'FB_APP_ID': FB_APP_ID,
              'PROTOCOL': protocol,
-             'fb': user.facebook}
+             'fb': user.facebook,
+             'stats': {'score': user.total_score,
+                       'victories': user.games_won,
+                       'win_ratio': win_ratio}}
     c.update(extra)
     return HttpResponse(t.render(c))
 
@@ -51,9 +60,8 @@ def fb_login(request):
     expires = (datetime.datetime.now() +
                   datetime.timedelta(seconds=(int(expires) - 10)))
 
-    # TODO: this ideally must be done asyncronuosly...
-
     try:
+        # TODO: this ideally must be done asyncronuosly...
         res = https_opener.open('https://graph.facebook.com/me?access_token=' + token)
         fb_user = json.load(res)
         res.close()
@@ -113,8 +121,7 @@ def fb_logout(request):
 def index(request):
     profile = UserProfile.get(request)
 
-    playing_now = Game.objects.filter(Q(p1__user=profile) |
-                                      Q(p2__user=profile))
+    playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
 
     chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:5]
     new_games = []
@@ -193,6 +200,7 @@ def join_game(request, game_id):
     post_update(game.channel, str(game.seq_num) + '\n' + str(game.state))
     return HttpResponseRedirect('/game/' + game_id)
 
+@transaction.commit_on_success
 def game(request, game_id):
     # TODO: maybe control who can watch a game
     game = get_object_or_404(Game, pk=game_id)
@@ -292,18 +300,22 @@ def move(request, game_id):
 
     result = str(game.seq_num) + '\n' + str(game.state) + '\n' + str(player) + '\n' + coded_move + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
 
+    me.save()
     post_update(game.channel, result)
+
     if game.state >= 3: # Game is over
         remaining = 51 - points[0] - points[1]
         points[0 if points[0] > points[1] else 1] += remaining
 
+        game.p1.user.games_finished = F('games_finished') + 1
+        game.p2.user.games_finished = F('games_finished') + 1
+
+        if game.state == 3:
+            game.p1.user.games_won = F('games_won') + 1
+        else:
+            game.p2.user.games_won = F('games_won') + 1
+
         inc_score(game.p1.user, points[0])
         inc_score(game.p2.user, points[1])
-
-        # TODO: decide what to do with this game that is no longer accessible
-        game.p1.delete()
-        game.p2.delete()
-    else:
-        me.save()
 
     return HttpResponse()

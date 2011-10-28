@@ -18,14 +18,17 @@ class UserProfile(models.Model):
     user = models.OneToOneField(User, blank=True, null=True, unique=True)
     facebook = models.OneToOneField(FacebookCache, blank=True,
                                     null=True, unique=True)
+    games_finished = models.IntegerField(default=0)
+    games_won = models.IntegerField(default=0)
     total_score = models.IntegerField(default=0)
     last_seen = models.DateTimeField(auto_now=True, db_index=True)
 
     def merge(self, other):
-        # TODO: maybe this should be in a transaction...
         Player.objects.filter(user=other).update(user=self)
         # Can't allow someone to play against itself
         Game.objects.filter(p1__user__exact=F('p2__user')).delete()
+        self.games_finished = F('games_finished') + other.games_finished
+        self.games_won = F('games_won') + other.games_won
         self.total_score = F('total_score') + other.total_score
         self.save()
         other.delete()
