@@ -14,6 +14,12 @@ function LastClick(m, n, player, bombed) {
     this.tile = mine[m][n];
     this.player = player;
     this.bombed = bombed;
+    if(bombed) {
+	this.min_x = Math.max(0, m - 2);
+	this.size_x = Math.min(15, m + 2) - this.min_x + 1;
+	this.min_y = Math.max(0, n - 2);
+	this.size_y = Math.min(15, n + 2) - this.min_y + 1;
+    }
 }
 
 LastClick.prototype.draw = function() {
@@ -24,12 +30,8 @@ LastClick.prototype.draw = function() {
 
     ctx.strokeStyle = MARK_COLOR[this.player-1];
     if(this.bombed) {
-	var min_x = Math.max(0, this.m - 2);
-	var size_x = Math.min(15, this.m + 2) - min_x + 1;
-	var min_y = Math.max(0, this.n - 2);
-	var size_y = Math.min(15, this.n + 2) - min_y + 1;
-	ctx.strokeRect(min_x*26 + 2, min_y*26 + 2,
-		       size_x*26 - 5, size_y*26 - 5);
+	ctx.strokeRect(this.min_x*26 + 2, this.min_y*26 + 2,
+		       this.size_x*26 - 5, this.size_y*26 - 5);
     } else {
 	ctx.strokeRect(this.tile.x + 2, this.tile.y + 2, 21, 21);
     }
@@ -37,7 +39,14 @@ LastClick.prototype.draw = function() {
 
 LastClick.prototype.clear = function() {
     if(this.bombed) {
-	// TODO: to be continued
+	for(var i = 0; i < this.size_x; ++i) {
+	    mine[this.min_x + i][this.min_y].draw();
+	    mine[this.min_x + i][this.min_y + this.size_y - 1].draw();
+	}
+	for(var i = 1; i < (this.size_y - 1); ++i) {
+	    mine[this.min_x][this.min_y + i].draw();
+	    mine[this.min_x + this.size_x - 1][this.min_y + i].draw();
+	}
     } else {
 	this.tile.draw();
     }
