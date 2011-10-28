@@ -13,7 +13,9 @@ var params = {
 "state": {{ state }},
 "seq_num": {{ seq_num }},
 "last_change": "{{ last_change }}",
-"channel": "{{ channel }}"{% if mine %},
+"channel": "{{ channel }}"{% if p1_last_move %},
+"p1_last_move": "{{ p1_last_move }}"{% endif %}{% if p2_last_move %},
+"p2_last_move": "{{ p2_last_move }}"{% endif %}{% if mine %},
 "mine": "{{ mine }}"{% endif %}{% if player %},
 "player": {{ player }}{% if bomb_used %},
 "bomb_used": true{% endif %}{% endif %}

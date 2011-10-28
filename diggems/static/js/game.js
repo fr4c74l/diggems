@@ -7,6 +7,53 @@ var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
 
 var images = {};
+
+function LastClick(m, n, player, bombed) {
+    this.m = m;
+    this.n = n;
+    this.tile = mine[m][n];
+    this.player = player;
+    this.bombed = bombed;
+}
+
+LastClick.prototype.draw = function() {
+    var MARK_COLOR = [
+	'rgb(255,0,0)',
+	'rgb(0,0,255)'
+    ];
+
+    ctx.strokeStyle = MARK_COLOR[this.player-1];
+    if(this.bombed) {
+	var min_x = Math.min(0, this.m - 2);
+	var size_x = Math.max(15, this.m + 2) - min_x + 1;
+	var min_y = Math.min(0, this.n - 2);
+	var size_y = Math.max(15, this.n + 2) - min_y + 1;
+	ctx.strokeRect(min_x*26 + 2, min_y*26 + 2,
+		       size_x*26 - 4, size_y*26 - 4);
+    } else {
+	ctx.strokeRect(this.tile.x + 2, this.tile.y + 2, 21, 21);
+    }
+}
+
+LastClick.prototype.clear = function() {
+    if(this.bombed) {
+	// TODO: to be continued
+    } else {
+	this.tile.draw();
+    }
+}
+
+function last_click_decode(player, encoded) {
+    var bombed;
+    var v = [];
+
+    bombed = encoded.charAt(0) == 'x';
+    for(var j = 1; j < 3; ++j)
+    	v[j-1] = parseInt(encoded.charAt(j), 16);
+
+    return new LastClick(v[0], v[1], player, bombed);
+}
+
 var last_click = [null, null];
 
 // Bomb things:
@@ -84,21 +131,7 @@ Tile.prototype.draw = function() {
 	ctx.fillStyle = 'rgb(227,133,0)';
 	ctx.fillRect(this.x, this.y, 25, 25);
     }
-
-    var MARK_COLOR = [
-	'rgb(255,0,0)',
-	'rgb(0,0,255)'
-    ];
-
-    for(var i = 1; i <= 2; ++i) {
-	if(last_click[i] == this) {
-	    ctx.strokeStyle = MARK_COLOR[i-1];
-	    ctx.strokeRect(this.x + 2, this.y + 2, 21, 21);
-	    break;
-	}
-    }
 };
-
 
 function load_img(name) {
     var img = new Image();
@@ -164,34 +197,40 @@ function set_state(state) {
 }
 
 function handle_event(msg) {
-    var parser = /(\d+),(\d+):(.)/;
-    var changes = msg.split('\n');
-    var seq_num = parseInt(changes[0]);
+    var lines = msg.split('\n');
+    var seq_num = parseInt(lines[0]);
 
     if(seq_num <= params.seq_num)
 	return;
     params.seq_num = seq_num;
 
-    for(var i = 2; i < changes.length; ++i) {
-	var res = parser.exec(changes[i]);
+    var new_state = parseInt(lines[1]);
+    set_state(new_state);
+    if(lines.length <= 2)
+	return;
+
+    var player = parseInt(lines[2]);
+    var lclick = last_click_decode(player, lines[3]);
+    var parser = /(\d+),(\d+):(.)/;
+
+    for(var i = 4; i < lines.length; ++i) {
+	var res = parser.exec(lines[i]);
 	if(res) {
 	    var m = parseInt(res[1]);
 	    var n = parseInt(res[2]);
 
-	    if(m < 0 || m > 15 || n < 0 || n > 15)
-		continue; // Invalid answer; what else can I do?
+	    // Just suppose correct valid values were delivered...
 
 	    mine[m][n].s = res[3];
-	    if(i == 2 && (params.state == 1 || params.state == 2)) {
-		var previous = last_click[params.state];
-		last_click[params.state] = mine[m][n];
-		if(previous)
-		    previous.draw();
-	    }
 	    mine[m][n].draw();
 	}
     }
-    set_state(parseInt(changes[1]));
+
+    if(last_click[player-1])
+	last_click[player-1].clear();
+    last_click[player-1] = lclick;
+    lclick.draw();
+
     update_points();
 }
 
@@ -317,6 +356,16 @@ function init() {
     for(var i = 0; i < 16; ++i)
 	for(var j = 0; j < 16; ++j)
 	    mine[i][j].draw();
+
+    // Draw movement marks
+    if(params.p1_last_move) {
+	last_click[0] = last_click_decode(1, params.p1_last_move);
+	last_click[0].draw();
+    }
+    if(params.p2_last_move) {
+	last_click[1] = last_click_decode(2, params.p2_last_move);
+	last_click[1].draw();
+    }
 
     // Put display in current state
     set_state(params.state);

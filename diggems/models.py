@@ -64,6 +64,7 @@ class UserProfile(models.Model):
 class Player(models.Model):
     has_bomb = models.BooleanField(default=True)
     last_seen = models.DateTimeField(auto_now=True)
+    last_move = models.CharField(max_length=3, blank=True, null=True)
     user = models.ForeignKey(UserProfile)
 
 class Game(models.Model):

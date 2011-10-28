@@ -201,7 +201,11 @@ def game(request, game_id):
             'game_id': game_id,
             'seq_num': game.seq_num,
             'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
-            'channel': game.channel}
+            'channel': game.channel,
+            'p1_last_move': game.p1.last_move}
+
+    if(game.p2):
+        data['p2_last_move'] = game.p2.last_move
 
     profile = UserProfile.get(request)
     pdata = game.what_player(profile)
@@ -220,6 +224,7 @@ def game(request, game_id):
 
     return render_with_extra('game.html', data, request, profile)
 
+@transaction.commit_on_success
 def move(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
 
@@ -239,20 +244,18 @@ def move(request, game_id):
 
     mine = mine_decode(game.mine)
 
+    to_reveal = [(m, n)]
+    bomb_used = False
+
     if request.GET.get('bomb') == 'y':
         if not me.has_bomb:
             return HttpResponseBadRequest()
         me.has_bomb = False
-        m0 = max(m-2, 0)
-        m5 = min(m+2, 15)
         to_reveal = itertools.product(xrange(max(m-2,0),
                                              min(m+3, 16)),
                                       xrange(max(n-2,0),
                                              min(n+3, 16)))
         bomb_used = True
-    else:
-        to_reveal = [(m, n)]
-        bomb_used = False
 
     revealed = []
     def reveal(m, n):
@@ -267,13 +270,12 @@ def move(request, game_id):
         if old == 0:
             for_each_surrounding(m, n, reveal)
 
-    for m, n in to_reveal:
-        reveal(m, n)
+    for x, y in to_reveal:
+        reveal(x, y)
 
     if not revealed:
         return HttpResponseBadRequest()
 
-    m, n, s = revealed[0]
     if mine[m][n] <= 18 or bomb_used:
         game.state = (game.state % 2) + 1
 
@@ -283,10 +285,12 @@ def move(request, game_id):
     if points[0] >= 26 or points[1] >= 26:
         game.state = player + 2
 
+    coded_move = '%s%x%x' % ('b' if bomb_used else 'd', m, n)
+    me.last_move = coded_move
     game.mine = new_mine
     game.save()
 
-    result = str(game.seq_num) + '\n' + str(game.state) + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
+    result = str(game.seq_num) + '\n' + str(game.state) + '\n' + str(player) + '\n' + coded_move + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
 
     post_update(game.channel, result)
     if game.state >= 3: # Game is over
