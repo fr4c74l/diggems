@@ -24,12 +24,12 @@ LastClick.prototype.draw = function() {
 
     ctx.strokeStyle = MARK_COLOR[this.player-1];
     if(this.bombed) {
-	var min_x = Math.min(0, this.m - 2);
-	var size_x = Math.max(15, this.m + 2) - min_x + 1;
-	var min_y = Math.min(0, this.n - 2);
-	var size_y = Math.max(15, this.n + 2) - min_y + 1;
+	var min_x = Math.max(0, this.m - 2);
+	var size_x = Math.min(15, this.m + 2) - min_x + 1;
+	var min_y = Math.max(0, this.n - 2);
+	var size_y = Math.min(15, this.n + 2) - min_y + 1;
 	ctx.strokeRect(min_x*26 + 2, min_y*26 + 2,
-		       size_x*26 - 4, size_y*26 - 4);
+		       size_x*26 - 5, size_y*26 - 5);
     } else {
 	ctx.strokeRect(this.tile.x + 2, this.tile.y + 2, 21, 21);
     }
@@ -47,7 +47,7 @@ function last_click_decode(player, encoded) {
     var bombed;
     var v = [];
 
-    bombed = encoded.charAt(0) == 'x';
+    bombed = encoded.charAt(0) == 'b';
     for(var j = 1; j < 3; ++j)
     	v[j-1] = parseInt(encoded.charAt(j), 16);
 
