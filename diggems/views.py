@@ -226,7 +226,7 @@ def game(request, game_id):
     if game.state == 0 and game.token: # Uninitialized private game
         data['token'] = game.token
     else:
-        masked = mine_mask_encoded(game.mine)
+        masked = mine_mask(game.mine, game.state > 2)
         if masked.count('?') != 256:
             data['mine'] = masked
 
@@ -297,25 +297,34 @@ def move(request, game_id):
     me.last_move = coded_move
     game.mine = new_mine
     game.save()
-
-    result = str(game.seq_num) + '\n' + str(game.state) + '\n' + str(player) + '\n' + coded_move + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
-
     me.save()
-    post_update(game.channel, result)
 
     if game.state >= 3: # Game is over
         remaining = 51 - points[0] - points[1]
         points[0 if points[0] > points[1] else 1] += remaining
 
-        game.p1.user.games_finished = F('games_finished') + 1
-        game.p2.user.games_finished = F('games_finished') + 1
+        for user, idx in ((game.p1.user, 0), (game.p2.user, 1)):
+            user.games_finished = F('games_finished') + 1
+            user.total_score = F('total_score') + points[idx]
+            if game.state == (idx + 3):
+                user.games_won = F('games_won') + 1
 
-        if game.state == 3:
-            game.p1.user.games_won = F('games_won') + 1
-        else:
-            game.p2.user.games_won = F('games_won') + 1
+            user.save()
 
-        inc_score(game.p1.user, points[0])
-        inc_score(game.p2.user, points[1])
+        for m, n in itertools.product(xrange(0, 16), xrange(0, 16)):
+             if mine[m][n] == 9:
+                 revealed.append((m, n, 'x'))
+
+    result = str(game.seq_num) + '\n' + str(game.state) + '\n' + str(player) + '\n' + coded_move + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
+
+    # Since updating Facebook with score may be slow, we post
+    # the update to the user now...
+    post_update(game.channel, result)
+
+    # ... and then publish the scores on FB, if game is over.
+    # (TODO: If only this could be done asyncronously...)
+    if game.state >= 3: 
+        publish_score(game.p1.user)
+        publish_score(game.p2.user)
 
     return HttpResponse()

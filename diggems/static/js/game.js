@@ -139,6 +139,13 @@ Tile.prototype.draw = function() {
     else {
 	ctx.fillStyle = 'rgb(227,133,0)';
 	ctx.fillRect(this.x, this.y, 25, 25);
+
+	if(this.s == 'x') {
+	    var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
+	    ctx.globalCompositeOperation = 'lighter';
+	    ctx.drawImage(icon, this.x + 2, this.y + 5);
+	    ctx.globalCompositeOperation = 'source-over';
+	}
     }
 };
 
