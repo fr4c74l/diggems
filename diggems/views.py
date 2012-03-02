@@ -10,7 +10,7 @@ import ssl
 from wsgiref.handlers import format_date_time
 from time import mktime
 
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
@@ -183,12 +183,25 @@ def join_game(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
     profile = UserProfile.get(request)
 
+    # If already playing this game, redirect to game screen
     if game.what_player(profile):
         return HttpResponseRedirect('/game/' + str(game.id))
 
+    # If user cannot start this game, then 403
+    token = request.REQUEST.get('token')
     if game.state != 0 or (game.token and
-                           request.REQUEST.get('token') != game.token):
+                           token != game.token):
         return HttpResponseForbidden()
+
+    # If we got here via GET, return a page that will make the client/user
+    # retry via POST. Done so that Facebook and other robots do not join
+    # the game in place of a real user.
+    if request.method != 'POST':
+        url = '/game/' + game_id + '/join/'
+        if token:
+            url = url + '?token=' + token
+        c = Context({'url', url})
+        return render_to_response('post_redirect.html', c)
 
     p2 = Player(user=profile)
     p2.save()
