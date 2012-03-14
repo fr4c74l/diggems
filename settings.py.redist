@@ -1,5 +1,7 @@
 # Django settings for webgames project.
 
+EVENT_SERVER = '127.0.0.1'
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

@@ -315,7 +315,7 @@ function on_click(ev) {
 	url += '&bomb=y';
 	bombed = true;
     }
-    move_request.open('GET', url, true);
+    move_request.open('POST', url, true);
     move_request.onreadystatechange = function(ev){
 	if (move_request.readyState == 4) {
 	    if(move_request.status == 200) {

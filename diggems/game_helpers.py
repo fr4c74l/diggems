@@ -10,8 +10,8 @@ import models
 from django.core.cache import cache
 from django.db.models import F
 from https_conn import https_opener
+from settings import EVENT_SERVER
 
-EVENT_SERVER = '127.0.0.1'
 FB_APP_ID = '264111940275149'
 FB_APP_KEY = '8a9260360907fd0cdffc1deafeb16b24'
 

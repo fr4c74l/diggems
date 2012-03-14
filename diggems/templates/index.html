@@ -19,7 +19,7 @@ Software under Affero GPL license, see LICENSE.txt
 {% endif %}{% if new_games %}<h1>Jogos Por Começar</h1>{% for g in new_games %}
 <ul>
     <li>Contra {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</li>
-    <li><a href="game/{{ g.id }}/join/">Juntar-se!</a></li>
+    <li><form action="game/{{ g.id }}/join/" method="post"><input type="submit" value="Juntar-se!" /></form></li>
 </ul>{% endfor %}
 
 {% endif %}<h1>Novo Jogo</h1>

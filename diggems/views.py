@@ -247,6 +247,9 @@ def game(request, game_id):
 
 @transaction.commit_on_success
 def move(request, game_id):
+    if request.method != 'POST':
+        return HttpResponseForbidden()
+
     game = get_object_or_404(Game, pk=game_id)
 
     pdata = game.what_player(UserProfile.get(request))
@@ -256,8 +259,8 @@ def move(request, game_id):
     player, me = pdata
 
     try:
-        m = int(request.GET['m'])
-        n = int(request.GET['n'])
+        m = int(request.REQUEST['m'])
+        n = int(request.REQUEST['n'])
         if not (0 <= m <= 15 and 0 <= n <= 15):
             raise ValueError
     except:
@@ -268,7 +271,7 @@ def move(request, game_id):
     to_reveal = [(m, n)]
     bomb_used = False
 
-    if request.GET.get('bomb') == 'y':
+    if request.REQUEST.get('bomb') == 'y':
         if not me.has_bomb:
             return HttpResponseBadRequest()
         me.has_bomb = False
