@@ -13,7 +13,8 @@ var params = {
 "state": {{ state }},
 "seq_num": {{ seq_num }},
 "last_change": "{{ last_change }}",
-"channel": "{{ channel }}"{% if p1_last_move %},
+"channel": "{{ channel }}"{% if fb_other %},
+"fb_other": "{{ fb_other }}"{% endif %}{% if p1_last_move %},
 "p1_last_move": "{{ p1_last_move }}"{% endif %}{% if p2_last_move %},
 "p2_last_move": "{{ p2_last_move }}"{% endif %}{% if mine %},
 "mine": "{{ mine }}"{% endif %}{% if player %},
@@ -28,6 +29,12 @@ var params = {
 Atualize seu navegador.
 </canvas>
 </div>
+<!-- TODO: Have button to disable the audio. -->
+<audio id="ring" preload="auto">
+<source src="/static/sound/ring.mp3" type="audio/mpeg" />
+<source src="/static/sound/ring.ogg" type="audio/ogg" />
+<source src="/static/sound/ring.wav" type="audio/wav" />
+</audio>
 <img id="bomb" style="visibility:hidden;" src="/static/images/bomb.png" />
 <div class="clr"></div>
 {% if not player %}<p>Modo espectador.</p>
@@ -36,5 +43,11 @@ Atualize seu navegador.
 <p>Pontuação:<br />
 Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />
 Jogador Azul {% if player == 2 %}(você){% endif %}: <span id="p2_pts">0</span></p>
+<!-- TODO: Make notification stuff always visible -->
+<script>
+if(nt && nt.checkPermission() == /* nt.PERMISSION_NOT_ALLOWED */ 1)
+document.write('<span onclick=\"nt.requestPermission();\">Clique para permitir notificação.</span>');
+</script>
+<span id="brag_button" style="visibility:hidden" onclick="publish_results()">Publicar resultado.</span>
 
 {% endblock %}

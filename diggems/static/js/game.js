@@ -8,6 +8,9 @@ var event_request = new XMLHttpRequest();
 
 var images = {};
 
+var nt = window.webkitNotifications;
+var last_nt;
+
 function LastClick(m, n, player, bombed) {
     this.m = m;
     this.n = n;
@@ -149,12 +152,6 @@ Tile.prototype.draw = function() {
     }
 };
 
-function load_img(name) {
-    var img = new Image();
-    img.src = "/static/images/" + name + ".png";
-    images[name] = img;
-}
-
 function update_points() {
     var p1 = 0;
     var p2 = 0;
@@ -178,6 +175,35 @@ function update_points() {
     document.getElementById('p2_pts').innerHTML = String(p2);
 }
 
+function close_last_nt() {
+    if(last_nt) {
+	last_nt.cancel();
+	last_nt = null;
+    }
+}
+
+function notify_state(msg) {
+    // Sound stuff
+    var ring = document.getElementById('ring');
+    ring.play();
+
+    // Notification stuff
+    if(!nt
+       || nt.checkPermission() != /* nt.PERMISSION_ALLOWED */ 0
+       || document.visibilityState == "visible")
+	return;
+
+    if(msg != '') {
+	try{
+	    close_last_nt();
+	    last_nt = nt.createNotification('/static/images/ruby.png', 'DigGems: Jogo ' + params.game_id, msg);
+	    last_nt.show();
+	} catch(err) {
+	    // Do nothing...
+	}
+    }
+}
+
 // TODO: localization
 function set_state(state) {
     var msg;
@@ -190,13 +216,20 @@ function set_state(state) {
 	}
 	else if(state == 3 || state == 4) {
 	    msg = 'Fim de jogo. ';
-	    if((state - 2) == params.player)
+	    if((state - 2) == params.player) {
+		if(auth.fb)
+		    document.getElementById('brag_button')
+		    .style.setProperty('visibility', 'visible', null);
 		msg += 'Você venceu!';
+	    }
 	    else
 		msg += 'Você perdeu.';
 	}
 	else
 	    return; // What else can I do?
+
+	if(params.state != state && (state == params.player || state > 2))
+	    notify_state(msg);
     } else {
 	// Spectator mode.
 	var state_msgs =
@@ -207,7 +240,6 @@ function set_state(state) {
 	     'Azul venceu.'];
 	msg = state_msgs[state];
     }
-
     document.getElementById('message').innerHTML = msg;
     params.state = state;
 }
@@ -235,7 +267,7 @@ function handle_event(msg) {
 	    var m = parseInt(res[1]);
 	    var n = parseInt(res[2]);
 
-	    // Just suppose correct valid values were delivered...
+	    // Just assume correct valid values were delivered...
 
 	    mine[m][n].s = res[3];
 	    mine[m][n].draw();
@@ -307,6 +339,8 @@ function on_click(ev) {
     if(!bomb.active && mine[m][n].s != '?')
 	return;
 
+    close_last_nt();
+
     // TODO: indicate activity
 
     var url = '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n;
@@ -333,6 +367,12 @@ function on_click(ev) {
 }
 
 function init() {
+    // TODO: find a better way to deal with sound
+    // Bogus browsers won't allow me to play the sound repeatedely
+    // without reloading it.
+    var ring = document.getElementById('ring');
+    ring.addEventListener('ended', function() { ring.load(); }, false);
+
     var canvas = document.getElementById('game_canvas');
     if (!canvas || !canvas.getContext) {
 	// Panic return
@@ -397,7 +437,33 @@ function init() {
     }
 }
 
-// Load Images
+// Will publish the result of a match to the wall.
+// ATTENTION: This thing is completely unsafe and fakeable!
+// TODO: FIX SECURITY PROBLEM!
+function publish_results()
+{
+    if((params.state - 2) != params.player
+       || !auth.fb)
+	return;
+
+    var dialog = {
+        method: 'feed',
+	// TODO: put right link here
+        link: 'http://vella.no-ip.org/',
+        picture: 'http://vella.no-ip.org/static/images/logo.png',
+        name: 'Resultado DigGems',
+        caption: 'Partida Ganha',
+        description: 'Using Dialogs to interact with users.'
+    };
+}
+
+function load_img(name) {
+    var img = new Image();
+    img.src = "/static/images/" + name + ".png";
+    images[name] = img;
+}
+
+// Load resources
 load_img("saphire");
 load_img("ruby");
 
