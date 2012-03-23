@@ -196,7 +196,7 @@ function notify_state(msg) {
     if(msg != '') {
 	try{
 	    close_last_nt();
-	    last_nt = nt.createNotification('/static/images/ruby.png', 'DigGems: Jogo ' + params.game_id, msg);
+	    last_nt = nt.createNotification('/static/images/icon32.png', 'DigGems: Jogo ' + params.game_id, msg);
 	    last_nt.show();
 	} catch(err) {
 	    // Do nothing...

@@ -10,13 +10,13 @@ Software under Affero GPL license, see LICENSE.txt
 <link rel="stylesheet" media="screen" type="text/css" href="/static/css/style.css" />
 </head>
 <body>
+
 <div id="fb-root"></div>
 <script src="//connect.facebook.net/pt_BR/all.js"></script>
 <script>
   var auth = {
     "fb": {% if fb %}{% include "auth_fb.json" %}{% else %}null{% endif %}
   }
-
   FB.init({
   "appId": "{{ FB_APP_ID }}",
   "status": true, "cookie": true, "oauth": true,
@@ -24,14 +24,20 @@ Software under Affero GPL license, see LICENSE.txt
   });
 </script>
 <script src="/static/js/login.js"></script>
-<div id="user_header">
-<span id="auth_fb_button" {% if fb %}style="visibility:hidden"{% endif %} onclick="fb_login()">Login via Facebook</span>
-<div id="auth_logged" {% if not fb %}style="visibility:hidden"{% endif %}>
-Olá, <span id="auth_username">{% if fb %}{{ fb.name }}{% endif %}</span>
-<span onclick="fb_logout()">Logout</span>
+
+<dir id="header">
+  <img id="logo" src="/static/images/icon64.png" />
+  <div id="user_info">
+    <span id="auth_fb_button" {% if fb %}style="visibility:hidden"{% endif %} onclick="fb_login()">Login via Facebook</span>
+    <div id="auth_logged" {% if not fb %}style="visibility:hidden"{% endif %}>
+      Olá, <span id="auth_username">{% if fb %}{{ fb.name }}{% endif %}</span>
+      <span onclick="fb_logout()">Logout</span>
+    </div>
+    Escore acumulado: {{stats.score}} Vitórias: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}% dos jogos terminados){% endif %}
+  </div>
 </div>
-Escore acumulado: {{stats.score}} Vitórias: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}% dos jogos terminados){% endif %}
-</div>
+
 {% block content %}{% endblock %}
+
 </body>
 </html>
