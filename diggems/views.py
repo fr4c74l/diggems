@@ -22,10 +22,6 @@ from https_conn import https_opener
 def render_with_extra(template_name, data, request, user):
     t = loader.get_template(template_name)
     c = Context(data)
-    if request.is_secure():
-        protocol = 'https'
-    else:
-        protocol = 'http'
 
     try:
         win_ratio = (float(user.games_won) / user.games_finished) * 100.0
@@ -33,7 +29,6 @@ def render_with_extra(template_name, data, request, user):
         win_ratio = None
 
     extra = {'FB_APP_ID': FB_APP_ID,
-             'PROTOCOL': protocol,
              'fb': user.facebook,
              'stats': {'score': user.total_score,
                        'victories': user.games_won,
