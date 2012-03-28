@@ -10,7 +10,6 @@ Software under Affero GPL license, see LICENSE.txt
 <link rel="stylesheet" media="screen" type="text/css" href="/static/css/style.css" />
 </head>
 <body>
-
 <div id="fb-root"></div>
 <script src="//connect.facebook.net/pt_BR/all.js"></script>
 <script>
@@ -19,25 +18,24 @@ Software under Affero GPL license, see LICENSE.txt
   }
   FB.init({
   "appId": "{{ FB_APP_ID }}",
-  "status": true, "cookie": true, "oauth": true,
+  "status": true, "cookie": true, "oauth": true, "xfbml": true,
   "channelURL": (window.location.protocol + "//vella.no-ip.org/fb/channel/"),
   });
 </script>
 <script src="/static/js/login.js"></script>
 
-<dir id="header">
-  <img id="logo" src="/static/images/icon64.png" />
-  <div id="user_info">
-    <span id="auth_fb_button" {% if fb %}style="visibility:hidden"{% endif %} onclick="fb_login()">Login via Facebook</span>
-    <div id="auth_logged" {% if not fb %}style="visibility:hidden"{% endif %}>
-      Olá, <span id="auth_username">{% if fb %}{{ fb.name }}{% endif %}</span>
-      <span onclick="fb_logout()">Logout</span>
-    </div>
-    Escore acumulado: {{stats.score}} Vitórias: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}% dos jogos terminados){% endif %}
+<div id="header">
+  <img id="icon" class="logo" src="/static/images/icon64.png" />
+  <span id="title" class="logo">DigGems</span>
+  <div id="user_info">{% if fb %}
+    <img id="user_pic" src="https://graph.facebook.com/{{ fb.uid }}/picture" />{% endif %}
+    <div class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
+    <span id="auth_username">{% if fb %}{{ fb.name }}{% endif %}</span>
+    <div id="score"><img src="/static/images/ruby.png" />: {{stats.score}} <img src="/static/images/saphire.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %} </div>
   </div>
 </div>
-
+<div>
 {% block content %}{% endblock %}
-
+</div>
 </body>
 </html>

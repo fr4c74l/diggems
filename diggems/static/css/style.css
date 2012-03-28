@@ -28,3 +28,39 @@ canvas {
 	background: url(../images/bomb_up.png) no-repeat left top ; 
 }
 
+div {
+overflow: hidden;
+}
+
+#header {
+border-radius: 15px;
+padding: 10px;
+
+background: #fefcea; /* Old browsers */
+background: -moz-linear-gradient(top, #fefcea 0%, #f1da36 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fefcea), color-stop(100%,#f1da36)); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top, #fefcea 0%,#f1da36 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top, #fefcea 0%,#f1da36 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top, #fefcea 0%,#f1da36 100%); /* IE10+ */
+background: linear-gradient(top, #fefcea 0%,#f1da36 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#fefcea', endColorstr='#f1da36',GradientType=0 ); /* IE6-9 */
+}
+
+.logo {
+	vertical-align: middle;
+	padding-left:10px;
+}
+
+#title {
+	font-family: sans;
+	color: #913D00;
+	font-size: 68px;
+	padding-left:20px;
+	letter-spacing: 4pt;
+}
+
+#user_info {
+    float: right;
+    top: 20px;
+	position: relative;
+}
