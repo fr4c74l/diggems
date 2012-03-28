@@ -195,7 +195,7 @@ def join_game(request, game_id):
         url = '/game/' + game_id + '/join/'
         if token:
             url = url + '?token=' + token
-        c = Context({'url', url})
+        c = Context({'url': url})
         return render_to_response('post_redirect.html', c)
 
     p2 = Player(user=profile)
