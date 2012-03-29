@@ -35,6 +35,8 @@ overflow: hidden;
 #header {
 border-radius: 15px;
 min-width:521px;
+padding:10px;
+
 background: #fefcea; /* Old browsers */
 background: -moz-linear-gradient(top, #fefcea 0%, #f1da36 100%); /* FF3.6+ */
 background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#fefcea), color-stop(100%,#f1da36)); /* Chrome,Safari4+ */
