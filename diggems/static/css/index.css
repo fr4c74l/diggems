@@ -1,0 +1,123 @@
+
+#content_container {
+	margin: 0 auto;
+	position: relative;
+	padding: 0;
+	max-width: 800px;
+}
+
+/* TABLES */
+
+table {
+	/* border-collapse:collapse; */
+	empty-cells: hide;
+	overflow: visible;
+	width:100%;
+	border-spacing: 20px;
+}
+
+tr {
+	width:50%;
+}
+
+td {
+	padding: 11px;
+}
+
+#new_game {
+	vertical-align: bottom;
+	background-color: #f3d0ff;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-o-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-moz-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-webkit-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3; 
+	border: 1px #fb3 solid;
+}
+
+#join_game {
+	background-color: #f8e08c;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-o-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-moz-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-webkit-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	border: 1px #fb3 solid;
+}
+
+#your_game {
+	background-color: #e9ffcd;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+	box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-o-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-moz-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3;
+	-webkit-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fb3; 
+	border: 1px #fb3 solid;
+}
+
+td.top {
+	vertical-align: top;
+}
+td h1 {
+	text-align: left;
+}
+
+caption {
+	font-weight:bold;
+	margin-bottom:.33em;
+}
+
+/* FORMS */
+
+form {
+	margin: 15px auto 20px;
+	padding: 12px 0;
+	-moz-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+}
+
+input[type=submit] {
+	height: 35px;
+	line-height: 34px;
+	padding: 0 10px;
+	margin: 4px 0 0 180px;
+	min-width: 150px;
+	background-color: #a0dC48;
+	display: block;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px outset #B0EC58;
+	color: #f9f9f9;
+	font-size: 13px;
+	letter-spacing: 1px;
+	font-weight: bold;
+	text-shadow: #72a749 0 -1px 0;
+	text-align: center;
+	cursor: pointer;
+	margin: 0 auto;
+}
+
+input[type=submit]:hover {
+	color: #f9f9f9;
+	cursor: pointer;
+}
+
+input[type=submit]:active {
+	line-height: 36px;
+	background-color: #6aa040;
+	line-height: 36px;
+	border: 1px inset #6aa040;
+}
+

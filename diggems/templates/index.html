@@ -7,24 +7,51 @@ Software under Affero GPL license, see LICENSE.txt
 {% endcomment %}
 
 {% block title %}Index{% endblock %}
+{% block css %}
+	{{block.super}}
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/index.css" />
+{% endblock %}
 {% block content %}
-{% if your_games %}<h1>Seus Jogos</h1>{% for g in your_games %}
-<ul>
-    <li><a href="game/{{ g.id }}/">Jogo {{ g.id }}</a></li>
-    <li>{% if g.token %}Privado{% else %}Público{% endif %}</li>{% if g.state = 0 %}
-    <li>Aguardando outro jogador</li>{% else %}
-    <li>Em andamento</li>{% endif %}
-</ul>{% endfor %}
-
-{% endif %}{% if new_games %}<h1>Jogos Por Começar</h1>{% for g in new_games %}
-<ul>
-    <li>Contra {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</li>
-    <li><form action="game/{{ g.id }}/join/" method="post"><input type="submit" value="Juntar-se!" /></form></li>
-</ul>{% endfor %}
-
-{% endif %}<h1>Novo Jogo</h1>
-<form action="new_game/" method="post">
-Jogo privado <input type="checkbox" name="private" value="1" /><br />
-<input type="submit" value="Criar!" />
-</form>
+<div id="content_container">
+	<table>
+		<tbody>
+			<tr>
+				<td id="new_game">
+					<h1>Novo Jogo</h1>
+					<form action="new_game/" method="post">
+						Jogo privado <input type="checkbox" name="private" value="1" />
+						<input type="submit" value="Criar!"  style="float: right;"/>
+					</form>
+				</td>
+				<td id="your_game" rowspan="2" class="top">
+					{% if your_games %}
+					<h1>Seus Jogos</h1>
+					<div class="center_list">
+						{% for g in your_games %}
+						<ul>
+							<li><a href="game/{{ g.id }}/">Jogo {{ g.id }}</a></li>
+							<li>{% if g.token %}Privado{% else %}Público{% endif %}</li>{% if g.state = 0 %}
+							<li>Aguardando outdo jogador</li>{% else %}
+							<li>Em andamento</li>{% endif %}
+						</ul>{% endfor %}
+						{% endif %}
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td id="join_game" class="top">
+					<h1>Jogos Por Começar</h1>
+					<div class="center_list">
+						{% for g in new_games %}
+						<ul>
+							<li>Contda {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</li>
+							<li><form action="game/{{ g.id }}/join/" method="post"><input type="submit" value="Juntar-se!" /></form></li>
+						</ul>
+						{% endfor %}
+					</div>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</div>
 {% endblock %}
