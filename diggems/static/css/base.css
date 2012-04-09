@@ -1,9 +1,23 @@
 @charset "utf-8";
 
+@font-face {
+    font-family: Diavlo;
+    src: url('/static/fonts/Diavlo_BOOK_II_37.otf');
+    /* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
+}
+
+@font-face {
+    font-family: Diavlo;
+    font-weight: bold;
+    src: url('/static/fonts/Diavlo_BOLD_II_37.otf');
+    /* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
+} 
+
 html {
 	overflow: auto;
-	background:url(../images/bg-diggems.png) repeat-x left top;
-	z-index: -1; 
+	background:url('/static/images/bg-diggems.png') repeat-x left top;
+	z-index: -1;
+	font-family: sans;
 }
 
 .clr {
@@ -57,9 +71,10 @@ li {
 }
 
 #title {
-	font-family: sans;
+	font-family: Diavlo;
+	font-weight: bold;
 	text-shadow: 0.1em 0.1em 0.2em #535353;
-	color: #913D00;
+	color: #234645;
 	font-size: 68px;
 	padding-left:20px;
 	letter-spacing: 4pt;
