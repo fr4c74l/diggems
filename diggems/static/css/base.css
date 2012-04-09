@@ -51,11 +51,12 @@ canvas {
 
 ul {
 	list-style:none;
-	border-bottom: 1px #fff solid;
+	padding: 0px;
 }
 
 li {
 	list-style:none;
+	padding: 0px;
 }
 
 /* HEADER */
@@ -116,17 +117,17 @@ li {
 	margin: 0 auto;
 }
 
-#footer ul {
+#footer li {
 	float: left;
 	list-style-type: none;
 }
 
-#footer ul a {
+#footer li a {
 	color: white;
 	text-decoration: none;
 }
 
-#footer ul a:hover {
+#footer li a:hover {
 	text-decoration: underline;
 }
 

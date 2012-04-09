@@ -25,34 +25,39 @@ Software under Affero GPL license, see LICENSE.txt
 				</td>
 				<td id="your_game" rowspan="2" class="top">
 					<h1>Seus Jogos</h1>
-					<div class="center_list">
+					<ul class="center_list">
 					{% if your_games %}
 						{% for g in your_games %}
-						<ul>
-							<li><a href="game/{{ g.id }}/">Jogo {{ g.id }}</a></li>
-							<li>{% if g.token %}Privado{% else %}Público{% endif %}</li>{% if g.state = 0 %}
-							<li>Aguardando outdo jogador</li>{% else %}
-							<li>Em andamento</li>{% endif %}
-						</ul>{% endfor %}
+						<li class="list_games">
+							<div style="float:left; padding: 0px 5px 5px 0px;" ><a href="game/{{ g.id }}/">Jogo {{ g.id }}</a></div>
+							<div>{% if g.token %}Privado{% else %}Público{% endif %}</div>{% if g.state = 0 %}
+							<div>Aguardando outdo jogador</div>{% else %}
+							<div>Em andamento</div>{% endif %}
+						</li>{% endfor %}
 					{% else %}
 					<h4> Nenhum jogo! </h4>
 					{% endif %}
-					</div>
+					</ul>
 				</td>
 			</tr>
 			<tr>
 				<td id="join_game" class="top">
 					<h1>Jogos Por Começar</h1>
-					<div class="center_list">
+					<ul class="center_list">
 						{% for g in new_games %}
-						<ul>
-							<li style="float:left;">Contra {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</li>
-							<li><form action="game/{{ g.id }}/join/" method="post"><input type="submit" value="Juntar-se!" /></form></li>
-							<li><a href="game/{{ g.id }}/">Visualizar jogo {{ g.id }}</a></li>
-						</ul>
+						<li class="list_games">
+							<div style="float:left; padding-right: 10px;">{{ g.id }}</div>
+							<div style="overflow:hidden;">
+								<div>Contra {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</div>
+									<div style="margin-top: 10px;">
+										<div style="float:left;"><form action="game/{{ g.id }}/" method="post"><input type="submit" value="Visualizar" /></form></div>
+										<div><form action="game/{{ g.id }}/join/" method="post"><input type="submit" value="Juntar-se!" /></form></div>
+									</div>
+							</div>
+						</li>
 						<div class="clr"></div>
 						{% endfor %}
-					</div>
+					</ul>
 				</td>
 			</tr>
 		</tbody>

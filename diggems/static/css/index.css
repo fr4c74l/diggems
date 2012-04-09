@@ -6,6 +6,11 @@
 	max-width: 800px;
 }
 
+ul.list_games {
+	padding: 0px 10px;
+	overflow: hidden;
+}
+
 /* TABLES */
 
 table {
@@ -70,9 +75,9 @@ form {
 }
 
 input[type=submit] {
-	height: 35px;
-	line-height: 34px;
-	min-width: 150px;
+	min-width: 15px;
+	padding: 4px;
+	margin: 0px 5px 0px 0px;
 	background-color: #a0dC48;
 	display: block;
 	-moz-border-radius: 3px;
@@ -86,7 +91,6 @@ input[type=submit] {
 	font-weight: bold;
 	text-shadow: #72a749 0 -1px 0;
 	text-align: center;
-	margin: 0 auto;
 }
 
 input[type=submit]:hover {
@@ -95,9 +99,7 @@ input[type=submit]:hover {
 }
 
 input[type=submit]:active {
-	line-height: 36px;
 	background-color: #6aa040;
-	line-height: 36px;
 	border: 1px inset #6aa040;
 }
 
