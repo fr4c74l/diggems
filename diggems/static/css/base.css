@@ -16,6 +16,7 @@
 html {
 	overflow: auto;
 	background:url('/static/images/bg-diggems.png') repeat-x left top;
+	background-size: auto 100%;
 	z-index: -1;
 	font-family: sans;
 }
