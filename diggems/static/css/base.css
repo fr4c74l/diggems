@@ -31,23 +31,37 @@ html, body {
 	line-height:0;
 }
 
-#center_box {
+canvas {
 	position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 680px;
-	height: 400px;
-	margin: -200px 0 0 -340px;
+	width: 416px;
+	height: 416px;
+	margin: -270px 0 0 -202px;
 	background-color: #eee;
+	z-index:1;
 }
 
-canvas {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	position: relative;
-	z-index:-1;
-	border: 30px solid #fff;
+#machine{
+	height: 903px;
+	width: 759px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -451px 0 0 -379px;
+	background: url('/static/images/maquina1.png') center no-repeat;
+	z-index:0;
+}
+
+#machine_border{
+	height: 903px;
+	width: 759px;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin: -451px 0 0 -379px;
+	background: url('/static/images/maquina1-borda.png') center no-repeat;
+	z-index:2;
 }
 
 #bomb {
