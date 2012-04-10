@@ -13,11 +13,13 @@
     /* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
 } 
 
-html {
+html, body {
 	overflow: auto;
 	background:url('/static/images/bg-diggems.png') repeat-x left top;
+	background-color: black;
 	z-index: -1;
 	font-family: sans;
+	/*height:100%;*/
 }
 
 .clr {
@@ -27,6 +29,16 @@ html {
 	width:100%;
 	font-size:0;
 	line-height:0;
+}
+
+#center_box {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 680px;
+	height: 400px;
+	margin: -200px 0 0 -340px;
+	background-color: #eee;
 }
 
 canvas {
@@ -51,12 +63,22 @@ canvas {
 
 ul {
 	list-style:none;
-	padding: 0px;
+	padding: 0;
+	margin: 0;
 }
 
 li {
 	list-style:none;
-	padding: 0px;
+	padding: 0;
+	margin: 0;
+}
+
+#container {
+	position:relative;
+	min-height: 100%;
+	height: auto !important;
+	height: 100%;
+	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
 }
 
 /* HEADER */
@@ -103,35 +125,39 @@ li {
 
 /* CONTENT */
 #content {
+	padding: 10px;
+	padding-bottom: 40px;   /* Height of the footer */
 }
 
 /* FOOTER */
+
 #footer {
-	border-radius: 15px;
 	min-width:521px;
-	padding:10px;
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 40px;   /* Height of the footer */
 }
 
 #footer_container {
-	/* width: 800px; */
 	margin: 0 auto;
 }
 
-#footer li {
+#footer_container li {
 	float: left;
+	padding-left: 20px;
 	list-style-type: none;
 }
 
-#footer li a {
+#footer_container li a {
 	color: white;
+	clear: both;
+	white-space: normal;
 	text-decoration: none;
 }
 
-#footer li a:hover {
+#footer_container li a:hover {
 	text-decoration: underline;
 }
 
-#footer_links {
-	width: 500px;
-	margin: 0 auto;
-}
+

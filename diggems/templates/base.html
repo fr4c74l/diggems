@@ -25,34 +25,35 @@ Software under Affero GPL license, see LICENSE.txt
   });
 </script>
 <script src="/static/js/login.js"></script>
-
-<div id="header">
-  <div>
-    <img id="icon" class="logo" src="/static/images/icon64.png" />
-    <span id="title" class="logo">DigGems</span>
-    <div id="user_info">{% if fb %}
-      <img id="user_pic" src="https://graph.facebook.com/{{ fb.uid }}/picture" />{% endif %}
-      <div id="user_stats">
-         <div class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
-        <span id="auth_username">{% if fb %}{{ fb.name }}{% endif %}</span>
-        <div id="score"><img src="/static/images/ruby.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %} </div>
-      </div>
-    </div>
-  </div>
-</div>
-<div class="clr"></div>
-<div id="content">
-	{% block content %}{% endblock %}
-</div>
-<div class="clr"></div>
-<div id="footer">
-	<div id="footer_container">
-		<ul id="footer_links">
-			<li><a href="http://fractalcorp.org">Fractal</a></li>
-			<li><a href="/howtoplay">Como Jogar?</a></li>
-			<li><a href="/license">Licença</a></li>
-			<li><a href="/bugreport">Reportar BUG</a></li>
-		</ul>
+<div id="container">
+	<div id="header">
+		<div>
+			<img id="icon" class="logo" src="/static/images/icon64.png" />
+			<span id="title" class="logo">DigGems</span>
+			<div id="user_info">{% if fb %}
+			  <img id="user_pic" src="https://graph.facebook.com/{{ fb.uid }}/picture" />{% endif %}
+			  <div id="user_stats">
+			     <div class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
+			    <span id="auth_username">{% if fb %}{{ fb.name }}{% endif %}</span>
+			    <div id="score"><img src="/static/images/ruby.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %} </div>
+			  </div>
+			</div>
+		</div>
+	</div>
+	<div class="clr"></div>
+	<div id="content">
+		{% block content %}{% endblock %}
+	</div>
+	<div class="clr"></div>
+	<div id="footer">
+		<div id="footer_container">
+			<ul>
+				<li><a href="http://fractalcorp.org">Fractal</a></li>
+				<li><a href="/howtoplay">Como Jogar?</a></li>
+				<li><a href="/license">Licença</a></li>
+				<li><a href="/bugreport">Reportar BUG</a></li>
+			</ul>
+		</div>
 	</div>
 </div>
 

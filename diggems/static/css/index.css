@@ -42,16 +42,16 @@ td {
 }
 
 #new_game {
-	min-width:270px;
+	min-width: 300px;
 	vertical-align: bottom;
 }
 
 #join_game {
-	min-width:270px;
+	min-width: 300px;
 }
 
 #your_game {
-	min-width:150px;
+	min-width: 300px;
 }
 
 td.top {
