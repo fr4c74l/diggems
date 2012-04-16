@@ -125,22 +125,24 @@ Tile.prototype.draw = function() {
 	'rgb(0,0,0)'
     ];
 
-    if(this.s >= 0 && this.s <= 8) {
-	ctx.fillStyle = 'rgb(255,216,161)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	if(this.s > 0) {
-	    ctx.fillStyle = TEXT_COLOR[this.s-1];
-	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
-	}
+		if(this.s >= 0 && this.s <= 8) 
+		{
+			ctx.fillStyle = 'rgb(255,216,161)';
+			ctx.fillRect(this.x, this.y, 25, 25);
+			if(this.s > 0)
+			{
+			  ctx.fillStyle = TEXT_COLOR[this.s-1];
+			  ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
+			}
     }
-    else if(this.s == 'r' || this.s == 'b') {
+	else if(this.s == 'r' || this.s == 'b') {
 	ctx.fillStyle = 'rgb(251,170,56)';
 	ctx.fillRect(this.x, this.y, 25, 25);
 	var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
 	ctx.drawImage(icon, this.x + 2, this.y + 5);
     }
     else {
-	ctx.fillStyle = 'rgb(227,133,0)';
+	ctx.fillStyle = 'rgb(126,171,70)';
 	ctx.fillRect(this.x, this.y, 25, 25);
 
 	if(this.s == 'x') {

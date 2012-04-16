@@ -24,9 +24,9 @@ html, body {
 	background:url('/static/images/bg-diggems.jpg') repeat-x left top;
 	background-color: #543116;
 	background-size: auto 100%;
-	z-index: -1;
 	font-family: sans;
-	/*height:100%;*/
+	font-size: small;
+	z-index: -1;
 }
 
 .clr {
@@ -59,9 +59,8 @@ li {
 
 /* HEADER */
 #header {
-	border-radius: 15px;
+	padding:1em;
 	min-width:521px;
-	padding:10px;
 }
 
 .logo {
@@ -102,18 +101,14 @@ li {
 
 /* CONTENT */
 #content {
-	padding: 10px;
-	padding-bottom: 40px;   /* Height of the footer */
+	padding:1em 1em 5em; /* bottom padding for footer */
 }
-
 /* FOOTER */
-
 #footer {
+	position:absolute;
+	width:100%;
 	min-width:521px;
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 40px;   /* Height of the footer */
+	bottom:0; /* stick to bottom */
 }
 
 #footer_container {
