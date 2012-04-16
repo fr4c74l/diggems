@@ -6,48 +6,62 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
 {% block title %}In-Game{% endblock %}
+{% block css %}
+	{{block.super}}
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />
+{% endblock %}
 {% block content %}
-<script>
-var params = {
-"game_id": {{ game_id }},
-"state": {{ state }},
-"seq_num": {{ seq_num }},
-"last_change": "{{ last_change }}",
-"channel": "{{ channel }}"{% if fb_other %},
-"fb_other": "{{ fb_other }}"{% endif %}{% if p1_last_move %},
-"p1_last_move": "{{ p1_last_move }}"{% endif %}{% if p2_last_move %},
-"p2_last_move": "{{ p2_last_move }}"{% endif %}{% if mine %},
-"mine": "{{ mine }}"{% endif %}{% if player %},
-"player": {{ player }}{% if bomb_used %},
-"bomb_used": true{% endif %}{% endif %}
-};
-</script>
-<script src="/static/js/game.js"></script>
+	<script>
+		var params = {
+		"game_id": {{ game_id }},
+		"state": {{ state }},
+		"seq_num": {{ seq_num }},
+		"last_change": "{{ last_change }}",
+		"channel": "{{ channel }}"{% if fb_other %},
+		"fb_other": "{{ fb_other }}"{% endif %}{% if p1_last_move %},
+		"p1_last_move": "{{ p1_last_move }}"{% endif %}{% if p2_last_move %},
+		"p2_last_move": "{{ p2_last_move }}"{% endif %}{% if mine %},
+		"mine": "{{ mine }}"{% endif %}{% if player %},
+		"player": {{ player }}{% if bomb_used %},
+		"bomb_used": true{% endif %}{% endif %}
+		};
+	</script>
+	<script src="/static/js/game.js"></script>
 
-<div id="game_area">
-<canvas id="game_canvas" width="416" height="416">
-Atualize seu navegador.
-</canvas>
-</div>
+	<div id="game_area">
+		<div id="machine">
+			<canvas id="game_canvas" width="416" height="416">
+				Atualize seu navegador.
+			</canvas>
+			<div id="machine_border" />
+		</div>
+	</div>
+
 <!-- TODO: Have button to disable the audio. -->
-<audio id="ring" preload="auto">
-<source src="/static/sound/ring.mp3" type="audio/mpeg" />
-<source src="/static/sound/ring.ogg" type="audio/ogg" />
-<source src="/static/sound/ring.wav" type="audio/wav" />
-</audio>
-<img id="bomb" style="visibility:hidden;" src="/static/images/bomb.png" />
-<div class="clr"></div>
-{% if not player %}<p>Modo espectador.</p>
-{% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url diggems.views.join_game game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
-{% endif %}</p>
-<p>Pontuação:<br />
-Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />
-Jogador Azul {% if player == 2 %}(você){% endif %}: <span id="p2_pts">0</span></p>
-<!-- TODO: Make notification stuff always visible -->
-<script>
-if(nt && nt.checkPermission() == /* nt.PERMISSION_NOT_ALLOWED */ 1)
-document.write('<span onclick=\"nt.requestPermission();\">Clique para permitir notificação.</span>');
-</script>
-<span id="brag_button" style="visibility:hidden" onclick="publish_results()">Publicar resultado.</span>
+	<audio id="ring" preload="auto">
+		<source src="/static/sound/ring.mp3" type="audio/mpeg" />
+		<source src="/static/sound/ring.ogg" type="audio/ogg" />
+		<source src="/static/sound/ring.wav" type="audio/wav" />
+	</audio>
+
+	<img id="bomb" style="visibility:hidden;" src="/static/images/bomb.png" />
+	<div class="clr"></div>
+	<div id="message">
+		{% if not player %}
+			<p>Modo espectador.</p>
+		{% endif %}
+		<p>{% if player and state == 0 %}Envie <a href="{% url diggems.views.join_game game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
+	{% endif %}</p>
+		<p id="score">Pontuação:<br />
+	Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />
+	Jogador Azul {% if player == 2 %}(você){% endif %}: <span id="p2_pts">0</span></p>
+	<!-- TODO: Make notification stuff always visible -->
+	</div>
+
+	<script>
+		if(nt && nt.checkPermission() == /* nt.PERMISSION_NOT_ALLOWED */ 1)
+			document.write('<span onclick=\"nt.requestPermission();\">Clique para permitir notificação.</span>');
+	</script>
+	<span id="brag_button" style="visibility:hidden" onclick="publish_results()">Publicar resultado.</span>
 
 {% endblock %}

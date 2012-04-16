@@ -1,21 +1,28 @@
 @charset "utf-8";
 
 @font-face {
-    font-family: Diavlo;
-    src: url('/static/fonts/Diavlo_BOOK_II_37.otf');
-    /* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
+	font-family: Diavlo;
+	src: url('/static/fonts/Diavlo_BOOK_II_37.otf');
+	/* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
 }
 
 @font-face {
-    font-family: Diavlo;
-    font-weight: bold;
-    src: url('/static/fonts/Diavlo_BOLD_II_37.otf');
-    /* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
+	font-family: Diavlo;
+	font-weight: bold;
+	src: url('/static/fonts/Diavlo_BOLD_II_37.otf');
+	/* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
 } 
+
+@font-face{
+	font-family: GrutchShaded;
+	src: url('/static/fonts/GrutchShaded.ttf');
+	/* A font by gruson.steeve@neuf.fr */
+}
 
 html, body {
 	overflow: auto;
 	background:url('/static/images/bg-diggems.jpg') repeat-x left top;
+	background-color: #543116;
 	background-size: auto 100%;
 	z-index: -1;
 	font-family: sans;
@@ -29,36 +36,6 @@ html, body {
 	width:100%;
 	font-size:0;
 	line-height:0;
-}
-
-#center_box {
-	position: absolute;
-	top: 50%;
-	left: 50%;
-	width: 680px;
-	height: 400px;
-	margin: -200px 0 0 -340px;
-	background-color: #eee;
-}
-
-canvas {
-	display: block;
-	margin-left: auto;
-	margin-right: auto;
-	position: relative;
-	z-index:-1;
-	border: 30px solid #fff;
-}
-
-#bomb {
-	float: left;
-	width: 50px;
-	height: 50px;
-	z-index:-1;
-}
-
-#bomb:hover{
-	background: url(../images/bomb_up.png) no-repeat left top ; 
 }
 
 ul {
@@ -77,7 +54,6 @@ li {
 	position:relative;
 	min-height: 100%;
 	height: auto !important;
-	height: 100%;
 	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
 }
 
@@ -94,13 +70,17 @@ li {
 }
 
 #title {
-	font-family: Diavlo;
+	font-family: GrutchShaded;
 	font-weight: bold;
-	text-shadow: 0.1em 0.1em 0.2em #535353;
-	color: #234645;
+	/* text-shadow: 0.1em 0.1em 0.2em #535353; */
+	color: #4c79a9;
 	font-size: 68px;
 	padding-left:20px;
 	letter-spacing: 4pt;
+}
+
+#subtitle {
+	color: #9a64c8;
 }
 
 #user_info {
@@ -120,9 +100,6 @@ li {
 #auth_username {
 }
 
-#score {
-}
-
 /* CONTENT */
 #content {
 	padding: 10px;
@@ -140,6 +117,7 @@ li {
 }
 
 #footer_container {
+	display: block;
 	margin: 0 auto;
 }
 
@@ -151,7 +129,6 @@ li {
 
 #footer_container li a {
 	color: white;
-	clear: both;
 	white-space: normal;
 	text-decoration: none;
 }
