@@ -1,11 +1,4 @@
 
-#content_container {
-	margin: 0 auto;
-	position: relative;
-	padding: 0;
-	max-width: 800px;
-}
-
 ul.list_games {
 	padding: 0px 10px;
 	overflow: hidden;

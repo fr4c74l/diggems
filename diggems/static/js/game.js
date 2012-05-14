@@ -12,47 +12,46 @@ var nt = window.webkitNotifications;
 var last_nt;
 
 function LastClick(m, n, player, bombed) {
-    this.m = m;
-    this.n = n;
-    this.tile = mine[m][n];
-    this.player = player;
-    this.bombed = bombed;
-    if(bombed) {
-	this.min_x = Math.max(0, m - 2);
-	this.size_x = Math.min(15, m + 2) - this.min_x + 1;
-	this.min_y = Math.max(0, n - 2);
-	this.size_y = Math.min(15, n + 2) - this.min_y + 1;
-    }
+	this.m = m;
+	this.n = n;
+	this.tile = mine[m][n];
+	this.player = player;
+	this.bombed = bombed;
+	if(bombed) {
+		this.min_x = Math.max(0, m - 2);
+		this.size_x = Math.min(15, m + 2) - this.min_x + 1;
+		this.min_y = Math.max(0, n - 2);
+		this.size_y = Math.min(15, n + 2) - this.min_y + 1;
+	}
 }
 
 LastClick.prototype.draw = function() {
-    var MARK_COLOR = [
-	'rgb(255,0,0)',
-	'rgb(0,0,255)'
-    ];
+	var MARK_COLOR = [
+		'rgb(255,0,0)',
+		'rgb(0,0,255)'
+	];
 
-    ctx.strokeStyle = MARK_COLOR[this.player-1];
-    if(this.bombed) {
-	ctx.strokeRect(this.min_x*26 + 2, this.min_y*26 + 2,
-		       this.size_x*26 - 5, this.size_y*26 - 5);
-    } else {
-	ctx.strokeRect(this.tile.x + 2, this.tile.y + 2, 21, 21);
-    }
+	ctx.strokeStyle = MARK_COLOR[this.player-1];
+	if(this.bombed) {
+		ctx.strokeRect(this.min_x*26 + 2, this.min_y*26 + 2, this.size_x*26 - 5, this.size_y*26 - 5);
+	} else {
+		ctx.strokeRect(this.tile.x + 2, this.tile.y + 2, 21, 21);
+	}
 }
 
 LastClick.prototype.clear = function() {
-    if(this.bombed) {
-	for(var i = 0; i < this.size_x; ++i) {
-	    mine[this.min_x + i][this.min_y].draw();
-	    mine[this.min_x + i][this.min_y + this.size_y - 1].draw();
+	if(this.bombed) {
+		for(var i = 0; i < this.size_x; ++i) {
+			mine[this.min_x + i][this.min_y].draw();
+			mine[this.min_x + i][this.min_y + this.size_y - 1].draw();
+		}
+		for(var i = 1; i < (this.size_y - 1); ++i) {
+			mine[this.min_x][this.min_y + i].draw();
+			mine[this.min_x + this.size_x - 1][this.min_y + i].draw();
+		}
+	} else {
+		this.tile.draw();
 	}
-	for(var i = 1; i < (this.size_y - 1); ++i) {
-	    mine[this.min_x][this.min_y + i].draw();
-	    mine[this.min_x + this.size_x - 1][this.min_y + i].draw();
-	}
-    } else {
-	this.tile.draw();
-    }
 }
 
 function last_click_decode(player, encoded) {
@@ -111,77 +110,84 @@ function Tile(x0,y0) {
   this.s = '?';
   this.x = x0*26;
   this.y = y0*26;
+  this.bg = images['on'];
 }
 
 Tile.prototype.draw = function() {
-    var TEXT_COLOR = [
-	'rgb(0,0,255)',
-	'rgb(0,160,0)',
-	'rgb(255,0,0)',
-	'rgb(0,0,127)',
-	'rgb(160,0,0)',
-	'rgb(0,255,255)',
-	'rgb(160,,160)',
-	'rgb(0,0,0)'
-    ];
+	var TEXT_COLOR = [
+		'rgb(0,0,255)',
+		'rgb(0,160,0)',
+		'rgb(255,0,0)',
+		'rgb(0,0,127)',
+		'rgb(160,0,0)',
+		'rgb(0,255,255)',
+		'rgb(160,,160)',
+		'rgb(0,0,0)'
+	];
 
-		if(this.s >= 0 && this.s <= 8) 
+	if(this.s >= 0 && this.s <= 8) 
+	{
+		ctx.fillStyle = 'rgb(255,216,161)';
+		ctx.fillRect(this.x, this.y, 25, 25);
+		if(this.s > 0)
 		{
-			ctx.fillStyle = 'rgb(255,216,161)';
-			ctx.fillRect(this.x, this.y, 25, 25);
-			if(this.s > 0)
-			{
-			  ctx.fillStyle = TEXT_COLOR[this.s-1];
-			  ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
-			}
-    }
-	else if(this.s == 'r' || this.s == 'b') {
-	ctx.fillStyle = 'rgb(251,170,56)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
-	ctx.drawImage(icon, this.x + 2, this.y + 5);
-    }
-    else {
-	ctx.fillStyle = 'rgb(126,171,70)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-
-	if(this.s == 'x') {
-	    var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
-	    ctx.globalCompositeOperation = 'lighter';
-	    ctx.drawImage(icon, this.x + 2, this.y + 5);
-	    ctx.globalCompositeOperation = 'source-over';
+			ctx.fillStyle = TEXT_COLOR[this.s-1];
+			ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
+		}
 	}
-    }
+	else if(this.s == 'r' || this.s == 'b') 
+	{
+		ctx.fillStyle = 'rgb(251,170,56)';
+		ctx.fillRect(this.x, this.y, 25, 25); 
+		//this.bg = images['off'];
+		//ctx.drawImage(this.bg, this.x, this.y);
+		var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
+		ctx.drawImage(icon, this.x + 2, this.y + 5);
+	}
+	else 
+	{
+		ctx.fillStyle = 'rgb(126,171,70)';
+		ctx.fillRect(this.x, this.y, 25, 25); 
+		if(this.s == 'x') {
+			var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
+			ctx.globalCompositeOperation = 'lighter';
+			ctx.drawImage(icon, this.x + 2, this.y + 5);
+			ctx.globalCompositeOperation = 'source-over';
+		}
+	}
 };
 
 function update_points() {
-    var p1 = 0;
-    var p2 = 0;
+	var p1 = 0;
+	var p2 = 0;
 
-    for(var i = 0; i < 16; ++i) 
-	for(var j = 0; j < 16; ++j){
-	    if(mine[i][j].s == 'r')
-		++p1;
-	    else if(mine[i][j].s == 'b')
-		++p2;
-	}
+	for(var i = 0; i < 16; ++i) 
+		for(var j = 0; j < 16; ++j)
+		{
+			if(mine[i][j].s == 'r')
+				++p1;
+			else if(mine[i][j].s == 'b')
+				++p2;
+		}
 
-    if(params.player == 1)
-	bomb.allowed = p2 > p1;
-    else
-	bomb.allowed = p1 > p2;
+	if(params.player == 1)
+		bomb.allowed = p2 > p1;
+	else
+		bomb.allowed = p1 > p2;
 
-    display_bomb();
+	display_bomb();
 
-    document.getElementById('p1_pts').innerHTML = String(p1);
-    document.getElementById('p2_pts').innerHTML = String(p2);
+	document.getElementById('p1_pts').innerHTML = String(p1);
+	document.getElementById('p2_pts').innerHTML = String(p2);
 }
 
-function close_last_nt() {
-    if(last_nt) {
-	last_nt.cancel();
-	last_nt = null;
-    }
+function close_last_nt()
+{
+	if(last_nt)
+	{
+		last_nt.cancel();
+		last_nt = null;
+	}
 }
 
 function notify_state(msg) {
@@ -247,126 +253,162 @@ function set_state(state) {
 }
 
 function handle_event(msg) {
-    var lines = msg.split('\n');
-    var seq_num = parseInt(lines[0]);
+	var lines = msg.split('\n');
+	var seq_num = parseInt(lines[0]);
 
-    if(seq_num <= params.seq_num)
-	return;
-    params.seq_num = seq_num;
+	if(seq_num <= params.seq_num)
+		return;
+	params.seq_num = seq_num;
 
-    var new_state = parseInt(lines[1]);
-    set_state(new_state);
-    if(lines.length <= 2)
-	return;
+	var new_state = parseInt(lines[1]);
+	set_state(new_state);
+	if(lines.length <= 2)
+		return;
 
-    var player = parseInt(lines[2]);
-    var lclick = last_click_decode(player, lines[3]);
-    var parser = /(\d+),(\d+):(.)/;
+	var player = parseInt(lines[2]);
+	var lclick = last_click_decode(player, lines[3]);
+	var parser = /(\d+),(\d+):(.)/;
 
-    for(var i = 4; i < lines.length; ++i) {
-	var res = parser.exec(lines[i]);
-	if(res) {
-	    var m = parseInt(res[1]);
-	    var n = parseInt(res[2]);
+	for(var i = 4; i < lines.length; ++i)
+	{
+		var res = parser.exec(lines[i]);
+		if(res)
+		{
+			var m = parseInt(res[1]);
+			var n = parseInt(res[2]);
 
-	    // Just assume correct valid values were delivered...
+			// Just assume correct valid values were delivered...
 
-	    mine[m][n].s = res[3];
-	    mine[m][n].draw();
+			mine[m][n].s = res[3];
+			mine[m][n].draw();
+		}
 	}
-    }
 
-    if(last_click[player-1])
+	if(last_click[player-1])
 	last_click[player-1].clear();
-    last_click[player-1] = lclick;
-    lclick.draw();
+	last_click[player-1] = lclick;
+	lclick.draw();
 
-    update_points();
+	update_points();
 }
 
 function register_event() {
-    if(params.state >= 3 || register_event.last_status == 410)
-	return; // Game is over
+	if(params.state >= 3 || register_event.last_status == 410)
+		return; // Game is over
 
-    event_request.open('GET', '/event/'+ params.channel, true);
-    if(register_event.etag)
-	event_request.setRequestHeader('If-None-Match', register_event.etag);
-    event_request.setRequestHeader('If-Modified-Since', params.last_change);
-    event_request.onreadystatechange = function(ev){
-	if (event_request.readyState == 4) {
-	    register_event.last_status == event_request.status;
-	    if(event_request.status == 200) {
-		register_event.error_count = 0;
-		register_event.etag = event_request.getResponseHeader('Etag')
-		params.last_change = event_request.getResponseHeader('Last-Modified')
-
-		handle_event(event_request.responseText);
-		register_event();
-	    }
-	    else {
-		// If this is the first error, try again right away
-		// If not, delay some time before trying again
-		if(register_event.error_count)
-		    register_event.error_count = Math.min(register_event.error_count + 1, 10);
-		else
-		    register_event.error_count = 1;
-
-		if(register_event.error_count > 1) {
-		    var delay = (register_event.error_count - 1) * 500;
-		    setTimeout(register_event, delay);
+	event_request.open('GET', '/event/'+ params.channel, true);
+	if(register_event.etag)
+		event_request.setRequestHeader('If-None-Match', register_event.etag);
+	event_request.setRequestHeader('If-Modified-Since', params.last_change);
+	event_request.onreadystatechange = function(ev)
+	{
+		if (event_request.readyState == 4) 
+		{
+			register_event.last_status == event_request.status;
+			if(event_request.status == 200) 
+			{
+				register_event.error_count = 0;
+				register_event.etag = event_request.getResponseHeader('Etag');
+				params.last_change = event_request.getResponseHeader('Last-Modified');
+				handle_event(event_request.responseText);
+				register_event();
+			}
+			else 
+			{
+				// If this is the first error, try again right away
+				// If not, delay some time before trying again
+				if(register_event.error_count)
+					register_event.error_count = Math.min(register_event.error_count + 1, 10);
+				else
+					register_event.error_count = 1;
+				if(register_event.error_count > 1)
+				{
+					var delay = (register_event.error_count - 1) * 500;
+					setTimeout(register_event, delay);
+				}
+				else
+					register_event();
+			}
 		}
-		else
-		    register_event();
-	    }
 	}
-    }
-    event_request.send(null);
+	event_request.send(null);
 }
 
 function on_click(ev) {
-    if(ev.button != 0 || params.player != params.state)
-	return;
+	if(ev.button != 0 || params.player != params.state)
+		return;
 
-    var m;
-    var n;
+	var m;
+	var n;
 
-    m = ev.clientX + document.body.scrollLeft +
-	document.documentElement.scrollLeft - this.offsetLeft;
-    n = ev.clientY + document.body.scrollTop +
-        document.documentElement.scrollTop - this.offsetTop;
+	m = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft;
+	n = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop;
 
-    m = Math.floor(m / 26);
-    n = Math.floor(n / 26);
+	m = Math.floor(m / 26);
+	n = Math.floor(n / 26);
 
-    if(!bomb.active && mine[m][n].s != '?')
-	return;
+	if(!bomb.active && mine[m][n].s != '?')
+		return;
 
-    close_last_nt();
+	close_last_nt();
 
-    // TODO: indicate activity
+	// TODO: indicate activity
 
-    var url = '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n;
-    var bombed = false;
-    if(bomb.active) {
-	url += '&bomb=y';
-	bombed = true;
-    }
-    move_request.open('POST', url, true);
-    move_request.onreadystatechange = function(ev){
-	if (move_request.readyState == 4) {
-	    if(move_request.status == 200) {
-		// TODO: find a more reliable way to know if the bomb was used
-		if(bombed) {
-		    params.bomb_used = true;
-		    toggle_bomb();
-		}
-	    }
-	    // TODO: else: treat error
-	    // TODO: stop activity indication
+	var url = '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n;
+	var bombed = false;
+	if(bomb.active) 
+	{
+		url += '&bomb=y';
+		bombed = true;
 	}
-    };
-    move_request.send(null);
+	move_request.open('POST', url, true);
+	move_request.onreadystatechange = function(ev)
+	{
+		if (move_request.readyState == 4) 
+		{
+			if(move_request.status == 200) 
+			{
+				// TODO: find a more reliable way to know if the bomb was used
+				if(bombed) 
+				{
+					params.bomb_used = true;
+					toggle_bomb();
+				}
+			}
+		// TODO: else: treat error
+		// TODO: stop activity indication
+		}
+	};
+	move_request.send(null);
 }
+
+var mg;
+var ng;
+var xmouse;
+var ymouse;
+
+function on_mouseover(ev)
+{
+	xmouse = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft;
+	ymouse = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop;
+
+	xmouse = Math.floor(xmouse / 26);
+	ymouse = Math.floor(ymouse / 26);
+
+	if (xmouse != mg || ymouse != ng)
+	{
+		ctx.fillStyle = 'rgb(0,0,255)';
+		ctx.fillRect(mg*26, ng*26, 25, 25);
+		mg = xmouse;
+		ng = ymouse;
+	}
+	else
+	{
+		ctx.fillStyle = 'rgb(255,0,0)';
+		ctx.fillRect(xmouse*26, ymouse*26, 25, 25);
+	}
+}
+
 
 function init() {
     // TODO: find a better way to deal with sound
@@ -435,6 +477,7 @@ function init() {
     if(params.player) { // Not a spectator
 	// Wait for user
 	canvas.addEventListener('click', on_click, false);
+	canvas.addEventListener('mousemove', on_mouseover, false);
 	document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
     }
 }
@@ -468,5 +511,8 @@ function load_img(name) {
 // Load resources
 load_img("saphire");
 load_img("ruby");
+load_img("on");
+load_img("over");
+load_img("off");
 
 window.addEventListener('load', init, false);

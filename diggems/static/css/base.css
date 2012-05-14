@@ -13,17 +13,11 @@
 	/* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
 } 
 
-@font-face{
-	font-family: GrutchShaded;
-	src: url('/static/fonts/GrutchShaded.ttf');
-	/* A font by gruson.steeve@neuf.fr */
-}
-
-html, body {
+html,body {
 	overflow: auto;
-	background:url('/static/images/bg-diggems.jpg') repeat-x left top;
-	background-color: #543116;
-	background-size: auto 100%;
+	/* background:url('/static/images/bg-diggems.jpg') repeat-x left top; 
+	background-color: #543116; 
+	background-size: auto 100%; */
 	font-family: sans;
 	font-size: small;
 	z-index: -1;
@@ -36,6 +30,29 @@ html, body {
 	width:100%;
 	font-size:0;
 	line-height:0;
+}
+
+canvas {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	width: 416px;
+	height: 416px;
+	margin: -270px 0 0 -202px;
+	background-color: #eee;
+	z-index:1;
+}
+
+
+#bomb {
+	float: left;
+	width: 50px;
+	height: 50px;
+	z-index:-1;
+}
+
+#bomb:hover{
+	background: url(../images/bomb_up.png) no-repeat left top ; 
 }
 
 ul {
@@ -53,7 +70,7 @@ li {
 #container {
 	position:relative;
 	min-height: 100%;
-	height: auto !important;
+	height: auto !important; 
 	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
 }
 
@@ -99,9 +116,20 @@ li {
 #auth_username {
 }
 
+#score {
+}
+
 /* CONTENT */
 #content {
 	padding:1em 1em 5em; /* bottom padding for footer */
+}
+
+#content_container {
+	margin: 0 auto;
+	position: relative;
+	padding: 0;
+	height: 142px;
+	max-width: 800px;
 }
 /* FOOTER */
 #footer {
@@ -124,6 +152,7 @@ li {
 
 #footer_container li a {
 	color: white;
+	clear: both;
 	white-space: normal;
 	text-decoration: none;
 }
