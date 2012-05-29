@@ -340,9 +340,9 @@ function on_click(ev) {
 
 	var m;
 	var n;
-
-	m = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft;
-	n = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop;
+	//TODO: REMOVE -8 ugly stuff
+	m = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft - 8;
+	n = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop -8 ;
 
 	m = Math.floor(m / 26);
 	n = Math.floor(n / 26);
@@ -389,12 +389,12 @@ var ymouse;
 
 function on_mouseover(ev)
 {
-	xmouse = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft;
-	ymouse = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop;
-
+	//TODO: REMOVE -8 ugly stuff
+	xmouse = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft - 8;
+	ymouse = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop - 8;
 	xmouse = Math.floor(xmouse / 26);
 	ymouse = Math.floor(ymouse / 26);
-
+	//alert(ev.clientX + ' ' + this.offsetLeft);
 	if (xmouse != mg || ymouse != ng)
 	{
 		ctx.fillStyle = 'rgb(0,0,255)';
