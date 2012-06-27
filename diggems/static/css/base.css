@@ -14,7 +14,6 @@
 } 
 
 html,body {
-	overflow: auto;
 	/* background:url('/static/images/bg-diggems.jpg') repeat-x left top; 
 	background-color: #543116; 
 	background-size: auto 100%; */
@@ -30,17 +29,16 @@ html,body {
 	width:100%;
 	font-size:0;
 	line-height:0;
+	display:none;
 }
 
-canvas {
-	position: absolute;
+#game_canvas {
+	/*position: absolute;
 	top: 50%;
 	left: 50%;
-	width: 416px;
-	height: 416px;
-	margin: -270px 0 0 -202px;
-	background-color: #eee;
-	z-index:1;
+	margin: -270px 0 0 -202px;*/
+	background-color: #fff;
+	z-index: 1;
 }
 
 
@@ -48,7 +46,7 @@ canvas {
 	float: left;
 	width: 50px;
 	height: 50px;
-	z-index:-1;
+	z-index:0;
 }
 
 #bomb:hover{
@@ -68,16 +66,16 @@ li {
 }
 
 #container {
-	position:relative;
+	/*position:relative;
 	min-height: 100%;
 	height: auto !important; 
-	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */
+	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */s
 }
 
 /* HEADER */
 #header {
 	padding:1em;
-	min-width:521px;
+/*	min-width:521px; */
 }
 
 .logo {
@@ -121,19 +119,19 @@ li {
 
 /* CONTENT */
 #content {
-	padding:1em 1em 5em; /* bottom padding for footer */
+/*	padding:1em 1em 5em; /* bottom padding for footer */
 }
 
 #content_container {
-	margin: 0 auto;
+/*	margin: 0 auto;
 	position: relative;
 	padding: 0;
 	height: 142px;
-	max-width: 800px;
+	max-width: 800px;*/
 }
 /* FOOTER */
 #footer {
-	position:absolute;
+/*	position:absolute;
 	width:100%;
 	min-width:521px;
 	bottom:0; /* stick to bottom */

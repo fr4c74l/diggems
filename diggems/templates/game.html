@@ -24,7 +24,7 @@ Software under Affero GPL license, see LICENSE.txt
 </script>
 <script src="/static/js/game.js"></script>
 
-<div>
+<div style="width:416px; height:416px; margin: 0 auto;">
 	<canvas id="game_canvas" width="416" height="416">
 		Atualize seu navegador.
 	</canvas>
@@ -37,18 +37,20 @@ Software under Affero GPL license, see LICENSE.txt
 <source src="/static/sound/ring.wav" type="audio/wav" />
 </audio>
 <img id="bomb" style="visibility:hidden;" src="/static/images/bomb.png" />
-<div class="clr"></div>
-{% if not player %}<p>Modo espectador.</p>
-{% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url diggems.views.join_game game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
-{% endif %}</p>
-<p>Pontuação:<br />
-Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />
-Jogador Azul {% if player == 2 %}(você){% endif %}: <span id="p2_pts">0</span></p>
-<!-- TODO: Make notification stuff always visible -->
-<script>
-if(nt && nt.checkPermission() == /* nt.PERMISSION_NOT_ALLOWED */ 1)
-document.write('<span onclick=\"nt.requestPermission();\">Clique para permitir notificação.</span>');
-</script>
-<span id="brag_button" style="visibility:hidden" onclick="publish_results()">Publicar resultado.</span>
+<div id="notification">
+	{% if not player %}<p>Modo espectador.</p>
+	{% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url diggems.views.join_game game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
+	{% endif %}</p>
+	<p>Pontuação:<br />
+	Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />
+	Jogador Azul {% if player == 2 %}(você){% endif %}: <span id="p2_pts">0</span></p>
+	<!-- TODO: Make notification stuff always visible -->
+
+	<script>
+	if(nt && nt.checkPermission() == /* nt.PERMISSION_NOT_ALLOWED */ 1)
+	document.write('<span onclick=\"nt.requestPermission();\">Clique para permitir notificação.</span>');
+	</script>
+	<span id="brag_button" style="visibility:hidden" onclick="publish_results()">Publicar resultado.</span>
+</div>
 
 {% endblock %}

@@ -340,9 +340,8 @@ function on_click(ev) {
 
 	var m;
 	var n;
-	//TODO: REMOVE -8 ugly stuff
-	m = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft - 8;
-	n = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop -8 ;
+	m = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft;
+	n = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop ;
 
 	m = Math.floor(m / 26);
 	n = Math.floor(n / 26);
@@ -389,9 +388,8 @@ var ymouse;
 
 function on_mouseover(ev)
 {
-	//TODO: REMOVE -8 ugly stuff
-	xmouse = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft - 8;
-	ymouse = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop - 8;
+	xmouse = ev.clientX + document.body.scrollLeft + document.documentElement.scrollLeft - this.offsetLeft;
+	ymouse = ev.clientY + document.body.scrollTop + document.documentElement.scrollTop - this.offsetTop;
 	xmouse = Math.floor(xmouse / 26);
 	ymouse = Math.floor(ymouse / 26);
 	//alert(ev.clientX + ' ' + this.offsetLeft);
