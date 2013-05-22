@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from diggems.models import *
-from diggems.game_helpers import mine_decode
+from game.models import *
+from game.game_helpers import mine_decode
 
 class Command(BaseCommand):
     help = 'Show the gems location of a game'

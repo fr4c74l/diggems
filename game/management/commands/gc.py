@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from diggems.models import *
+from game.models import *
 import datetime
 
 class Command(BaseCommand):
