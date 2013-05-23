@@ -16,14 +16,14 @@ Software under Affero GPL license, see LICENSE.txt
 	<table>
 		<tbody>
 			<tr>
-				<td id="new_game">
+				<td class="box" id="new_game">
 					<h1>Novo Jogo</h1>
 					<form action="new_game/" method="post">
 						Jogo privado <input type="checkbox" name="private" value="1" />
 						<input type="submit" value="Criar!"  style="float: right;"/>
 					</form>
 				</td>
-				<td id="your_game" rowspan="2" class="top">
+				<td class="box" id="your_game" rowspan="2" class="top">
 					<h1>Seus Jogos</h1>
 					<ul class="center_list">
 					{% if your_games %}
@@ -41,12 +41,12 @@ Software under Affero GPL license, see LICENSE.txt
 				</td>
 			</tr>
 			<tr>
-				<td id="join_game" class="top">
+				<td class="box" id="join_game" class="top">
 					<h1>Jogos Por Começar</h1>
 					<ul class="center_list">
-						{% for g in new_games %}
+						{% if new_games %}{% for g in new_games %}
 						<li class="list_games">
-							<div style="float:left; padding-right: 10px;">{{ g.id }}</div>
+							<div style="float:left; padding-right: 10px;">Jogo {{ g.id }}</div>
 							<div style="overflow:hidden;">
 								<div>Contra {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</div>
 									<div style="margin-top: 10px;">
@@ -55,7 +55,7 @@ Software under Affero GPL license, see LICENSE.txt
 									</div>
 							</div>
 						</li>
-						{% endfor %}
+						{% endfor %}{% else %}<h4> Nenhum jogo! </h4>{% endif %}
 					</ul>
 				</td>
 			</tr>

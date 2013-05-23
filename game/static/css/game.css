@@ -1,0 +1,35 @@
+#main {
+    display: block;
+    position: relative;
+    width: 438px;
+    margin: 0 auto;
+}
+
+#p1_pts {
+    display: block;
+    position: relative;
+    width: 130px;
+    margin-bottom: 10px;
+}
+
+#h_pts {
+    display: block;
+    position: absolute;
+    top: 0px;
+    width: 50px;
+    left: 183px;
+}
+
+#p2_pts {
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 130px;
+}
+
+#game_box {
+    display: block;
+    position: relative;
+    height: 416px;
+}

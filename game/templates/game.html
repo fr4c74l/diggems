@@ -6,6 +6,10 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
 {% block title %}In-Game{% endblock %}
+{% block css %}
+	{{block.super}}
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />
+{% endblock %}
 {% block content %}
 <script>
 	var params = {
@@ -24,10 +28,15 @@ Software under Affero GPL license, see LICENSE.txt
 </script>
 <script src="/static/js/game.js"></script>
 
-<div style="width:416px; height:416px; margin: 0 auto;">
-	<canvas id="game_canvas" width="416" height="416">
-		Atualize seu navegador.
-	</canvas>
+<div id="main">
+	<div class="box" id="p1_pts">0</div>
+	<div class="box" id="h_pts">51</div>
+	<div class="box" id="p2_pts">0</div>
+	<div id="game_box" class="box">
+		<canvas id="game_canvas" width="416" height="416">
+			Atualize seu navegador.
+		</canvas>
+	</div>
 </div>
 
 <!-- TODO: Have button to disable the audio. -->
@@ -42,8 +51,8 @@ Software under Affero GPL license, see LICENSE.txt
 	{% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
 	{% endif %}</p>
 	<p>Pontuação:<br />
-	Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />
-	Jogador Azul {% if player == 2 %}(você){% endif %}: <span id="p2_pts">0</span></p>
+	Jogador Vermelho {% if player == 1 %}(você){% endif %}: <br />
+	Jogador Azul {% if player == 2 %}(você){% endif %}: </p>
 	<!-- TODO: Make notification stuff always visible -->
 
 	<script>
