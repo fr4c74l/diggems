@@ -173,6 +173,7 @@ function update_points() {
 
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
+    document.getElementById('h_pts').innerHTML = String(51 - p1 - p2);
 }
 
 function close_last_nt() {
@@ -327,11 +328,25 @@ function on_click(ev) {
 
     var m;
     var n;
+    if (ev.offsetX !== undefined && ev.offsetY !== undefined) {
+	m = ev.offsetX;
+	n = ev.offsetY;
+    } else {
+	var totalOffsetX = 0;
+	var totalOffsetY = 0;
+	var canvasX = 0;
+	var canvasY = 0;
+	var currentElement = this;
 
-    m = ev.clientX + document.body.scrollLeft +
-	document.documentElement.scrollLeft - this.offsetLeft;
-    n = ev.clientY + document.body.scrollTop +
-        document.documentElement.scrollTop - this.offsetTop;
+	do{
+	    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
+	    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
+	}
+	while(currentElement = currentElement.offsetParent);
+
+	m = ev.pageX - totalOffsetX;
+	n = ev.pageY - totalOffsetY;
+    }
 
     m = Math.floor(m / 26);
     n = Math.floor(n / 26);
