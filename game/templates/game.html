@@ -39,7 +39,7 @@ Software under Affero GPL license, see LICENSE.txt
 <img id="bomb" style="visibility:hidden;" src="/static/images/bomb.png" />
 <div id="notification">
 	{% if not player %}<p>Modo espectador.</p>
-	{% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url diggems.views.join_game game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
+	{% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
 	{% endif %}</p>
 	<p>Pontuação:<br />
 	Jogador Vermelho {% if player == 1 %}(você){% endif %}: <span id="p1_pts">0</span><br />

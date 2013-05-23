@@ -13,10 +13,10 @@
 	/* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
 } 
 
-html,body {
-	/* background:url('/static/images/bg-diggems.jpg') repeat-x left top; 
+html {
+	background:url('/static/images/bg-diggems.jpg') repeat-x left top; 
 	background-color: #543116; 
-	background-size: auto 100%; */
+	background-size: auto 100%;
 	font-family: sans;
 	font-size: small;
 	z-index: -1;
