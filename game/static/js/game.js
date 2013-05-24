@@ -450,6 +450,9 @@ function init() {
 	canvas.addEventListener('click', on_click, false);
 	document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
     }
+    
+    // Everything is setup, show the canvas
+    canvas.style.setProperty('visibility', 'visible', null);
 }
 
 // Will publish the result of a match to the wall.

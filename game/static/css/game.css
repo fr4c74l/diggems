@@ -40,4 +40,29 @@
     display: block;
     position: relative;
     height: 416px;
+    margin-bottom: 10px;
+}
+
+#p1_box {
+    background: rgba(255,0,0,0.25);
+    font-size: x-large;
+    text-align: center;
+    vertical-align: middle;
+    display: block;
+    position: relative;
+    width: 190px;
+    height: 40px;
+}
+
+#p2_box {
+    background: rgba(0,0,255,0.25);
+    font-size: x-large;
+    text-align: center;
+    vertical-align: middle;
+    display: block;
+    position: absolute;
+    bottom: 22px;
+    right: 0px;
+    width: 190px;
+    height: 40px;
 }
