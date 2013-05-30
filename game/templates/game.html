@@ -37,9 +37,17 @@ Software under Affero GPL license, see LICENSE.txt
 			Atualize seu navegador.
 		</canvas>
 	</div>
-	<div class="box" id="p1_box"></div>
-	<div class="box" id="p2_box">{% if player and state == 0 %}Aguardando...{% endif %}</div>
-	<div class="box"></div>
+	<div class="box" id="p1_box"><div>Nome</div><div style="font-size: large;">Mensagem</div></div>
+	<div class="box" id="p2_box"><div>Nome</div><div style="font-size: large;">{% if player and state == 0 %}Aguardando...{% else %}Mensagem{% endif %}</div></div>
+	<div class="box" id="message">{% if player and state == 0 %}
+		<div>Envie este link para o seu parceiro se conectar:</div>
+		<div>
+			<input type="text" id="join_link" readonly/>
+			<script>
+				document.getElementById('join_link').value = (window.location.origin + "{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}");
+			</script>
+		</div>{% endif %}
+	</div>
 </div>
 
 <!-- TODO: Have button to disable the audio. -->
@@ -49,14 +57,6 @@ Software under Affero GPL license, see LICENSE.txt
 <source src="/static/sound/ring.wav" type="audio/wav" />
 </audio>
 <img id="bomb" style="visibility:hidden;" src="/static/images/bomb.png" />
-<div id="notification">
-	{% if not player %}<p>Modo espectador.</p>
-	{% endif %}<p id="message">{% if player and state == 0 %}Envie <a href="{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}">este link</a> ao seu parceiro para que ele possa entrar no jogo.<br />
-	{% endif %}</p>
-	<!-- TODO: Make notification stuff always visible -->
-
-	<span id="brag_button" style="visibility:hidden" onclick="publish_results()">Publicar resultado.</span>
-</div>
 
 <!--
 TODO: Place this together with the enable/disable sound button.
