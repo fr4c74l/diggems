@@ -22,8 +22,8 @@ Software under Affero GPL license, see LICENSE.txt
 	"p1_last_move": "{{ p1_last_move }}"{% endif %}{% if p2_last_move %},
 	"p2_last_move": "{{ p2_last_move }}"{% endif %}{% if mine %},
 	"mine": "{{ mine }}"{% endif %}{% if player %},
-	"player": {{ player }}{% if bomb_used %},
-	"bomb_used": true{% endif %}{% endif %}
+	"player": {{ player }}{% if tnt_used %},
+	"tnt_used": true{% endif %}{% endif %}
 	};
 </script>
 <script src="/static/js/game.js"></script>
@@ -38,7 +38,7 @@ Software under Affero GPL license, see LICENSE.txt
 		</canvas>
 	</div>
 	<div class="box pbox" id="p1_box"><div>Nome</div><div class="big">Mensagem</div></div>{% if player %}
-	<div class="box" id="bomb_box"><img class="button_out" src="/static/images/tnt.png" /></div>
+	<div class="box" id="tnt_box"><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></div>
 	{% endif %}<div class="box pbox" id="p2_box"><div>Nome</div><div class="big">{% if player and state == 0 %}Aguardando...{% else %}Mensagem{% endif %}</div></div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
 		<div>Envie este link para o seu parceiro se conectar:</div>
@@ -57,7 +57,6 @@ Software under Affero GPL license, see LICENSE.txt
 <source src="/static/sound/ring.ogg" type="audio/ogg" />
 <source src="/static/sound/ring.wav" type="audio/wav" />
 </audio>
-<img id="bomb" style="visibility:hidden;" src="/static/images/bomb.png" />
 
 <!--
 TODO: Place this together with the enable/disable sound button.

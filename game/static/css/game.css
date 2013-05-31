@@ -64,11 +64,11 @@
     right: 0px;
 }
 
-#bomb_box {
+#tnt_box {
     position: absolute;
     padding: 9px;
-    bottom: 61px;
-    right: 182px;
+    bottom: 63px;
+    right: 184px;
     width: 52px;
     height: 52px;
 }
@@ -86,28 +86,33 @@ div.big {
     width: 390px;
 }
 
-img.button_out {
+img.button {
     position: relative;
     bottom: 4px;
     right: 4px;
-    /*background: rgba(255,255,255,0.00);*/
     padding: 2px 2px 2px 2px;
+}
+
+img.out {
     border-top: 1px solid #CCCCCC;
     border-right: 1px solid #333333;
     border-bottom: 1px solid #333333;
     border-left: 1px solid #CCCCCC;
 }
 
-img.button_out:hover {
+img.out:hover {
     background: rgba(255,255,255,0.25);
     background-image: url('/static/images/spark.png');
     background-repeat: no-repeat;
     background-position: top right;
 }
 
-img.button_in {
+img.in {
     border-top: 1px solid #333333;
     border-right: 1px solid #CCCCCC;
     border-bottom: 1px solid #CCCCCC;
     border-left: 1px solid #333333;
+    background-image: url('/static/images/spark.png');
+    background-repeat: no-repeat;
+    background-position: top right;
 }

@@ -227,7 +227,7 @@ def game(request, game_id):
     pdata = game.what_player(profile)
     if pdata:
         my_number, me = pdata
-        data['bomb_used'] = not me.has_bomb
+        data['tnt_used'] = not me.has_tnt
         data['player'] = my_number
         me.save()
 
@@ -264,17 +264,17 @@ def move(request, game_id):
     mine = mine_decode(game.mine)
 
     to_reveal = [(m, n)]
-    bomb_used = False
+    tnt_used = False
 
-    if request.REQUEST.get('bomb') == 'y':
-        if not me.has_bomb:
+    if request.REQUEST.get('tnt') == 'y':
+        if not me.has_tnt:
             return HttpResponseBadRequest()
-        me.has_bomb = False
+        me.has_tnt = False
         to_reveal = itertools.product(xrange(max(m-2,0),
                                              min(m+3, 16)),
                                       xrange(max(n-2,0),
                                              min(n+3, 16)))
-        bomb_used = True
+        tnt_used = True
 
     revealed = []
     def reveal(m, n):
@@ -295,7 +295,7 @@ def move(request, game_id):
     if not revealed:
         return HttpResponseBadRequest()
 
-    if mine[m][n] <= 18 or bomb_used:
+    if mine[m][n] <= 18 or tnt_used:
         game.state = (game.state % 2) + 1
 
     new_mine = mine_encode(mine)
@@ -304,7 +304,7 @@ def move(request, game_id):
     if points[0] >= 26 or points[1] >= 26:
         game.state = player + 2
 
-    coded_move = '%s%x%x' % ('b' if bomb_used else 'd', m, n)
+    coded_move = '%s%x%x' % ('b' if tnt_used else 'd', m, n)
     me.last_move = coded_move
     game.mine = new_mine
     game.save()
@@ -329,7 +329,7 @@ def move(request, game_id):
     result = str(game.seq_num) + '\n' + str(game.state) + '\n' + str(player) + '\n' + coded_move + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
 
     # Since updating Facebook with score may be slow, we post
-    # the update to the user now...
+    # the update to the user first...
     post_update(game.channel, result)
 
     # ... and then publish the scores on FB, if game is over.

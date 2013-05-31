@@ -68,49 +68,51 @@ function last_click_decode(player, encoded) {
 
 var last_click = [null, null];
 
-// Bomb things:
-var bomb = {
+// T.N.T. stuff:
+var tnt = {
     'allowed': false,
     'active': false
 };
 
-/* Displays the bomb if it is to be shown. */
-function display_bomb() {
-    var visible = !params.bomb_used && bomb.allowed;
- 
-    document.getElementById('bomb')
-	.style.setProperty('visibility',
-			   visible ? 'visible' : 'hidden', null);
+/* Configure T.N.T. display according to state. */
+function display_tnt() {
+    var obj = document.getElementById('tnt');
+    if(tnt.allowed && !params.tnt_used) {
+	obj.src = images['tnt'].src;
+	if (params.player == params.state) {
+	    obj.className = tnt.active ? 'button in' : 'button out';
+	} else {
+	    obj.className = '';
+	}
+    } else {
+	obj.src = images[params.tnt_used ? 'explosion' : 'crate'].src;
+	obj.className = '';
+    }
 }
 
-function toggle_bomb(ev) {
-    var button = document.getElementById('bomb');
+function toggle_tnt(ev) {
+    var button = document.getElementById('tnt');
 
-    if(params.bomb_used || !bomb.allowed) {
-	bomb.active = false;
-	display_bomb();
-	return;
+    if(params.tnt_used || !tnt.allowed) {
+	tnt.active = false;
+    } else {
+	// TODO: marker over the T.N.T. area.
+	if(!tnt.active) {
+	    tnt.active = true;
+	}
+	else {
+	    tnt.active = false;
+	}
     }
 
-    // TODO: marker over the bomb area
-    //var canvas =  document.getElementById('game_canvas');
-
-    if(!bomb.active) {
-	bomb.active = true;
-	button.style.setProperty('background-color', 'red', null);
-	//toggle_bomb.move_event = canvas.addEventListener('move', on_click, false);
-    }
-    else {
-	bomb.active = false;
-	button.style.removeProperty('background-color');
-    }
+    display_tnt();
 }
 
 // Class Tile
 function Tile(x0,y0) {
   this.s = '?';
-  this.x = x0*26;
-  this.y = y0*26;
+  this.x = x0 * 26;
+  this.y = y0 * 26;
 }
 
 Tile.prototype.draw = function() {
@@ -165,11 +167,11 @@ function update_points() {
 	}
 
     if(params.player == 1)
-	bomb.allowed = p2 > p1;
+	tnt.allowed = p2 > p1;
     else
-	bomb.allowed = p1 > p2;
+	tnt.allowed = p1 > p2;
 
-    display_bomb();
+    display_tnt();
 
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
@@ -210,7 +212,7 @@ function set_state(state) {
     var msg;
     if(params.player) {
 	if(state == params.player) {
-	    msg = 'Jogue!';
+	    msg = 'Sua vez! Jogue!';
 	}
 	else if(state == 1 || state == 2) {
 	    msg = 'Aguarde sua vez.';
@@ -266,8 +268,13 @@ function handle_event(msg) {
 
     var player = parseInt(lines[2]);
     var lclick = last_click_decode(player, lines[3]);
+    
+    if (player == params.player && lclick.bombed) {
+	params.tnt_used = true;
+	tnt.active = false;
+    }
+    
     var parser = /(\d+),(\d+):(.)/;
-
     for(var i = 4; i < lines.length; ++i) {
 	var res = parser.exec(lines[i]);
 	if(res) {
@@ -347,8 +354,7 @@ function on_click(ev) {
 	do{
 	    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
 	    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-	}
-	while(currentElement = currentElement.offsetParent);
+	} while(currentElement = currentElement.offsetParent);
 
 	m = ev.pageX - totalOffsetX;
 	n = ev.pageY - totalOffsetY;
@@ -357,7 +363,7 @@ function on_click(ev) {
     m = Math.floor(m / 26);
     n = Math.floor(n / 26);
 
-    if(!bomb.active && mine[m][n].s != '?')
+    if(!tnt.active && mine[m][n].s != '?')
 	return;
 
     close_last_nt();
@@ -365,23 +371,16 @@ function on_click(ev) {
     // TODO: indicate activity
 
     var url = '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n;
-    var bombed = false;
-    if(bomb.active) {
-	url += '&bomb=y';
-	bombed = true;
+    if(tnt.active) {
+	url += '&tnt=y';
     }
     move_request.open('POST', url, true);
     move_request.onreadystatechange = function(ev){
 	if (move_request.readyState == 4) {
 	    if(move_request.status == 200) {
-		// TODO: find a more reliable way to know if the bomb was used
-		if(bombed) {
-		    params.bomb_used = true;
-		    toggle_bomb();
-		}
+		// TODO: stop activity indication
 	    }
 	    // TODO: else: treat error
-	    // TODO: stop activity indication
 	}
     };
     move_request.send(null);
@@ -452,9 +451,9 @@ function init() {
     register_event();
 
     if(params.player) { // Not a spectator
-	// Wait for user
+	// Expect for user input
 	canvas.addEventListener('click', on_click, false);
-	document.getElementById('bomb').addEventListener('click', toggle_bomb, false);
+	document.getElementById('tnt').addEventListener('click', toggle_tnt, false);
     }
     
     // Everything is setup, show the canvas
@@ -490,5 +489,8 @@ function load_img(name) {
 // Load resources
 load_img("saphire");
 load_img("ruby");
+load_img("crate");
+load_img("tnt");
+load_img("explosion");
 
 window.addEventListener('load', init, false);
