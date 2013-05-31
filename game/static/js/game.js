@@ -210,21 +210,21 @@ function set_state(state) {
     var msg;
     if(params.player) {
 	if(state == params.player) {
-	    msg = 'Sua vez!';
+	    msg = 'Jogue!';
 	}
 	else if(state == 1 || state == 2) {
-	    msg = '';
+	    msg = 'Aguarde sua vez.';
 	}
 	else if(state == 3 || state == 4) {
-	    msg = 'Fim de jogo. ';
+	    msg = 'O jogo acabou, ';
 	    if((state - 2) == params.player) {
 		if(auth.fb)
 		    document.getElementById('brag_button')
 		    .style.setProperty('visibility', 'visible', null);
-		msg += 'Você venceu!';
+		msg += 'você venceu!';
 	    }
 	    else
-		msg += 'Você perdeu.';
+		msg += 'você perdeu.';
 	}
 	else
 	    return; // What else can I do?
@@ -237,11 +237,17 @@ function set_state(state) {
 	    ['',
 	     'Vez do vermelho.',
 	     'Vez do azul.',
-	     'Vermelho venceu.',
-	     'Azul venceu.'];
+	     'O jogo acabou, o vermelho venceu.',
+	     'O jogo acabou, o azul venceu.'];
 	msg = state_msgs[state];
     }
-    document.getElementById('message').innerHTML = msg;
+    var msg_box = document.getElementById('message');
+    if (!params.state && state) {
+	// Just started the game, prepare box for messages
+	msg_box.innerHTML = '';
+	msg_box.className += " big";
+    }
+    msg_box.innerHTML = msg;
     params.state = state;
 }
 

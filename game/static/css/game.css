@@ -64,6 +64,11 @@
     height: 40px;
 }
 
+div.big {
+    font-size: large;
+    text-align: center;
+}
+
 #message {
     height: 35px;
 }
