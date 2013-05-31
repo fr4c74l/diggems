@@ -11,7 +11,13 @@
 	font-weight: bold;
 	src: url('/static/fonts/Diavlo_BOLD_II_37.otf');
 	/* A font by Jos Buivenga (exljbris) -> www.exljbris.com */
-} 
+}
+
+@font-face {
+	font-family: GrutchShaded;
+	src: url('/static/fonts/GrutchShaded.ttf');
+	/* Free font by Steeve Gruson */
+}
 
 html {
 	background:url('/static/images/bg-diggems.jpg') repeat-x left top; 
@@ -47,27 +53,6 @@ html {
 	display:none;
 }
 
-#game_canvas {
-	/*position: absolute;
-	top: 50%;
-	left: 50%;
-	margin: -270px 0 0 -202px;*/
-	background-color: #fff;
-	z-index: 1;
-}
-
-
-#bomb {
-	float: left;
-	width: 50px;
-	height: 50px;
-	z-index:0;
-}
-
-#bomb:hover{
-	background: url(../images/bomb_up.png) no-repeat left top ; 
-}
-
 ul {
 	list-style:none;
 	padding: 0;
@@ -78,13 +63,6 @@ li {
 	list-style:none;
 	padding: 0;
 	margin: 0;
-}
-
-#container {
-	/*position:relative;
-	min-height: 100%;
-	height: auto !important; 
-	margin: 0 auto -142px; /* the bottom margin is the negative value of the footer's height */s
 }
 
 /* HEADER */
@@ -100,9 +78,8 @@ li {
 
 #title {
 	font-family: GrutchShaded;
-	font-weight: bold;
-	/* text-shadow: 0.1em 0.1em 0.2em #535353; */
-	color: #4c79a9;
+	text-shadow: 0.1em 0.1em 0.2em #535353;
+	color: #551a8b;
 	font-size: 68px;
 	padding-left:20px;
 	letter-spacing: 4pt;
@@ -126,32 +103,6 @@ li {
 	padding-left: 5px;
 }
 
-#auth_username {
-}
-
-#score {
-}
-
-/* CONTENT */
-#content {
-/*	padding:1em 1em 5em; /* bottom padding for footer */
-}
-
-#content_container {
-/*	margin: 0 auto;
-	position: relative;
-	padding: 0;
-	height: 142px;
-	max-width: 800px;*/
-}
-/* FOOTER */
-#footer {
-/*	position:absolute;
-	width:100%;
-	min-width:521px;
-	bottom:0; /* stick to bottom */
-}
-
 #footer_container {
 	display: block;
 	margin: 0 auto;
@@ -173,5 +124,3 @@ li {
 #footer_container li a:hover {
 	text-decoration: underline;
 }
-
-

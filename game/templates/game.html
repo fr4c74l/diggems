@@ -37,8 +37,9 @@ Software under Affero GPL license, see LICENSE.txt
 			Atualize seu navegador.
 		</canvas>
 	</div>
-	<div class="box" id="p1_box"><div>Nome</div><div class="big">Mensagem</div></div>
-	<div class="box" id="p2_box"><div>Nome</div><div class="big">{% if player and state == 0 %}Aguardando...{% else %}Mensagem{% endif %}</div></div>
+	<div class="box pbox" id="p1_box"><div>Nome</div><div class="big">Mensagem</div></div>{% if player %}
+	<div class="box" id="bomb_box"><img class="button_out" src="/static/images/tnt.png" /></div>
+	{% endif %}<div class="box pbox" id="p2_box"><div>Nome</div><div class="big">{% if player and state == 0 %}Aguardando...{% else %}Mensagem{% endif %}</div></div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
 		<div>Envie este link para o seu parceiro se conectar:</div>
 		<div>
