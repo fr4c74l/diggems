@@ -23,7 +23,7 @@ class VerifiedHTTPSConnection(httplib.HTTPSConnection):
                                     self.key_file,
                                     self.cert_file,
                                     cert_reqs=ssl.CERT_REQUIRED,
-                                    ca_certs='entrust_ssl_ca.cer')
+                                    ca_certs='facebook_ssl_ca.cer')
 
 # wraps https connections with ssl certificate verification
 class VerifiedHTTPSHandler(urllib2.HTTPSHandler):

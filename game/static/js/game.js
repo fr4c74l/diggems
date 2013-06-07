@@ -77,6 +77,9 @@ var tnt = {
 /* Configure T.N.T. display according to state. */
 function display_tnt() {
     var obj = document.getElementById('tnt');
+    if (!obj) {
+	return;
+    }
     if(tnt.allowed && !params.tnt_used) {
 	obj.src = images['tnt'].src;
 	if (params.player == params.state) {
