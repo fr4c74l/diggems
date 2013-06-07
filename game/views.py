@@ -147,7 +147,8 @@ def new_game(request):
     mine = [[0] * 16 for i in xrange(16)]
 
     indexes = list(itertools.product(xrange(16), repeat=2))
-    gems = random.sample(indexes, 51)
+    rnd = random.SystemRandom()
+    gems = rnd.sample(indexes, 51)
 
     for (m, n) in gems:
         mine[m][n] = 9
