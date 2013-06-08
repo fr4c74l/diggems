@@ -43,6 +43,35 @@ html {
 	font-family: Diavlo;
 }
 
+.button {
+	min-width: 15px;
+	padding: 4px;
+	margin: 0px 5px 0px 0px;
+	background-color: #a0dC48;
+	display: block;
+	-moz-border-radius: 3px;
+	-o-border-radius: 3px;
+	-webkit-border-radius: 3px;
+	border-radius: 3px;
+	border: 1px outset #B0EC58;
+	color: #f9f9f9;
+	font-size: 13px;
+	letter-spacing: 1px;
+	font-weight: bold;
+	text-shadow: #72a749 0 -1px 0;
+	text-align: center;
+}
+
+.button:hover {
+	color: #f9f9f9;
+	cursor: pointer;
+}
+
+.button:active {
+	background-color: #6aa040;
+	border: 1px inset #6aa040;
+}
+
 .clr {
 	clear:both;
 	padding:0;

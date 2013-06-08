@@ -13,16 +13,23 @@ function new_post_request(url) {
 function auth_render() {
     var fb_button = document.getElementById('auth_fb_button');
     var username = document.getElementById('auth_username');
-    var logged = document.getElementById('auth_logged');
+    var picture = document.getElementById('auth_user_pic');
+    var logout = document.getElementById('auth_logout')
 
     if(auth.fb) {
 	username.innerHTML = auth.fb.name;
 
-	fb_button.style.setProperty('visibility', 'hidden', null);
-	logged.style.setProperty('visibility', 'visible', null);
+	picture.src = 'https://graph.facebook.com/' + auth.fb.uid + '/picture';
+	picture.style.setProperty('visibility', 'visible', null);
+
+	fb_button.style.setProperty('display', 'none', null);
+	logout.style.setProperty('visibility', 'visible', null);
     } else {
-	fb_button.style.setProperty('visibility', 'visible', null);
-	logged.style.setProperty('visibility', 'hidden', null);
+	username.innerHTML = 'Visitante';
+
+	picture.style.setProperty('visibility', 'hidden', null);
+	fb_button.style.setProperty('display', 'inline-block', null);
+	logout.style.setProperty('visibility', 'hidden', null);
     }
 }
 
@@ -92,5 +99,4 @@ function fb_logout() {
 /* Initial check of login status. */
 window.addEventListener('load', function() {
     FB.Event.subscribe('auth.authResponseChange', on_fb_login);
-    FB.getLoginStatus(on_fb_login);
 }, false);

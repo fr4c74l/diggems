@@ -20,7 +20,7 @@ Software under Affero GPL license, see LICENSE.txt
 					<h1>Novo Jogo</h1>
 					<form action="new_game/" method="post">
 						Jogo privado <input type="checkbox" name="private" value="1" />
-						<input type="submit" value="Criar!"  style="float: right;"/>
+						<input class="button" type="submit" value="Criar!"  style="float: right;"/>
 					</form>
 				</td>
 				<td class="box" id="your_game" rowspan="2" class="top">
@@ -50,8 +50,8 @@ Software under Affero GPL license, see LICENSE.txt
 							<div style="overflow:hidden;">
 								<div>Contra {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</div>
 									<div style="margin-top: 10px;">
-										<div style="float:left;"><form action="game/{{ g.id }}/" method="post"><input type="submit" value="Visualizar" /></form></div>
-										<div><form action="game/{{ g.id }}/join/" method="post"><input type="submit" value="Juntar-se!" /></form></div>
+										<div style="float:left;"><form action="game/{{ g.id }}/" method="post"><input class="button" type="submit" value="Visualizar" /></form></div>
+										<div><form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="Juntar-se!" /></form></div>
 									</div>
 							</div>
 						</li>
