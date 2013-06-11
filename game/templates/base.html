@@ -32,7 +32,7 @@ Software under Affero GPL license, see LICENSE.txt
       <img id="icon" class="logo" src="/static/images/icon64.png" />
       <span id="title" class="logo">DigGems</span></a>
       <div id="user_info">
-	<img id="auth_user_pic" {% if fb %}src="https://graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
+	<img id="auth_user_pic" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
 	<div id="user_stats">
 	  <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
 	  <span id="auth_username">{% if fb %}{{ fb.name }}{% else %}Visitante{% endif %}</span>
