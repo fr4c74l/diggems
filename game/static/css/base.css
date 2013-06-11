@@ -26,6 +26,7 @@ html {
 	font-family: sans;
 	font-size: small;
 	z-index: -1;
+	height: 100%;
 }
 
 .box {
