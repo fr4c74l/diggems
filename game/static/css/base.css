@@ -98,7 +98,7 @@ li {
 /* HEADER */
 #header {
 	padding:1em;
-/*	min-width:521px; */
+	min-width:521px; 
 }
 
 .logo {
@@ -120,17 +120,34 @@ li {
 }
 
 #user_info {
-	float: right;
+	float: right; 
 	top: 20px;
 	position: relative;
 }
 
-#user_pic {
+#user_info li {
 	float: left;
+}
+
+#user_info ul {
 }
 
 #user_stats {
 	padding-left: 5px;
+}
+
+#auth_user_pic {
+	padding: 0 5px;
+}
+
+#auth_fb_button {
+	float: right;
+}
+
+#auth_logout {
+	float: right;
+	position: relative;
+	bottom: -9px;
 }
 
 #footer_container {

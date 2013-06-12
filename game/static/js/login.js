@@ -26,7 +26,8 @@ function auth_render() {
 	logout.style.setProperty('visibility', 'visible', null);
     } else {
 	username.innerHTML = 'Visitante';
-
+	
+	
 	picture.style.setProperty('visibility', 'hidden', null);
 	fb_button.style.setProperty('display', 'inline-block', null);
 	logout.style.setProperty('visibility', 'hidden', null);

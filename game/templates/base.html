@@ -27,19 +27,19 @@ Software under Affero GPL license, see LICENSE.txt
 <script src="/static/js/login.js"></script>
 <div id="container">
   <div id="header">
-    <div>
-      <a href="/">
-      <img id="icon" class="logo" src="/static/images/icon64.png" />
-      <span id="title" class="logo">DigGems</span></a>
-      <div id="user_info">
-	<img id="auth_user_pic" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
-	<div id="user_stats">
-	  <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
-	  <span id="auth_username">{% if fb %}{{ fb.name }}{% else %}Visitante{% endif %}</span>
-	  <div id="score"><img src="/static/images/ruby.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %} </div>
-	  <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();">Logout</div>
-	</div>
-      </div>
+    <a href="/">
+    <img id="icon" class="logo" src="/static/images/icon64.png" />
+    <span id="title" class="logo">DigGems</span></a>
+    <div id="user_info">
+      <ul>
+	<li><img id="auth_user_pic" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} /></li>
+	<ul id="user_stats">
+	  <li> <span id="auth_username">{% if fb %}{{ fb.name }}{% else %}Visitante{% endif %}</span> </li>
+	  <li id="score"><img src="/static/images/ruby.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</li>
+	</ul>
+      </ul>
+      <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
+      <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();">Logout</div>
     </div>
   </div>
   
