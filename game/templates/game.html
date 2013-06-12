@@ -37,9 +37,9 @@ Software under Affero GPL license, see LICENSE.txt
 			Atualize seu navegador.
 		</canvas>
 	</div>
-	<div class="box pbox" id="p1_box"><div>Nome</div><div class="big">Mensagem</div></div>{% if player %}
+	<div class="box pbox" id="p1_box"><a id="p1_link"><img id="p1_pic" /><div id="p1_name"></a></div><div id="p1_rel"></div></div>{% if player %}
 	<div class="box" id="tnt_box"><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></div>
-	{% endif %}<div class="box pbox" id="p2_box"><div>Nome</div><div class="big">{% if player and state == 0 %}Aguardando...{% else %}Mensagem{% endif %}</div></div>
+	{% endif %}<div class="box pbox" id="p2_box"><a id="p2_link"><img id="p2_pic" /><div id="p2_name"></a></div><div id="p2_rel"></div></div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
 		<div>Envie este link para o seu parceiro se conectar:</div>
 		<div>
@@ -58,12 +58,11 @@ Software under Affero GPL license, see LICENSE.txt
 <source src="/static/sound/ring.wav" type="audio/wav" />
 </audio>
 
-<!--
+{% comment %}
 TODO: Place this together with the enable/disable sound button.
 <script>
 if(nt && nt.checkPermission() == 1)
 document.write('<span onclick=\"nt.requestPermission();\">Clique para permitir notificação.</span>');
 </script>
--->
-
+{% endcomment %}
 {% endblock %}
