@@ -206,7 +206,12 @@ def join_game(request, game_id):
     game.state = 1
     game.save()
 
-    post_update(game.channel, str(game.seq_num) + '\n' + str(game.state))
+    outdata = [game.seq_num, game.state]
+    fb = profile.facebook
+    if fb:
+        outdata += [fb.uid, fb.name]
+
+    post_update(game.channel, '\n'.join(map(str, outdata)))
     return HttpResponseRedirect('/game/' + game_id)
 
 @transaction.commit_on_success
@@ -221,8 +226,13 @@ def game(request, game_id):
             'channel': game.channel,
             'p1_last_move': game.p1.last_move}
 
+    if(game.p1.user.facebook):
+        data['p1_info'] = game.p1.user.facebook.pub_info()
+
     if(game.p2):
         data['p2_last_move'] = game.p2.last_move
+        if(game.p2.user.facebook):
+            data['p2_info'] = game.p2.user.facebook.pub_info()
 
     profile = UserProfile.get(request)
     pdata = game.what_player(profile)

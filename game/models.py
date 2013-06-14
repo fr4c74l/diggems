@@ -12,6 +12,10 @@ class FacebookCache(models.Model):
     name = models.CharField(max_length=100)
     access_token = models.CharField(max_length=500)
     expires = models.DateTimeField()
+    
+    def pub_info(self):
+        return {'uid': self.uid,
+                'name': self.name}
 
 class UserProfile(models.Model):
     id = models.CharField(max_length=22, primary_key=True)
