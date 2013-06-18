@@ -15,6 +15,7 @@ from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader
+from django.utils.html import escape
 from game_helpers import *
 from models import *
 from https_conn import https_opener
@@ -209,7 +210,7 @@ def join_game(request, game_id):
     outdata = [game.seq_num, game.state]
     fb = profile.facebook
     if fb:
-        outdata += [fb.uid, fb.name]
+        outdata += [fb.uid, escape(fb.name)]
 
     post_update(game.channel, '\n'.join(map(str, outdata)))
     return HttpResponseRedirect('/game/' + game_id)

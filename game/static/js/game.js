@@ -83,7 +83,7 @@ function display_tnt() {
     if(tnt.allowed && !params.tnt_used) {
 	obj.src = images['tnt'].src;
 	if (params.player == params.state) {
-	    obj.className = tnt.active ? 'button in' : 'button out';
+	    obj.className = tnt.active ? 'tntbtn in' : 'tntbtn out';
 	} else {
 	    obj.className = '';
 	}
@@ -256,6 +256,24 @@ function set_state(state) {
     params.state = state;
 }
 
+function blue_player_display(info) {
+    var name = document.getElementById('p2_name');
+    if (info) {
+	var uid = info[0];
+	var pname = info.slice(1).join('<br \>');
+
+	document.getElementById('p2_link').href = "//facebook.com/" + uid + "/";
+
+	var pic = document.getElementById('p2_pic');
+	pic.src = "//graph.facebook.com/" + uid + "/picture";
+	pic.style.display = "inline-block";
+
+	name.innerHTML = pname;
+    } else {
+	name.innerHTML = "Visitante";
+    }
+}
+
 function handle_event(msg) {
     var lines = msg.split('\n');
     var seq_num = parseInt(lines[0]);
@@ -265,9 +283,14 @@ function handle_event(msg) {
     params.seq_num = seq_num;
 
     var new_state = parseInt(lines[1]);
+    var old_state = params.state;
     set_state(new_state);
-    if(lines.length <= 2)
+    if(old_state == 0) {
+	// The second (blue) player just connected.
+	// Display know info about the other player.
+	blue_player_display(lines.slice(2));
 	return;
+    }
 
     var player = parseInt(lines[2]);
     var lclick = last_click_decode(player, lines[3]);
