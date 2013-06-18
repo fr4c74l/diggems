@@ -49,7 +49,7 @@ Software under Affero GPL license, see LICENSE.txt
 	<div class="box pbox" id="p2_box">
 		<a id="p2_link" target="_blank"{% if p2_info %} href="//facebook.com/{{ p2_info.uid }}/"{% endif %}>
 			<img id="p2_pic" width="40px" height="40px" style="{% if not p2_info %}display: none; {% endif %}margin-left: 2px; float: right;"{% if p2_info %} src="//graph.facebook.com/{{ p2_info.uid }}/picture"{% endif %} />
-			<div id="p2_name" style="white-space: normal; height: 30px; overflow: hidden; text-overflow: ellipsis;">{% if state == 0 %}Aguardando outro jogador...{% elif p2_info %}{{ p2_info.name }}{% else %}Visitante{% endif %}</div>
+			<div id="p2_name" style="white-space: normal; height: 30px; overflow: hidden; text-overflow: ellipsis;">{% if state == 0 %}{% if not player and not token %}Vago!<form style="float: right;" action="join/" method="post"><input class="button" type="submit" value="Juntar-se!" /></form>{% else %}Aguardando outro jogador...{% endif %}{% elif p2_info %}{{ p2_info.name }}{% else %}Visitante{% endif %}</div>
 		</a>
 		<div id="p2_rel" style="text-align: left; font-size: x-small; position: relative; bottom: -4px;">{% if player %}({% if player == 2 %}Você{% else %}Seu oponente{% endif %}){% endif %}</div>
 	</div>

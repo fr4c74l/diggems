@@ -258,7 +258,7 @@ function set_state(state) {
 
 function blue_player_display(info) {
     var name = document.getElementById('p2_name');
-    if (info) {
+    if (info && info.length == 2) {
 	var uid = info[0];
 	var pname = info.slice(1).join('<br \>');
 
