@@ -340,6 +340,9 @@ def move(request, game_id):
 
     result = str(game.seq_num) + '\n' + str(game.state) + '\n' + str(player) + '\n' + coded_move + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
 
+    # Everything is OK until now, so commit DB transaction
+    transaction.commit()
+
     # Since updating Facebook with score may be slow, we post
     # the update to the user first...
     post_update(game.channel, result)
