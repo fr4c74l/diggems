@@ -1,12 +1,11 @@
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
-import urllib2
 import itertools
 import random
-import httplib
 import radix64
 import models
+import http_cli
 from django.core.cache import cache
 from django.db.models import F
 from https_conn import https_opener
@@ -80,11 +79,11 @@ def publish_score(user):
     def try_publish_score():
         # Publish score...
         # TODO: log Facebook connection error, but do not raise exception
-        # TODO: make it asyncronous
         app_token = cache.get('app_token')
         if not app_token:
             try:
-                app_token = https_opener.open('https://graph.facebook.com/oauth/access_token?client_id=' + FB_APP_ID + '&client_secret=' + FB_APP_KEY + '&grant_type=client_credentials').read()
+                app_token = conn.get('/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'
+                                     .format(FB_APP_ID, FB_APP_KEY)).read()
                 cache.set('app_token', app_token, 3600)
             except urllib2.HTTPError:
                 # TODO: Log error before returning...
@@ -92,11 +91,14 @@ def publish_score(user):
         # There is a small chance that a race condition will make the score
         # stored at Facebook to be inconsistent. But since it is temporary
         # until the next game play, the risk seems acceptable.
-        https_opener.open('https://graph.facebook.com/' + user.facebook.uid + '/scores', 'score=' + str(user.total_score) + '&' + app_token).read()
+        # TODO: Fix this request; this is most certainly a POST:
+        conn.get('/{}/scores'.format(user.facebook.uid), 'score={}&{}'.format(user.total_score, app_token))
+        # Ignore return value, because there is not much we can do with it...
 
     if user.facebook:
         # Reload to ensure most accurate score
         user = models.UserProfile.objects.get(pk=user.pk)
+        conn = http_cli.get_conn('https://graph.facebook.com/')
         try:
             try_publish_score()
         except urllib2.HTTPError:
@@ -107,27 +109,25 @@ def publish_score(user):
 # Event dealing:
 def create_channel(channel):
     try:
-        conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('PUT', '/ctrl_event/' + channel,
-                     headers={'Content-Length': 0})
-        resp = conn.getresponse()
+        conn = http_cli.get_conn(EVENT_SERVER)
+        req = conn.put('/ctrl_event/' + channel, headers={'Content-Length': 0})
+        resp = req.read()
     except:
         pass # TODO: log error
 
 def delete_channel(channel):
     try:
-        conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('DELETE', '/ctrl_event/' + channel)
-        resp = conn.getresponse()
+        conn = http_cli.get_conn(EVENT_SERVER)
+        req = conn.delete('/ctrl_event/' + channel)
+        resp = req.read()
     except:
         pass # TODO: log error
 
 def post_update(channel, msg):
     try:
-        conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('POST', '/ctrl_event/' + channel, msg,
-                     headers={'Content-Type': 'text/plain'})
-        resp = conn.getresponse()
+        conn = http_cli.get_conn(EVENT_SERVER)
+        req = conn.post('/ctrl_event/' + channel, msg, headers={'Content-Type': 'text/plain'})
+        resp = req.read()
     except:
         pass # TODO: log error
 

@@ -4,9 +4,10 @@
 
 import itertools
 import datetime
-import urllib2
 import json
 import ssl
+import gevent
+import http_cli
 from wsgiref.handlers import format_date_time
 from time import mktime
 
@@ -18,7 +19,6 @@ from django.template import Context, RequestContext, loader
 from django.utils.html import escape
 from game_helpers import *
 from models import *
-from https_conn import https_opener
 
 def render_with_extra(template_name, data, request, user):
     t = loader.get_template(template_name)
@@ -57,10 +57,8 @@ def fb_login(request):
                   datetime.timedelta(seconds=(int(expires) - 10)))
 
     try:
-        # TODO: this ideally must be done asyncronuosly...
-        res = https_opener.open('https://graph.facebook.com/me?access_token=' + token)
+        res = http_cli.get_conn('https://graph.facebook.com/').get('me?access_token=' + token)
         fb_user = json.load(res)
-        res.close()
     except ssl.SSLError:
         # TODO: Log this error? What to do when Facebook
         # connection has been compromised?
@@ -343,14 +341,11 @@ def move(request, game_id):
     # Everything is OK until now, so commit DB transaction
     transaction.commit()
 
-    # Since updating Facebook with score may be slow, we post
-    # the update to the user first...
-    post_update(game.channel, result)
-
     # ... and then publish the scores on FB, if game is over.
     # (TODO: If only this could be done asyncronously...)
-    if game.state >= 3: 
-        publish_score(game.p1.user)
-        publish_score(game.p2.user)
+    if game.state >= 3:
+        for u in (game.p1.user, game.p2.user):
+            gevent.spawn(publish_score, u)
 
+    post_update(game.channel, result)
     return HttpResponse()
