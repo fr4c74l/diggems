@@ -91,8 +91,7 @@ def publish_score(user):
         # There is a small chance that a race condition will make the score
         # stored at Facebook to be inconsistent. But since it is temporary
         # until the next game play, the risk seems acceptable.
-        # TODO: Fix this request; this is most certainly a POST:
-        conn.get('/{}/scores'.format(user.facebook.uid), 'score={}&{}'.format(user.total_score, app_token))
+        conn.post('/{}/scores'.format(user.facebook.uid), 'score={}&access_token={}'.format(user.total_score, app_token))
         # Ignore return value, because there is not much we can do with it...
 
     if user.facebook:
