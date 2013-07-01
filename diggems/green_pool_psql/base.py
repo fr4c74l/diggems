@@ -173,7 +173,7 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             if settings_dict['PORT']:
                 conn_params['port'] = settings_dict['PORT']
 
-            self.pool = GeventConnectionPool(5, 20, **conn_params)
+            self.pool = GeventConnectionPool(1, 20, **conn_params)
             _pools[self.alias] = self.pool
 
     def check_constraints(self, table_names=None):
