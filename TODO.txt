@@ -1,0 +1,10 @@
+- Add brag button (publish results on Facebook)
+- Rematch button after game is over
+- 30 seconds of deadline to play, otherwise the game is lost
+  - epistolar mode, with no deadline
+- Internationalization
+- Tip-jar
+- Facebook like button
+- Async load of Facebook API
+- Mobile friendly version?
+- Gradually change color of game canvas border to  match found gems
