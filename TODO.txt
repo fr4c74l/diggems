@@ -8,3 +8,4 @@
 - Async load of Facebook API
 - Mobile friendly version?
 - Gradually change color of game canvas border to  match found gems
+- Display activity on user input.
