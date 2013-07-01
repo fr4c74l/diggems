@@ -108,6 +108,8 @@ class GeventConnectionPool(psycopg2.pool.AbstractConnectionPool):
     # Not sure what to do about this one...
     closeall = psycopg2.pool.AbstractConnectionPool._closeall
 
+_pools = {}
+
 class DatabaseWrapper(BaseDatabaseWrapper):
     vendor = 'postgresql'
     operators = {
@@ -152,22 +154,27 @@ class DatabaseWrapper(BaseDatabaseWrapper):
             raise ImproperlyConfigured(
                 "settings.DATABASES is improperly configured. "
                 "Please supply the NAME value.")
-        conn_params = {
-            'database': settings_dict['NAME'],
-        }
-        conn_params.update(settings_dict['OPTIONS'])
-        if 'autocommit' in conn_params:
-            del conn_params['autocommit']
-        if settings_dict['USER']:
-            conn_params['user'] = settings_dict['USER']
-        if settings_dict['PASSWORD']:
-            conn_params['password'] = force_str(settings_dict['PASSWORD'])
-        if settings_dict['HOST']:
-            conn_params['host'] = settings_dict['HOST']
-        if settings_dict['PORT']:
-            conn_params['port'] = settings_dict['PORT']
 
-        self.pool = GeventConnectionPool(5, 20, **conn_params)
+        try:
+            self.pool = _pools[self.alias]
+        except KeyError:
+            conn_params = {
+                'database': settings_dict['NAME'],
+            }
+            conn_params.update(settings_dict['OPTIONS'])
+            if 'autocommit' in conn_params:
+                del conn_params['autocommit']
+            if settings_dict['USER']:
+                conn_params['user'] = settings_dict['USER']
+            if settings_dict['PASSWORD']:
+                conn_params['password'] = force_str(settings_dict['PASSWORD'])
+            if settings_dict['HOST']:
+                conn_params['host'] = settings_dict['HOST']
+            if settings_dict['PORT']:
+                conn_params['port'] = settings_dict['PORT']
+
+            self.pool = GeventConnectionPool(5, 20, **conn_params)
+            _pools[self.alias] = self.pool
 
     def check_constraints(self, table_names=None):
         """
