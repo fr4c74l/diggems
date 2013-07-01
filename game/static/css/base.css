@@ -172,7 +172,7 @@ li {
 	text-decoration: underline;
 }
 
-a {
+.plain {
 	color: inherit;
 	text-decoration: inherit;
 }

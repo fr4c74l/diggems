@@ -265,7 +265,7 @@ function blue_player_display(info) {
 
 	var link = document.getElementById('p2_link');
 	link.href = "//facebook.com/" + uid + "/";
-	link.className = "undlin";
+	link.className += " undlin";
 
 	var pic = document.getElementById('p2_pic');
 	pic.src = "//graph.facebook.com/" + uid + "/picture";
