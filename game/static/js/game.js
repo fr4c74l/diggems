@@ -223,9 +223,10 @@ function set_state(state) {
 	else if(state == 3 || state == 4) {
 	    msg = 'O jogo acabou, ';
 	    if((state - 2) == params.player) {
-		if(auth.fb)
-		    document.getElementById('brag_button')
-		    .style.setProperty('visibility', 'visible', null);
+		if(auth.fb) {
+		    /*document.getElementById('brag_button')
+		    .style.setProperty('visibility', 'visible', null);*/
+		}
 		msg += 'você venceu!';
 	    }
 	    else

@@ -10,10 +10,7 @@ import models
 from django.core.cache import cache
 from django.db.models import F
 from https_conn import https_opener
-from diggems.settings import EVENT_SERVER
-
-FB_APP_ID = '264111940275149'
-FB_APP_KEY = '8a9260360907fd0cdffc1deafeb16b24'
+from diggems.settings import EVENT_SERVER, FB_APP_ID, FB_APP_KEY
 
 ## Tile codes:
 # 0     -> empty hidden tile
@@ -92,7 +89,7 @@ def publish_score(user):
         # There is a small chance that a race condition will make the score
         # stored at Facebook to be inconsistent. But since it is temporary
         # until the next game play, the risk seems acceptable.
-        https_opener.open('https://graph.facebook.com/' + user.facebook.uid + '/scores', 'score=' + str(user.total_score) + '&' + app_token).read()
+        https_opener.open('https://graph.facebook.com/{}/scores'.format(user.facebook.uid), 'score={}&{}'.format(user.total_score, app_token)).read()
 
     if user.facebook:
         # Reload to ensure most accurate score
@@ -100,34 +97,24 @@ def publish_score(user):
         try:
             try_publish_score()
         except urllib2.HTTPError:
-            # App access token must have expired, try just once more
+            # App access token must have expired, reset it and try just once more
             cache.delete('app_token')
             try_publish_score()
 
 # Event dealing:
 def create_channel(channel):
-    try:
-        conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('PUT', '/ctrl_event/' + channel,
-                     headers={'Content-Length': 0})
-        resp = conn.getresponse()
-    except:
-        pass # TODO: log error
+    conn = httplib.HTTPConnection(EVENT_SERVER)
+    conn.request('PUT', '/ctrl_event/' + channel,
+                 headers={'Content-Length': 0})
+    resp = conn.getresponse()
 
 def delete_channel(channel):
-    try:
-        conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('DELETE', '/ctrl_event/' + channel)
-        resp = conn.getresponse()
-    except:
-        pass # TODO: log error
+    conn = httplib.HTTPConnection(EVENT_SERVER)
+    conn.request('DELETE', '/ctrl_event/' + channel)
+    resp = conn.getresponse()
 
 def post_update(channel, msg):
-    try:
-        conn = httplib.HTTPConnection(EVENT_SERVER)
-        conn.request('POST', '/ctrl_event/' + channel, msg,
-                     headers={'Content-Type': 'text/plain'})
-        resp = conn.getresponse()
-    except:
-        pass # TODO: log error
-
+    conn = httplib.HTTPConnection(EVENT_SERVER)
+    conn.request('POST', '/ctrl_event/' + channel, msg,
+                 headers={'Content-Type': 'text/plain'})
+    resp = conn.getresponse()

@@ -1,6 +1,9 @@
 # Django settings for diggems project.
 import os.path
 
+FB_APP_ID = '264111940275149'
+FB_APP_KEY = '8a9260360907fd0cdffc1deafeb16b24'
+
 INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
 EVENT_SERVER = '127.0.0.1:8080'
 
