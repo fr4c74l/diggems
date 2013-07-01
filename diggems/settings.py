@@ -2,7 +2,7 @@
 import os.path
 
 INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
-EVENT_SERVER = '127.0.0.1:8080'
+EVENT_SERVER = 'http://127.0.0.1:8080/'
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG

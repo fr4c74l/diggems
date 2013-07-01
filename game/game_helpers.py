@@ -8,7 +8,6 @@ import models
 import http_cli
 from django.core.cache import cache
 from django.db.models import F
-from https_conn import https_opener
 from diggems.settings import EVENT_SERVER
 
 FB_APP_ID = '264111940275149'
@@ -82,8 +81,9 @@ def publish_score(user):
         app_token = cache.get('app_token')
         if not app_token:
             try:
-                app_token = conn.get('/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'
-                                     .format(FB_APP_ID, FB_APP_KEY)).read()
+                with conn.get('/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'
+                                     .format(FB_APP_ID, FB_APP_KEY)) as req:
+                    app_token = req.read()
                 cache.set('app_token', app_token, 3600)
             except urllib2.HTTPError:
                 # TODO: Log error before returning...
@@ -91,8 +91,8 @@ def publish_score(user):
         # There is a small chance that a race condition will make the score
         # stored at Facebook to be inconsistent. But since it is temporary
         # until the next game play, the risk seems acceptable.
-        conn.post('/{}/scores'.format(user.facebook.uid), 'score={}&access_token={}'.format(user.total_score, app_token))
-        # Ignore return value, because there is not much we can do with it...
+        with conn.post('/{}/scores'.format(user.facebook.uid), 'score={}&access_token={}'.format(user.total_score, app_token)) as req:
+            req.read() # Ignore return value, because there is not much we can do with it...
 
     if user.facebook:
         # Reload to ensure most accurate score
@@ -107,26 +107,16 @@ def publish_score(user):
 
 # Event dealing:
 def create_channel(channel):
-    try:
-        conn = http_cli.get_conn(EVENT_SERVER)
-        req = conn.put('/ctrl_event/' + channel, headers={'Content-Length': 0})
+    conn = http_cli.get_conn(EVENT_SERVER)
+    with conn.put('/ctrl_event/' + channel, headers={'Content-Length': 0}) as req:
         resp = req.read()
-    except:
-        pass # TODO: log error
 
 def delete_channel(channel):
-    try:
-        conn = http_cli.get_conn(EVENT_SERVER)
-        req = conn.delete('/ctrl_event/' + channel)
+    conn = http_cli.get_conn(EVENT_SERVER)
+    with conn.delete('/ctrl_event/' + channel) as req:
         resp = req.read()
-    except:
-        pass # TODO: log error
 
 def post_update(channel, msg):
-    try:
-        conn = http_cli.get_conn(EVENT_SERVER)
-        req = conn.post('/ctrl_event/' + channel, msg, headers={'Content-Type': 'text/plain'})
+    conn = http_cli.get_conn(EVENT_SERVER)
+    with conn.post('/ctrl_event/' + channel, msg, headers={'Content-Type': 'text/plain'}) as req:
         resp = req.read()
-    except:
-        pass # TODO: log error
-

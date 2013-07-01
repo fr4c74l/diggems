@@ -57,8 +57,8 @@ def fb_login(request):
                   datetime.timedelta(seconds=(int(expires) - 10)))
 
     try:
-        res = http_cli.get_conn('https://graph.facebook.com/').get('me?access_token=' + token)
-        fb_user = json.load(res)
+        with http_cli.get_conn('https://graph.facebook.com/').get('me?access_token=' + token) as res:
+            fb_user = json.load(res)
     except ssl.SSLError:
         # TODO: Log this error? What to do when Facebook
         # connection has been compromised?
