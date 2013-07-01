@@ -64,6 +64,29 @@
     right: 0px;
 }
 
+#p1_pic {
+    margin-right: 2px;
+    float: left;
+}
+
+#p2_pic {
+    margin-left: 2px;
+    float: right;
+}
+
+.pinfo {
+    font-size: x-small;
+    position: relative;
+    bottom: -4px;
+}
+
+.pname {
+    white-space: normal;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #tnt_box {
     position: absolute;
     padding: 9px;

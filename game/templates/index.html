@@ -29,7 +29,7 @@ Software under Affero GPL license, see LICENSE.txt
 					{% if your_games %}
 						{% for g in your_games %}
 						<li class="list_games">
-							<div style="float:left; padding: 0px 5px 5px 0px;" ><a href="game/{{ g.id }}/">Jogo {{ g.id }}</a></div>
+							<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">Jogo {{ g.id }}</a></div>
 							<div>{% if g.token %}Privado{% else %}Público{% endif %}</div>{% if g.state = 0 %}
 							<div>Aguardando outdo jogador</div>{% else %}
 							<div>Em andamento</div>{% endif %}
