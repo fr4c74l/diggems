@@ -216,6 +216,22 @@ def join_game(request, game_id):
     return HttpResponseRedirect('/game/' + game_id)
 
 @transaction.commit_on_success
+def abort_game(request, game_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    game = get_object_or_404(Game, pk=game_id)
+    if game.state == 0:
+        profile = UserProfile.get(request)
+        pdata = game.what_player(profile)
+        if pdata:
+            pdata[1].delete()
+            game.delete()
+            return HttpResponseRedirect('/')
+
+    return HttpResponseForbidden()    
+
+@transaction.commit_on_success
 def game(request, game_id):
     # TODO: maybe control who can watch a game
     game = get_object_or_404(Game, pk=game_id)
