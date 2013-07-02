@@ -4,8 +4,18 @@
   - epistolar mode, with no deadline
 - Internationalization
 - Tip-jar
+- Advertsiment.
 - Facebook like button
 - Async load of Facebook API
 - Mobile friendly version?
 - Gradually change color of game canvas border to  match found gems
 - Display activity on user input.
+- Button to enable/disable sound.
+- Button to enable desktop notification.
+- Div "user_info" is displaced if windows is smaller than some width.
+- Logo name is ugly and logo placement is bad, fix them.
+- Index screen boxes were once centralized. Make them so again.
+- Adversary picture placement in index is crappy.
+- Timeout uninitialized game if host has left.
+- Change user display if player or opponent logs in.
+- RT update of user stats.

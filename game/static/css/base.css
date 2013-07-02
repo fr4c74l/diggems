@@ -171,3 +171,12 @@ li {
 #footer_container li a:hover {
 	text-decoration: underline;
 }
+
+.plain {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+.undlin:hover {
+	text-decoration:underline;
+}
