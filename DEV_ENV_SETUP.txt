@@ -70,4 +70,5 @@ $ mv diggems/settings.py diggems/settings.py.local
 
 8) Create django database and run server
 $ python manage.py syncdb
+$ python manage.py createcachetable cache
 $ python manage.py runserver
