@@ -1,7 +1,8 @@
 """
 Modified PostgreSQL database backend for Django, made to use green pool.
 
-Requires psycopg2cffi and gevent.
+Intented to be used with psycopg2cffi and gevent one day,
+but for now will just make a connection pool using threading.Semaphore
 """
 import logging
 import sys
@@ -19,7 +20,7 @@ from django.utils.safestring import SafeText, SafeBytes
 from django.utils import six
 from django.utils.timezone import utc
 
-from gevent.lock import Semaphore
+from threading import Semaphore
 
 try:
     import psycopg2 as Database
