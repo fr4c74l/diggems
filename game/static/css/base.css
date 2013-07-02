@@ -19,6 +19,7 @@
 	/* Free font by Steeve Gruson */
 }
 
+
 html {
 	background:url('/static/images/bg-diggems.jpg') repeat-x left top; 
 	background-color: #543116; 
@@ -98,7 +99,8 @@ li {
 /* HEADER */
 #header {
 	padding:1em;
-	min-width:521px; 
+	min-width:728px;
+	min-height:100px; 
 }
 
 .logo {
@@ -113,6 +115,7 @@ li {
 	font-size: 68px;
 	padding-left:20px;
 	letter-spacing: 4pt;
+	text-decoration: none;
 }
 
 #subtitle {
@@ -120,34 +123,47 @@ li {
 }
 
 #user_info {
-	float: right; 
-	top: 20px;
-	position: relative;
-}
-
-#user_info li {
-	float: left;
-}
-
-#user_info ul {
+    	font-family: Diavlo;
+	font-weight: bold;
+  	float: right;
+	position: relative; 
+	min-width: 205px;
+        display: block;
+        margin: 5px;
 }
 
 #user_stats {
-	padding-left: 5px;
+	float: right;
+	display: inline-block;
+	vertical-align: top;
+	margin: 2px;
+}
+
+
+#logged_as {
+	display: inline-block;
+}
+
+#score {
+	display: block;
+/*	padding-left: 25px; */
+}
+
+#auth_username {
+	font-weight: normal;
+	padding-left: 2px;
 }
 
 #auth_user_pic {
-	padding: 0 5px;
+	margin:2px;
 }
 
 #auth_fb_button {
-	float: right;
+	padding: 4px 0px;
 }
 
 #auth_logout {
-	float: right;
-	position: relative;
-	bottom: -9px;
+	padding: 4px 0px;
 }
 
 #footer_container {
