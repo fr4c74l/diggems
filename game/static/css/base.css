@@ -145,7 +145,6 @@ li {
 
 #score {
 	display: block;
-/*	padding-left: 25px; */
 }
 
 #auth_username {
@@ -154,7 +153,8 @@ li {
 }
 
 #auth_user_pic {
-	margin:2px;
+	margin: 5px;
+	float: left;
 }
 
 #auth_fb_button {
