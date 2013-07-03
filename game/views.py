@@ -15,6 +15,7 @@ from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader
+from django.views.generic import TemplateView
 from django.utils.html import escape
 from game_helpers import *
 from models import *
@@ -364,3 +365,6 @@ def move(request, game_id):
         publish_score(game.p2.user)
 
     return HttpResponse()
+
+class AboutView(TemplateView):
+    template_name = "about.html"

@@ -12,19 +12,19 @@ Software under Affero GPL license, see LICENSE.txt
 {% endblock %}
 </head>
 <body>
-<div id="fb-root"></div>
-<script src="//connect.facebook.net/pt_BR/all.js"></script>
-<script>
-  var auth = {
-    "fb": {% if fb %}{% include "auth_fb.json" %}{% else %}null{% endif %}
-  }
-  FB.init({
-    "appId": "{{ FB_APP_ID }}",
-    "status": true, "cookie": true, "oauth": true, "xfbml": true,
-    "channelURL": "/fb/channel/",
-  });
-</script>
-<script src="/static/js/login.js"></script>
+  <div id="fb-root"></div>
+  <script src="//connect.facebook.net/pt_BR/all.js"></script>
+  <script>
+    var auth = {
+      "fb": {% if fb %}{% include "auth_fb.json" %}{% else %}null{% endif %}
+    }
+    FB.init({
+      "appId": "{{ FB_APP_ID }}",
+      "status": true, "cookie": true, "oauth": true, "xfbml": true,
+      "channelURL": "/fb/channel/",
+    });
+  </script>
+  <script src="/static/js/login.js"></script>
   <div id="wrapper">
     <div id="header">
       <a style="position: relative;" class="plain" href="/">
@@ -41,7 +41,7 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
       </div>
     </div>
-    <div id="content">{% block content %}{% endblock %}</div>
+    <div class="content">{% block content %}{% endblock %}</div>
     <div id="footer">
       <div id="footer_container">
 	<ul>

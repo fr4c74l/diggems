@@ -175,6 +175,27 @@ li {
 	padding: 4px 0px;
 }
 
+#content_container {
+	min-width: 728px;
+	padding-bottom:100px; /* Height of the footer element */
+}
+
+.content {
+	margin:0 auto;
+	width:728px;
+	padding:18px 0 32px;	
+}
+
+.content h1 {
+	padding-left: 10px;
+	text-decoration: underline;
+}
+
+.content p {
+	padding: 0px 10px;
+	text-align: justify;
+}
+
 #footer {
 	width:100%;
 	height:100px;
