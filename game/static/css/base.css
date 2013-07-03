@@ -117,6 +117,10 @@ li {
 	letter-spacing: 4pt;
 }
 
+#beta {
+	vertical-align: bottom;
+}
+
 #subtitle {
 	color: #9a64c8;
 }
