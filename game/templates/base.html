@@ -25,37 +25,34 @@ Software under Affero GPL license, see LICENSE.txt
   });
 </script>
 <script src="/static/js/login.js"></script>
-  <div id="header">
-    <a style="position: relative;" class="plain" href="/">
-      <img id="icon" class="logo" src="/static/images/icon64.png" />
-      <span id="title" class="logo">DigGems</span><img style="position: absolute; right: 0px; bottom: 0px;" id="beta" src="/static/images/beta.png"/>
-    </a>
-    <div id="user_info">
-      <img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
-      <div id="user_stats">
-	  <div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %}Visitante{% endif %}</span></div>
-	  <div id="score"> Placar: <img src="/static/images/ruby.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
-        <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
-        <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();">Logout</div>
+  <div id="wrapper">
+    <div id="header">
+      <a style="position: relative;" class="plain" href="/">
+	<img id="icon" class="logo" src="/static/images/icon64.png" />
+	<span id="title" class="logo">DigGems</span><img style="position: absolute; right: 0px; bottom: 0px;" id="beta" src="/static/images/beta.png"/>
+      </a>
+      <div id="user_info">
+	<img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
+	<div id="user_stats">
+	    <div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %}Visitante{% endif %}</span></div>
+	    <div id="score"> Placar: <img src="/static/images/ruby.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
+	  <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
+	  <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();">Logout</div>
+	</div>
+      </div>
+    </div>
+    <div id="content">{% block content %}{% endblock %}</div>
+    <div id="footer">
+      <div id="footer_container">
+	<ul>
+	  <li><a href="/about">Sobre Nós</a></li>
+	  <li><a href="/howtoplay">Como Jogar?</a></li>
+	  <li><a href="/license">Licença e código-fonte</a></li>
+	  <li><a href="/bugreport">Reportar BUG</a></li>
+	</ul>
       </div>
     </div>
   </div>
-  <div id="content">{% block content %}{% endblock %}</div>
-  <!--
-  <img id="sound" src="/static/images/sound-off.png"/>
-  <div class="clr"></div>
-  <div id="footer">
-    <div id="footer_container">
-      <ul>
-	<li><a href="/about">Sobre Nós</a></li>
-	<li><a href="/howtoplay">Como Jogar?</a></li>
-	<li><a href="/license">Licença</a></li>
-	<li><a href="/bugreport">Reportar BUG</a></li>
-      </ul>
-    </div>
-  </div>
-  -->
-
 </body>
 </html>
 

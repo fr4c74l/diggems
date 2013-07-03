@@ -19,7 +19,6 @@
 - Real-time update of user stats.
 - Real-time update of index page.
 - Footer bar with links
-  - "About" page
   - "How to play" page
   - "Contact" page
   - "License and source" page
@@ -36,3 +35,9 @@
 - Add icon indicating the unrevealed gems (a gem with a question mark, perhaps?)
 - Limit drawing inside the tile space.
 - Add clickable objects below the canvas for accessibility.
+- Add menu for view/play all games that are occurring
+- Add general chat
+- Mouse cursor like a shovel
+- Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
+- Add help-tips for TNT usage
+- Use {{ STATIC_URL }} instead of fullpath of static urls in templates

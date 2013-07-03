@@ -172,19 +172,30 @@ li {
 	padding: 4px 0px;
 }
 
+#footer {
+	width:100%;
+	height:100px;
+	position:absolute;
+	bottom:0;
+	left:0;
+	font-family: Diavlo;
+	font-weight: bold;
+	text-align: center;
+}
+
 #footer_container {
-	display: block;
 	margin: 0 auto;
+	min-width:728px;
 }
 
 #footer_container li {
-	float: left;
+	display: inline;
 	padding-left: 20px;
 	list-style-type: none;
 }
 
 #footer_container li a {
-	color: white;
+	color: #161311;
 	clear: both;
 	white-space: normal;
 	text-decoration: none;
