@@ -10,8 +10,6 @@ from django.contrib.auth.models import User
 class FacebookCache(models.Model):
     uid = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=100)
-    access_token = models.CharField(max_length=500)
-    expires = models.DateTimeField()
     
     def pub_info(self):
         return {'uid': self.uid,

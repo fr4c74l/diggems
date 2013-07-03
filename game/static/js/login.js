@@ -26,8 +26,7 @@ function auth_render() {
 	logout.style.setProperty('visibility', 'visible', null);
     } else {
 	username.innerHTML = 'Visitante';
-	
-	
+
 	picture.style.setProperty('visibility', 'hidden', null);
 	fb_button.style.setProperty('display', 'inline-block', null);
 	logout.style.setProperty('visibility', 'hidden', null);
@@ -54,7 +53,7 @@ function server_fb_login(fb_login)
 	    auth_render();
 	}
     }
-    request.send('token='+fb_login.accessToken+'&expires='+fb_login.expiresIn);
+    request.send('token='+fb_login.accessToken);
 }
 
 /* Turn the player back into a guest user on server. */
@@ -69,8 +68,7 @@ function server_fb_logout()
 /* Handle response from Facebook login events. */
 function on_fb_login(res) {
   if(res.authResponse) {
-      if(auth.fb && auth.fb.uid == res.authResponse.userID
-	 && auth.fb.access_token == res.authResponse.accessToken) {
+      if(auth.fb && auth.fb.uid == res.authResponse.userID) {
 	  auth_render();
       } else {
 	  auth.fb = null;
@@ -90,12 +88,6 @@ function fb_logout() {
     FB.logout();
     server_fb_logout();
 }
-
-/* Button callback to initiate client side login process via Facebook. */
-/*function fb_login() {
-    FB.login(on_fb_login,
-	     {"scope": "publish_actions"});
-}*/
 
 /* Initial check of login status. */
 window.addEventListener('load', function() {

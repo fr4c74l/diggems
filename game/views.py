@@ -49,12 +49,8 @@ def fb_channel(request):
 @transaction.commit_on_success
 def fb_login(request):
     token = request.POST.get('token')
-    expires = request.POST.get('expires')
-    if not (token and expires):
+    if not token:
         return HttpResponseBadRequest()
-
-    expires = (datetime.datetime.now() +
-                  datetime.timedelta(seconds=(int(expires) - 10)))
 
     try:
         # TODO: this ideally must be done asyncronuosly...
@@ -72,8 +68,6 @@ def fb_login(request):
         fb = FacebookCache(uid=fb_user['id'])
 
     fb.name = fb_user['name']
-    fb.access_token = token
-    fb.expires = expires
     fb.save()
 
     old_user_id = request.session.get('user_id')

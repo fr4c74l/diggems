@@ -11,7 +11,6 @@
 - Display activity on user input.
 - Button to enable/disable sound.
 - Button to enable desktop notification.
-- Div "user_info" is displaced if windows is smaller than some width. => Hardcoded fixed, may be a problem with mobile version
 - Logo name is ugly and logo placement is bad, fix them.
 - Index screen boxes were once centralized. Make them so again.
 - Adversary picture placement in index is crappy.
@@ -19,9 +18,6 @@
 - Change user display if player or opponent logs in.
 - Real-time update of user stats.
 - Real-time update of index page.
-- Stop that silly /fb/login request that arrives on every page load.
-  - Investigate how often this really is, does it really change on every
-    page load?
 - Revisit that "gc" maintenance command and verify its purpose.
 - Footer bar with links
   - "About" page
