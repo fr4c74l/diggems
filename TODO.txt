@@ -18,7 +18,7 @@
 - Change user display if player or opponent logs in.
 - Real-time update of user stats.
 - Real-time update of index page.
-- Revisit that "gc" maintenance command and verify its purpose.
+- Must update Player.last_seen in order to GC to work correctly.
 - Footer bar with links
   - "About" page
   - "How to play" page

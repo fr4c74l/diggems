@@ -84,7 +84,7 @@ class Game(models.Model):
     seq_num = models.IntegerField(default=0)
     token = models.CharField(max_length=22, blank=True, null=True)
     channel = models.CharField(max_length=22, unique=True)
-    p1 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p1')
+    p1 = models.OneToOneField(Player, related_name='game_as_p1')
     p2 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p2')
 
     def save(self, *args, **kwargs):
