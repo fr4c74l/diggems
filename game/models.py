@@ -69,6 +69,7 @@ class UserProfile(models.Model):
             if user_id:
                 del request.session['user_id']
 
+        # Must always save, to update timestamp
         prof.save()
         return prof
 
