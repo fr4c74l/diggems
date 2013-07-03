@@ -12,6 +12,7 @@
 - Display activity on user input.
 - Button to enable/disable sound.
 - Button to enable desktop notification.
+- Div "user_info" is displaced if windows is smaller than some width. => Hardcoded fixed, may be a problem with mobile version
 - Logo name is ugly and logo placement is bad, fix them.
 - Index screen boxes were once centralized. Make them so again.
 - Adversary picture placement in index is crappy.
