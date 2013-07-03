@@ -86,16 +86,16 @@ def fb_login(request):
                     profile.merge(old_profile)
             except UserProfile.DoesNotExist:
                 pass
-
     except UserProfile.DoesNotExist:
+        # First time login with Facebook
         try:
             profile = UserProfile.objects.get(pk=old_user_id)
             if not profile.user and not profile.facebook:
                 profile.facebook = fb
             else:
-                profile = UserProfile(id=gen_token(), facebook=fb)
-        except UserProfile.DoesNotExist:
-            profile = UserProfile(id=gen_token(), facebook_id=fb_user.id)
+                raise Exception()
+        except:
+            profile = UserProfile(id=gen_token(), facebook=fb)
     profile.save()
 
     request.session['user_id'] = profile.id

@@ -28,13 +28,19 @@ class UserProfile(models.Model):
     last_seen = models.DateTimeField(auto_now=True, db_index=True)
 
     def merge(self, other):
+        # Update players user to the unified one
         Player.objects.filter(user=other).update(user=self)
-        # Can't allow someone to play against itself
+
+        # Can't allow someone to play against itself, delete those games
         Game.objects.filter(p1__user__exact=F('p2__user')).delete()
-        self.games_finished = F('games_finished') + other.games_finished
-        self.games_won = F('games_won') + other.games_won
-        self.total_score = F('total_score') + other.total_score
+        
+        # Update scores
+        self.games_finished += other.games_finished
+        self.games_won += other.games_won
+        self.total_score += other.total_score
         self.save()
+
+        # No longer needed
         other.delete()
 
     @staticmethod
