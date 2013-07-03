@@ -3,7 +3,6 @@
 - 30 seconds of deadline to play, otherwise the game is lost
   - epistolar mode, with no deadline
 - Internationalization
-- Tip-jar
 - Advertsiment.
 - Facebook like button
 - Async load of Facebook API
@@ -24,6 +23,13 @@
   - Investigate how often this really is, does it really change on every
     page load?
 - Revisit that "gc" maintenance command and verify its purpose.
+- Footer bar with links
+  - "About" page
+  - "How to play" page
+  - "Contact" page
+  - "License and source" page
+  - Fratal name and logo
+  - Tip-jar
 - Scoreboards
   - All time
     - Everybody
