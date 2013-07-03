@@ -37,3 +37,7 @@
   - Weekly
     - Everybody
     - Friends
+- Change user score icon to a gem with both colors
+- Add icon indicating the unrevealed gems (a gem with a question mark, perhaps?)
+- Limit drawing inside the tile space.
+- Add clickable objects below the canvas for accessibility.
