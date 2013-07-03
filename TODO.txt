@@ -18,4 +18,6 @@
 - Adversary picture placement in index is crappy.
 - Timeout uninitialized game if host has left.
 - Change user display if player or opponent logs in.
-- RT update of user stats.
+- Real-time update of user stats.
+- Real-time update of index page.
+- Stop that silly /fb/login request that arrives on every page load.
