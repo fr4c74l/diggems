@@ -6,7 +6,12 @@ class Command(BaseCommand):
     help = 'Show the gems location of a game'
 
     def handle(self, *args, **options):
-        game_id = int(args[0])
+        try:
+            game_id = int(args[0])
+        except:
+            print 'You must pass game id.'
+            return
+
         g = Game.objects.get(id=game_id)
         mine = mine_decode(g.mine)
         for m in xrange(16):
