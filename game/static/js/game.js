@@ -176,9 +176,28 @@ function update_points() {
 
     display_tnt();
 
+    var hidden = 51 - p1 - p2;
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
-    document.getElementById('h_pts').innerHTML = String(51 - p1 - p2);
+    document.getElementById('h_pts').innerHTML = String(hidden);
+
+    var prop1, prop2;
+    if (p1 > p2) {
+	prop1 = 1;
+	prop2 = p2 / p1;
+    } else if (p2 > p1) {
+	prop2 = 1;
+	prop1 = p1 / p2;
+    } else {
+	prop1 = prop2 = 1;
+    }
+    
+    var g = hidden * 5;
+    var rem_total = 255 - g;
+    var r = g + Math.round(prop1 * rem_total);
+    var b = g + Math.round(prop2 * rem_total);
+    var bg_color = 'rgba(' + r + ',' + g + ',' + b + ',0.25)'
+    document.getElementById('game_box').style.background = bg_color;
 }
 
 function close_last_nt() {
