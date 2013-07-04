@@ -6,11 +6,9 @@ Software under Affero GPL license, see LICENSE.txt
 {% endcomment %}
 <html>
 <head>
-<title>DigGems: {% block title %}{% endblock %}</title>
-{% block css %}
+<title>DigGems: {% block title %}{% endblock %}</title>{% block css %}
   <link rel="stylesheet" media="screen" type="text/css" href="/static/css/base.css" />
-{% endblock %}
-</head>
+{% endblock %}</head>
 <body>
   <div id="fb-root"></div>
   <script src="//connect.facebook.net/pt_BR/all.js"></script>
@@ -21,7 +19,7 @@ Software under Affero GPL license, see LICENSE.txt
     FB.init({
       "appId": "{{ FB_APP_ID }}",
       "status": true, "cookie": true, "oauth": true, "xfbml": true,
-      "channelURL": "/fb/channel/",
+      "channelURL": "http://" + window.location.host + "/fb/channel/",
     });
   </script>
   <script src="/static/js/login.js"></script>

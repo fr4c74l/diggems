@@ -58,7 +58,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<div>
 			<input type="text" id="join_link" readonly/>
 			<script>
-				document.getElementById('join_link').value = (window.location.origin + "{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}");
+				document.getElementById('join_link').value = (window.location.protocol + "//" + window.location.host + "{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}");
 			</script>
 		</div>{% endif %}
 	</div>
