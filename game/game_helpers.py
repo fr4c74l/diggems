@@ -7,6 +7,7 @@ import random
 import httplib
 import radix64
 import models
+import traceback
 from django.core.cache import cache
 from django.db.models import F
 from https_conn import https_opener
@@ -101,18 +102,29 @@ def publish_score(user):
             cache.delete('app_token')
             try_publish_score()
 
+def log_exception(f):
+    def ret(*a, **ka):
+        try:
+            f(*a, **ka)
+        except:
+            traceback.print_exc()
+    return ret
+
 # Event dealing:
+@log_exception
 def create_channel(channel):
     conn = httplib.HTTPConnection(EVENT_SERVER)
     conn.request('PUT', '/ctrl_event/' + channel,
                  headers={'Content-Length': 0})
     resp = conn.getresponse()
 
+@log_exception
 def delete_channel(channel):
     conn = httplib.HTTPConnection(EVENT_SERVER)
     conn.request('DELETE', '/ctrl_event/' + channel)
     resp = conn.getresponse()
 
+@log_exception
 def post_update(channel, msg):
     conn = httplib.HTTPConnection(EVENT_SERVER)
     conn.request('POST', '/ctrl_event/' + channel, msg,
