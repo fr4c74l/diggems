@@ -1,6 +1,4 @@
 from django.conf.urls import patterns, include, url
-from django.views.generic import TemplateView
-from game.views import AboutView
 
 urlpatterns = patterns (
     '',
@@ -13,7 +11,7 @@ urlpatterns = patterns (
     (r'^fb/channel/', 'game.views.fb_channel'),
     (r'^fb/login/', 'game.views.fb_login'),
     (r'^fb/logout/', 'game.views.fb_logout'),
-    (r'^about/', AboutView.as_view()),
+    (r'^about/', 'game.views.about'),
     
     # Error views:
     (r'^error/404$', 'django.views.defaults.page_not_found'),

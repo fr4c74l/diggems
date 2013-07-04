@@ -12,7 +12,6 @@
 - Button to enable/disable sound.
 - Button to enable desktop notification.
 - Logo name is ugly and logo placement is bad, fix them.
-- Index screen boxes were once centralized. Make them so again.
 - Adversary picture placement in index is crappy.
 - Timeout uninitialized game if host has left.
 - Change user display if player or opponent logs in.

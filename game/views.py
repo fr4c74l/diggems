@@ -15,13 +15,12 @@ from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader
-from django.views.generic import TemplateView
 from django.utils.html import escape
 from game_helpers import *
 from models import *
 from https_conn import https_opener
 
-def render_with_extra(template_name, data, request, user):
+def render_with_extra(template_name, user, data={}):
     t = loader.get_template(template_name)
     c = Context(data)
 
@@ -131,7 +130,7 @@ def index(request):
         new_games.append(info)
 
     context = {'your_games': playing_now, 'new_games': new_games}
-    return render_with_extra('index.html', context, request, profile)
+    return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
 def new_game(request):
@@ -261,7 +260,7 @@ def game(request, game_id):
         if masked.count('?') != 256:
             data['mine'] = masked
 
-    return render_with_extra('game.html', data, request, profile)
+    return render_with_extra('game.html', profile, data)
 
 @transaction.commit_on_success
 def move(request, game_id):
@@ -366,5 +365,5 @@ def move(request, game_id):
 
     return HttpResponse()
 
-class AboutView(TemplateView):
-    template_name = "about.html"
+def about(request):
+    return render_with_extra('about.html', UserProfile.get(request))
