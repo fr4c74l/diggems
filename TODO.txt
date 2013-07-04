@@ -40,3 +40,4 @@
 - Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
 - Add help-tips for TNT usage
 - Use {{ STATIC_URL }} instead of fullpath of static urls in templates
+- Bug: footer climbs over content if window is resized.
