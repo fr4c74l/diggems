@@ -39,7 +39,11 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
       </div>
     </div>
-    <div class="content">{% block content %}{% endblock %}</div>
+    <div class="content">
+      <div id="left"></div>
+      <div id="center">{% block content %}{% endblock %}</div>
+      <div id="right"></div>
+    </div>
     <div id="footer">
       <div id="footer_container">
 	<ul>
