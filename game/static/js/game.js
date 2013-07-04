@@ -395,8 +395,6 @@ function on_click(ev) {
     } else {
 	var totalOffsetX = 0;
 	var totalOffsetY = 0;
-	var canvasX = 0;
-	var canvasY = 0;
 	var currentElement = this;
 
 	do{
@@ -404,8 +402,8 @@ function on_click(ev) {
 	    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
 	} while(currentElement = currentElement.offsetParent);
 
-	m = ev.pageX - totalOffsetX;
-	n = ev.pageY - totalOffsetY;
+	m = ev.clientX - totalOffsetX;
+	n = ev.clientY - totalOffsetY;
     }
 
     m = Math.floor(m / 26);
