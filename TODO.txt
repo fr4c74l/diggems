@@ -38,3 +38,6 @@
 - Add help-tips for TNT usage
 - Use {{ STATIC_URL }} instead of fullpath of static urls in templates
 - Add GG button 
+- Custom 403 page for when some tries to join a already started game
+- Custom 404 page
+- Custom generic 403 page
