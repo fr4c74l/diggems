@@ -200,6 +200,37 @@ function update_points() {
     document.getElementById('game_box').style.background = bg_color;
 }
 
+function TitleBlinker(msg) {
+    this.original = document.title;
+    this.changed = msg;
+    this.blinking = false;
+    this.is_displaying = false;
+}
+
+TitleBlinker.prototype.blink = function() {
+    if (this.is_displaying) {
+	document.title = this.original;
+    } else {
+	document.title = this.changed;
+    }
+    this.is_displaying = !this.is_displaying;
+}
+
+TitleBlinker.prototype.setBlinking = function(to_blink) {
+    if (to_blink == this.blinking)
+	return;
+    if (to_blink) {
+	this.timer = window.setInterval(this.blink.bind(this), 1000);
+    } else if (this.timer) {
+	document.title = this.original;
+	window.clearInterval(this.timer);
+	this.timer = null;
+    }
+    this.blinking = to_blink;
+}
+
+var your_turn_blinker = new TitleBlinker('Sua Vez! Jogue!');
+
 function close_last_nt() {
     if(last_nt) {
 	last_nt.cancel();
@@ -211,6 +242,9 @@ function notify_state(msg) {
     // Sound stuff
     var ring = document.getElementById('ring');
     ring.play();
+
+    // Blink title to alert user, if its turn.
+    your_turn_blinker.setBlinking(params.state == params.player);
 
     // Notification stuff
     if(!nt
@@ -500,6 +534,9 @@ function init() {
     // Put display in current state
     set_state(params.state);
     update_points();
+
+    // Set title alert if must
+    your_turn_blinker.setBlinking(params.state == params.player);
 
     // Receive updates from server
     register_event();
