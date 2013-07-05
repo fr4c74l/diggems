@@ -231,10 +231,14 @@ function notify_state(msg) {
 
 // TODO: localization
 function set_state(state) {
-    var msg;
+    var msg = '';
+    var cursor = 'default';
     if(params.player) {
 	if(state == params.player) {
 	    msg = 'Sua vez! Jogue!';
+
+	    // Set shovel cursor in game_canvas area
+	    cursor = 'url(' + images['shovel'].src + '),auto';
 	}
 	else if(state == 1 || state == 2) {
 	    msg = 'Aguarde sua vez.';
@@ -269,10 +273,13 @@ function set_state(state) {
     var msg_box = document.getElementById('message');
     if (!params.state && state) {
 	// Just started the game, prepare box for messages
-	msg_box.innerHTML = '';
 	msg_box.className += " big";
     }
     msg_box.innerHTML = msg;
+    
+    var canvas = document.getElementById('game_canvas');
+    canvas.style.cursor = cursor;
+    
     params.state = state;
 }
 
@@ -447,9 +454,6 @@ function init() {
 	return;
     }
 
-    // Set shovel cursor in game_canvas area
-    canvas.style.cursor = 'url(/static/images/shovel.png),auto';
-        
     mine = new Array(16);
     for (var i=0; i < 16; ++i) {
 	mine[i] = new Array(16);
@@ -542,5 +546,6 @@ load_img("ruby");
 load_img("crate");
 load_img("tnt");
 load_img("explosion");
+load_img("shovel");
 
 window.addEventListener('load', init, false);
