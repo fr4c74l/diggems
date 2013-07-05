@@ -447,7 +447,7 @@ function init() {
 	return;
     }
 
-    // Set shovel cursorin game_canvas area
+    // Set shovel cursor in game_canvas area
     canvas.style.cursor = 'url(/static/images/shovel.png),auto';
         
     mine = new Array(16);
