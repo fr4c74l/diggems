@@ -35,8 +35,7 @@
 - Add clickable objects below the canvas for accessibility.
 - Add menu for view/play all games that are occurring
 - Add general chat
-- Mouse cursor like a shovel
 - Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
 - Add help-tips for TNT usage
 - Use {{ STATIC_URL }} instead of fullpath of static urls in templates
-- Bug: footer is over contents on game screen.
+- Add GG button 

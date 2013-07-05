@@ -440,12 +440,16 @@ function init() {
     ring.addEventListener('ended', function() { ring.load(); }, false);
 
     var canvas = document.getElementById('game_canvas');
+    
     if (!canvas || !canvas.getContext) {
 	// Panic return
 	// TODO: add friendly message explaining why IE sucks
 	return;
     }
 
+    // Set shovel cursorin game_canvas area
+    canvas.style.cursor = 'url(/static/images/shovel.png),auto';
+        
     mine = new Array(16);
     for (var i=0; i < 16; ++i) {
 	mine[i] = new Array(16);
