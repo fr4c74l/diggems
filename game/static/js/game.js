@@ -548,7 +548,7 @@ highlight_tile.clear = function() {
     var to_redraw = Array();
     var old = highlight_tile.old;
     highlight_tile.set_hover(old.active, old, false, to_redraw);
-    redraw_hidden(to_redraw);
+    highlight_tile.redraw_hidden(to_redraw);
 }
 
 function init() {
