@@ -242,8 +242,11 @@ function close_last_nt() {
 function notify_state(msg) {
     // Sound stuff
     var ring = document.getElementById('ring');
-    ring.play();
-
+    try{
+        ring.play();
+    }
+    catch(e){
+    }
     // Blink title to alert user, if its turn.
     your_turn_blinker.setBlinking(params.state == params.player);
 
@@ -548,7 +551,7 @@ highlight_tile.clear = function() {
     var to_redraw = Array();
     var old = highlight_tile.old;
     highlight_tile.set_hover(old.active, old, false, to_redraw);
-    redraw_hidden(to_redraw);
+    highlight_tile.redraw_hidden(to_redraw);
 }
 
 function init() {
