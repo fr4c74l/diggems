@@ -591,10 +591,8 @@ function init() {
     ctx.lineWidth = 3;
 
     // Shadows presets
-    // TODO: Fix buggy shadows drawing...
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 1;
-    ctx.shadowBlur = 1;
     ctx.shadowColor = "black";
 
     // Draw map
