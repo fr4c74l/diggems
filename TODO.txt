@@ -1,3 +1,20 @@
+Priority:
+- Share new game link on:
+  - Facebook
+- Add GG button
+- Adversary picture placement in index is crappy.
+- Footer bar with links
+  - "How to play" page
+  - "License and source" page
+  - Privacy Police
+  - User Terms
+  - Fratal name and logo
+  - Tip-jar
+- Hover cursor
+  - Increase for TNT
+- Custom 403/404 page for when some tries to join a already started game
+
+TODO Later:
 - Add brag button (publish results on Facebook)
 - Rematch button after game is over
 - 30 seconds of deadline to play, otherwise the game is lost
@@ -10,18 +27,10 @@
 - Display activity on user input.
 - Button to enable/disable sound.
 - Button to enable desktop notification.
-- Logo name is ugly and logo placement is bad, fix them.
-- Adversary picture placement in index is crappy.
 - Timeout uninitialized game if host has left.
 - Change user display if player or opponent logs in.
 - Real-time update of user stats.
 - Real-time update of index page.
-- Footer bar with links
-  - "How to play" page
-  - "Contact" page
-  - "License and source" page
-  - Fratal name and logo
-  - Tip-jar
 - Scoreboards
   - All time
     - Everybody
@@ -35,9 +44,7 @@
 - Add menu for view/play all games that are occurring
 - Add general chat
 - Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
-- Add help-tips for TNT usage
 - Use {{ STATIC_URL }} instead of fullpath of static urls in templates
-- Add GG button 
-- Custom 403 page for when some tries to join a already started game
-- Custom 404 page
-- Custom generic 403 page
+- More footer links
+  - "Contact" page
+- Custom generic 404/403 page
