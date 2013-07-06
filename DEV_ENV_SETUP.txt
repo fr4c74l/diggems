@@ -5,68 +5,56 @@ $> su -c 'apt-get install postgresql libpq-dev'
 $> su -c 'zypper install postgresql libpqxx-devel'
 
 2) Create the database
-$> su postgres
-$> psql template1
-template1=# create user digger password 'dig';
-template1=# create database diggems owner digger encoding 'UTF8';
-template1=# grant all on database diggems to digger;
-template1=# \q
+$> sudo su postgres
+$> createuser <user>
+$> createdb -O <user> diggems
 
-3) Edit the file "pg_hba.conf", and add the following line:
-DEBIAN:/etc/postgresql/YOUR_PSQL_VERSION/main/pg_hba.conf
-OPENSUSE:/var/lib/pgsql/data/pg_hba.conf
-
-# TYPE  DATABASE        USER            ADDRESS                 METHOD
-local   diggems         digger                                  md5
-
-$> su -c '/etc/init.d/postgresql reload'
-
-4) Install some OS dependencies
+3) Install some OS dependencies
 DEBIAN: su -c 'apt-get install libev-dev'
 OPENSUSE: su -c 'zypper install libev-devel'
 
-5) Configure the virtual environment:
-5.1) Install pythonbrew
+
+4) Configure the virtual environment: {optional}
+4.1) Install pythonbrew
 REF: https://pypi.python.org/pypi/pythonbrew/
 
 $ curl -kL http://xrl.us/pythonbrewinstall | bash
 
 After that, pythonbrew installs itself to ~/.pythonbrew.
 
-5.2) Add the following line to the end of your ~/.bashrc::
+4.2) Add the following line to the end of your ~/.bashrc::
 #------------------------------------------------------------------------
 [[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
 #------------------------------------------------------------------------
 
-5.3) Install versioned python (2.7+) and virtualenvwrapper
+4.3) Install versioned python (2.7+) and virtualenvwrapper
 $ pythonbrew install --configure="--enable-threads" 2.7.3
 $ pythonbrew switch 2.7.3
 $ pip install virtualenvwrapper
 
-5.4) Install virtualenv
+4.4) Install virtualenv
 DEBIAN: su -c 'apt-get install virtualenv'
 OPENSUSE: su -c 'zypper install virtualenv'
 
-5.5) Create a directory: ~/.virtualenvs
+4.5) Create a directory: ~/.virtualenvs
 $ mkdir ~/.virtualenvs
 
-5.6) Add the following lines in the ~/.bashrc
+4.6) Add the following lines in the ~/.bashrc
 ------------------------------------------------------------------------
 export WORKON_HOME=$HOME/.virtualenvs
 export VIRTUALENVWRAPPER_PYTHON=$HOME/.pythonbrew/pythons/Python-2.7.3/bin/python
 source $HOME/.pythonbrew/pythons/Python-2.7.3/bin/virtualenvwrapper.sh
 ------------------------------------------------------------------------
 
-5.7) Create the virtual environment:
+5) Install virtual environment:
+$ sudo apt-get install virtualenv virtualenvwrapper
+
+6) Create the virtual environment:
 $ mkvirtualenv --no-site-packages diggemsenv
 
-
-6) Change to diggemsenv and install Diggems requirements
+7) Change to diggemsenv and install Diggems requirements
 $ workon diggemsenv
 $ pip install -r local-requirements.txt
-
-7) Rename settings.py.local to settings.py
-$ mv diggems/settings.py.local diggems/settings.py
 
 8) Create django database and run server
 $ python manage.py syncdb
