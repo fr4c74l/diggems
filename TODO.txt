@@ -10,8 +10,6 @@ Priority:
   - User Terms
   - Fratal name and logo
   - Tip-jar
-- Hover cursor
-  - Increase for TNT
 - Custom 403/404 page for when some tries to join a already started game
 
 TODO Later:

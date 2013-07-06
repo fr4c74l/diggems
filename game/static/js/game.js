@@ -114,6 +114,7 @@ function toggle_tnt(ev) {
 // Class Tile
 function Tile(x0,y0) {
   this.s = '?';
+  this.hover = false;
   this.x = x0 * 26;
   this.y = y0 * 26;
 }
@@ -145,7 +146,7 @@ Tile.prototype.draw = function() {
 	ctx.drawImage(icon, this.x + 2, this.y + 5);
     }
     else {
-	ctx.fillStyle = 'rgb(227,133,0)';
+	ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
 	ctx.fillRect(this.x, this.y, 25, 25);
 
 	if(this.s == 'x') {
@@ -266,31 +267,48 @@ function notify_state(msg) {
 // TODO: localization
 function set_state(state) {
     var msg = '';
-    var cursor = 'default';
     if(params.player) {
+	var cursor;
+	var hover_indicator;
 	if(state == params.player) {
 	    msg = 'Sua vez! Jogue!';
 
 	    // Set shovel cursor in game_canvas area
 	    cursor = 'url(' + images['shovel'].src + '),auto';
+
+	    // Mark the to be affected tiles
+	    hover_indicator = highlight_tile;
 	}
-	else if(state == 1 || state == 2) {
-	    msg = 'Aguarde sua vez.';
-	}
-	else if(state == 3 || state == 4) {
-	    msg = 'O jogo acabou, ';
-	    if((state - 2) == params.player) {
-		if(auth.fb) {
-		    /*document.getElementById('brag_button')
-		    .style.setProperty('visibility', 'visible', null);*/
+	else {
+	    // Not my turn, set default cursor...
+	    cursor = 'default';
+	    
+	    // and stop highlighting tiles:
+	    hover_indicator = null;
+	    highlight_tile.clear();
+
+	    if(state == 1 || state == 2) {
+		msg = 'Aguarde sua vez.';
+	    }
+	    else if(state == 3 || state == 4) {
+		msg = 'O jogo acabou, ';
+		if((state - 2) == params.player) {
+		    if(auth.fb) {
+			/*document.getElementById('brag_button')
+			.style.setProperty('visibility', 'visible', null);*/
+		    }
+		    msg += 'você venceu!';
 		}
-		msg += 'você venceu!';
+		else
+		    msg += 'você perdeu.';
 	    }
 	    else
-		msg += 'você perdeu.';
+		return; // What else can I do?
 	}
-	else
-	    return; // What else can I do?
+
+	var canvas = document.getElementById('game_canvas');
+	canvas.style.cursor = cursor;
+	canvas.onmousemove = hover_indicator;
 
 	if(params.state != state && (state == params.player || state > 2))
 	    notify_state(msg);
@@ -310,10 +328,7 @@ function set_state(state) {
 	msg_box.className += " big";
     }
     msg_box.innerHTML = msg;
-    
-    var canvas = document.getElementById('game_canvas');
-    canvas.style.cursor = cursor;
-    
+
     params.state = state;
 }
 
@@ -424,10 +439,7 @@ function register_event() {
     event_request.send(null);
 }
 
-function on_click(ev) {
-    if(ev.button != 0 || params.player != params.state)
-	return;
-
+function mouse_tile(ev) {
     var m;
     var n;
     if (ev.offsetX !== undefined && ev.offsetY !== undefined) {
@@ -436,7 +448,7 @@ function on_click(ev) {
     } else {
 	var totalOffsetX = 0;
 	var totalOffsetY = 0;
-	var currentElement = this;
+	var currentElement = ev.target;
 
 	do{
 	    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
@@ -449,15 +461,23 @@ function on_click(ev) {
 
     m = Math.floor(m / 26);
     n = Math.floor(n / 26);
+    
+    return {'m': m, 'n': n};
+}
 
-    if(!tnt.active && mine[m][n].s != '?')
+function on_click(ev) {
+    if(ev.button != 0 || params.player != params.state)
+	return;
+
+    var pos = mouse_tile(ev);
+    if(!tnt.active && mine[pos.m][pos.n].s != '?')
 	return;
 
     close_last_nt();
 
     // TODO: indicate activity
 
-    var url = '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n;
+    var url = '/game/'+ params.game_id + '/move/?m=' + pos.m + '&n=' + pos.n;
     if(tnt.active) {
 	url += '&tnt=y';
     }
@@ -471,6 +491,64 @@ function on_click(ev) {
 	}
     };
     move_request.send(null);
+}
+
+// Hover effect on tile
+function highlight_tile(ev) {
+    var pos = mouse_tile(ev);
+    var to_redraw = Array();
+
+    if(highlight_tile.old) {
+	var old = highlight_tile.old;
+	if(tnt.active == old.active && old.m == pos.m && old.n == pos.n) {
+	    return;
+	}
+
+	highlight_tile.set_hover(old.active, old, false, to_redraw);
+    }
+    highlight_tile.set_hover(tnt.active, pos, true, to_redraw);
+
+    highlight_tile.old = {'active': tnt.active, 'm': pos.m, 'n': pos.n};
+
+    // Redraw affected tiles.
+    highlight_tile.redraw_hidden(to_redraw);
+}
+
+highlight_tile.redraw_hidden = function(to_redraw) {
+    for (var k in to_redraw) {
+	pos = to_redraw[k];
+	var tile = mine[pos.m][pos.n];
+	if (tile.s == '?')
+	    tile.draw();
+    }
+}
+
+highlight_tile.set_hover = function(tnt, bpos, hover, to_redraw) {
+    if(tnt) {
+	for(var dm = -2; dm <= 2; ++dm) {
+	    for(var dn = -2; dn <= 2; ++dn) {
+		var m = bpos.m + dm;
+		var n = bpos.n + dn;
+		if (m >= 0 && m <= 15 && n >= 0 && n <= 15) {
+		    mine[m][n].hover = hover;
+		    to_redraw[m + ',' + n] = {'m': m, 'n': n};
+		}
+	    }
+	}
+    } else {
+	mine[bpos.m][bpos.n].hover = hover;
+	to_redraw[bpos.m + ',' + bpos.n] = bpos;
+    }
+}
+
+highlight_tile.clear = function() {
+    if(!highlight_tile.old)
+	return;
+
+    var to_redraw = Array();
+    var old = highlight_tile.old;
+    highlight_tile.set_hover(old.active, old, false, to_redraw);
+    redraw_hidden(to_redraw);
 }
 
 function init() {
