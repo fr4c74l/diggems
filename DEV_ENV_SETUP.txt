@@ -63,7 +63,7 @@ $ pip install -r local-requirements.txt
 export WORKON_HOME=$HOME/.virtualenvs
 
 8.2)
-$ workon diggemsv
+$ workon diggemsenv
 
 8.3)
 $ python manage.py syncdb
