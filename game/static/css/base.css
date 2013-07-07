@@ -100,6 +100,27 @@ li {
 	margin: 0;
 }
 
+img.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+img.rightclear { 
+	float: right;
+	clear: right;
+	margin: 4px;
+}
+
+div#image_container {
+	display: inline-block;
+	width: 100%;
+}
+
+#image_container img {
+	padding: 0 9px;
+}
+
 #wrapper {
 	height: 100%;
 	min-width: 960px; 
@@ -196,23 +217,25 @@ li {
 }
 
 .content p {
-	padding: 0px 10px;
+	margin: 4px;
+	padding: 10px;
+
 	text-align: justify;
 }
 
-#left {
+#left_content {
 	float:left;
 	width:100px;
 	padding:10px;
 }
 
-#center {
+#center_content {
 	float:left;
 	width:700px;
 	padding:10px;
 }
 
-#right {
+#right_content {
 	float:right;
 	width:100px;
 	padding:10px;
