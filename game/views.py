@@ -365,8 +365,8 @@ def move(request, game_id):
 
     return HttpResponse()
 
-def about(request):
-    return render_with_extra('about.html', UserProfile.get(request))
-
-def howtoplay(request):
-    return render_with_extra('howtoplay.html', UserProfile.get(request))
+def info(request, page):
+    if page not in info.existing_pages:
+        raise Http404
+    return render_with_extra(page + '.html', UserProfile.get(request))
+info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode'))

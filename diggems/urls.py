@@ -14,8 +14,7 @@ urlpatterns = patterns (
     (r'^fb/channel/', 'game.views.fb_channel'),
     (r'^fb/login/', 'game.views.fb_login'),
     (r'^fb/logout/', 'game.views.fb_logout'),
-    (r'^about/', 'game.views.about'),
-    (r'^howtoplay/', 'game.views.howtoplay'),
+    (r'^info/(?P<page>.*)/', 'game.views.info'),
     
     # Error views:
     (r'^error/404$', 'django.views.defaults.page_not_found'),

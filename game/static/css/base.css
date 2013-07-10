@@ -37,6 +37,15 @@ html, body {
 	cursor: default;
 }
 
+.plain {
+	color: inherit;
+	text-decoration: inherit;
+}
+
+.undlin:hover {
+	text-decoration:underline;
+}
+
 .box {
 	padding: 11px;
 	background: rgba(255,255,255,0.25);
@@ -271,13 +280,4 @@ div#image_container {
 
 #footer_container li a:hover {
 	text-decoration: underline;
-}
-
-.plain {
-	color: inherit;
-	text-decoration: inherit;
-}
-
-.undlin:hover {
-	text-decoration:underline;
 }
