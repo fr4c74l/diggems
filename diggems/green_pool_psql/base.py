@@ -1,8 +1,9 @@
 """
 Modified PostgreSQL database backend for Django, made to use green pool.
+See LICENSE.Django.txt for copyright info.
 
 Intented to be used with psycopg2cffi and gevent one day,
-but for now will just make a connection pool using threading.Semaphore
+but for now will just make a connection pool using threading.Semaphore.
 """
 import logging
 import sys

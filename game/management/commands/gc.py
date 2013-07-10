@@ -1,3 +1,6 @@
+# Copyright 2013 Fractal Jogos e Tecnologia
+# Software under Affero GPL license, see LICENSE.txt
+
 from django.core.management.base import BaseCommand, CommandError
 from django.db import transaction
 from game.models import *

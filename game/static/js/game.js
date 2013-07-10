@@ -1,4 +1,5 @@
 // Copyright 2011 Lucas Clemente Vella
+// Copyright 2013 Fractal Jogos e Tecnologia
 // Software distributed under Affero GPL, see http://gnu.org/licenses/agpl.txt
 
 var ctx;
