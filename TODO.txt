@@ -4,11 +4,10 @@ Priority:
 - Add GG button
 - Adversary picture placement in index is crappy.
 - Footer bar with links
-  - "How to play" page
   - "License and source" page
   - Privacy Police
   - User Terms
-  - Fratal name and logo
+  - Fractal name and logo
   - Tip-jar
 - Custom 403/404 page for when some tries to join a already started game
 
