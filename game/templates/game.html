@@ -5,10 +5,11 @@ Copyright 2011 Lucas Clemente Vella
 Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
-{% block title %}Jogo{% endblock %}
-{% block css %}
-	{{block.super}}
-	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />
+{% block title %}Jogo {{ game_id }}{% endblock %}
+{% block header_extra %}
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />{% if player and state == 0 %}
+	<script type="text/javascript">var switchTo5x=true;</script>
+	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>{% endif %}
 {% endblock %}
 {% block content %}
 <script>
@@ -34,7 +35,6 @@ Software under Affero GPL license, see LICENSE.txt
 	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span> <img src="/static/images/saphire.png"/></div>
 	<div id="game_box" class="box">
 		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416">
-			Atualize seu navegador.
 		</canvas>
 	</div>
 	<div class="box pbox" id="p1_box">
@@ -54,12 +54,15 @@ Software under Affero GPL license, see LICENSE.txt
 		<div class="pinfo" style="text-align: left;">{% if player %}({% if player == 2 %}Você{% else %}Seu oponente{% endif %}){% endif %}</div>
 	</div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
-		<div>Envie este link para o seu parceiro se conectar:</div>
-		<div>
-			<input type="text" id="join_link" readonly/>
-			<script>
-				document.getElementById('join_link').value = (window.location.protocol + "//" + window.location.host + "{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}");
-			</script>
+		<span>Copie o link para seu oponente:</span>
+		<input type="text" style="width: 225px;" id="join_link" readonly/>
+		<script>
+			document.getElementById('join_link').value = (window.location.protocol + "//" + window.location.host + "{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}");
+		</script>
+		<div style="position: relative; left: 20px; top: 1px;">
+		<span class='st_googleplus'></span>
+		<span class='st_twitter'></span>
+		<span class='st_facebook'></span>
 		</div>{% endif %}
 	</div>
 </div>

@@ -1,6 +1,4 @@
 Priority:
-- Share new game link on:
-  - Facebook
 - Add GG button
 - Adversary picture placement in index is crappy.
 - Footer bar with links

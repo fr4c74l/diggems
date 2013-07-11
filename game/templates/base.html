@@ -6,9 +6,9 @@ Software under Affero GPL license, see LICENSE.txt
 {% endcomment %}
 <html>
 <head>
-<title>DigGems: {% block title %}{% endblock %}</title>{% block css %}
+  <title>DigGems: {% block title %}{% endblock %}</title>
   <link rel="stylesheet" media="screen" type="text/css" href="/static/css/base.css" />
-{% endblock %}</head>
+{% block header_extra %}{% endblock %}</head>
 <body>
   <div id="fb-root"></div>
   <script src="/static/js/login.js"></script>

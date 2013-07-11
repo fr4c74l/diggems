@@ -6,7 +6,8 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
 {% block title %}Index{% endblock %}
-{% block css %}{{block.super}}  <link rel="stylesheet" media="screen" type="text/css" href="/static/css/index.css" />
+{% block header_extra %}
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/index.css" />
 {% endblock %}
 {% block content %}
 <table>
