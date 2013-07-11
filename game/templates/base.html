@@ -11,18 +11,32 @@ Software under Affero GPL license, see LICENSE.txt
 {% endblock %}</head>
 <body>
   <div id="fb-root"></div>
-  <script src="//connect.facebook.net/pt_BR/all.js"></script>
+  <script src="/static/js/login.js"></script>
   <script>
     var auth = {
       "fb": {% if fb %}{% include "auth_fb.json" %}{% else %}null{% endif %}
-    }
-    FB.init({
-      "appId": "{{ FB_APP_ID }}",
-      "status": true, "cookie": true, "oauth": true, "xfbml": true,
-      "channelURL": "http://" + window.location.host + "/fb/channel/",
-    });
+    };
+
+    window.fbAsyncInit = function() {
+      FB.init({
+        "appId": "{{ FB_APP_ID }}",
+        "status": true, "cookie": true, "oauth": true, "xfbml": true,
+        "channelURL": "http://" + window.location.host + "/fb/channel/",
+      });
+
+      /* Initial check of login status. */
+      FB.Event.subscribe('auth.authResponseChange', on_fb_login);
+    };
+
+    // Load Facebook SDK asynchronously
+    (function(d, s, id){
+      var js, fjs = d.getElementsByTagName(s)[0];
+      if (d.getElementById(id)) {return;}
+      js = d.createElement(s); js.id = id;
+      js.src = "//connect.facebook.net/en_US/all.js";
+      fjs.parentNode.insertBefore(js, fjs);
+    }(document, 'script', 'facebook-jssdk'));
   </script>
-  <script src="/static/js/login.js"></script>
   <div id="wrapper">
     <div id="header">
       <a style="position: relative;" class="plain" href="/">

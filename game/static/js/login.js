@@ -85,11 +85,11 @@ function on_fb_login(res) {
 
 /* Button callback to logout the user. */
 function fb_logout() {
-    FB.logout();
-    server_fb_logout();
+    if(FB) {
+	FB.logout();
+	server_fb_logout();
+    } else {
+	// Retry in half second...
+	setTimeout(fb_logout, 500);
+    }
 }
-
-/* Initial check of login status. */
-window.addEventListener('load', function() {
-    FB.Event.subscribe('auth.authResponseChange', on_fb_login);
-}, false);

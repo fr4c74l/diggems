@@ -19,7 +19,6 @@ TODO Later:
 - Internationalization
 - Advertsiment.
 - Facebook like button
-- Async load of Facebook API
 - Mobile friendly version?
 - Display activity on user input.
 - Button to enable/disable sound.
