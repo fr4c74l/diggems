@@ -1,8 +1,8 @@
 # Django settings for diggems project.
 import os.path
 
-FB_APP_ID = '264111940275149'
-FB_APP_KEY = '8a9260360907fd0cdffc1deafeb16b24'
+FB_APP_ID = '676057105742978'
+FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
 DB_POOL_MAX_CONN = 40
 
 INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
