@@ -60,9 +60,9 @@ Software under Affero GPL license, see LICENSE.txt
 			document.getElementById('join_link').value = (window.location.protocol + "//" + window.location.host + "{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}");
 		</script>
 		<div style="position: relative; left: 20px; top: 1px;">
-		<span class='st_googleplus'></span>
-		<span class='st_twitter'></span>
 		<span class='st_facebook'></span>
+		<span class='st_twitter'></span>
+		<span class='st_googleplus'></span>
 		</div>{% endif %}
 	</div>
 </div>
