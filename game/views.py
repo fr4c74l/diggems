@@ -253,6 +253,10 @@ def game(request, game_id):
         data['player'] = my_number
         me.save()
 
+        if game.state == 0:
+            protocol = 'https' if request.is_secure() else 'http'
+            data['base_url'] = '{}://{}/'.format(protocol, request.get_host())
+
     if game.state == 0 and game.token: # Uninitialized private game
         data['token'] = game.token
     else:

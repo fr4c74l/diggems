@@ -8,6 +8,11 @@ Software under Affero GPL license, see LICENSE.txt
 {% block title %}Jogo {{ game_id }}{% endblock %}
 {% block header_extra %}
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />{% if player and state == 0 %}
+	<meta property="og:type" content="Jogo rápido de tabuleiro" />
+	<meta property="og:url" content="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" />
+	<meta property="og:image" content="{{ base_url }}/static/images/icon64.png" />
+	<meta property="og:description" content="Aceite o desafio e jogue imediatamente!" />
+	<meta property="og:site_name" content="Dig Gems" />
 	<script type="text/javascript">var switchTo5x=true;</script>
 	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>{% endif %}
 {% endblock %}
@@ -55,10 +60,7 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
 		<span>Copie o link para seu oponente:</span>
-		<input type="text" style="width: 225px;" id="join_link" readonly/>
-		<script>
-			document.getElementById('join_link').value = (window.location.protocol + "//" + window.location.host + "{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}");
-		</script>
+		<input type="text" style="width: 225px;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
 		<div style="position: relative; left: 20px; top: 1px;">
 		<span class='st_facebook'></span>
 		<span class='st_twitter'></span>
