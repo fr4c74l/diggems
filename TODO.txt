@@ -45,3 +45,4 @@ TODO Later:
 - Our own login system, for non-facebook users
 - Pictures for guest users based on their random internal ID
 - Warn user about bogus Internet browsers.
+- Publish open-graph story of a player 
