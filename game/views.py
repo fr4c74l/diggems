@@ -202,12 +202,15 @@ def join_game(request, game_id):
     game.state = 1
     game.save()
 
-    outdata = [game.seq_num, game.state]
+    outdata = map(unicode, [game.seq_num, game.state])
     fb = profile.facebook
     if fb:
         outdata += [fb.uid, escape(fb.name)]
 
-    post_update(game.channel, '\n'.join(map(str, outdata)))
+    for o in outdata:
+        print type(o)
+
+    post_update(game.channel, u'\n'.join(outdata))
     return HttpResponseRedirect('/game/' + game_id)
 
 @transaction.commit_on_success
