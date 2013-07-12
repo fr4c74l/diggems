@@ -130,154 +130,190 @@ div#image_container {
 }
 
 #image_container img {
-	padding: 0 9px;
+    padding: 0 9px;
 }
 
-#wrapper {
-	height: 100%;
-	min-width: 960px; 
-	position:relative;
-	width:960px;
-	margin:0 auto;
+.wrapper {
+    height: 100%;
+    min-width: 960px; 
+    position:relative;
+    width:960px;
+    margin:0 auto;
+}
+
+.lang_button {
+    display: inline;
+    border: none;
+}
+
+.lang_button:hover {
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    border: 1px #666 solid;
+}
+
+.lang_button#selected {
+    -moz-border-radius: 3px;
+    -o-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    border-radius: 3px;
+    font-weight: bold;
+    border: 1px #666 solid;
+    margin: 1px 3px;
+    padding: 1px;
+}
+
+.langbar {
+    font-family: Diavlo;
+    color: #000;
+    text-align:right;
+    padding-top:5px;
+}
+
+.langbar form {
+    margin:0px;
+    display:inline;
+    width:200px;
 }
 
 /* HEADER */
-#header {
-	padding:1em;
+.header {
+    padding:1em;
 }
 
 .logo {
-	vertical-align: middle;
-	padding-left:10px;
+    vertical-align: middle;
+    padding-left:10px;
 }
 
 #title {
-	font-family: GrutchShaded;
-	text-shadow: 0.1em 0.1em 0.2em #535353;
-	color: #551a8b;
-	font-size: 68px;
-	padding-left:20px;
-	letter-spacing: 4pt;
+    font-family: GrutchShaded;
+    text-shadow: 0.1em 0.1em 0.2em #535353;
+    color: #551a8b;
+    font-size: 68px;
+    padding-left:20px;
+    letter-spacing: 4pt;
 }
 
 #beta {
-	position: absolute;
-	right: 0px;
-	bottom: 0px;
-	vertical-align: bottom;
+    position: absolute;
+    right: 0px;
+    bottom: 0px;
+    vertical-align: bottom;
 }
 
 #subtitle {
-	color: #9a64c8;
+    color: #9a64c8;
 }
 
 #user_info {
-    	font-family: Diavlo;
-	font-weight: bold;
-  	float: right;
-	position: relative; 
-	min-width: 205px;
-        display: block;
-        margin: 5px;
+    font-family: Diavlo;
+    font-weight: bold;
+    float: right;
+    position: relative; 
+    min-width: 205px;
+    display: block;
+    margin: 5px;
 }
 
 #user_stats {
-	float: right;
-	display: inline-block;
-	vertical-align: top;
-	margin: 2px;
+    float: right;
+    display: inline-block;
+    vertical-align: top;
+    margin: 2px;
 }
 
 
 #logged_as {
-	display: inline-block;
+    display: inline-block;
 }
 
 #score {
-	display: block;
+    display: block;
 }
 
 #auth_username {
-	font-weight: normal;
-	padding-left: 2px;
+    font-weight: normal;
+    padding-left: 2px;
 }
 
 #auth_user_pic {
-	float: left;
-	width: 60px;
-	height: 60px;
-	margin: 0 5px;
-	padding: 3px;
+    float: left;
+    width: 60px;
+    height: 60px;
+    margin: 0 5px;
+    padding: 3px;
 }
 
 #auth_fb_button {
-	padding: 4px 0px;
+    padding: 4px 0px;
 }
 
 #auth_logout {
-	padding: 4px 0px;
+    padding: 4px 0px;
 }
 
 .content {
-	margin:0 auto;
-	padding:18px 0 32px;
+    margin:0 auto;
+    padding:18px 0 32px;
 }
 
 .content h1 {
-	padding-left: 10px;
-	text-decoration: underline;
+    padding-left: 10px;
+    text-decoration: underline;
 }
 
 .content p {
-	margin: 4px;
-	padding: 10px;
-
-	text-align: justify;
+    margin: 4px;
+    padding: 10px;
+    text-align: justify;
 }
 
 #left_content {
-	float:left;
-	width:100px;
-	padding:10px;
+    float:left;
+    width:100px;
+    padding:10px;
 }
 
 #center_content {
-	float:left;
-	width:700px;
-	padding:10px;
+    float:left;
+    width:700px;
+    padding:10px;
 }
 
 #right_content {
-	float:right;
-	width:100px;
-	padding:10px;
+    float:right;
+    width:100px;
+    padding:10px;
 }
 
-#footer {
-	clear:both;
-	width:100%;
-	font-family: Diavlo;
-	font-weight: bold;
-	text-align: center;
+.footer {
+    clear:both;
+    width:100%;
+    font-family: Diavlo;
+    font-weight: bold;
+    text-align: center;
 }
 
 #footer_container {
-	margin: 0 auto;
+    margin: 0 auto;
 }
 
 #footer_container li {
-	display: inline;
-	padding-left: 20px;
-	list-style-type: none;
+    display: inline;
+    padding-left: 20px;
+    list-style-type: none;
 }
 
 #footer_container li a {
-	color: #161311;
-	clear: both;
-	white-space: normal;
-	text-decoration: none;
+    color: #161311;
+    clear: both;
+    white-space: normal;
+    text-decoration: none;
 }
 
 #footer_container li a:hover {
-	text-decoration: underline;
+    text-decoration: underline;
 }

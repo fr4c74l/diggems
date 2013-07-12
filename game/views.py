@@ -17,6 +17,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader
 from django.utils.html import escape
+from django.utils.translation import ugettext as _
 from game_helpers import *
 from models import *
 from https_conn import https_opener
@@ -125,8 +126,7 @@ def index(request):
                                   + player.facebook.uid
                                   + '/picture')
         else:
-            # TODO: internationalization
-            info['op_name'] = 'jogador anônimo'
+            info['op_name'] = _(u'jogador anônimo')
 
         new_games.append(info)
 

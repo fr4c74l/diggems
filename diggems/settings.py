@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 # Django settings for diggems project.
 import os.path
 
@@ -65,6 +67,17 @@ USE_L10N = True
 # If you set this to False, Django will not use timezone-aware datetimes.
 USE_TZ = True
 
+# Supported languages
+LANGUAGES = (
+    ('pt-br', 'Portuguese'),
+    ('en', 'English'),
+    ('es', 'Spanish'),
+)
+
+LOCALE_PATHS = (
+    INSTALATION_DIR + 'locale/',
+)
+
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
 MEDIA_ROOT = ''
@@ -109,10 +122,15 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.i18n',
+)
+
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware', # TODO: is this really needed?
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware', # TODO: is this really needed?
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:

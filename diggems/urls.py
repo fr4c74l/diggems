@@ -16,6 +16,8 @@ urlpatterns = patterns (
     (r'^fb/logout/', 'game.views.fb_logout'),
     (r'^info/(?P<page>.*)/', 'game.views.info'),
     
+    (r'^i18n/', include('django.conf.urls.i18n')),
+    
     # Error views:
     (r'^error/404$', 'django.views.defaults.page_not_found'),
     (r'^error/500$', 'django.views.defaults.server_error'),

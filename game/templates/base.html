@@ -1,3 +1,4 @@
+{% load i18n %}
 {% comment %}
 
 Copyright 2011 Lucas Clemente Vella
@@ -6,26 +7,26 @@ Software under Affero GPL license, see LICENSE.txt
 {% endcomment %}
 <html>
 <head>
-  <title>DigGems: {% block title %}{% endblock %}</title>
-  <link rel="stylesheet" media="screen" type="text/css" href="/static/css/base.css" />
-{% block header_extra %}{% endblock %}</head>
+    <title>DigGems: {% block title %}{% endblock %}</title>
+    <link rel="stylesheet" media="screen" type="text/css" href="/static/css/base.css" />
+    {% block header_extra %}{% endblock %}
+</head>
 <body>
-  <div id="fb-root"></div>
-  <script src="/static/js/login.js"></script>
-  <script>
+    <div id="fb-root"></div>
+    <script src="/static/js/login.js"></script>
+    <script>
     var auth = {
       "fb": {% if fb %}{% include "auth_fb.json" %}{% else %}null{% endif %}
     };
 
     window.fbAsyncInit = function() {
-      FB.init({
-        "appId": "{{ FB_APP_ID }}",
-        "status": true, "cookie": true, "oauth": true, "xfbml": true,
-        "channelURL": "http://" + window.location.host + "/fb/channel/",
-      });
-
-      /* Initial check of login status. */
-      FB.Event.subscribe('auth.authResponseChange', on_fb_login);
+        FB.init({
+          "appId": "{{ FB_APP_ID }}",
+          "status": true, "cookie": true, "oauth": true, "xfbml": true,
+          "channelURL": "http://" + window.location.host + "/fb/channel/",
+        });
+        /* Initial check of login status. */
+        FB.Event.subscribe('auth.authResponseChange', on_fb_login);
     };
 
     // Load Facebook SDK asynchronously
@@ -36,37 +37,47 @@ Software under Affero GPL license, see LICENSE.txt
       js.src = "//connect.facebook.net/pt_BR/all.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
-  </script>
-  <div id="wrapper">
-    <div id="header">
-      <a style="position: relative;" class="plain" href="/">
-	<img id="icon" class="logo" src="/static/images/icon64.png" />
-	<span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
-      </a>
-      <div id="user_info">
-	<img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
-	<div id="user_stats">
-	    <div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %}Visitante{% endif %}</span></div>
-	    <div id="score"> Placar: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
-	  <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
-	  <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();">Logout</div>
-	</div>
+    </script>
+    <div class="wrapper">
+      {% get_current_language as LANGUAGE_CODE %}
+      {% get_available_languages as LANGUAGES %}
+      <div class='langbar'>
+        <form name='langform' action='/i18n/setlang/' method='POST'>
+            {% for LANG in LANGUAGES  %}
+                <div class='lang_button' {% if LANGUAGE_CODE == LANG.0 %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG.0 }}';document.langform.submit();"> {{ LANG.0 }} </div>
+            {% endfor %}
+            <input name='language' type='hidden' >
+        </form>
       </div>
+    <div class="header">
+        <a style="position: relative;" class="plain" href="/">
+            <img id="icon" class="logo" src="/static/images/icon64.png" />
+            <span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
+        </a>
+        <div id="user_info">
+            <img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
+            <div id="user_stats">
+                <div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %} {% trans "Visitante" %} {% endif %}</span></div>
+                <div id="score"> {% trans "Placar" %}: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
+                <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
+                <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();"> {% trans "Sair" %}</div>
+            </div>
+        </div>
     </div>
     <div class="content">
-      <div id="left_content"></div>
-      <div id="center_content">{% block content %}{% endblock %}</div>
-      <div id="right_content"></div>
+        <div id="left_content"></div>
+        <div id="center_content">{% block content %}{% endblock %}</div>
+        <div id="right_content"></div>
     </div>
-    <div id="footer">
-      <div id="footer_container">
-	<ul>
-	  <li><a href="/info/about">Sobre o Jogo</a></li>
-	  <li><a href="/info/howtoplay">Como Jogar?</a></li>
-	  <li><a href="/info/sourcecode">Código Fonte</a></li>
-	  <!-- <li><a href="/info/bugreport">Reportar BUG</a></li> -->
-	</ul>
-      </div>
+    <div class="footer">
+        <div id="footer_container">
+            <ul>
+                <li><a href="/info/about">Sobre o Jogo</a></li>
+                <li><a href="/info/howtoplay">Como Jogar?</a></li>
+                <li><a href="/info/sourcecode">Código Fonte</a></li>
+                <!-- <li><a href="/info/bugreport">Reportar BUG</a></li> -->
+            </ul>
+        </div>
     </div>
   </div>
 </body>
