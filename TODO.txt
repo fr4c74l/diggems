@@ -7,9 +7,9 @@ Priority:
   - Fractal name and logo
   - Tip-jar
 - Custom 403/404 page for when some tries to join a already started game
+- Bug: Title blinks wrongly: when it is not my turn and after the game is over.
 
 TODO Later:
-- Title still blinks it is my turn after the game is over.
 - Add brag button (publish results on Facebook)
 - Rematch button after game is over
 - 30 seconds of deadline to play, otherwise the game is lost
