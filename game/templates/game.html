@@ -7,14 +7,7 @@ Software under Affero GPL license, see LICENSE.txt
 {% endcomment %}
 {% block title %}Jogo {{ game_id }}{% endblock %}
 {% block header_extra %}
-	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />{% if player and state == 0 %}
-	<meta property="og:type" content="Jogo rápido de tabuleiro" />
-	<meta property="og:url" content="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" />
-	<meta property="og:image" content="{{ base_url }}/static/images/icon64.png" />
-	<meta property="og:description" content="Aceite o desafio e jogue imediatamente!" />
-	<meta property="og:site_name" content="Dig Gems" />
-	<script type="text/javascript">var switchTo5x=true;</script>
-	<script type="text/javascript" src="http://w.sharethis.com/button/buttons.js"></script>{% endif %}
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />
 {% endblock %}
 {% block content %}
 <script>
@@ -61,11 +54,21 @@ Software under Affero GPL license, see LICENSE.txt
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
 		<span>Copie o link para seu oponente:</span>
 		<input type="text" style="width: 225px;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
-		<div style="position: relative; left: 20px; top: 1px;">
-		<span class='st_facebook'></span>
-		<span class='st_twitter'></span>
-		<span class='st_googleplus'></span>
-		</div>{% endif %}
+		<div style="position: absolute; right: 10px;" class="addthis_toolbox addthis_default_style addthis_16x16_style">
+			<a class="addthis_button_facebook"></a>
+			<a class="addthis_button_twitter"></a>
+			<a class="addthis_button_google_plusone_share"></a>
+		</div>
+		<script>
+			var addthis_config = { data_track_clickback: false };
+			var addthis_share = {
+				title: "DigGems: Jogo {{ game_id }}",
+				url: "{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}",
+				description: "Aceite o desafio e jogue imediatamente!",
+			};
+		</script> 
+		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e">
+		</script>{% endif %}
 	</div>
 </div>
 
