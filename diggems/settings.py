@@ -1,13 +1,22 @@
 # Django settings for diggems project.
 import os.path
 
-FB_APP_ID = '676057105742978'
-FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
+INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
+
+# Diggems specific settings:
 DB_POOL_MAX_CONN = 40
 
-INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
+## Facebook app settings
+FB_APP_ID = '676057105742978'
+FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
+
+## URL that will be reffered when someone clicks FB "Like":
+FB_LIKE_URL = 'http://my.main.url/'
+
+## Long pool server
 EVENT_SERVER = '127.0.0.1:8080'
 
+# Django settings:
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 

@@ -7,6 +7,7 @@ import datetime
 import urllib2
 import json
 import ssl
+from diggems import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
 
@@ -129,7 +130,7 @@ def index(request):
 
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
