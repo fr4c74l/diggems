@@ -45,14 +45,13 @@ Software under Affero GPL license, see LICENSE.txt
 				<ul>
 					{% if new_games %}{% for g in new_games %}
 					<li class="list_games">
-					<div style="float:left; padding-right: 10px;">{% trans "Game" %} {{ g.id }}</div>
-						<div style="overflow:hidden;">
-						  <div>{% trans "Versus" %} {% if g.op_picture %}<img src="{{g.op_picture}}" /> {% endif %}{{ g.op_name }}</div>
-								<div style="margin-top: 10px;">
-								  <div style="float:left;"><form action="game/{{ g.id }}/" method="post"><input class="button" type="submit" value="{% trans "Watch" %}" /> </form></div>
-									<div><form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form></div>
-								</div>
-						</div>
+							<div style="float:left;">
+								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
+							</div>
+							{% if g.op_picture %}<img style="float:right;" class="middle thumb box" src="{{g.op_picture}}" /> {% endif %}
+							<img style="float:right;" class="middle thumb box" src="/static/images/userpic.gif" />
+							{% trans "Game" %} {{ g.id }} :
+							{% trans "Versus" %} {{ g.op_name }}
 					</li>
 					{% endfor %}{% else %}<h4>{% trans "No game found!" %}</h4>{% endif %}
 				</ul>

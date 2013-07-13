@@ -1,6 +1,5 @@
 Priority:
 - Add GG button
-- Adversary picture placement in index is crappy.
 - Footer bar with links
   - Privacy Police
   - User Terms
