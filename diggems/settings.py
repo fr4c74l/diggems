@@ -112,6 +112,8 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+STATICFILES_STORAGE = 'diggems.nginx_staticgzip_storage.NginxStaticGZIPStorage'
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '$z_2d_$-r-gmzvk4z0d*eo-1b5wi8$2_dxueukhihhpfx2+1s1'
 
