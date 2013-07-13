@@ -69,7 +69,11 @@ $ workon diggemsenv
 $ python manage.py syncdb
 $ python manage.py createcachetable cache
 $ python manage.py runserver
-$ python manage.py makemessages -l en
-$ python manage.py compilemessages
 
+8.4) Aply translatinons
+LANGUAGE = pt_BR, en, es, etc...
+$ cd game
+$ ../manage.py makemessages -l <LANGUAGE>
+$ ../manage.py makemessages -d djangojs -l <LANGUAGE>
+$ ../manage.py compilemessages
 

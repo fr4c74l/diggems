@@ -52,7 +52,7 @@ TIME_ZONE = 'America/Sao_Paulo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'pt-br'
+LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 
@@ -69,13 +69,13 @@ USE_TZ = True
 
 # Supported languages
 LANGUAGES = (
-    ('pt-br', 'Portuguese'),
     ('en', 'English'),
+    ('pt-br', 'Portuguese'),
     ('es', 'Spanish'),
 )
 
 LOCALE_PATHS = (
-    INSTALATION_DIR + 'locale/',
+    INSTALATION_DIR + 'game/locale/',
 )
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.

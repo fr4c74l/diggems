@@ -231,7 +231,7 @@ TitleBlinker.prototype.setBlinking = function(to_blink) {
     this.blinking = to_blink;
 }
 
-var your_turn_blinker = new TitleBlinker('Sua Vez! Jogue!');
+var your_turn_blinker = new TitleBlinker(gettext('Your turn! Play!'));
 
 function close_last_nt() {
     if(last_nt) {
@@ -275,7 +275,7 @@ function set_state(state) {
 	var cursor;
 	var hover_indicator;
 	if(state == params.player) {
-	    msg = 'Sua vez! Jogue!';
+	    msg = gettext('Your turn! Play!');
 
 	    // Set shovel cursor in game_canvas area
 	    cursor = 'url(' + images['shovel'].src + '),auto';
@@ -292,19 +292,19 @@ function set_state(state) {
 	    highlight_tile.clear();
 
 	    if(state == 1 || state == 2) {
-		msg = 'Aguarde sua vez.';
+		msg = gettext('Wait for your turn.');
 	    }
 	    else if(state == 3 || state == 4) {
-		msg = 'O jogo acabou, ';
+		msg = gettext('Game over, ');
 		if((state - 2) == params.player) {
 		    if(auth.fb) {
 			/*document.getElementById('brag_button')
 			.style.setProperty('visibility', 'visible', null);*/
 		    }
-		    msg += 'você venceu!';
+		    msg += gettext('you win!');
 		}
 		else
-		    msg += 'você perdeu.';
+		    msg += gettext('you lose.');
 	    }
 	    else
 		return; // What else can I do?

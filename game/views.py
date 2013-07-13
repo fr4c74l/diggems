@@ -126,7 +126,7 @@ def index(request):
                                   + player.facebook.uid
                                   + '/picture')
         else:
-            info['op_name'] = _(u'jogador anônimo')
+            info['op_name'] = _('anonymous player')
 
         new_games.append(info)
 

@@ -3,11 +3,12 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
+#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 09:26-0300\n"
+"POT-Creation-Date: 2013-07-13 11:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -15,19 +16,20 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: game/views.py:129
-msgid "jogador anônimo"
-msgstr "anonymous player"
+#: views.py:129
+msgid "anonymous player"
+msgstr ""
 
-#: game/templates/base.html:60
-msgid "Visitante"
-msgstr "Visitor"
+#: templates/base.html:60
+msgid "Visitor"
+msgstr ""
 
-#: game/templates/base.html:61
-msgid "Placar"
-msgstr "Score"
+#: templates/base.html:61
+msgid "Score"
+msgstr ""
 
-#: game/templates/base.html:63
-msgid "Sair"
-msgstr "Logout"
+#: templates/base.html:63
+msgid "Logout"
+msgstr ""

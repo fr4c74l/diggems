@@ -57,10 +57,10 @@ Software under Affero GPL license, see LICENSE.txt
         <div id="user_info">
             <img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
             <div id="user_stats">
-                <div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %} {% trans "Visitante" %} {% endif %}</span></div>
-                <div id="score"> {% trans "Placar" %}: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
+                <div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %} {% trans "Visitor" %} {% endif %}</span></div>
+		<div id="score"> {% trans "Score" %}: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
                 <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
-                <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();"> {% trans "Sair" %}</div>
+                <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();"> {% trans "Logout" %}</div>
             </div>
         </div>
     </div>
