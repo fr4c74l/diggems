@@ -69,3 +69,7 @@ $ workon diggemsenv
 $ python manage.py syncdb
 $ python manage.py createcachetable cache
 $ python manage.py runserver
+$ python manage.py makemessages -l en
+$ python manage.py compilemessages
+
+
