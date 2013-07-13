@@ -16,14 +16,14 @@ Software under Affero GPL license, see LICENSE.txt
 	<tbody>
 		<tr>
 			<td class="box" id="new_game">
-				<h1>Novo Jogo</h1>
+			  <h1>{% trans "New games" %}</h1>
 				<form action="new_game/" method="post">
-				  {% trans "Private game" %} <input type="checkbox" name="private" value="1" />
+				    {% trans "Private game" %} <input type="checkbox" name="private" value="1" />
 					<input class="button" type="submit" value="Criar!"  style="float: right;"/>
 				</form>
 			</td>
 			<td class="box" id="your_game" rowspan="2" class="top">
-				<h1>Seus Jogos</h1>
+			  <h1>{% trans "Your games" %}</h1>
 				<ul class="center_list">
 				{% if your_games %}
 					{% for g in your_games %}
@@ -34,14 +34,14 @@ Software under Affero GPL license, see LICENSE.txt
 						<div>{% trans "On progress" %}</div>{% endif %}
 					</li>{% endfor %}
 				{% else %}
-				<h4> Nenhum jogo! </h4>
+				<h4>{% trans "No game found!" %}</h4>
 				{% endif %}
 				</ul>
 			</td>
 		</tr>
 		<tr>
 			<td class="box" id="join_game" class="top">
-				<h1>Jogos Por Começar</h1>
+			  <h1>{% trans "Games to start" %}</h1>
 				<ul class="center_list">
 					{% if new_games %}{% for g in new_games %}
 					<li class="list_games">
