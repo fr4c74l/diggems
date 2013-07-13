@@ -22,9 +22,9 @@ Software under Affero GPL license, see LICENSE.txt
 					<input class="button" type="submit" value="Criar!"  style="float: right;"/>
 				</form>
 			</td>
-			<td class="box" id="your_game" rowspan="2" class="top">
+			<td class="box top" id="your_game" rowspan="2">
 			  <h1>{% trans "Your games" %}</h1>
-				<ul class="center_list">
+				<ul>
 				{% if your_games %}
 					{% for g in your_games %}
 					<li class="list_games">
@@ -42,7 +42,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<tr>
 			<td class="box" id="join_game" class="top">
 			  <h1>{% trans "Games to start" %}</h1>
-				<ul class="center_list">
+				<ul>
 					{% if new_games %}{% for g in new_games %}
 					<li class="list_games">
 					<div style="float:left; padding-right: 10px;">{% trans "Game" %} {{ g.id }}</div>
