@@ -295,6 +295,7 @@ div#image_container {
     font-family: Diavlo;
     font-weight: bold;
     text-align: center;
+    padding: 10px 0 15px;
 }
 
 #footer_container {
