@@ -149,6 +149,16 @@ div#image_container {
     padding: 0 9px;
 }
 
+.tip_jar {
+	display: block;
+	width: 100px;
+	height: 95px;
+	background: url('/static/images/empty_jug.png');
+}
+.tip_jar:hover {
+	background: url('/static/images/full_jug.png');
+}
+
 .wrapper {
     height: 100%;
     min-width: 960px; 

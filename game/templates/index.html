@@ -28,7 +28,7 @@ Software under Affero GPL license, see LICENSE.txt
 				{% if your_games %}
 					{% for g in your_games %}
 					<li class="list_games">
-						<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">Jogo {{ g.id }}</a></div>
+					<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
 						<div>{% if g.token %}{% trans "Private" %}{% else %}{% trans "Public" %}{% endif %}</div>{% if g.state = 0 %}
 						<div>{% trans "Waiting the other player" %}</div>{% else %}
 						<div>{% trans "On progress" %}</div>{% endif %}
@@ -49,8 +49,7 @@ Software under Affero GPL license, see LICENSE.txt
 								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
 							</div>
 							{% if g.op_picture %}<img style="float:right;" class="middle thumb box" src="{{g.op_picture}}" /> {% endif %}
-							<img style="float:right;" class="middle thumb box" src="/static/images/userpic.gif" />
-							{% trans "Game" %} {{ g.id }} :
+							<a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a>:
 							{% trans "Versus" %} {{ g.op_name }}
 					</li>
 					{% endfor %}{% else %}<h4>{% trans "No game found!" %}</h4>{% endif %}
