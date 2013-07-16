@@ -38,10 +38,10 @@ Software under Affero GPL license, see LICENSE.txt
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
-    <div class="container">
+    <div>
       {% get_current_language as LANGUAGE_CODE %}
       {% get_available_languages as LANGUAGES %}
-      <div id='langbar'>
+      <div id='langbar' class="container">
         <form name='langform' action='/i18n/setlang/' method='POST'>
             {% for LANG in LANGUAGES  %}
                 <div class='lang_button' {% if LANGUAGE_CODE == LANG.0 %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG.0 }}';document.langform.submit();"> {{ LANG.0 }} </div>
@@ -49,7 +49,7 @@ Software under Affero GPL license, see LICENSE.txt
             <input name='language' type='hidden' >
         </form>
       </div>
-	  <div id="header">
+	  <div id="header" class="container">
 		  <a style="position: relative;" class="plain" href="/">
 			  <img id="icon" class="logo" src="/static/images/icon64.png" />
 			  <span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
@@ -64,17 +64,31 @@ Software under Affero GPL license, see LICENSE.txt
 			  </div>
 		  </div>
 	  </div>
-	  <div id="content">
+	  <div id="content" class="container">
 		  {% block content %}{% endblock %}            
 	  </div>
 	  <div id="footer">
-		  <div id="footer_container">
+		  <div id="footer_container" class="container">
+			<div class="col1">
+			  <h3> About </h3>
 			  <ul>
-				  <li><a href="/info/about">Sobre o Jogo</a></li>
-				  <li><a href="/info/howtoplay">Como Jogar?</a></li>
-				  <li><a href="/info/sourcecode">Código Fonte</a></li>
-				  <!-- <li><a href="/info/bugreport">Reportar BUG</a></li> -->
+				  <li><a href="/info/about">{% trans "About the game" %}</a></li>
+				  <li><a href="/info/howtoplay">{% trans "How to play" %}</a></li>
+				  <li><a href="/info/sourcecode">{% trans "Source code" %}</a></li>
 			  </ul>
+			</div>
+			<div class="col2">
+			  <!-- <h3>{% trans "Support" %} </h3>
+			  <ul>
+				<li><a href="/info/bugreport">{% trans "Bug report" %}</a></li>
+			  </ul> -->
+			</div>
+			<div class="col3">
+			</div>
+			<div class="col4">
+			<h3>{% trans "Donation" %} </h3>
+			  <div class="tip_jar"></div>
+			</div>
 		  </div>
 	  </div>
     </div>

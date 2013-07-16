@@ -301,31 +301,52 @@ div#image_container {
 
 /* FOOTER */
 #footer {
-    clear:both;
-    width:100%;
-    font-family: Diavlo;
-    font-weight: bold;
-    text-align: center;
-    padding: 10px 0 15px;
+  clear:both;
+  width:100%;
+  font-family: Diavlo;
+  font-weight: bold;
+  /*padding: 10px 0 15px;*/
+  padding: 2em 0em 6em;
+  background-color: #2e1d11;
 }
 
 #footer_container {
-    margin: 0 auto;
+  height: 	200px;
+  overflow: hidden;
+  margin: 	0 auto;
+  border-bottom: 1px solid #271609;
+}
+
+.col1, .col2, .col3, .col4 {
+  margin: 10px;
+  padding-top: 10px;
+  width: 150px;
+}
+
+.col1,  .col2, .col3 {
+  float: left;
+}
+
+.col4 {
+  float: right;
+}
+
+#footer_container h3 {
+  color: #000;
+  border-bottom: 1px solid #271609;
 }
 
 #footer_container li {
-    display: inline;
-    padding-left: 20px;
-    list-style-type: none;
+  list-style-type: none;
 }
 
 #footer_container a {
-    color: #161311;
-    clear: both;
-    white-space: normal;
-    text-decoration: none;
+  color: #161311;
+  clear: both;
+  white-space: normal;
+  text-decoration: none;
 }
 
 #footer_container a:hover {
-    text-decoration: underline;
+  text-decoration: underline;
 }
