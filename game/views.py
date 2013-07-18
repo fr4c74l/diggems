@@ -207,9 +207,6 @@ def join_game(request, game_id):
     if fb:
         outdata += [fb.uid, escape(fb.name)]
 
-    for o in outdata:
-        print type(o)
-
     post_update(game.channel, u'\n'.join(outdata))
     return HttpResponseRedirect('/game/' + game_id)
 
