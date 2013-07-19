@@ -66,6 +66,7 @@ body {
 	-webkit-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fff; 
 	text-shadow: 0.1em 0.1em 0.2em #535353;
 	font-family: Diavlo;
+	overflow: hidden;
 }
 
 .button {
@@ -317,17 +318,25 @@ div#image_container {
   border-bottom: 1px solid #271609;
 }
 
-.col1, .col2, .col3, .col4 {
-  margin: 10px;
-  padding-top: 10px;
-  width: 150px;
+.twocol {
+
 }
 
-.col1,  .col2, .col3 {
+.threecol {
+	width: 30%;
+}
+
+.fourcol {
+	width: 22%;
+}
+
+.colleft{
+  padding-top: 10px;
   float: left;
 }
 
-.col4 {
+.colright {
+  padding-top: 10px;
   float: right;
 }
 
@@ -337,11 +346,13 @@ div#image_container {
 }
 
 #footer_container li {
+  padding: 3px 0px;
   list-style-type: none;
 }
 
 #footer_container a {
-  color: #161311;
+  /*color: #161311; */
+  color: #fff;
   clear: both;
   white-space: normal;
   text-decoration: none;
