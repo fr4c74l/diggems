@@ -2,6 +2,7 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 import game_helpers
+import datetime
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_delete
@@ -87,7 +88,8 @@ class Game(models.Model):
     channel = models.CharField(max_length=22, unique=True)
     p1 = models.OneToOneField(Player, related_name='game_as_p1')
     p2 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p2')
-
+    last_move_time = models.DateTimeField(auto_now=True)
+    
     def save(self, *args, **kwargs):
         self.seq_num = self.seq_num + 1
         super(Game, self).save(*args, **kwargs)
@@ -99,6 +101,9 @@ class Game(models.Model):
             return (2, self.p2)
         else:
             return None
+            
+    def timeout_diff(self):
+        return 30 - (datetime.datetime.now() - self.last_move_time).seconds
 
 def delete_game_channel(sender, **kwargs):
     game_helpers.delete_channel(kwargs['instance'].channel)
