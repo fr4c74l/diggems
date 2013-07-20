@@ -33,12 +33,13 @@ Software under Affero GPL license, see LICENSE.txt
     (function(d, s, id){
       var js, fjs = d.getElementsByTagName(s)[0];
       if (d.getElementById(id)) {return;}
-      js = d.createElement(s); js.id = id;
-      js.src = "//connect.facebook.net/pt_BR/all.js";
+	  js = d.createElement(s); js.id = id;
+  	  {% comment %}Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml{% endcomment %}
+	  js.src = "//connect.facebook.net/{% trans "en_US" %}/all.js";
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
-    <div class="wrapper">
+	<div class="wrapper">
       {% get_current_language as LANGUAGE_CODE %}
       {% get_available_languages as LANGUAGES %}
       <div id='langbar' class="container">

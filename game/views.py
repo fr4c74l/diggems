@@ -35,12 +35,13 @@ def render_with_extra(template_name, user, data={}):
              'fb': user.facebook,
              'stats': {'score': user.total_score,
                        'victories': user.games_won,
-                       'win_ratio': win_ratio}}
+                       'win_ratio': win_ratio}
+            }
     c.update(extra)
     return HttpResponse(t.render(c))
 
 def fb_channel(request):
-    resp = HttpResponse('<script src="//connect.facebook.net/pt_BR/all.js"></script>')
+    resp = HttpResponse('<script src="//connect.facebook.net/{}/all.js"></script>'.format(_("en_US")))
     secs = 60*60*24*365
     resp['Pragma'] = 'public'
     resp['Cache-Control'] = 'max-age=' + str(secs)
@@ -378,3 +379,4 @@ def info(request, page):
         raise Http404
     return render_with_extra(page + '.html', UserProfile.get(request))
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'donate'))
+

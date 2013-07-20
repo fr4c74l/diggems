@@ -31,11 +31,13 @@ Software under Affero GPL license, see LICENSE.txt
 	  <input type="hidden" name="cancel_return" value="http://diggems.net/info/donate">
 	  <input type="hidden" name="rm" value="1">
 	  <input type="hidden" name="no_note" value="0">
-	  <input type="hidden" name="currency_code" value="BRL">
-	  <input type="hidden" name="lc" value="BR">
-	  <label for="amount" style="font-size: 12px;">R$</label> <input type="text" name="amount" value="1.00" size="5" style="font-size: 12px; margin-right: 4px;">
-	  <input type="image" align="top" src="https://www.paypalobjects.com/en_GB/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="PayPal - The safer, easier way to pay online!">
-	  <img alt="" border="0" src="https://www.paypalobjects.com/pt_BR/i/scr/pixel.gif" width="1" height="1">
+	  {% comment %}Translators: Please see currencies codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/api/currency_codes/#id09A6G0U0GYK {% endcomment %}
+	  <input type="hidden" name="currency_code" value="{% trans "USD" %}">
+  	  {% comment %}Translators: Please see locale codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/ {% endcomment %}
+	  <input type="hidden" name="lc" value="{% trans "US" %}">
+	  <label for="amount" style="font-size: 12px;">{% trans "U$" %}</label> <input type="text" name="amount" value="1.00" size="5" style="font-size: 12px; margin-right: 4px;">
+	  <input type="image" align="top" src="https://www.paypalobjects.com/{% trans "en_US" %}/i/btn/btn_donate_SM.gif" border="0" name="submit" alt="{% trans "PayPal - The safer, easier way to pay online!"%}">
+	  <img alt="" border="0" src="https://www.paypalobjects.com/{% trans "en_US" %}/i/scr/pixel.gif" width="1" height="1">
 	</form>
   </div>
 
@@ -46,7 +48,7 @@ Software under Affero GPL license, see LICENSE.txt
   
   <div class="theecol colright">
 	<h3> Bitcoin </h3>
-	<a href="http://www.weusecoins.com/en/" target="_blank"><img src="/static/images/bitcoin_32x32.png" style="vertical-align:middle;" alt="Donate Bitcoin" /></a><a class="undlin" rel="nofollow" href="bitcoin:1FmuHuupaQYFnULG2kpX4DM984LoG3Svwr"> 1FmuHuupaQYFnULG2kpX4DM984LoG3Svwr </a>
+	<a href="http://www.weusecoins.com/en/" target="_blank"><img src="/static/images/bitcoin_32x32.png" style="vertical-align:middle;" alt="{% trans "Donate Bitcoin" %}" /></a><a class="undlin" rel="nofollow" href="bitcoin:1FmuHuupaQYFnULG2kpX4DM984LoG3Svwr"> 1FmuHuupaQYFnULG2kpX4DM984LoG3Svwr </a>
   </div>
 </div>
 {% endblock %}
