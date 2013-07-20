@@ -4,7 +4,6 @@ Priority:
   - Privacy Police
   - User Terms
   - Fractal name and logo
-- Custom generic 403/404 page for when some tries to join a already started game
 - Bug: Title blinks wrongly: when it is not my turn and after the game is over.
 - Create a page to thank donations
 

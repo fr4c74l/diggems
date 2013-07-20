@@ -19,7 +19,7 @@ FB_LIKE_URL = 'http://my.main.url/'
 EVENT_SERVER = '127.0.0.1:8080'
 
 # Django settings:
-DEBUG = True
+DEBUG = False
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -42,8 +42,7 @@ DATABASES = {
 
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = []
-
+ALLOWED_HOSTS = ['localhost']
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
