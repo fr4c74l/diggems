@@ -19,7 +19,7 @@ FB_LIKE_URL = 'http://my.main.url/'
 EVENT_SERVER = '127.0.0.1:8080'
 
 # Django settings:
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
@@ -64,7 +64,7 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
 
 # Supported languages
 LANGUAGES = (

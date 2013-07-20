@@ -6,6 +6,7 @@ var ctx;
 var mine;
 var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
+var button_request = new XMLHttpRequest();
 
 var images = {};
 
@@ -276,7 +277,7 @@ function set_state(state) {
 	var hover_indicator;
 	if(state == params.player) {
 	    msg = gettext('Your turn! Play!');
-
+	    
 	    // Set shovel cursor in game_canvas area
 	    cursor = 'url(' + images['shovel'].src + '),auto';
 
@@ -373,35 +374,37 @@ function handle_event(msg) {
 	blue_player_display(lines.slice(2));
 	return;
     }
+    if (lines.length > 2){
+        var player = parseInt(lines[2]);
+        var lclick = last_click_decode(player, lines[3]);
+        
+        if (player == params.player && lclick.bombed) {
+	    params.tnt_used = true;
+	    tnt.active = false;
+        }
+        
+        var parser = /(\d+),(\d+):(.)/;
+        for(var i = 4; i < lines.length; ++i) {
+	    var res = parser.exec(lines[i]);
+	    if(res) {
+	        var m = parseInt(res[1]);
+	        var n = parseInt(res[2]);
 
-    var player = parseInt(lines[2]);
-    var lclick = last_click_decode(player, lines[3]);
-    
-    if (player == params.player && lclick.bombed) {
-	params.tnt_used = true;
-	tnt.active = false;
+	        // Just assume correct valid values were delivered...
+
+	        mine[m][n].s = res[3];
+	        mine[m][n].draw();
+	    }
+        }
+
+        if(last_click[player-1])
+	    last_click[player-1].clear();
+        last_click[player-1] = lclick;
+        lclick.draw();
     }
     
-    var parser = /(\d+),(\d+):(.)/;
-    for(var i = 4; i < lines.length; ++i) {
-	var res = parser.exec(lines[i]);
-	if(res) {
-	    var m = parseInt(res[1]);
-	    var n = parseInt(res[2]);
-
-	    // Just assume correct valid values were delivered...
-
-	    mine[m][n].s = res[3];
-	    mine[m][n].draw();
-	}
-    }
-
-    if(last_click[player-1])
-	last_click[player-1].clear();
-    last_click[player-1] = lclick;
-    lclick.draw();
-
     update_points();
+    reset_counter();
 }
 
 function register_event() {
@@ -629,6 +632,11 @@ function init() {
     
     // Everything is setup, show the canvas
     canvas.style.setProperty('visibility', 'visible', null);
+  if ((params.state == 1) || (params.state == 2))
+  {
+    reset_counter.int = window.setInterval(timeOut,1000);
+    timeOut();
+  }
 }
 
 // Will publish the result of a match to the wall.
@@ -655,6 +663,49 @@ function load_img(name) {
     var img = new Image();
     img.src = "/static/images/" + name + ".png";
     images[name] = img;
+}
+
+function timeOut()
+{
+	document.getElementById("clock").value = params.time_left;
+	if (params.time_left <= 0)
+	{
+		clearInterval(reset_counter.int);
+		params.time_left = 0;
+		if (params.player != params.state) 
+		{
+			document.getElementById("timeout_terminate").style.setProperty('visibility', 'visible', null);
+			document.getElementById("timeout_claim").style.setProperty('visibility', 'visible', null);
+		}	
+	}
+	else
+		params.time_left -= 1;
+}
+
+function claim_game(terminate)
+{
+	var url = '/game/'+ params.game_id + '/claim/';
+	button_request.open('POST', url, true);
+	var data = null;
+	if (terminate)
+	{
+		data = "terminate=y";
+		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+		button_request.setRequestHeader("Content-length", data.length);
+		button_request.setRequestHeader("Connection", "close");
+	}
+	button_request.send(data);
+}
+
+function reset_counter()
+{
+	document.getElementById("timeout_terminate").style.setProperty('visibility', 'hidden', null);
+	document.getElementById("timeout_claim").style.setProperty('visibility', 'hidden', null);
+
+	if (reset_counter.int)
+	  clearInterval(reset_counter.int);
+	params.time_left = 30;
+	reset_counter.int = window.setInterval(timeOut,1000);
 }
 
 // Load resources

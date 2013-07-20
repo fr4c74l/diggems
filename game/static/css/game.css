@@ -108,6 +108,14 @@
     width: 390px;
 }
 
+#timeout_terminate {
+	visibility: hidden;
+}
+
+#timeout_claim {
+	visibility: hidden;
+}
+
 img.tntbtn {
     position: relative;
     bottom: 4px;

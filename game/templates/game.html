@@ -16,6 +16,7 @@ Software under Affero GPL license, see LICENSE.txt
 	"game_id": {{ game_id }},
 	"state": {{ state }},
 	"seq_num": {{ seq_num }},
+	"time_left": {% if time_left %}{{ time_left }}{% else %}0{% endif %},
 	"last_change": "{{ last_change }}",
 	"channel": "{{ channel }}"{% if fb_other %},
 	"fb_other": "{{ fb_other }}"{% endif %}{% if p1_last_move %},
@@ -27,6 +28,12 @@ Software under Affero GPL license, see LICENSE.txt
 	};
 </script>
 <script src="/static/js/game.js"></script>
+
+<div>
+	<input type="text" id="clock" />
+	<div id="timeout_terminate" class="button" onclick="claim_game(true);"> Terminate Game</div>
+	<div id="timeout_claim" class="button" onclick="claim_game(false);"> Take Player's turn</div>
+</div>
 
 <div id="main">
 	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span></div>
