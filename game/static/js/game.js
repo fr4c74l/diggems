@@ -182,7 +182,7 @@ function update_points() {
     var hidden = 51 - p1 - p2;
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
-    document.getElementById('h_pts').innerHTML = String(hidden);
+    //document.getElementById('h_pts').innerHTML = String(hidden);
 
     var prop1, prop2;
     if (p1 > p2) {
@@ -667,7 +667,7 @@ function load_img(name) {
 
 function timeOut()
 {
-	document.getElementById("clock").value = params.time_left;
+	document.getElementById("clock").innerHTML = params.time_left;
 	if (params.time_left <= 0)
 	{
 		clearInterval(reset_counter.int);

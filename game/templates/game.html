@@ -30,15 +30,14 @@ Software under Affero GPL license, see LICENSE.txt
 <script src="/static/js/game.js"></script>
 
 <div>
-	<input type="text" id="clock" />
 	<div id="timeout_terminate" class="button" onclick="claim_game(true);"> Terminate Game</div>
 	<div id="timeout_claim" class="button" onclick="claim_game(false);"> Take Player's turn</div>
 </div>
 
 <div id="main">
-	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span></div>
-	<div class="box" id="h_pts_box"><span id="h_pts">51</span></div>
-	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span> <img src="/static/images/saphire.png"/></div>
+	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span><span> / 26</span></div>
+	<div class="box" id="h_pts_box"><span id="clock" >{{ time_left }}</span></div>
+	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
 	<div id="game_box" class="box">
 		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416">
 		</canvas>
