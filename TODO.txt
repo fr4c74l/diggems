@@ -12,10 +12,10 @@ TODO Later:
 - Rematch button after game is over
 - 30 seconds of deadline to play, otherwise the game is lost
   - epistolar mode, with no deadline
+  - new states for when game claimed 
 - Internationalization (incomplete)
   - Use django templates to ajust paypal translations/currency_code in donate.html
 - Advertsiment.
-- Facebook like button
 - Mobile friendly version?
 - Display activity on user input.
 - Create a settings icon and menu
