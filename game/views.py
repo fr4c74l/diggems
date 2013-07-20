@@ -18,11 +18,12 @@ from django.db.models import Q
 from django.template import Context, RequestContext, loader
 from django.utils.html import escape
 from django.utils.translation import ugettext as _
+from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
 from models import *
 from https_conn import https_opener
 
-def render_with_extra(template_name, user, data={}):
+def render_with_extra(template_name, user, data={}, status=200):
     t = loader.get_template(template_name)
     c = Context(data)
 
@@ -37,7 +38,7 @@ def render_with_extra(template_name, user, data={}):
                        'victories': user.games_won,
                        'win_ratio': win_ratio}}
     c.update(extra)
-    return HttpResponse(t.render(c))
+    return HttpResponse(t.render(c), status=status)
 
 def fb_channel(request):
     resp = HttpResponse('<script src="//connect.facebook.net/pt_BR/all.js"></script>')
@@ -172,8 +173,13 @@ def new_game(request):
 
 @transaction.commit_on_success
 def join_game(request, game_id):
-    game = get_object_or_404(Game, pk=game_id)
     profile = UserProfile.get(request)
+
+    # If game is too old, render 404 game error screen
+    try:
+        game = Game.objects.get(pk=int(game_id))
+    except ObjectDoesNotExist:
+        return render_with_extra('game404.html', profile, status=404)
 
     # If already playing this game, redirect to game screen
     if game.what_player(profile):
@@ -183,7 +189,7 @@ def join_game(request, game_id):
     token = request.REQUEST.get('token')
     if game.state != 0 or (game.token and
                            token != game.token):
-        return HttpResponseForbidden()
+        return render_with_extra('game403.html', profile, status=403)
 
     # If we got here via GET, return a page that will make the client/user
     # retry via POST. Done so that Facebook and other robots do not join
@@ -229,7 +235,12 @@ def abort_game(request, game_id):
 @transaction.commit_on_success
 def game(request, game_id):
     # TODO: maybe control who can watch a game
-    game = get_object_or_404(Game, pk=game_id)
+    profile = UserProfile.get(request)
+    #game = get_object_or_404(Game, pk=game_id)
+    try:
+        game = Game.objects.get(pk=int(game_id))
+    except ObjectDoesNotExist:
+        return render_with_extra('game404.html', profile, status=404)
 
     data = {'state': game.state,
             'game_id': game_id,
@@ -246,7 +257,6 @@ def game(request, game_id):
         if(game.p2.user.facebook):
             data['p2_info'] = game.p2.user.facebook.pub_info()
 
-    profile = UserProfile.get(request)
     pdata = game.what_player(profile)
     if pdata:
         my_number, me = pdata

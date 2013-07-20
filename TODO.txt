@@ -5,7 +5,6 @@ Priority:
   - User Terms
   - Fractal name and logo
   - Tip-jar
-- Custom 403/404 page for when some tries to join a already started game
 - Bug: Title blinks wrongly: when it is not my turn and after the game is over.
 
 TODO Later:
