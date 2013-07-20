@@ -10,24 +10,6 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% block title %}{% trans "Donation" %}{% endblock %}
 
-{% block header_extra %}
-<script type="text/javascript">
-/* <![CDATA[ */
-    (function() {
-        var s = document.createElement('script');
-		var t = document.getElementsByTagName('script')[0];
-
-		var lang = 
-        s.type = 'text/javascript';
-        s.async = true;
-        s.src = '//api.flattr.com/js/0.6/load.js?'+
-                'mode=auto&uid=fr4c74l&button=compact&language=en_GB&category=software&popout=0&url='+encodeURIComponent(document.URL);
-        t.parentNode.insertBefore(s, t);
-    })();
-/* ]]> */
-</script>
-{% endblock %}
-
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
@@ -59,17 +41,12 @@ Software under Affero GPL license, see LICENSE.txt
 
   <div class="threecol colleft">
 	<h3> Flattr </h3>
-	<a class="FlattrButton" style="display:none;"
-		data-flattr-tags="software, opensource, game, diggems"
-		href="https://flattr.com/profile/fr4c74l">
-	</a>
+	<script id='flattrbtn'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent(document.URL);f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');</script>
   </div>
   
   <div class="theecol colright">
 	<h3> Bitcoin </h3>
-	<img src="/static/images/bitcoin.png" alt="Donate Bitcoin" /><a rel="nofollow" href="bitcoin:1FmuHuupaQYFnULG2kpX4DM984LoG3Svwr"> 1FmuHuupaQYFnULG2kpX4DM984LoG3Svwr </a>
-  	</div>
-
-
+	<a href="http://www.weusecoins.com/en/" target="_blank"><img src="/static/images/bitcoin_32x32.png" style="vertical-align:middle;" alt="Donate Bitcoin" /></a><a class="undlin" rel="nofollow" href="bitcoin:1FmuHuupaQYFnULG2kpX4DM984LoG3Svwr"> 1FmuHuupaQYFnULG2kpX4DM984LoG3Svwr </a>
+  </div>
 </div>
 {% endblock %}

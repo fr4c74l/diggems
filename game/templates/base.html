@@ -38,13 +38,13 @@ Software under Affero GPL license, see LICENSE.txt
       fjs.parentNode.insertBefore(js, fjs);
     }(document, 'script', 'facebook-jssdk'));
     </script>
-    <div>
+    <div class="wrapper">
       {% get_current_language as LANGUAGE_CODE %}
       {% get_available_languages as LANGUAGES %}
       <div id='langbar' class="container">
         <form name='langform' action='/i18n/setlang/' method='POST'>
             {% for LANG in LANGUAGES  %}
-                <div class='lang_button' {% if LANGUAGE_CODE == LANG.0 %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG.0 }}';document.langform.submit();"> {{ LANG.0 }} </div>
+			<div class='lang_button' {% if LANGUAGE_CODE == LANG.0 %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG.0 }}';document.langform.submit();"> {{ LANG.0 }}</div>
             {% endfor %}
             <input name='language' type='hidden' >
         </form>
@@ -65,7 +65,9 @@ Software under Affero GPL license, see LICENSE.txt
 		  </div>
 	  </div>
 	  <div id="content" class="container">
+		<div class="content_wrapper">
 		  {% block content %}{% endblock %}            
+		</div>
 	  </div>
 	  <div id="footer">
 		  <div id="footer_container" class="container">
@@ -83,15 +85,14 @@ Software under Affero GPL license, see LICENSE.txt
 				<li><a href="/info/bugreport">{% trans "Bug report" %}</a></li>
 			  </ul> -->
 			</div>
-			<div class="fourcol colleft">
-			</div>
+			<div class="fourcol colleft"></div>
 			<div class="fourcol colright">
-			<h3>{% trans "Donation" %} </h3>
-			  <div><a class="tip_jar" href="/info/donate"></a></div>
+				<h3>{% trans "Donation" %} </h3>
+				<div><a class="tip_jar" href="/info/donate"></a></div>
 			</div>
 		  </div>
 	  </div>
-    </div>
+	</div>
 </body>
 </html>
 
