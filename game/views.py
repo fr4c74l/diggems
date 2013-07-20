@@ -382,9 +382,13 @@ def move(request, game_id):
 
     return HttpResponse()
 
+def donate(request):
+    profile = UserProfile.get(request)
+    return render_with_extra('donate.html', profile)
+
 def info(request, page):
     actual_locale = to_locale(get_language())
     if page not in info.existing_pages:
         raise Http404
     return render_with_extra('{}/{}.html'.format(actual_locale, page), UserProfile.get(request))
-info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'donate'))
+info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode'))
