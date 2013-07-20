@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% comment %}
 
 Copyright 2013 Fractal Jogos e Tecnologia
@@ -6,13 +7,13 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
 
-{% block title %}Link Quebrado{% endblock %}
+{% block title %}{% blocktrans %}Broken Link{% endblocktrans %}{% endblock %}
 
 {% block content %}
 
 <div class="box">
-	<h1>Erro 404: Essa partida expirou!</h1>
-  <p>...ou nunca existiu. Crie uma nova partida na <a href ="/">página principal</a>.</p>
+	<h1>{% blocktrans %}Error 404: This game has expired!{% endblocktrans %}</h1>
+  <p>{% blocktrans %}...or has never existed. Create a new one at the <a href ="/">main page</a>.</p>{% endblocktrans %}
 </div>
 
 {% endblock %}

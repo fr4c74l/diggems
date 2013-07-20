@@ -22,6 +22,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
 from models import *
 from https_conn import https_opener
+from django.utils.translation import to_locale, get_language
 
 def render_with_extra(template_name, user, data={}, status=200):
     t = loader.get_template(template_name)
@@ -382,8 +383,8 @@ def move(request, game_id):
     return HttpResponse()
 
 def info(request, page):
+    actual_locale = to_locale(get_language())
     if page not in info.existing_pages:
         raise Http404
-    return render_with_extra(page + '.html', UserProfile.get(request))
+    return render_with_extra('{}/{}.html'.format(actual_locale, page), UserProfile.get(request))
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'donate'))
-

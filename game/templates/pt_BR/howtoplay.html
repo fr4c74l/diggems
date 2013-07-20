@@ -1,0 +1,75 @@
+{% extends "base.html" %}
+{% comment %}
+
+Copyright 2013 Fractal Jogos e Tecnologia
+Software under Affero GPL license, see LICENSE.txt
+
+{% endcomment %}
+
+{% block title %}Como jogar{% endblock %}
+
+{% block content %}
+<div class="box">
+	<h1>Como jogar</h1>
+	<p>Olá minerador! Imagino que queira saber como poderá se tornar o mais novo rei da
+	Birmânia, então pegue sua pá ou picareta e vamos ao trabalho! Abaixo está a mina, seu
+	objetivo é cavucá-la e encontrar o maior número possível de pedras preciosas antes que
+	seu adversário o faça, afinal você não quer que ele te escravize né!? Pedras preciosas
+	são raras; dizem que existem apenas 51 delas enterradas na mina, então não perca tempo
+	e comece logo a cavar!</p>
+	<img class="center" src="/static/images/t-score.png" />
+
+	<br><br><br>
+
+	<p>Para iniciar a escavação, basta enviar o link mostrado logo abaixo da mina para o
+	seu oponente. Assim que este se conectar, a corrida pelas pedras preciosas se inicia.
+	Mas calma aí!!! Você não tem uma pá! Para que consiga cavar nós lhe emprestaremos uma,
+	mas cuida bem dela, tá? Pois é a única que temos e a emprestamos para outros mineiros
+	também, e é por isso que todas as ações ocorrem em turnos, então espere para que a sua
+	pá ou picareta apareça permitindo assim que você faça seu movimento.</p>
+	<img class="center" src="/static/images/t-link.png" />
+
+	<br><br><br>
+
+	<img class="rightclear" src="/static/images/t-gameplay-gem.png" />
+	<img class="rightclear" src="/static/images/t-gameplay-gemfound.png" />
+	<p>Você possui ferramentas que lhe auxiliam a encontrar as pedras preciosas, uma delas
+	é um detector de proximidade de pedras preciosas. A outra é o seu cérebro. Quando você
+	cava, é mostrado um número que representa quantas pedras preciosas estão ao redor da
+	posição cavada ― as 8 posições ao redor da posição central, para ser mais exato.</p>
+
+	<p>Por exemplo, na figura ao lado, o número 1 circulado em azul indica que há exatamente
+	uma pedra preciosa escondida em torno dessa posição. Como 7 destas posições já foram
+	escavadas e reveladas, há apenas um lugar onde a pedra preciosa poderia estar. Basta
+	clicar ("cavucar") nesse lugar para encontrá-la.</p>
+
+	<p>Desta forma, os números mostrados a medida que se cava são as pistas que indicam o
+	número de pedras preciosas na vizinhança. Quando não há nenhuma pedra preciosa ao redor
+	do local cavucado, você consegue cavar freneticamente até os números serem encontrados,
+	revelando todo o espaço vazio ao seu redor.</p>
+
+	<br><br><br>
+
+	<p> Caso você esteja perdendo o jogo, ou seja, a quando a quantidade de pedras preciosas
+	que você encontrou ― mostrada no topo da mina ― é inferior a do seu oponente, você pode
+	usar uma única carga de dinamite para explodir parte da mina. A potente dinamite abre um
+	vão de 5 por 5 posições! As figuras abaixo mostram a dinamite sendo utilizada pelo
+	minerador vermelho.</p>
+	<div id="image_container" > 
+		<img src="/static/images/t-bomb.png" />
+  		<img id="arrow" src="/static/images/arrow.png" />
+		<img src="/static/images/t-explosion.png" />
+	</div>
+
+
+	<br><br><br>
+
+	<p>A escavação se encerra quando um dos mineradores encontra mais da metade das pedras
+	preciosas. Ao final, é relevada a posição de todas as pedras preciosas que não foram
+	encontradas ― contabilizadas ao vencedor!</p>
+	<img class="center" src="/static/images/t-final.png" />
+
+	<p>Boa cavucada!</p>
+</div>
+
+{% endblock %}

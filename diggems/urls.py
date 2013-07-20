@@ -2,6 +2,7 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 from django.conf.urls import patterns, include, url
+from django.conf.urls.i18n import i18n_patterns
 
 js_info_dict = {
     'packages': ('game',),
@@ -19,7 +20,7 @@ urlpatterns = patterns (
     (r'^fb/login/', 'game.views.fb_login'),
     (r'^fb/logout/', 'game.views.fb_logout'),
     (r'^info/(?P<page>.*)/', 'game.views.info'),
-    
+
     (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 
