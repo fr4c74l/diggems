@@ -82,7 +82,7 @@ html, body {
 .button {
 	min-width: 15px;
 	padding: 4px;
-	margin: 0px 5px 0px 0px;
+	margin: 0px;
 	background-color: #a0dC48;
 	display: block;
 	-moz-border-radius: 3px;
