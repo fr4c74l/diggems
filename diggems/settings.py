@@ -19,7 +19,7 @@ FB_LIKE_URL = 'http://my.main.url/'
 EVENT_SERVER = '127.0.0.1:8080'
 
 # Django settings:
-DEBUG = False
+DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

@@ -71,8 +71,10 @@ def for_each_surrounding(m, n, func):
         if 0 <= x <= 15 and 0 <= y <= 15:
             func(x, y)
 
+true_random = random.SystemRandom()
+
 def gen_token():
-    return radix64.encode(random.getrandbits(132))
+    return radix64.encode(true_random.getrandbits(132))
 
 def publish_score(user):
     def try_publish_score():
