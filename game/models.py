@@ -103,7 +103,7 @@ class Game(models.Model):
             return None
             
     def timeout_diff(self):
-        return 30 - (datetime.datetime.now() - self.last_move_time).seconds
+        return 45 - (datetime.datetime.now() - self.last_move_time).seconds
 
 def delete_game_channel(sender, **kwargs):
     game_helpers.delete_channel(kwargs['instance'].channel)

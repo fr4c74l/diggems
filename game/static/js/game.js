@@ -667,19 +667,17 @@ function load_img(name) {
 
 function timeOut()
 {
-  document.getElementById("clock").style.setProperty('color', '#000000');
 	document.getElementById("clock").innerHTML = params.time_left;
-	if (params.time_left <= 10 && params.time_left > 0)
-	  document.getElementById("clock").style.setProperty('color', '#ffff00');
+	if (params.time_left <= 10)
+	  document.getElementById("clock").style.setProperty('color', '#ff0000');
 	if (params.time_left <= 0)
 	{
 		clearInterval(reset_counter.int);
 		params.time_left = 0;
-		document.getElementById("clock").style.setProperty('color', '#ff0000');
 		if (params.player != params.state) 
 		{
-			document.getElementById("timeout_terminate").style.setProperty('visibility', 'visible', null);
-			document.getElementById("timeout_claim").style.setProperty('visibility', 'visible', null);
+		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
+			document.getElementById("timeout_buttons").style.display = 'block';
 		}	
 	}
 	else
@@ -703,12 +701,14 @@ function claim_game(terminate)
 
 function reset_counter()
 {
-	document.getElementById("timeout_terminate").style.setProperty('visibility', 'hidden', null);
-	document.getElementById("timeout_claim").style.setProperty('visibility', 'hidden', null);
+  params.time_left = 45;
+  timeOut();
+  document.getElementById("clock").style.setProperty('color', '#000000');
+  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
+	document.getElementById("timeout_buttons").style.display = 'none';
 
 	if (reset_counter.int)
 	  clearInterval(reset_counter.int);
-	params.time_left = 30;
 	reset_counter.int = window.setInterval(timeOut,1000);
 }
 

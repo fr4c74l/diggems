@@ -14,8 +14,8 @@
     
     display: block;
     position: relative;
-    width: 130px;
-    margin-bottom: 10px;
+    width: 60px;
+    margin-bottom: 25px;
 }
 
 #h_pts_box {
@@ -36,7 +36,7 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 130px;
+    width: 60px;
 }
 
 #game_box {
@@ -109,11 +109,24 @@
 }
 
 #timeout_terminate {
-	visibility: hidden;
+  text-align: center;
+  display: block;
+  /*position: absolute;*/
 }
 
 #timeout_claim {
-	visibility: hidden;
+  text-align: center;
+  display: block;
+  /*position: absolute;*/
+}
+
+#timeout_buttons {
+  top: 0px;
+  left: 125px;
+  display: none;
+	width: 180px;
+	position: absolute;
+	padding: 3px;
 }
 
 img.tntbtn {
