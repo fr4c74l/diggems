@@ -6,6 +6,7 @@ var ctx;
 var mine;
 var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
+var button_request = new XMLHttpRequest();
 
 var images = {};
 
@@ -181,7 +182,7 @@ function update_points() {
     var hidden = 51 - p1 - p2;
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
-    document.getElementById('h_pts').innerHTML = String(hidden);
+    //document.getElementById('h_pts').innerHTML = String(hidden);
 
     var prop1, prop2;
     if (p1 > p2) {
@@ -276,7 +277,7 @@ function set_state(state) {
 	var hover_indicator;
 	if(state == params.player) {
 	    msg = gettext('Your turn! Play!');
-
+	    
 	    // Set shovel cursor in game_canvas area
 	    cursor = 'url(' + images['shovel'].src + '),auto';
 
@@ -371,37 +372,40 @@ function handle_event(msg) {
 	// The second (blue) player just connected.
 	// Display know info about the other player.
 	blue_player_display(lines.slice(2));
+	reset_counter();
 	return;
     }
+    if (lines.length > 2){
+        var player = parseInt(lines[2]);
+        var lclick = last_click_decode(player, lines[3]);
+        
+        if (player == params.player && lclick.bombed) {
+	    params.tnt_used = true;
+	    tnt.active = false;
+        }
+        
+        var parser = /(\d+),(\d+):(.)/;
+        for(var i = 4; i < lines.length; ++i) {
+	    var res = parser.exec(lines[i]);
+	    if(res) {
+	        var m = parseInt(res[1]);
+	        var n = parseInt(res[2]);
 
-    var player = parseInt(lines[2]);
-    var lclick = last_click_decode(player, lines[3]);
-    
-    if (player == params.player && lclick.bombed) {
-	params.tnt_used = true;
-	tnt.active = false;
+	        // Just assume correct valid values were delivered...
+
+	        mine[m][n].s = res[3];
+	        mine[m][n].draw();
+	    }
+        }
+
+        if(last_click[player-1])
+	    last_click[player-1].clear();
+        last_click[player-1] = lclick;
+        lclick.draw();
     }
     
-    var parser = /(\d+),(\d+):(.)/;
-    for(var i = 4; i < lines.length; ++i) {
-	var res = parser.exec(lines[i]);
-	if(res) {
-	    var m = parseInt(res[1]);
-	    var n = parseInt(res[2]);
-
-	    // Just assume correct valid values were delivered...
-
-	    mine[m][n].s = res[3];
-	    mine[m][n].draw();
-	}
-    }
-
-    if(last_click[player-1])
-	last_click[player-1].clear();
-    last_click[player-1] = lclick;
-    lclick.draw();
-
     update_points();
+    reset_counter();
 }
 
 function register_event() {
@@ -629,6 +633,11 @@ function init() {
     
     // Everything is setup, show the canvas
     canvas.style.setProperty('visibility', 'visible', null);
+  if ((params.state == 1) || (params.state == 2))
+  {
+    reset_counter.int = window.setInterval(timeOut,1000);
+    timeOut();
+  }
 }
 
 // Will publish the result of a match to the wall.
@@ -655,6 +664,56 @@ function load_img(name) {
     var img = new Image();
     img.src = "/static/images/" + name + ".png";
     images[name] = img;
+}
+
+function timeOut()
+{
+	document.getElementById("clock").innerHTML = params.time_left;
+	if (params.time_left <= 10)
+	  document.getElementById("clock").style.setProperty('color', '#ff0000');
+	if (params.time_left <= 0)
+	{
+		clearInterval(reset_counter.int);
+		params.time_left = 0;
+		if ((params.player != params.state) && (params.state == 1 || params.state == 2))
+		{
+		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
+			document.getElementById("timeout_buttons").style.display = 'block';
+		}	
+	}
+	else
+		params.time_left -= 1;
+}
+
+function claim_game(terminate)
+{
+	var url = '/game/'+ params.game_id + '/claim/';
+	button_request.open('POST', url, true);
+	var data = null;
+	if (terminate)
+	{
+		data = "terminate=y";
+		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	}
+	button_request.send(data);
+}
+
+function reset_counter()
+{
+  document.getElementById("timeout_buttons").style.display = 'none';
+	if (reset_counter.int)
+	  clearInterval(reset_counter.int);
+  if (params.state == 1 || params.state == 2)
+  {
+    params.time_left = 45;
+    timeOut();
+    document.getElementById("clock").style.setProperty('color', '#000000');
+    document.getElementById("timeout_buttons").style.display = 'none';
+    reset_counter.int = window.setInterval(timeOut,1000);
+  }
+  else
+    document.getElementById("clock").innerHTML = "";
+  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
 }
 
 // Load resources
