@@ -372,6 +372,7 @@ function handle_event(msg) {
 	// The second (blue) player just connected.
 	// Display know info about the other player.
 	blue_player_display(lines.slice(2));
+	reset_counter();
 	return;
     }
     if (lines.length > 2){
@@ -674,7 +675,7 @@ function timeOut()
 	{
 		clearInterval(reset_counter.int);
 		params.time_left = 0;
-		if (params.player != params.state) 
+		if ((params.player != params.state) && (params.state == 1 || params.state == 2))
 		{
 		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
 			document.getElementById("timeout_buttons").style.display = 'block';
@@ -693,22 +694,25 @@ function claim_game(terminate)
 	{
 		data = "terminate=y";
 		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-		button_request.setRequestHeader("Content-length", data.length);
-		button_request.setRequestHeader("Connection", "close");
 	}
 	button_request.send(data);
 }
 
 function reset_counter()
 {
-  params.time_left = 45;
-  timeOut();
-  document.getElementById("clock").style.setProperty('color', '#000000');
-  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
-	document.getElementById("timeout_buttons").style.display = 'none';
-
+  document.getElementById("timeout_buttons").style.display = 'none';
 	if (reset_counter.int)
 	  clearInterval(reset_counter.int);
+  if (params.state == 1 || params.state == 2)
+  {
+    params.time_left = 45;
+    timeOut();
+    document.getElementById("clock").style.setProperty('color', '#000000');
+    document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
+    document.getElementById("timeout_buttons").style.display = 'none';
+  }
+  else
+    document.getElementById("clock").innerHTML = "";
 	reset_counter.int = window.setInterval(timeOut,1000);
 }
 
