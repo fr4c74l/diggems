@@ -708,12 +708,12 @@ function reset_counter()
     params.time_left = 45;
     timeOut();
     document.getElementById("clock").style.setProperty('color', '#000000');
-    document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
     document.getElementById("timeout_buttons").style.display = 'none';
+    reset_counter.int = window.setInterval(timeOut,1000);
   }
   else
     document.getElementById("clock").innerHTML = "";
-	reset_counter.int = window.setInterval(timeOut,1000);
+  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
 }
 
 // Load resources
