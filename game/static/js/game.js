@@ -667,11 +667,15 @@ function load_img(name) {
 
 function timeOut()
 {
+  document.getElementById("clock").style.setProperty('color', '#000000');
 	document.getElementById("clock").innerHTML = params.time_left;
+	if (params.time_left <= 10 && params.time_left > 0)
+	  document.getElementById("clock").style.setProperty('color', '#ffff00');
 	if (params.time_left <= 0)
 	{
 		clearInterval(reset_counter.int);
 		params.time_left = 0;
+		document.getElementById("clock").style.setProperty('color', '#ff0000');
 		if (params.player != params.state) 
 		{
 			document.getElementById("timeout_terminate").style.setProperty('visibility', 'visible', null);
