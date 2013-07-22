@@ -1,0 +1,44 @@
+
+.chat {
+	height: 10em;
+	text-align: left;
+}
+
+.chat ul#chat_window {
+	overflow: auto;
+	height: 9em;
+	list-style: none;
+	padding: 0.1em;
+	margin: 0.1em;
+	background: #fff;
+}
+
+.chat li {
+	margin-bottom: 0.2em;
+}
+
+
+.chat li.notice {
+	color: #999;
+}
+
+.chat li.message {
+	color: #000;
+}
+
+#send_button {
+	margin: 0 0 0 6px;
+	float: right;
+}
+
+#input_field {
+	margin: 0;
+	width: 81%;
+}
+
+#chat_username {
+	width:10%;
+	text-align: left;
+	color: #222;
+	font-weight: bold;
+}

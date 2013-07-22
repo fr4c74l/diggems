@@ -10,6 +10,7 @@ import ssl
 from diggems import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
+from datetime import datetime, time
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
@@ -387,3 +388,29 @@ def info(request, page):
     return render_with_extra(page + '.html', UserProfile.get(request))
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'donate'))
 
+def main_chat(request):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    profile = UserProfile.get(request)
+    msg = request.body
+    if not msg:
+        return HttpResponseBadRequest()
+
+    if profile.facebook:
+        user_id = profile.facebook.name
+    else:
+        user_id = _('Guest') + '-' + profile.id[:6]
+    utcnow = datetime.utcnow()
+    midnight_utc = datetime.combine(utcnow.date(), time(0))
+    delta = utcnow - midnight_utc
+
+    data = {
+        'time_in_sec': delta.seconds,
+        'user_id': user_id,
+        'msg': escape(msg)
+    }
+
+    post_update("main_channel", json.dumps(data))
+
+    return HttpResponse()

@@ -19,6 +19,8 @@ urlpatterns = patterns (
     (r'^fb/login/', 'game.views.fb_login'),
     (r'^fb/logout/', 'game.views.fb_logout'),
     (r'^info/(?P<page>.*)/', 'game.views.info'),
+
+    (r'^main_chat', 'game.views.main_chat'),
     
     (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),

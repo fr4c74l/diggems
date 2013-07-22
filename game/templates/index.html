@@ -9,7 +9,9 @@ Software under Affero GPL license, see LICENSE.txt
 {% block title %}Index{% endblock %}
 {% block header_extra %}
 	<link rel="stylesheet" media="screen" type="text/css" href="static/css/index.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="static/css/chat.css" />
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
+	<script src="/static/js/chat.js"></script>
 {% endblock %}
 {% block content %}
 <table>
@@ -56,6 +58,7 @@ Software under Affero GPL license, see LICENSE.txt
 				</ul>
 			</td>
 		</tr>
+		{% include "chat.html" %}
 		<tr>
 			<td class="box" colspan="2"><div class="fb-like" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div></td>
 		</tr>

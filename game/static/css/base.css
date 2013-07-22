@@ -73,11 +73,10 @@ html, body {
 	overflow: hidden;
 }
 
-.box h1, h2, h3 {
+.box h1, h2, h3, h4, h5 {
 	color: #222;
 	text-shadow: 0.05em 0.05em 0.05em #535353;
 }
-
 
 .button {
 	min-width: 15px;
@@ -254,7 +253,7 @@ div#image_container {
 }
 
 #subtitle {
-    font-weight: normal;
+	font-weight: normal;
 	color: #9a64c8;
 }
 
