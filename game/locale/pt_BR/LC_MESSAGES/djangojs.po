@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 10:21-0300\n"
+"POT-Creation-Date: 2013-07-22 15:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,6 +17,22 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: static/js/game.js:234
+#: static/js/game.js:234 static/js/game.js.c:278
 msgid "Your turn! Play!"
 msgstr "Sua vez! Jogue!"
+
+#: static/js/game.js:295
+msgid "Wait for your turn."
+msgstr "Espere sua vez."
+
+#: static/js/game.js:298
+msgid "Game over, "
+msgstr "O jogo acabou, "
+
+#: static/js/game.js:304
+msgid "you win!"
+msgstr "você venceu!"
+
+#: static/js/game.js:307
+msgid "you lose."
+msgstr "você perdeu."

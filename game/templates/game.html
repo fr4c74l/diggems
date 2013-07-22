@@ -46,9 +46,9 @@ Software under Affero GPL license, see LICENSE.txt
 	<div class="box pbox" id="p1_box">
 		<a id="p1_link" class="plain{% if p1_info %} undlin{% endif %}" target="_blank"{% if p1_info %} href="//facebook.com/{{ p1_info.uid }}/"{% endif %}>
 			<img id="p1_pic" width="40px" height="40px" style="{% if not p1_info %}display: none;{% endif %}"{% if p1_info %} src="//graph.facebook.com/{{ p1_info.uid }}/picture"{% endif %} />
-			<div id="p1_name" class="pname">{% if p1_info %}{{ p1_info.name }}{% else %}{% blocktrans %}Visitante{% endblocktrans %}{% endif %}</div>
+			<div id="p1_name" class="pname">{% if p1_info %}{{ p1_info.name }}{% else %}{% blocktrans %}Visitor{% endblocktrans %}{% endif %}</div>
 		</a>
-		<div class="pinfo" style="text-align: right;">{% if player %}({% if player == 1 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your opponent{% endblocktrans %}{% endif %}){% endif %}</div>
+		<div class="pinfo" style="text-align: right;">{% if player %}({% if player == 1 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
 	</div>{% if player %}
 	<div class="box" id="tnt_box"><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></div>
 	{% endif %}
@@ -57,10 +57,10 @@ Software under Affero GPL license, see LICENSE.txt
 			<img id="p2_pic" width="40px" height="40px" style="{% if not p2_info %}display: none;{% endif %}"{% if p2_info %} src="//graph.facebook.com/{{ p2_info.uid }}/picture"{% endif %} />
 			<div id="p2_name" class="pname">{% if state == 0 %}{% if not player and not token %}{% blocktrans %}Empty!{% endblocktrans %}{% else %}{% blocktrans %}Wait...{% endblocktrans %}{% endif %}{% if player or not token %}<form style="float: right;" action="{% if player %}abort{% else %}join{% endif %}/" method="post"><input class="button" type="submit" value="{% if player %}{% blocktrans %}Abort{% endblocktrans %}{% else %}{% blocktrans %}Join!{% endblocktrans %}{% endif %}" /></form>{% endif %}{% elif p2_info %}{{ p2_info.name }}{% else %}{% blocktrans %}Visitor{% endblocktrans %}{% endif %}</div>
 		</a>
-		<div class="pinfo" style="text-align: left;">{% if player %}({% if player == 2 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your opponent{% endblocktrans %}{% endif %}){% endif %}</div>
+		<div class="pinfo" style="text-align: left;">{% if player %}({% if player == 2 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
 	</div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
-		<span>{% blocktrans %}Copy the link to your opponent{% endblocktrans %}:</span>
+		<span>{% blocktrans %}Copy the link to your adversary{% endblocktrans %}:</span>
 		<input type="text" style="width: 225px;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
 		<div style="position: absolute; right: 10px;" class="addthis_toolbox addthis_default_style addthis_16x16_style">
 			<a class="addthis_button_facebook"></a>
