@@ -67,13 +67,13 @@ Software under Affero GPL license, see LICENSE.txt
 	  </div>
 	  <div id="content" class="container">
 		<div class="content_wrapper">
-		  {% block content %}{% endblock %}            
+		  {% block content %}{% endblock %}
 		</div>
 	  </div>
 	  <div id="footer">
-		  <div id="footer_container" class="container">
+		  <div id="footer_container" class="container box">
 			<div class="fourcol colleft">
-			  <h3> About </h3>
+			  <h3> Diggems </h3>
 			  <ul>
 				  <li><a href="/info/about">{% trans "About the game" %}</a></li>
 				  <li><a href="/info/howtoplay">{% trans "How to play" %}</a></li>
@@ -81,12 +81,17 @@ Software under Affero GPL license, see LICENSE.txt
 			  </ul>
 			</div>
 			<div class="fourcol colleft">
-			  <!-- <h3>{% trans "Support" %} </h3>
+			  <!--<h3>{% trans "Support" %} </h3>
 			  <ul>
 				<li><a href="/info/bugreport">{% trans "Bug report" %}</a></li>
 			  </ul> -->
 			</div>
-			<div class="fourcol colleft"></div>
+			<div class="fourcol colleft">
+			  <!--<h3>{% trans "About Us" %} </h3>
+			  <ul>
+				<li><a href="/info/contact">{% trans "Contact" %}</a></li>
+			  </ul> -->
+			</div>
 			<div class="fourcol colright">
 				<h3>{% trans "Donation" %} </h3>
 				<div><a class="tip_jar" href="{% url 'game.views.donate' %}"></a></div>
