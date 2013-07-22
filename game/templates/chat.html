@@ -6,7 +6,7 @@
 		<ul id="chat_window">
 			<!-- <li class="notice">Fulano joins the chat.</li> -->
 		</ul>
-			<span id="chat_username"> {% if fb %}{{ fb.name }}{% else %} {% trans "Visitor" %} {% endif %} : </span><input type="text" name="input_message" id="input_field"/>
+			<span id="chat_username"> {{ user_id }} : </span><input type="text" name="input_message" id="input_field"/>
 			<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />
 	</td>
 </tr>

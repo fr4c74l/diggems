@@ -48,7 +48,7 @@ function handle_event(msg) {
 	var ul = document.getElementById("chat_window");
 	var li = document.createElement('li');
 	li.className = "message";
-	var li_text = "<span style='color:#999;font-size:small;'>" + time_fmt + "</span><span style='color:#000;font-weight: bold;'>" + data['user_id'] + ' : ' + "</span>" +
+	var li_text = "<span style='color:#999;font-size:small;'>" + time_fmt + "</span><span style='color:#000;font-size:small;font-weight: bold;'>" + data['user_id'] + ' : ' + "</span>" +
 					"<span style='color:#000'>" + data['msg'] + "</span>";
 	li.innerHTML = li_text;
 

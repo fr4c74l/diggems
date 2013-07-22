@@ -17,7 +17,6 @@
 	margin-bottom: 0.2em;
 }
 
-
 .chat li.notice {
 	color: #999;
 }
@@ -33,7 +32,7 @@
 
 #input_field {
 	margin: 0;
-	width: 81%;
+	width: 76%;
 }
 
 #chat_username {
