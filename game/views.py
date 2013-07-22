@@ -252,7 +252,7 @@ def game(request, game_id):
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
-            'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
+            'last_change': format_date_time(mktime(datetime.now().timetuple())),
             'channel': game.channel,
             'p1_last_move': game.p1.last_move}
 
