@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-22 15:30-0300\n"
+"POT-Creation-Date: 2013-07-22 20:12-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +21,7 @@ msgstr ""
 #: views.py:46 templates/base.html:38 templates/donate.html:39
 #: templates/donate.html.py:40
 msgid "en_US"
-msgstr "es_ES"
+msgstr "es_LA"
 
 #: views.py:132
 msgid "anonymous player"
@@ -41,16 +40,16 @@ msgid ""
 "This page does not exist. You may have mis-typed the URL. Go back to <a href="
 "\"/\">main page</a>."
 msgstr ""
-"Esta página no existe. Es posible que haya escrito mal la URL. Vuelva a la <a href="
-"\"/\">página principal</a>."
+"Esta página no existe. Es posible que haya escrito mal la URL. Vuelva a la "
+"<a href=\"/\">página principal</a>."
 
-#: templates/base.html:61 templates/game.html:44 templates/game.html.py:53
+#: templates/base.html:61 templates/game.html:49 templates/game.html.py:58
 msgid "Visitor"
 msgstr "Visitante"
 
 #: templates/base.html:62
 msgid "Score"
-msgstr "pontuación"
+msgstr "Pontuación"
 
 #: templates/base.html:64
 msgid "Logout"
@@ -113,31 +112,39 @@ msgstr "Donar Bitcoin"
 msgid "Game %(game_id)s"
 msgstr "Juego %(game_id)s"
 
-#: templates/game.html:46 templates/game.html.py:55
+#: templates/game.html:38
+msgid "Terminate Game"
+msgstr "Juego privado"
+
+#: templates/game.html:39
+msgid "Take Player's Turn"
+msgstr ""
+
+#: templates/game.html:51 templates/game.html.py:60
 msgid "You"
 msgstr "Usted"
 
-#: templates/game.html:46 templates/game.html.py:55
+#: templates/game.html:51 templates/game.html.py:60
 msgid "Your adversary"
 msgstr "Tu adversario"
 
-#: templates/game.html:53
+#: templates/game.html:58
 msgid "Empty!"
 msgstr "Vazio!"
 
-#: templates/game.html:53
+#: templates/game.html:58
 msgid "Wait..."
 msgstr "Espere..."
 
-#: templates/game.html:53
+#: templates/game.html:58
 msgid "Abort"
 msgstr "Abortar"
 
-#: templates/game.html:53 templates/index.html:49
+#: templates/game.html:58 templates/index.html:49
 msgid "Join!"
 msgstr "Unirse!"
 
-#: templates/game.html:58
+#: templates/game.html:63
 msgid "Copy the link to your adversary"
 msgstr "Copie este link para tu oponente"
 
@@ -162,8 +169,7 @@ msgid ""
 "...or has never existed. Create a new one at the <a href =\"/\">main page</"
 "a>."
 msgstr ""
-"...o nunca existió. Crie uno nuevo en la <a href =\"/\">página principal</"
-"a>."
+"...o nunca existió. Crie uno nuevo en la <a href =\"/\">página principal</a>."
 
 #: templates/index.html:19
 msgid "New games"
