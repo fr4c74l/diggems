@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 10:21-0300\n"
+"POT-Creation-Date: 2013-07-22 15:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,18 +17,206 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: views.py:129
+#. Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
+#: views.py:46 templates/base.html:38 templates/donate.html:39
+#: templates/donate.html.py:40
+msgid "en_US"
+msgstr "pt_BR"
+
+#: views.py:132
 msgid "anonymous player"
 msgstr "jogador anônimo"
 
-#: templates/base.html:60
+#: templates/404.html:10 templates/game404.html:10
+msgid "Broken Link"
+msgstr "Link Quebrado"
+
+#: templates/404.html:15
+msgid "Oops! Error 404"
+msgstr "Oops! Erro 404"
+
+#: templates/404.html:16
+msgid ""
+"This page does not exist. You may have mis-typed the URL. Go back to <a href="
+"\"/\">main page</a>."
+msgstr ""
+"Esta página não existe. Você deve ter digitado a URL errado. Volte para <a "
+"href=\"/\">página principal</a>."
+
+#: templates/base.html:61 templates/game.html:44 templates/game.html.py:53
 msgid "Visitor"
 msgstr "Visitante"
 
-#: templates/base.html:61
+#: templates/base.html:62
 msgid "Score"
 msgstr "Placar"
 
-#: templates/base.html:63
+#: templates/base.html:64
 msgid "Logout"
 msgstr "Sair"
+
+#: templates/base.html:78
+msgid "About the game"
+msgstr "Sobre o jogo"
+
+#: templates/base.html:79
+msgid "How to play"
+msgstr "Como jogar"
+
+#: templates/base.html:80
+msgid "Source code"
+msgstr "Código Fonte"
+
+#: templates/base.html:84
+msgid "Support"
+msgstr "Suporte"
+
+#: templates/base.html:86
+msgid "Bug report"
+msgstr "Reporte um Bug"
+
+#: templates/base.html:91 templates/donate.html:11 templates/donate.html.py:17
+msgid "Donation"
+msgstr "Doações"
+
+#: templates/donate.html:18
+msgid ""
+" Place a creative message here to get donations, or we will starve to death "
+"trying to survive developing games."
+msgstr ""
+
+#. Translators: Please see currencies codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/api/currency_codes/#id09A6G0U0GYK
+#: templates/donate.html:35
+msgid "USD"
+msgstr "BRL"
+
+#. Translators: Please see locale codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
+#: templates/donate.html:37
+msgid "US"
+msgstr "BR"
+
+#: templates/donate.html:38
+msgid "U$"
+msgstr "R$"
+
+#: templates/donate.html:39
+msgid "PayPal - The safer, easier way to pay online!"
+msgstr ""
+"PayPal - A maneira mais simples e segura de pagar suas compras na Internet!"
+
+#: templates/donate.html:51
+msgid "Donate Bitcoin"
+msgstr "Doar Bitcoin"
+
+#: templates/game.html:10
+#, python-format
+msgid "Game %(game_id)s"
+msgstr "Jogo %(game_id)s"
+
+#: templates/game.html:46 templates/game.html.py:55
+msgid "You"
+msgstr "Você"
+
+#: templates/game.html:46 templates/game.html.py:55
+msgid "Your adversary"
+msgstr "Seu adversário"
+
+#: templates/game.html:53
+msgid "Empty!"
+msgstr "Vazio!"
+
+#: templates/game.html:53
+msgid "Wait..."
+msgstr "Espere..."
+
+#: templates/game.html:53
+msgid "Abort"
+msgstr "Abortar"
+
+#: templates/game.html:53 templates/index.html:49
+msgid "Join!"
+msgstr "Juntar-se"
+
+#: templates/game.html:58
+msgid "Copy the link to your adversary"
+msgstr "Copie o link para seu adversário"
+
+#: templates/game403.html:10
+msgid "Unauthorized"
+msgstr "Não autorizado"
+
+#: templates/game403.html:15
+msgid "Error 403: Somebody is already playing in this place"
+msgstr "Erro 403: Alguém já está jogando aqui"
+
+#: templates/game403.html:16
+msgid "Create a new game at the <a href =\"/\">main page</a>."
+msgstr "Crie um novo jogo na <a href = \"/\">página principal</a>."
+
+#: templates/game404.html:15
+msgid "Error 404: This game has expired!"
+msgstr "Erro 404: Este jogo já expirou!"
+
+#: templates/game404.html:16
+#, fuzzy
+msgid ""
+"...or has never existed. Create a new one at the <a href =\"/\">main page</"
+"a>."
+msgstr ""
+"... ou nunca existiu. Crie um novo na <a href =\"/\">main page</"
+"a>."
+
+#: templates/index.html:19
+msgid "New games"
+msgstr "Novos jogos"
+
+#: templates/index.html:21
+msgid "Private game"
+msgstr "Jogo privado"
+
+#: templates/index.html:22
+msgid "Create!"
+msgstr "Criar!"
+
+#: templates/index.html:26
+msgid "Your games"
+msgstr "Seus jogos"
+
+#: templates/index.html:31 templates/index.html.py:52
+msgid "Game"
+msgstr "Jogo"
+
+#: templates/index.html:32
+msgid "Private"
+msgstr "Privado"
+
+#: templates/index.html:32
+msgid "Public"
+msgstr "Público"
+
+#: templates/index.html:33
+msgid "Waiting the other player"
+msgstr "Esperando o outro jogador"
+
+#: templates/index.html:34
+msgid "On progress"
+msgstr "Em progresso"
+
+#: templates/index.html:37 templates/index.html.py:55
+msgid "No game found!"
+msgstr "Nenhum jogo encontrado!"
+
+#: templates/index.html:44
+msgid "Games to start"
+msgstr "Jogos que estão para começar"
+
+#: templates/index.html:53
+msgid "Versus"
+msgstr "Contra"
+
+#~ msgid "Your opponent"
+#~ msgstr "Seu oponente"
+
+#, fuzzy
+#~ msgid "Visitante"
+#~ msgstr "Visitante"

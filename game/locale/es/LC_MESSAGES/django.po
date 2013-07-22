@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 11:00-0300\n"
+"POT-Creation-Date: 2013-07-22 15:30-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,18 +18,193 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: views.py:129
+#. Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
+#: views.py:46 templates/base.html:38 templates/donate.html:39
+#: templates/donate.html.py:40
+msgid "en_US"
+msgstr ""
+
+#: views.py:132
 msgid "anonymous player"
 msgstr ""
 
-#: templates/base.html:60
+#: templates/404.html:10 templates/game404.html:10
+msgid "Broken Link"
+msgstr ""
+
+#: templates/404.html:15
+msgid "Oops! Error 404"
+msgstr ""
+
+#: templates/404.html:16
+msgid ""
+"This page does not exist. You may have mis-typed the URL. Go back to <a href="
+"\"/\">main page</a>."
+msgstr ""
+
+#: templates/base.html:61 templates/game.html:44 templates/game.html.py:53
 msgid "Visitor"
 msgstr ""
 
-#: templates/base.html:61
+#: templates/base.html:62
 msgid "Score"
 msgstr ""
 
-#: templates/base.html:63
+#: templates/base.html:64
 msgid "Logout"
+msgstr ""
+
+#: templates/base.html:78
+msgid "About the game"
+msgstr ""
+
+#: templates/base.html:79
+msgid "How to play"
+msgstr ""
+
+#: templates/base.html:80
+msgid "Source code"
+msgstr ""
+
+#: templates/base.html:84
+msgid "Support"
+msgstr ""
+
+#: templates/base.html:86
+msgid "Bug report"
+msgstr ""
+
+#: templates/base.html:91 templates/donate.html:11 templates/donate.html.py:17
+msgid "Donation"
+msgstr ""
+
+#: templates/donate.html:18
+msgid ""
+" Place a creative message here to get donations, or we will starve to death "
+"trying to survive developing games."
+msgstr ""
+
+#. Translators: Please see currencies codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/api/currency_codes/#id09A6G0U0GYK
+#: templates/donate.html:35
+msgid "USD"
+msgstr ""
+
+#. Translators: Please see locale codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
+#: templates/donate.html:37
+msgid "US"
+msgstr ""
+
+#: templates/donate.html:38
+msgid "U$"
+msgstr ""
+
+#: templates/donate.html:39
+msgid "PayPal - The safer, easier way to pay online!"
+msgstr ""
+
+#: templates/donate.html:51
+msgid "Donate Bitcoin"
+msgstr ""
+
+#: templates/game.html:10
+#, python-format
+msgid "Game %(game_id)s"
+msgstr ""
+
+#: templates/game.html:46 templates/game.html.py:55
+msgid "You"
+msgstr ""
+
+#: templates/game.html:46 templates/game.html.py:55
+msgid "Your adversary"
+msgstr ""
+
+#: templates/game.html:53
+msgid "Empty!"
+msgstr ""
+
+#: templates/game.html:53
+msgid "Wait..."
+msgstr ""
+
+#: templates/game.html:53
+msgid "Abort"
+msgstr ""
+
+#: templates/game.html:53 templates/index.html:49
+msgid "Join!"
+msgstr ""
+
+#: templates/game.html:58
+msgid "Copy the link to your adversary"
+msgstr ""
+
+#: templates/game403.html:10
+msgid "Unauthorized"
+msgstr ""
+
+#: templates/game403.html:15
+msgid "Error 403: Somebody is already playing in this place"
+msgstr ""
+
+#: templates/game403.html:16
+msgid "Create a new game at the <a href =\"/\">main page</a>."
+msgstr ""
+
+#: templates/game404.html:15
+msgid "Error 404: This game has expired!"
+msgstr ""
+
+#: templates/game404.html:16
+msgid ""
+"...or has never existed. Create a new one at the <a href =\"/\">main page</"
+"a>."
+msgstr ""
+
+#: templates/index.html:19
+msgid "New games"
+msgstr ""
+
+#: templates/index.html:21
+msgid "Private game"
+msgstr ""
+
+#: templates/index.html:22
+msgid "Create!"
+msgstr ""
+
+#: templates/index.html:26
+msgid "Your games"
+msgstr ""
+
+#: templates/index.html:31 templates/index.html.py:52
+msgid "Game"
+msgstr ""
+
+#: templates/index.html:32
+msgid "Private"
+msgstr ""
+
+#: templates/index.html:32
+msgid "Public"
+msgstr ""
+
+#: templates/index.html:33
+msgid "Waiting the other player"
+msgstr ""
+
+#: templates/index.html:34
+msgid "On progress"
+msgstr ""
+
+#: templates/index.html:37 templates/index.html.py:55
+msgid "No game found!"
+msgstr ""
+
+#: templates/index.html:44
+msgid "Games to start"
+msgstr ""
+
+#: templates/index.html:53
+msgid "Versus"
 msgstr ""
