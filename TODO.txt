@@ -9,6 +9,7 @@ Priority:
 
 TODO Later:
 - Rematch button after game is over
+- new states for when game claimed
 - Internationalization (incomplete)
   - Use django templates to ajust paypal translations/currency_code in donate.html
 - Advertsiment.
