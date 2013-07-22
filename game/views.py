@@ -425,7 +425,7 @@ def move(request, game_id):
 
 def donate(request):
     profile = UserProfile.get(request)
-    return render_with_extra('donate.html', profile)
+    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
 
 def info(request, page):
     actual_locale = to_locale(get_language())
