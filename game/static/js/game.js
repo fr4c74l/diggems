@@ -182,7 +182,6 @@ function update_points() {
     var hidden = 51 - p1 - p2;
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
-    //document.getElementById('h_pts').innerHTML = String(hidden);
 
     var prop1, prop2;
     if (p1 > p2) {
@@ -261,7 +260,7 @@ function notify_state(msg) {
     if(msg != '') {
 	try{
 	    close_last_nt();
-	    last_nt = nt.createNotification('/static/images/icon32.png', 'DigGems: Jogo ' + params.game_id, msg);
+	    last_nt = nt.createNotification('/static/images/icon32.png', gettext('DigGems: Game ') + params.game_id, msg);
 	    last_nt.show();
 	} catch(err) {
 	    // Do nothing...
@@ -321,10 +320,10 @@ function set_state(state) {
 	// Spectator mode.
 	var state_msgs =
 	    ['',
-	     'Vez do vermelho.',
-	     'Vez do azul.',
-	     'O jogo acabou, o vermelho venceu.',
-	     'O jogo acabou, o azul venceu.'];
+	     gettext("Red's turn."),
+	     gettext("Blue's turn."),
+	     gettext('Game is over, red player won.'),
+	     gettext('Game is over, blue player won.')];
 	msg = state_msgs[state];
     }
     var msg_box = document.getElementById('message');
@@ -353,7 +352,7 @@ function blue_player_display(info) {
 
 	name.innerHTML = pname;
     } else {
-	name.innerHTML = "Visitante";
+	name.innerHTML = gettext("Guest");
     }
 }
 
@@ -639,26 +638,6 @@ function init() {
     reset_counter.int = window.setInterval(timeOut, 1000);
     timeOut();
   }
-}
-
-// Will publish the result of a match to the wall.
-// ATTENTION: This thing is completely unsafe and fakeable!
-// TODO: FIX SECURITY PROBLEM!
-function publish_results()
-{
-    if((params.state - 2) != params.player
-       || !auth.fb)
-	return;
-
-    var dialog = {
-        method: 'feed',
-	// TODO: put right link here
-        link: 'http://vella.no-ip.org/',
-        picture: 'http://vella.no-ip.org/static/images/logo.png',
-        name: 'Resultado DigGems',
-        caption: 'Partida Ganha',
-        description: 'Using Dialogs to interact with users.'
-    };
 }
 
 function load_img(name) {
