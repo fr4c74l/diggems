@@ -22,7 +22,7 @@
 	/* Free font by Steeve Gruson */
 }
 
-html, body {
+body {
 	background:url('/static/images/bg-diggems.jpg') repeat-x fixed;
 	background-color: #543116; 
 	background-size: auto 100%;
