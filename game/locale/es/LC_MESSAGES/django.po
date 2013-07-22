@@ -22,61 +22,63 @@ msgstr ""
 #: views.py:46 templates/base.html:38 templates/donate.html:39
 #: templates/donate.html.py:40
 msgid "en_US"
-msgstr ""
+msgstr "es"
 
 #: views.py:132
 msgid "anonymous player"
-msgstr ""
+msgstr "jugador anónimo"
 
 #: templates/404.html:10 templates/game404.html:10
 msgid "Broken Link"
-msgstr ""
+msgstr "Link roto"
 
 #: templates/404.html:15
 msgid "Oops! Error 404"
-msgstr ""
+msgstr "Oops! Error 404"
 
 #: templates/404.html:16
 msgid ""
 "This page does not exist. You may have mis-typed the URL. Go back to <a href="
 "\"/\">main page</a>."
 msgstr ""
+"Esta página no existe. Es posible que haya escrito mal la URL. Vuelva a la <a href="
+"\"/\">página principal</a>."
 
 #: templates/base.html:61 templates/game.html:44 templates/game.html.py:53
 msgid "Visitor"
-msgstr ""
+msgstr "Visitante"
 
 #: templates/base.html:62
 msgid "Score"
-msgstr ""
+msgstr "pontuación"
 
 #: templates/base.html:64
 msgid "Logout"
-msgstr ""
+msgstr "Desconectar"
 
 #: templates/base.html:78
 msgid "About the game"
-msgstr ""
+msgstr "Sobre el juego"
 
 #: templates/base.html:79
 msgid "How to play"
-msgstr ""
+msgstr "Como jugar"
 
 #: templates/base.html:80
 msgid "Source code"
-msgstr ""
+msgstr "Código fuente"
 
 #: templates/base.html:84
 msgid "Support"
-msgstr ""
+msgstr "Soporte"
 
 #: templates/base.html:86
 msgid "Bug report"
-msgstr ""
+msgstr "Reportar error"
 
 #: templates/base.html:91 templates/donate.html:11 templates/donate.html.py:17
 msgid "Donation"
-msgstr ""
+msgstr "Donaciones"
 
 #: templates/donate.html:18
 msgid ""
@@ -100,111 +102,113 @@ msgstr ""
 
 #: templates/donate.html:39
 msgid "PayPal - The safer, easier way to pay online!"
-msgstr ""
+msgstr "PayPal - La forma más fácil y segura de pagar!"
 
 #: templates/donate.html:51
 msgid "Donate Bitcoin"
-msgstr ""
+msgstr "Donar Bitcoin"
 
 #: templates/game.html:10
 #, python-format
 msgid "Game %(game_id)s"
-msgstr ""
+msgstr "Juego %(game_id)s"
 
 #: templates/game.html:46 templates/game.html.py:55
 msgid "You"
-msgstr ""
+msgstr "Usted"
 
 #: templates/game.html:46 templates/game.html.py:55
 msgid "Your adversary"
-msgstr ""
+msgstr "Tu adversario"
 
 #: templates/game.html:53
 msgid "Empty!"
-msgstr ""
+msgstr "Vazio!"
 
 #: templates/game.html:53
 msgid "Wait..."
-msgstr ""
+msgstr "Espere..."
 
 #: templates/game.html:53
 msgid "Abort"
-msgstr ""
+msgstr "Abortar"
 
 #: templates/game.html:53 templates/index.html:49
 msgid "Join!"
-msgstr ""
+msgstr "Unirse!"
 
 #: templates/game.html:58
 msgid "Copy the link to your adversary"
-msgstr ""
+msgstr "Copie este link para tu oponente"
 
 #: templates/game403.html:10
 msgid "Unauthorized"
-msgstr ""
+msgstr "No autorizado"
 
 #: templates/game403.html:15
 msgid "Error 403: Somebody is already playing in this place"
-msgstr ""
+msgstr "Error 403: Alguien ya está jugando aqui"
 
 #: templates/game403.html:16
 msgid "Create a new game at the <a href =\"/\">main page</a>."
-msgstr ""
+msgstr "Crie un nuevo juego en la <a href =\"/\">página principal</a>."
 
 #: templates/game404.html:15
 msgid "Error 404: This game has expired!"
-msgstr ""
+msgstr "Error 404: Este juego terminó"
 
 #: templates/game404.html:16
 msgid ""
 "...or has never existed. Create a new one at the <a href =\"/\">main page</"
 "a>."
 msgstr ""
+"...o nunca existió. Crie uno nuevo en la <a href =\"/\">página principal</"
+"a>."
 
 #: templates/index.html:19
 msgid "New games"
-msgstr ""
+msgstr "Nuevos juegos"
 
 #: templates/index.html:21
 msgid "Private game"
-msgstr ""
+msgstr "Juego privado"
 
 #: templates/index.html:22
 msgid "Create!"
-msgstr ""
+msgstr "Crear!"
 
 #: templates/index.html:26
 msgid "Your games"
-msgstr ""
+msgstr "Sus juegos"
 
 #: templates/index.html:31 templates/index.html.py:52
 msgid "Game"
-msgstr ""
+msgstr "Juego"
 
 #: templates/index.html:32
 msgid "Private"
-msgstr ""
+msgstr "Privado"
 
 #: templates/index.html:32
 msgid "Public"
-msgstr ""
+msgstr "Público"
 
 #: templates/index.html:33
 msgid "Waiting the other player"
-msgstr ""
+msgstr "Esperando el otro jugador"
 
 #: templates/index.html:34
 msgid "On progress"
-msgstr ""
+msgstr "En curso"
 
 #: templates/index.html:37 templates/index.html.py:55
 msgid "No game found!"
-msgstr ""
+msgstr "Ningún juego encontrado!"
 
 #: templates/index.html:44
 msgid "Games to start"
-msgstr ""
+msgstr "Juegos por empezar"
 
 #: templates/index.html:53
 msgid "Versus"
-msgstr ""
+msgstr "Versus"
