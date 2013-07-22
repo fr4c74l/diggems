@@ -635,7 +635,8 @@ function init() {
     canvas.style.setProperty('visibility', 'visible', null);
   if ((params.state == 1) || (params.state == 2))
   {
-    reset_counter.int = window.setInterval(timeOut,1000);
+    timeOut.start_time = (new Date()).getTime();
+    reset_counter.int = window.setInterval(timeOut, 1000);
     timeOut();
   }
 }
@@ -668,21 +669,40 @@ function load_img(name) {
 
 function timeOut()
 {
-	document.getElementById("clock").innerHTML = params.time_left;
-	if (params.time_left <= 10)
+	var timeleft = params.time_left - ((new Date()).getTime() - timeOut.start_time) / 1000;
+	if (timeleft <= 10)
 	  document.getElementById("clock").style.setProperty('color', '#ff0000');
-	if (params.time_left <= 0)
+	if (timeleft <= 0)
 	{
 		clearInterval(reset_counter.int);
-		params.time_left = 0;
+		timeleft = 0;
 		if ((params.player != params.state) && (params.state == 1 || params.state == 2))
 		{
 		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
-			document.getElementById("timeout_buttons").style.display = 'block';
+		  document.getElementById("timeout_buttons").style.display = 'block';
 		}	
+	} else {
+	    document.getElementById("clock").innerHTML = Math.round(timeleft);
 	}
-	else
-		params.time_left -= 1;
+}
+
+function reset_counter()
+{
+  document.getElementById("timeout_buttons").style.display = 'none';
+  if (reset_counter.int)
+    clearInterval(reset_counter.int);
+  if (params.state == 1 || params.state == 2)
+  {
+    timeOut.start_time = (new Date()).getTime();
+    params.time_left = 45;
+    timeOut();
+    document.getElementById("clock").style.setProperty('color', '#000000');
+    document.getElementById("timeout_buttons").style.display = 'none';
+    reset_counter.int = window.setInterval(timeOut, 1000);
+  }
+  else
+    document.getElementById("clock").innerHTML = "";
+  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
 }
 
 function claim_game(terminate)
@@ -696,24 +716,6 @@ function claim_game(terminate)
 		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	}
 	button_request.send(data);
-}
-
-function reset_counter()
-{
-  document.getElementById("timeout_buttons").style.display = 'none';
-	if (reset_counter.int)
-	  clearInterval(reset_counter.int);
-  if (params.state == 1 || params.state == 2)
-  {
-    params.time_left = 45;
-    timeOut();
-    document.getElementById("clock").style.setProperty('color', '#000000');
-    document.getElementById("timeout_buttons").style.display = 'none';
-    reset_counter.int = window.setInterval(timeOut,1000);
-  }
-  else
-    document.getElementById("clock").innerHTML = "";
-  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
 }
 
 // Load resources
