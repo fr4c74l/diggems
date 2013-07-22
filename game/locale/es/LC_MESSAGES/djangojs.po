@@ -20,20 +20,20 @@ msgstr ""
 
 #: static/js/game.js:234 static/js/game.js.c:278
 msgid "Your turn! Play!"
-msgstr ""
+msgstr "Tú turno! Juege!"
 
 #: static/js/game.js:295
 msgid "Wait for your turn."
-msgstr ""
+msgstr "Espere tu turno"
 
 #: static/js/game.js:298
 msgid "Game over, "
-msgstr ""
+msgstr "Juego terminado, "
 
 #: static/js/game.js:304
 msgid "you win!"
-msgstr ""
+msgstr "tú ganaste!"
 
 #: static/js/game.js:307
 msgid "you lose."
-msgstr ""
+msgstr "tú perdiste."
