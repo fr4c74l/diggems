@@ -163,8 +163,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'south',
     'game',
 )
+
+SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
