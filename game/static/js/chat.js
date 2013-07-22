@@ -45,7 +45,7 @@ function handle_event(msg) {
 	var hours = Math.floor(offset / 3600);
 	var time_fmt = "(" + format_date_string(hours, minutes, seconds) + ") ";
 
-	var ul = document.getElementById("chat_window");
+	var ul = document.getElementById("chat_textfield");
 	var li = document.createElement('li');
 	li.className = "message";
 	var li_text = "<span style='color:#999;font-size:small;'>" + time_fmt + "</span><span style='color:#000;font-size:small;font-weight: bold;'>" + data['user_id'] + ' : ' + "</span>" +
@@ -96,13 +96,37 @@ function register_event() {
 	event_request.send(null);
 }
 
+function close() {
+	this.parentNode.parentNode.removeChild(this.parentNode);
+}
+
+function toggle(showHideDiv, toggle_button) {
+	var box = document.getElementById("chat_window");
+	var ele = document.getElementById(showHideDiv);
+	var button = document.getElementById(toggle_button);
+	if(ele.style.display == "block") {
+		ele.style.display = "none";
+		button.innerHTML = "+";
+	} else {
+		box.style.bottom = "0";
+		ele.style.display = "block";
+		button.innerHTML = "-";
+	}
+}
+
 var init = function()
 {
 	input_field = document.getElementById("input_field");
 	send_button = document.getElementById("send_button");
+	close_window = document.getElementById("close");
+	toggle_window = document.getElementById("toggle");
 
 	input_field.addEventListener("keypress", handle_key_press, false);
 	send_button.addEventListener("click", send_message, false);
+	if(close_window)
+		close_window.addEventListener("click", close, false);
+	if(toggle_window)
+		toggle_window.addEventListener("click",  function (ev) {toggle('chat_area' ,'toggle'); }, false);
 
 	register_event();
 }

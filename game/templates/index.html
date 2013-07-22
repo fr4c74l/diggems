@@ -8,8 +8,8 @@ Software under Affero GPL license, see LICENSE.txt
 {% endcomment %}
 {% block title %}Index{% endblock %}
 {% block header_extra %}
-	<link rel="stylesheet" media="screen" type="text/css" href="static/css/index.css" />
-	<link rel="stylesheet" media="screen" type="text/css" href="static/css/chat.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/index.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
 	<script src="/static/js/chat.js"></script>
 {% endblock %}
@@ -58,7 +58,16 @@ Software under Affero GPL license, see LICENSE.txt
 				</ul>
 			</td>
 		</tr>
-		{% include "chat.html" %}
+		<tr class="chat">
+			<td class="box" colspan="2">
+				<h3>{% trans "Global Chat Room " %}</h3>
+				<ul id="chat_textfield">
+					<!--TODO: <li class="notice">Put chat login/logout messages here!</li> -->
+				</ul>
+					<span id="chat_username"> {{ user_id }} : </span><input type="text" name="input_message" id="input_field"/>
+					<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />
+			</td>
+		</tr>
 		<tr>
 			<td class="box" colspan="2"><div class="fb-like" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div></td>
 		</tr>

@@ -249,12 +249,18 @@ def game(request, game_id):
     except ObjectDoesNotExist:
         return render_with_extra('game404.html', profile, status=404)
 
+    if profile.facebook:
+        user_id = profile.facebook.name
+    else:
+        user_id = _('Guest') + '-' + profile.id[:6]
+
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
             'last_change': format_date_time(mktime(datetime.now().timetuple())),
             'channel': game.channel,
-            'p1_last_move': game.p1.last_move}
+            'p1_last_move': game.p1.last_move,
+            'user_id': user_id}
 
     if(game.p1.user.facebook):
         data['p1_info'] = game.p1.user.facebook.pub_info()

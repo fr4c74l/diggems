@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% comment %}
 
 Copyright 2011 Lucas Clemente Vella
@@ -8,6 +9,8 @@ Software under Affero GPL license, see LICENSE.txt
 {% block title %}Jogo {{ game_id }}{% endblock %}
 {% block header_extra %}
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
+	<script src="/static/js/chat.js"></script>
 {% endblock %}
 {% block content %}
 <script type="text/javascript" src="{% url "django.views.i18n.javascript_catalog" %}"></script>
@@ -70,6 +73,22 @@ Software under Affero GPL license, see LICENSE.txt
 		</script> 
 		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e">
 		</script>{% endif %}
+	</div>
+</div>
+
+<div class="popup">
+	<div class="chat" id="chat_window">
+		<div class="box">
+			<!-- TODO Uncomment the below line after create a function to add chat-->
+			<!--<div id="close"><a>x</a></div> -->
+			<div id="toggle"><a>-</a></div>
+			<div id="chat_area" style="display: block;">
+				<h3>{% blocktrans %} Game {{ game_id }} Chat Room {% endblocktrans %}</h3>
+				<ul id="chat_textfield"></ul>
+					<span id="chat_username"> {{ user_id }} : </span><input type="text" name="input_message" id="input_field"/>
+					<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />
+			</div>
+		</div>
 	</div>
 </div>
 

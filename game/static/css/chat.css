@@ -4,9 +4,9 @@
 	text-align: left;
 }
 
-.chat ul#chat_window {
+.chat ul#chat_textfield {
 	overflow: auto;
-	height: 9em;
+	height: 9em; 
 	list-style: none;
 	padding: 0.1em;
 	margin: 0.1em;
@@ -40,4 +40,26 @@
 	text-align: left;
 	color: #222;
 	font-weight: bold;
+}
+
+#close, #toggle{
+	font-size:large;
+	padding: 0 5px;
+	float: right;
+}
+
+#close:hover, #toggle:hover{
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  border: 1px #666 solid;
+}
+
+.popup {
+	z-index: 2;
+	position: fixed;
+	bottom: 7em;
+	right: 0;
+	padding: 5px;
 }
