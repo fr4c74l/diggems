@@ -22,7 +22,7 @@ msgstr ""
 #: views.py:46 templates/base.html:38 templates/donate.html:39
 #: templates/donate.html.py:40
 msgid "en_US"
-msgstr "es"
+msgstr "es_ES"
 
 #: views.py:132
 msgid "anonymous player"
