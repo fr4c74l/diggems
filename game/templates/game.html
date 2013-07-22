@@ -60,9 +60,9 @@ Software under Affero GPL license, see LICENSE.txt
 		<div class="pinfo" style="text-align: left;">{% if player %}({% if player == 2 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
 	</div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
-		<span>{% blocktrans %}Copy the link to your adversary{% endblocktrans %}:</span>
-		<input type="text" style="width: 225px;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
-		<div style="position: absolute; right: 10px;" class="addthis_toolbox addthis_default_style addthis_16x16_style">
+		<div>{% blocktrans %}Copy the link to your adversary{% endblocktrans %}:</div>
+		<input type="text" style="display: inline-block; width: 250px;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
+		<div style="display: inline-block;" class="addthis_toolbox addthis_default_style addthis_16x16_style">
 			<a class="addthis_button_facebook"></a>
 			<a class="addthis_button_twitter"></a>
 			<a class="addthis_button_google_plusone_share"></a>
