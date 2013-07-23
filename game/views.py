@@ -17,7 +17,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader
 from django.utils.html import escape
-from django.utils.translation import ugettext as _
+from django.utils.translation import ugettext as _, pgettext
 from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
 from models import *
@@ -43,7 +43,7 @@ def render_with_extra(template_name, user, data={}, status=200):
     return HttpResponse(t.render(c), status=status)
 
 def fb_channel(request):
-    resp = HttpResponse('<script src="//connect.facebook.net/{}/all.js"></script>'.format(_("en_US")))
+    resp = HttpResponse('<script src="//connect.facebook.net/{}/all.js"></script>'.format(pgettext("Facebook", "en_US")))
     secs = 60*60*24*365
     resp['Pragma'] = 'public'
     resp['Cache-Control'] = 'max-age=' + str(secs)
