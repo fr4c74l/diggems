@@ -432,4 +432,4 @@ def info(request, page):
     if page not in info.existing_pages:
         raise Http404
     return render_with_extra('{}/{}.html'.format(actual_locale, page), UserProfile.get(request))
-info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode'))
+info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact'))

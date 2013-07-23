@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-23 15:00-0300\n"
+"POT-Creation-Date: 2013-07-23 17:47-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,22 +68,26 @@ msgid "Source code"
 msgstr "Código fonte"
 
 #: templates/base.html:99
-msgid "Support"
-msgstr "Suporte"
+msgid "Policy"
+msgstr ""
 
 #: templates/base.html:101
-msgid "Bug report"
-msgstr "Reporte um bug"
+msgid "Terms of service"
+msgstr ""
 
-#: templates/base.html:105
+#: templates/base.html:102
+msgid "Privacy policy"
+msgstr ""
+
+#: templates/base.html:106
 msgid "About Us"
 msgstr "Sobre Nós"
 
-#: templates/base.html:107
-msgid "Contact"
-msgstr "Contato"
+#: templates/base.html:108
+msgid "Contact us"
+msgstr "Contate-nos"
 
-#: templates/base.html:111 templates/donate.html:11
+#: templates/base.html:112 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
 msgstr "Patronato"
@@ -247,3 +251,9 @@ msgstr "Jogos por começar"
 #: templates/index.html:53
 msgid "Versus"
 msgstr "Contra"
+
+#~ msgid "Support"
+#~ msgstr "Suporte"
+
+#~ msgid "Bug report"
+#~ msgstr "Reporte um bug"
