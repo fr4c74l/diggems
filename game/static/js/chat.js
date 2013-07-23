@@ -100,16 +100,20 @@ function close() {
 	this.parentNode.parentNode.removeChild(this.parentNode);
 }
 
-function toggle(showHideDiv, toggle_button) {
-	var box = document.getElementById("chat_window");
-	var ele = document.getElementById(showHideDiv);
+function toggle(hidden_area, toggle_button) {
+	var chat_window = document.getElementById("chat_window");
+	var popup_window = document.getElementById("popup_window");
+	var element = document.getElementById(hidden_area);
 	var button = document.getElementById(toggle_button);
-	if(ele.style.display == "block") {
-		ele.style.display = "none";
+	if(element.style.display == "block") {
+		element.style.display = "none";
+		chat_window.style.height = "0em";
+		popup_window.style.bottom = "4em";
 		button.innerHTML = "+";
 	} else {
-		box.style.bottom = "0";
-		ele.style.display = "block";
+		element.style.display = "block";
+		chat_window.style.height = "10em";
+		popup_window.style.bottom = "7em";
 		button.innerHTML = "-";
 	}
 }
