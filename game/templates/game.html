@@ -87,8 +87,7 @@ Software under Affero GPL license, see LICENSE.txt
 	<div class="chat" id="chat_window">
 		<div class="box">
 			<!-- TODO Uncomment the line below after create a function to add chat-->
-			<!--<a id="close">x</a> -->
-			<a id="toggle">-</a>
+			<div style="float:right"><span id="toggle_msg">{% trans "Chat" %}</span><a id="toggle">-</a><!--<a id="close">x</a> --></div>
 			<div id="chat_area" style="display: block;">
 				<h3>{% blocktrans %} Game {{ game_id }} Chat Room {% endblocktrans %}</h3>
 				<ul id="chat_textfield"></ul>
