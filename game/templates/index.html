@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load mugshot %}
+
 {% comment %}
 
 Copyright 2011 Lucas Clemente Vella
@@ -48,7 +50,9 @@ Software under Affero GPL license, see LICENSE.txt
 							<div style="float:left; padding: 0px 5px 5px 0px;">
 								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
 							</div>
-							{% if g.op_picture %}<img style="float:right;" class="middle thumb box" src="{{g.op_picture}}" /> {% endif %}
+							{% if g.op_picture %}<img style="float:right;" class="middle thumb box" src="{{g.op_picture}}" />
+							{% else %}<img style="float:right;" class="middle thumb box" src="{{profile|mugshot}}"/>
+							{% endif %}
 							<a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a>:
 							{% trans "Versus" %} {{ g.op_name }}
 					</li>

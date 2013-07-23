@@ -133,7 +133,7 @@ def index(request):
 
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'profile': profile}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
