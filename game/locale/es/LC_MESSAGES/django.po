@@ -114,7 +114,7 @@ msgstr "Juego %(game_id)s"
 
 #: templates/game.html:38
 msgid "Terminate Game"
-msgstr "Juego privado"
+msgstr "Terminar el juego"
 
 #: templates/game.html:39
 msgid "Take Player's Turn"
