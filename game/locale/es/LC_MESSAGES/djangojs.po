@@ -19,15 +19,15 @@ msgstr ""
 
 #: static/js/game.js:234 static/js/game.js.c:278
 msgid "Your turn! Play!"
-msgstr "Tú turno! Juege!"
+msgstr "¡Tú turno! ¡Juege!"
 
 #: static/js/game.js:263
 msgid "DigGems: Game "
-msgstr "Juego "
+msgstr "DigGems: Juego "
 
 #: static/js/game.js:295
 msgid "Wait for your turn."
-msgstr "Espere tu turno"
+msgstr "Espere tu turno."
 
 #: static/js/game.js:298
 msgid "Game over, "
@@ -35,7 +35,7 @@ msgstr "Juego terminado, "
 
 #: static/js/game.js:304
 msgid "you win!"
-msgstr "tú ganaste!"
+msgstr "¡tú ganaste!"
 
 #: static/js/game.js:307
 msgid "you lose."
@@ -43,19 +43,19 @@ msgstr "tú perdiste."
 
 #: static/js/game.js:323
 msgid "Red's turn."
-msgstr "Turno del Rojo"
+msgstr "Turno del rojo."
 
 #: static/js/game.js:324
 msgid "Blue's turn."
-msgstr "Turno del Azul"
+msgstr "Turno del azul"
 
 #: static/js/game.js:325
 msgid "Game is over, red player won."
-msgstr "Juego terminó, el rojo ganó"
+msgstr "Juego terminó, el rojo ganó."
 
 #: static/js/game.js:326
 msgid "Game is over, blue player won."
-msgstr "Juego terminó, el azul ganó"
+msgstr "Juego terminó, el azul ganó."
 
 #: static/js/game.js:355
 msgid "Guest"

@@ -195,7 +195,7 @@ msgstr ""
 #: templates/index.html:19
 #, fuzzy
 msgid "New game"
-msgstr "Nuevos juegos"
+msgstr "Nuevo juego"
 
 #: templates/index.html:21
 msgid "Private game"
@@ -226,7 +226,6 @@ msgid "Waiting the other player"
 msgstr "Esperando el otro jugador"
 
 #: templates/index.html:34
-#, fuzzy
 msgid "In progress"
 msgstr "En curso"
 
@@ -241,6 +240,3 @@ msgstr "Juegos por empezar"
 #: templates/index.html:53
 msgid "Versus"
 msgstr "Versus"
-
-#~ msgid "Donation"
-#~ msgstr "Donaciones"
