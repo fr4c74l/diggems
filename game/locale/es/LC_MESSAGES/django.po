@@ -113,13 +113,12 @@ msgstr ""
 #. Translators: Please see locale codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
 #: templates/donate.html:36
 msgid "US"
-msgstr ""
+msgstr "ES"
 
 #: templates/donate.html:45 templates/donate.html.py:46
-#, fuzzy
 msgctxt "PayPal"
 msgid "en_US"
-msgstr "es_LA"
+msgstr "es_ES"
 
 #: templates/donate.html:45
 msgid "PayPal - The safer, easier way to pay online!"
