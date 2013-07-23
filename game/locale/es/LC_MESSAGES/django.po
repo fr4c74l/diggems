@@ -118,7 +118,7 @@ msgstr "Terminar el juego"
 
 #: templates/game.html:39
 msgid "Take Player's Turn"
-msgstr ""
+msgstr "Tomar el turno"
 
 #: templates/game.html:51 templates/game.html.py:60
 msgid "You"
