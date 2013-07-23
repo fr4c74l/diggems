@@ -19,7 +19,6 @@ msgstr ""
 
 #. Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
 #: views.py:46 templates/base.html:38
-#, fuzzy
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "es_LA"
@@ -193,7 +192,6 @@ msgstr ""
 "...o nunca existió. Crie uno nuevo en la <a href =\"/\">página principal</a>."
 
 #: templates/index.html:19
-#, fuzzy
 msgid "New game"
 msgstr "Nuevo juego"
 
