@@ -45,7 +45,7 @@ Software under Affero GPL license, see LICENSE.txt
 				<ul>
 					{% if new_games %}{% for g in new_games %}
 					<li class="list_games">
-							<div style="float:left;">
+							<div style="float:left; padding: 0px 5px 5px 0px;">
 								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
 							</div>
 							{% if g.op_picture %}<img style="float:right;" class="middle thumb box" src="{{g.op_picture}}" /> {% endif %}
