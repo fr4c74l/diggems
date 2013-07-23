@@ -3,12 +3,11 @@
 # This file is distributed under the same license as the PACKAGE package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-13 11:00-0300\n"
+"POT-Creation-Date: 2013-07-22 20:12-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,20 +19,44 @@ msgstr ""
 
 #: static/js/game.js:234 static/js/game.js.c:278
 msgid "Your turn! Play!"
+msgstr "Tú turno! Juege!"
+
+#: static/js/game.js:263
+msgid "DigGems: Game "
 msgstr ""
 
 #: static/js/game.js:295
 msgid "Wait for your turn."
-msgstr ""
+msgstr "Espere tu turno"
 
 #: static/js/game.js:298
 msgid "Game over, "
-msgstr ""
+msgstr "Juego terminado, "
 
 #: static/js/game.js:304
 msgid "you win!"
-msgstr ""
+msgstr "tú ganaste!"
 
 #: static/js/game.js:307
 msgid "you lose."
+msgstr "tú perdiste."
+
+#: static/js/game.js:323
+msgid "Red's turn."
+msgstr ""
+
+#: static/js/game.js:324
+msgid "Blue's turn."
+msgstr ""
+
+#: static/js/game.js:325
+msgid "Game is over, red player won."
+msgstr ""
+
+#: static/js/game.js:326
+msgid "Game is over, blue player won."
+msgstr ""
+
+#: static/js/game.js:355
+msgid "Guest"
 msgstr ""

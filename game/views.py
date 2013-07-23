@@ -23,6 +23,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
 from models import *
 from https_conn import https_opener
+from django.utils.translation import to_locale, get_language
 
 def render_with_extra(template_name, user, data={}, status=200):
     t = loader.get_template(template_name)
@@ -151,8 +152,7 @@ def new_game(request):
     mine = [[0] * 16 for i in xrange(16)]
 
     indexes = list(itertools.product(xrange(16), repeat=2))
-    rnd = random.SystemRandom()
-    gems = rnd.sample(indexes, 51)
+    gems = true_random.sample(indexes, 51)
 
     for (m, n) in gems:
         mine[m][n] = 9
@@ -240,6 +240,46 @@ def abort_game(request, game_id):
     return HttpResponseForbidden()    
 
 @transaction.commit_on_success
+def claim_game(request, game_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    game = get_object_or_404(Game, pk=game_id)
+    if game.state not in (1,2):
+        return HttpResponseForbidden()
+    
+    profile = UserProfile.get(request)
+    pdata = game.what_player(profile)
+    if pdata:
+        my_number, me = pdata
+    else:
+        return HttpResponseForbidden()
+    if my_number == game.state or game.timeout_diff() > 0:
+        return HttpResponseForbidden()
+        
+    term = request.POST.get('terminate') == 'y'
+    if term:
+        points = game.mine.count(tile_encode(19)) + game.mine.count(tile_encode(20))
+        profile.total_score+= points
+        profile.save()
+        
+        game.state = my_number + 2
+        
+    else:
+        game.state = my_number;
+        
+        
+    game.save()
+    transaction.commit()
+
+    result = str(game.seq_num) + '\n' + str(game.state)
+    post_update(game.channel, result)
+    
+    if term:
+        publish_score(me)
+    
+    return HttpResponse()
+
+@transaction.commit_on_success
 def game(request, game_id):
     # TODO: maybe control who can watch a game
     profile = UserProfile.get(request)
@@ -269,6 +309,8 @@ def game(request, game_id):
         data['p2_last_move'] = game.p2.last_move
         if(game.p2.user.facebook):
             data['p2_info'] = game.p2.user.facebook.pub_info()
+        if (game.state <= 2):
+            data['time_left'] = max(0, game.timeout_diff())
 
     pdata = game.what_player(profile)
     if pdata:
@@ -393,11 +435,16 @@ def move(request, game_id):
 
     return HttpResponse()
 
+def donate(request):
+    profile = UserProfile.get(request)
+    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
+
 def info(request, page):
+    actual_locale = to_locale(get_language())
     if page not in info.existing_pages:
         raise Http404
-    return render_with_extra(page + '.html', UserProfile.get(request))
-info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'donate'))
+    return render_with_extra('{}/{}.html'.format(actual_locale, page), UserProfile.get(request))
+info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode'))
 
 def main_chat(request):
     if request.method != 'POST':

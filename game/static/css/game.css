@@ -14,13 +14,13 @@
     
     display: block;
     position: relative;
-    width: 130px;
-    margin-bottom: 10px;
+    width: 60px;
+    margin-bottom: 25px;
 }
 
 #h_pts_box {
     text-align: center;
-
+    font-size: 150%;
     display: block;
     position: absolute;
     top: 0px;
@@ -36,7 +36,7 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 130px;
+    width: 60px;
 }
 
 #game_box {
@@ -106,6 +106,27 @@
 
 #join_link {
     width: 390px;
+}
+
+#timeout_terminate {
+  text-align: center;
+  display: block;
+  /*position: absolute;*/
+}
+
+#timeout_claim {
+  text-align: center;
+  display: block;
+  /*position: absolute;*/
+}
+
+#timeout_buttons {
+  top: 0px;
+  left: 125px;
+  display: none;
+	width: 180px;
+	position: absolute;
+	padding: 3px;
 }
 
 img.tntbtn {

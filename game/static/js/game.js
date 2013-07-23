@@ -6,6 +6,7 @@ var ctx;
 var mine;
 var move_request = new XMLHttpRequest();
 var event_request = new XMLHttpRequest();
+var button_request = new XMLHttpRequest();
 
 var images = {};
 
@@ -181,7 +182,6 @@ function update_points() {
     var hidden = 51 - p1 - p2;
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
-    document.getElementById('h_pts').innerHTML = String(hidden);
 
     var prop1, prop2;
     if (p1 > p2) {
@@ -260,7 +260,7 @@ function notify_state(msg) {
     if(msg != '') {
 	try{
 	    close_last_nt();
-	    last_nt = nt.createNotification('/static/images/icon32.png', 'DigGems: Jogo ' + params.game_id, msg);
+	    last_nt = nt.createNotification('/static/images/icon32.png', gettext('DigGems: Game ') + params.game_id, msg);
 	    last_nt.show();
 	} catch(err) {
 	    // Do nothing...
@@ -276,7 +276,7 @@ function set_state(state) {
 	var hover_indicator;
 	if(state == params.player) {
 	    msg = gettext('Your turn! Play!');
-
+	    
 	    // Set shovel cursor in game_canvas area
 	    cursor = 'url(' + images['shovel'].src + '),auto';
 
@@ -320,10 +320,10 @@ function set_state(state) {
 	// Spectator mode.
 	var state_msgs =
 	    ['',
-	     'Vez do vermelho.',
-	     'Vez do azul.',
-	     'O jogo acabou, o vermelho venceu.',
-	     'O jogo acabou, o azul venceu.'];
+	     gettext("Red's turn."),
+	     gettext("Blue's turn."),
+	     gettext('Game is over, red player won.'),
+	     gettext('Game is over, blue player won.')];
 	msg = state_msgs[state];
     }
     var msg_box = document.getElementById('message');
@@ -352,7 +352,7 @@ function blue_player_display(info) {
 
 	name.innerHTML = pname;
     } else {
-	name.innerHTML = "Visitante";
+	name.innerHTML = gettext("Guest");
     }
 }
 
@@ -371,37 +371,40 @@ function handle_event(msg) {
 	// The second (blue) player just connected.
 	// Display know info about the other player.
 	blue_player_display(lines.slice(2));
+	reset_counter();
 	return;
     }
+    if (lines.length > 2){
+        var player = parseInt(lines[2]);
+        var lclick = last_click_decode(player, lines[3]);
+        
+        if (player == params.player && lclick.bombed) {
+	    params.tnt_used = true;
+	    tnt.active = false;
+        }
+        
+        var parser = /(\d+),(\d+):(.)/;
+        for(var i = 4; i < lines.length; ++i) {
+	    var res = parser.exec(lines[i]);
+	    if(res) {
+	        var m = parseInt(res[1]);
+	        var n = parseInt(res[2]);
 
-    var player = parseInt(lines[2]);
-    var lclick = last_click_decode(player, lines[3]);
-    
-    if (player == params.player && lclick.bombed) {
-	params.tnt_used = true;
-	tnt.active = false;
+	        // Just assume correct valid values were delivered...
+
+	        mine[m][n].s = res[3];
+	        mine[m][n].draw();
+	    }
+        }
+
+        if(last_click[player-1])
+	    last_click[player-1].clear();
+        last_click[player-1] = lclick;
+        lclick.draw();
     }
     
-    var parser = /(\d+),(\d+):(.)/;
-    for(var i = 4; i < lines.length; ++i) {
-	var res = parser.exec(lines[i]);
-	if(res) {
-	    var m = parseInt(res[1]);
-	    var n = parseInt(res[2]);
-
-	    // Just assume correct valid values were delivered...
-
-	    mine[m][n].s = res[3];
-	    mine[m][n].draw();
-	}
-    }
-
-    if(last_click[player-1])
-	last_click[player-1].clear();
-    last_click[player-1] = lclick;
-    lclick.draw();
-
     update_points();
+    reset_counter();
 }
 
 function register_event() {
@@ -629,32 +632,69 @@ function init() {
     
     // Everything is setup, show the canvas
     canvas.style.setProperty('visibility', 'visible', null);
-}
-
-// Will publish the result of a match to the wall.
-// ATTENTION: This thing is completely unsafe and fakeable!
-// TODO: FIX SECURITY PROBLEM!
-function publish_results()
-{
-    if((params.state - 2) != params.player
-       || !auth.fb)
-	return;
-
-    var dialog = {
-        method: 'feed',
-	// TODO: put right link here
-        link: 'http://vella.no-ip.org/',
-        picture: 'http://vella.no-ip.org/static/images/logo.png',
-        name: 'Resultado DigGems',
-        caption: 'Partida Ganha',
-        description: 'Using Dialogs to interact with users.'
-    };
+  if ((params.state == 1) || (params.state == 2))
+  {
+    timeOut.start_time = (new Date()).getTime();
+    reset_counter.int = window.setInterval(timeOut, 1000);
+    timeOut();
+  }
 }
 
 function load_img(name) {
     var img = new Image();
     img.src = "/static/images/" + name + ".png";
     images[name] = img;
+}
+
+function timeOut()
+{
+	var timeleft = params.time_left - ((new Date()).getTime() - timeOut.start_time) / 1000;
+	if (timeleft <= 10)
+	  document.getElementById("clock").style.setProperty('color', '#ff0000');
+	if (timeleft <= 0)
+	{
+		clearInterval(reset_counter.int);
+		timeleft = 0;
+		if ((params.player != params.state) && (params.state == 1 || params.state == 2))
+		{
+		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
+		  document.getElementById("timeout_buttons").style.display = 'block';
+		}	
+	} else {
+	    document.getElementById("clock").innerHTML = Math.round(timeleft);
+	}
+}
+
+function reset_counter()
+{
+  document.getElementById("timeout_buttons").style.display = 'none';
+  if (reset_counter.int)
+    clearInterval(reset_counter.int);
+  if (params.state == 1 || params.state == 2)
+  {
+    timeOut.start_time = (new Date()).getTime();
+    params.time_left = 45;
+    timeOut();
+    document.getElementById("clock").style.setProperty('color', '#000000');
+    document.getElementById("timeout_buttons").style.display = 'none';
+    reset_counter.int = window.setInterval(timeOut, 1000);
+  }
+  else
+    document.getElementById("clock").innerHTML = "";
+  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
+}
+
+function claim_game(terminate)
+{
+	var url = '/game/'+ params.game_id + '/claim/';
+	button_request.open('POST', url, true);
+	var data = null;
+	if (terminate)
+	{
+		data = "terminate=y";
+		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	}
+	button_request.send(data);
 }
 
 // Load resources

@@ -5,7 +5,7 @@ Copyright 2013 Fractal Jogos e Tecnologia
 Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
-
+{% load static %}
 {% block title %}Código fonte{% endblock %}
 
 {% block content %}
@@ -36,12 +36,5 @@ Software under Affero GPL license, see LICENSE.txt
 	mostre o código fonte."</p>
 	<p id="code" style="visibility: hidden"><a class="button plain" target="_blank" href="http://gitorious.org/diggems/">Código fonte!</a></p>
 </div>
-<script>
-	function accept_terms() {
-		var agreed = document.getElementById('agreed');
-		var code = document.getElementById('code');
-		code.style.visibility = agreed.checked ? 'visible' : 'hidden';
-	}
-	accept_terms();
-</script>
+<script src="{% static "js/terms.js" %}"></script>
 {% endblock %}

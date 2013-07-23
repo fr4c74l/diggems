@@ -8,14 +8,11 @@ Priority:
 - Create a page to thank donations
 
 TODO Later:
-- Add brag button (publish results on Facebook)
 - Rematch button after game is over
-- 30 seconds of deadline to play, otherwise the game is lost
-  - epistolar mode, with no deadline
+- new states for when game claimed
 - Internationalization (incomplete)
   - Use django templates to ajust paypal translations/currency_code in donate.html
 - Advertsiment.
-- Facebook like button
 - Mobile friendly version?
 - Display activity on user input.
 - Create a settings icon and menu
@@ -35,14 +32,17 @@ TODO Later:
 - Add icon indicating the unrevealed gems (a gem with a question mark, perhaps?).
 - Limit drawing inside the tile space.
 - Add clickable objects below the canvas for accessibility.
-- Add menu for view/play all games that are occurring.
-- Add some game mods, like pro-mode where player has 5 sec to play before passing the turn.
-- Use {{ STATIC_URL }} instead of fullpath of static urls in templates.
+- Add menu for view/play all games that are occurring
+- Add general chat
+- Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
+  - Epistolar mode, with no time deadline
+- Use {{ STATIC_URL }} instead of fullpath of static urls in templates
 - More footer links
   - "Contact" page
 - Our own login system, for non-facebook users.
 - Pictures for guest users based on their random internal ID.
 - Warn user about bogus Internet browsers.
 - Publish open-graph story of a player.
+  - Brag about user result
 - Create a generic register_event for channels.
 - Create in game chat

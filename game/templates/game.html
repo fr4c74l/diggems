@@ -6,7 +6,9 @@ Copyright 2011 Lucas Clemente Vella
 Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
-{% block title %}Jogo {{ game_id }}{% endblock %}
+{% load i18n %}
+
+{% block title %}{% blocktrans %}Game {{ game_id }}{% endblocktrans %}{% endblock %}
 {% block header_extra %}
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
@@ -19,6 +21,7 @@ Software under Affero GPL license, see LICENSE.txt
 	"game_id": {{ game_id }},
 	"state": {{ state }},
 	"seq_num": {{ seq_num }},
+	"time_left": {% if time_left %}{{ time_left | escapejs }}{% else %}0{% endif %},
 	"last_change": "{{ last_change }}",
 	"channel": "{{ channel }}"{% if fb_other %},
 	"fb_other": "{{ fb_other }}"{% endif %}{% if p1_last_move %},
@@ -32,9 +35,13 @@ Software under Affero GPL license, see LICENSE.txt
 <script src="/static/js/game.js"></script>
 
 <div id="main">
-	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span></div>
-	<div class="box" id="h_pts_box"><span id="h_pts">51</span></div>
-	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span> <img src="/static/images/saphire.png"/></div>
+	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span><span> / 26</span></div>
+	<div class="box" id="h_pts_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
+	<div class = "box" id="timeout_buttons">
+	<div class="button" id="timeout_terminate" onclick="claim_game(true);">{% trans "Terminate Game" %}</div>
+	<div class="button" id="timeout_claim" onclick="claim_game(false);">{% trans "Take Player's Turn" %}</div>
+	</div>
+	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
 	<div id="game_box" class="box">
 		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416">
 		</canvas>
@@ -42,23 +49,23 @@ Software under Affero GPL license, see LICENSE.txt
 	<div class="box pbox" id="p1_box">
 		<a id="p1_link" class="plain{% if p1_info %} undlin{% endif %}" target="_blank"{% if p1_info %} href="//facebook.com/{{ p1_info.uid }}/"{% endif %}>
 			<img id="p1_pic" width="40px" height="40px" style="{% if not p1_info %}display: none;{% endif %}"{% if p1_info %} src="//graph.facebook.com/{{ p1_info.uid }}/picture"{% endif %} />
-			<div id="p1_name" class="pname">{% if p1_info %}{{ p1_info.name }}{% else %}Visitante{% endif %}</div>
+			<div id="p1_name" class="pname">{% if p1_info %}{{ p1_info.name }}{% else %}{% blocktrans %}Visitor{% endblocktrans %}{% endif %}</div>
 		</a>
-		<div class="pinfo" style="text-align: right;">{% if player %}({% if player == 1 %}Você{% else %}Seu oponente{% endif %}){% endif %}</div>
+		<div class="pinfo" style="text-align: right;">{% if player %}({% if player == 1 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
 	</div>{% if player %}
 	<div class="box" id="tnt_box"><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></div>
 	{% endif %}
 	<div class="box pbox" id="p2_box">
 		<a id="p2_link" class="plain{% if p2_info %} undlin{% endif %}" target="_blank"{% if p2_info %} href="//facebook.com/{{ p2_info.uid }}/"{% endif %}>
 			<img id="p2_pic" width="40px" height="40px" style="{% if not p2_info %}display: none;{% endif %}"{% if p2_info %} src="//graph.facebook.com/{{ p2_info.uid }}/picture"{% endif %} />
-			<div id="p2_name" class="pname">{% if state == 0 %}{% if not player and not token %}Vago!{% else %}Aguarde...{% endif %}{% if player or not token %}<form style="float: right;" action="{% if player %}abort{% else %}join{% endif %}/" method="post"><input class="button" type="submit" value="{% if player %}Abortar{% else %}Juntar-se!{% endif %}" /></form>{% endif %}{% elif p2_info %}{{ p2_info.name }}{% else %}Visitante{% endif %}</div>
+			<div id="p2_name" class="pname">{% if state == 0 %}{% if not player and not token %}{% blocktrans %}Empty!{% endblocktrans %}{% else %}{% blocktrans %}Wait...{% endblocktrans %}{% endif %}{% if player or not token %}<form style="float: right;" action="{% if player %}abort{% else %}join{% endif %}/" method="post"><input class="button" type="submit" value="{% if player %}{% blocktrans %}Abort{% endblocktrans %}{% else %}{% blocktrans %}Join!{% endblocktrans %}{% endif %}" /></form>{% endif %}{% elif p2_info %}{{ p2_info.name }}{% else %}{% blocktrans %}Visitor{% endblocktrans %}{% endif %}</div>
 		</a>
-		<div class="pinfo" style="text-align: left;">{% if player %}({% if player == 2 %}Você{% else %}Seu oponente{% endif %}){% endif %}</div>
+		<div class="pinfo" style="text-align: left;">{% if player %}({% if player == 2 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
 	</div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
-		<span>Copie o link para seu oponente:</span>
-		<input type="text" style="width: 225px;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
-		<div style="position: absolute; right: 10px;" class="addthis_toolbox addthis_default_style addthis_16x16_style">
+		<div>{% blocktrans %}Copy the link to your adversary{% endblocktrans %}:</div>
+		<input type="text" style="display: inline-block; width: 250px;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
+		<div style="display: inline-block;" class="addthis_toolbox addthis_default_style addthis_16x16_style">
 			<a class="addthis_button_facebook"></a>
 			<a class="addthis_button_twitter"></a>
 			<a class="addthis_button_google_plusone_share"></a>
@@ -66,9 +73,9 @@ Software under Affero GPL license, see LICENSE.txt
 		<script>
 			var addthis_config = { data_track_clickback: false };
 			var addthis_share = {
-				title: "DigGems: Jogo {{ game_id }}",
+				title: "DigGems: Game {{ game_id }}",
 				url: "{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}",
-				description: "Aceite o desafio e jogue imediatamente!",
+				description: gettext("Accept the challange and play immediately!"),
 			};
 		</script> 
 		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e">

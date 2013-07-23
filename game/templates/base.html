@@ -40,59 +40,80 @@ Software under Affero GPL license, see LICENSE.txt
     }(document, 'script', 'facebook-jssdk'));
     </script>
 	<div class="wrapper">
-      {% get_current_language as LANGUAGE_CODE %}
-      {% get_available_languages as LANGUAGES %}
-      <div id='langbar' class="container">
-        <form name='langform' action='/i18n/setlang/' method='POST'>
-            {% for LANG in LANGUAGES  %}
-			<div class='lang_button' {% if LANGUAGE_CODE == LANG.0 %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG.0 }}';document.langform.submit();"> {{ LANG.0 }}</div>
-            {% endfor %}
-            <input name='language' type='hidden' >
-        </form>
-      </div>
-      <div id="header" class="container">
-		  <a style="position: relative;" class="plain" href="/">
-			  <img id="icon" class="logo" src="/static/images/icon64.png" />
-			  <span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
-		  </a>
-		  <div id="user_info">
-			  <img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
-			  <div id="user_stats">
-				  <div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %} {% trans "Visitor" %} {% endif %}</span></div>
-		  <div id="score"> {% trans "Score" %}: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
-				  <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
-				  <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();"> {% trans "Logout" %}</div>
-			  </div>
-		  </div>
-	  </div>
-	  <div id="content" class="container">
-		<div class="content_wrapper">
-		  {% block content %}{% endblock %}
+		<div class="col1">
+			<div id="advertisement">
+				<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+				<!-- adsense -->
+				<ins class="adsbygoogle"
+					 style="display:inline-block;width:300px;height:600px"
+					 data-ad-client="ca-pub-8118869021643552"
+					 data-ad-slot="4679159828"></ins>
+				<script>
+				(adsbygoogle = window.adsbygoogle || []).push({});
+				</script>
+			</div>
 		</div>
-	  </div>
-	  <div id="footer">
-		  <div id="footer_container" class="container">
-			<div class="fourcol colleft">
-			  <h3> About </h3>
-			  <ul>
-				  <li><a href="/info/about">{% trans "About the game" %}</a></li>
-				  <li><a href="/info/howtoplay">{% trans "How to play" %}</a></li>
-				  <li><a href="/info/sourcecode">{% trans "Source code" %}</a></li>
-			  </ul>
+		<div class="col2">
+			{% get_current_language as LANGUAGE_CODE %}
+			{% get_available_languages as LANGUAGES %}
+			<div id='langbar' class="container">
+			<form name='langform' action='/i18n/setlang/' method='POST'>
+				{% for LANG in LANGUAGES  %}
+				<div class='lang_button' {% if LANGUAGE_CODE == LANG.0 %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG.0 }}';document.langform.submit();"> {{ LANG.0 }}</div>
+				{% endfor %}
+				<input name='language' type='hidden' >
+			</form>
 			</div>
-			<div class="fourcol colleft">
-			  <!-- <h3>{% trans "Support" %} </h3>
-			  <ul>
-				<li><a href="/info/bugreport">{% trans "Bug report" %}</a></li>
-			  </ul> -->
+			<div id="header" class="container">
+			  <a style="position: relative;" class="plain" href="/">
+				  <img id="icon" class="logo" src="/static/images/icon64.png" />
+				  <span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
+			  </a>
+			  <div id="user_info">
+				  <img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
+				  <div id="user_stats">
+					  <div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %} {% trans "Visitor" %} {% endif %}</span></div>
+			  <div id="score"> {% trans "Score" %}: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
+					  <div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
+					  <div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();"> {% trans "Logout" %}</div>
+				  </div>
+			  </div>
 			</div>
-			<div class="fourcol colleft"></div>
-			<div class="fourcol colright">
-				<h3>{% trans "Donation" %} </h3>
-				<div><a class="tip_jar" href="/info/donate"></a></div>
+			<div id="content" class="container">
+				<div class="content_wrapper">
+					{% block content %}{% endblock %}
+				</div>
 			</div>
-		  </div>
-	  </div>
+			<div id="footer">
+			  <div id="footer_container" class="container box">
+				<div class="fourcol colleft">
+				  <h3> Diggems </h3>
+				  <ul>
+					  <li><a href="/info/about">{% trans "About the game" %}</a></li>
+					  <li><a href="/info/howtoplay">{% trans "How to play" %}</a></li>
+					  <li><a href="/info/sourcecode">{% trans "Source code" %}</a></li>
+				  </ul>
+				</div>
+				<div class="fourcol colleft">
+				  <!--<h3>{% trans "Support" %} </h3>
+				  <ul>
+					<li><a href="/info/bugreport">{% trans "Bug report" %}</a></li>
+				  </ul> -->
+				</div>
+				<div class="fourcol colleft">
+				  <!--<h3>{% trans "About Us" %} </h3>
+				  <ul>
+					<li><a href="/info/contact">{% trans "Contact" %}</a></li>
+				  </ul> -->
+				</div>
+				<div class="fourcol colright">
+					<h3>{% trans "Donation" %} </h3>
+					<div><a class="tip_jar" href="{% url 'game.views.donate' %}"></a></div>
+				</div>
+			  </div>
+			</div>
+		</div>
+		<div class="col3"> </div>
 	</div>
 </body>
 </html>

@@ -22,7 +22,7 @@
 	/* Free font by Steeve Gruson */
 }
 
-html, body {
+body {
 	background:url('/static/images/bg-diggems.jpg') repeat-x fixed;
 	background-color: #543116; 
 	background-size: auto 100%;
@@ -34,19 +34,30 @@ html, body {
 	border: 0;
 	width: 100%;
 	height:100%;
-	min-width: 600px;
+	min-width: 1560px;
 }
 
 /* WRAPPER */
 .wrapper {
+	width:1560px;
+	margin:0 auto;
 	min-height: 100%;
-	position: relative;
+	overflow: visible;
 }
 
-.container
-{
+.container {
   width: 960px;
   margin: 0 auto;
+}
+
+#advertisement {
+	width:300px;
+	height:100%;
+}
+
+.adsbygoogle {
+	position: relative;
+	top:150px;
 }
 
 .plain {
@@ -81,7 +92,7 @@ html, body {
 .button {
 	min-width: 15px;
 	padding: 4px;
-	margin: 0px 5px 0px 0px;
+	margin: 0px;
 	background-color: #a0dC48;
 	display: block;
 	-moz-border-radius: 3px;
@@ -307,7 +318,7 @@ div#image_container {
 /* CONTENT */
 #content {
 	margin: 0 auto;
-	padding: 18px 0 200px; 
+	padding: 18px 0 20px; 
 }
 
 .content_wrapper {
@@ -315,30 +326,20 @@ div#image_container {
 }
 
 #content h1 {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 #content p {
-    text-align: justify;
+	text-align: justify;
 }
 
-/* FOOTER */
-#footer {
-	position: absolute;
-	bottom: 0;
-	width: 100%;
-	height: 200px;			/* Height of the footer */
-	clear: both;
-	font-family: Diavlo;
-	font-weight: bold;
-	background-color: #2c2416;
-}
-
-#footer_container {
-	overflow: hidden;
-	margin: 	0 auto;
-	padding-bottom: 10px;
-	border-bottom: 1px solid #453823;
+/* COLUMNS */
+.col1,
+.col2,
+.col3 {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;
 }
 
 .threecol {
@@ -347,6 +348,7 @@ div#image_container {
 
 .fourcol {
 	width: 22%;
+	padding:10px;
 }
 
 .colleft{
@@ -359,9 +361,26 @@ div#image_container {
 	float: right;
 }
 
+/* FOOTER */
+#footer {
+	position: relative;
+	bottom: 0;
+	width: 100%;
+	height: 200px;
+	clear: both;
+	font-family: Diavlo;
+	font-weight: bold;
+}
+
+#footer_container {
+	overflow: hidden;
+	margin: 	0 auto;
+	padding-bottom: 10px;
+}
+
 #footer_container h3 {
 	color: #f4f0cb;
-	border-bottom: 1px solid #453823;
+	border-bottom: 1px solid #443b2b;
 }
 
 #footer_container li {
@@ -370,8 +389,7 @@ div#image_container {
 }
 
 #footer_container a {
-	color: #baa378;
-	clear: both;
+	color: #100e0a;
 	white-space: normal;
 	text-decoration: none;
 }

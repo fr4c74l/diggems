@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% comment %}
+
+Copyright 2013 Fractal Jogos e Tecnologia
+Software under Affero GPL license, see LICENSE.txt
+
+{% endcomment %}
+{% load static %}
+{% block title %}Source Code{% endblock %}
+{% block content %}
+<div class="box">
+	<h1>Source Code</h1>
+	<a style="margin-left: 10px; float: right" href="http://www.gnu.org/licenses/agpl-3.0.html">
+	<img src="http://www.gnu.org/graphics/agplv3-155x51.png" \>
+	</a>
+	<p>This game is a<a href="http://www.gnu.org/philosophy/free-sw.en.html">
+	free software</a>. This means that all technology and software	
+	running on our server is publicly available on the Internet to
+	anyone to download and use, as long as that the terms of its license, the
+	<a href="http://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public
+	License</a>, are respected.</p>
+	<p>In short, the license allows you to download, use and modify the software
+	as you wish. Either to study, market, make available as a service,
+	adapt or use it as a base for other products and services. All this with the restriction
+	that if you redistribute it or make it available as a service over the Internet, you
+	have to do it under the same conditions in which you got it, including the
+	possibility for the user to download the source code, plus any modifications
+	you may have done.</p>
+	<p>Following are the terms of the full license which you must agree 
+	to have access to the source code.</p>
+	<div style="margin-left:auto; margin-right:auto; width: 600px; height: 400px; overflow-y: scroll;" class="box">
+{% include "agpl3.html"%}
+	</div>
+	<p><input type="checkbox" id="agreed" onclick="accept_terms();" />"I agree to abide the terms of the license, 
+	show me the source code."</p>
+	<p id="code" style="visibility: hidden"><a class="button plain" target="_blank" href="http://gitorious.org/diggems/">Source Code!</a></p>
+</div>
+<script src="{% static "js/terms.js" %}"></script>
+{% endblock %}

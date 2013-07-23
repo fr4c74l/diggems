@@ -21,7 +21,7 @@ Software under Affero GPL license, see LICENSE.txt
 			  <h1>{% trans "New games" %}</h1>
 				<form action="new_game/" method="post">
 				    {% trans "Private game" %} <input type="checkbox" name="private" value="1" />
-					<input class="button" type="submit" value="Criar!"  style="float: right;"/>
+					<input class="button" type="submit" value="{% trans "Create!" %}"  style="float: right;"/>
 				</form>
 			</td>
 			<td class="box top" id="your_game" rowspan="2">
@@ -69,7 +69,10 @@ Software under Affero GPL license, see LICENSE.txt
 			</td>
 		</tr>
 		<tr>
-			<td class="box" colspan="2"><div class="fb-like" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div></td>
+			<td class="box" colspan="2">
+				<div class="fb-like" style="display: inline-block;" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>
+				<div style="float: right; display: inline-block;"><script id='flattrbtn'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent('{{ like_url }}');f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');</script></div>
+			</td>
 		</tr>
 	</tbody>
 </table>
