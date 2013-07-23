@@ -3,7 +3,6 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 import itertools
-import datetime
 import urllib2
 import json
 import ssl
@@ -297,7 +296,7 @@ def game(request, game_id):
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
-            'last_change': format_date_time(mktime(datetime.now().timetuple())),
+            'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
             'channel': game.channel,
             'p1_last_move': game.p1.last_move,
             'user_id': user_id}
@@ -459,8 +458,8 @@ def main_chat(request):
         user_id = profile.facebook.name
     else:
         user_id = _('Guest') + '-' + profile.id[:6]
-    utcnow = datetime.utcnow()
-    midnight_utc = datetime.combine(utcnow.date(), time(0))
+    utcnow = datetime.datetime.utcnow()
+    midnight_utc = datetime.datetime.combine(utcnow.date(), time(0))
     delta = utcnow - midnight_utc
 
     data = {

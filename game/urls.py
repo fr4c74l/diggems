@@ -29,6 +29,8 @@ urlpatterns = patterns('',
     (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
 
+    (r'^main_chat', 'game.views.main_chat'),
+
     # Error views:
     (r'^error/404$', 'django.views.defaults.page_not_found'),
     (r'^error/500$', 'django.views.defaults.server_error'),
