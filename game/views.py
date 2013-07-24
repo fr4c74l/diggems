@@ -15,7 +15,7 @@ from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
-from django.template import Context, RequestContext, loader
+from django.template import Context, RequestContext, loader, TemplateDoesNotExist
 from django.utils.html import escape
 from django.utils.translation import ugettext as _, pgettext
 from django.core.exceptions import ObjectDoesNotExist
@@ -431,5 +431,9 @@ def info(request, page):
     actual_locale = get_language()
     if page not in info.existing_pages:
         raise Http404
-    return render_with_extra('{}/{}.html'.format(actual_locale, page), UserProfile.get(request))
+    for locale in (actual_locale, 'en'):
+        try:
+            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request))
+        except TemplateDoesNotExist:
+            continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact'))
