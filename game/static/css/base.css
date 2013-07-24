@@ -413,9 +413,25 @@ http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
 						 plus (right column left padding) */
 }
 
+
+.wrap {
+	position:relative;
+	min-height:100%;
+}
+
+.inner_wrap {
+	padding-bottom: 200px;
+}
+
+.inner_wrap:after {
+	content:" ";
+	display:block;
+	clear:both;
+}
+
 /* FOOTER */
 #footer {
-	position: relative;
+	position: absolute;
 	bottom: 0;
 	width: 100%;
 	height: 200px;
@@ -426,7 +442,7 @@ http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
 
 #footer_container {
 	overflow: hidden;
-	margin: 	0 auto;
+	margin: 0 auto;
 	padding-bottom: 10px;
 }
 
