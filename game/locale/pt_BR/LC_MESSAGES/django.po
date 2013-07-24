@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-24 01:44-0300\n"
+"POT-Creation-Date: 2013-07-24 19:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgctxt "Facebook"
 msgid "en_US"
 msgstr "pt_BR"
 
-#: views.py:132
+#: views.py:130
 msgid "anonymous player"
 msgstr "jogador anônimo"
 
@@ -193,8 +193,9 @@ msgstr "Erro 403: Alguém já está jogando aqui"
 msgid ""
 "You can not play this game anymore, because someone else is already playing "
 "it. You may instead:"
-msgstr "Você não pode mais se juntar a esta partida, porque já tem alguém jogando neste lugar. "
-"Em vez disso, você pode:"
+msgstr ""
+"Você não pode mais se juntar a esta partida, porque já tem alguém jogando "
+"neste lugar. Em vez disso, você pode:"
 
 #: templates/game403.html:18
 msgid "Watch that match <a href=\"../\">here</a>;"
@@ -208,7 +209,9 @@ msgstr "Encontrar outra partida para se juntar no <a href=\"/\">índice</a>;"
 msgid ""
 "Create a <a href=\"/new_game/\">new match</a> and invite your friends to "
 "play."
-msgstr "Criar uma <a href=\"/new_game/\">nova partida</a> e chamar seus amigos para jogar."
+msgstr ""
+"Criar uma <a href=\"/new_game/\">nova partida</a> e chamar seus amigos para "
+"jogar."
 
 #: templates/game404.html:15
 msgid "Error 404: This game has expired!"

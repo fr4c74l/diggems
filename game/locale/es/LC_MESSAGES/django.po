@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-24 01:44-0300\n"
+"POT-Creation-Date: 2013-07-24 19:00-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -23,7 +23,7 @@ msgctxt "Facebook"
 msgid "en_US"
 msgstr "es_LA"
 
-#: views.py:132
+#: views.py:130
 msgid "anonymous player"
 msgstr "jugador anónimo"
 

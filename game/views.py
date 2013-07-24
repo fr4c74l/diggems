@@ -255,7 +255,7 @@ def claim_game(request, game_id):
         profile.total_score += points
         profile.save()
 
-        game.state = my_number + 2
+        game.state = my_number + 4 
 
     else:
         game.state = my_number;
@@ -312,7 +312,7 @@ def game(request, game_id):
     if game.state == 0 and game.token: # Uninitialized private game
         data['token'] = game.token
     else:
-        masked = mine_mask(game.mine, game.state > 2)
+        masked = mine_mask(game.mine, game.state in (2, 3))
         if masked.count('?') != 256:
             data['mine'] = masked
 
@@ -348,9 +348,9 @@ def move(request, game_id):
         if not me.has_tnt:
             return HttpResponseBadRequest()
         me.has_tnt = False
-        to_reveal = itertools.product(xrange(max(m-2,0),
+        to_reveal = itertools.product(xrange(max(m-2, 0),
                                              min(m+3, 16)),
-                                      xrange(max(n-2,0),
+                                      xrange(max(n-2, 0),
                                              min(n+3, 16)))
         tnt_used = True
 
