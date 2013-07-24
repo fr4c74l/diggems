@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-24 19:00-0300\n"
+"POT-Creation-Date: 2013-07-24 19:35-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,38 +56,42 @@ msgid "Logout"
 msgstr "Desconectar"
 
 #: templates/base.html:93
+msgid "Play it now!"
+msgstr "¡Juege ahora!"
+
+#: templates/base.html:94
 msgid "About the game"
 msgstr "Sobre el juego"
 
-#: templates/base.html:94
+#: templates/base.html:95
 msgid "How to play"
 msgstr "Como jugar"
 
-#: templates/base.html:95
+#: templates/base.html:96
 msgid "Source code"
 msgstr "Código fuente"
 
-#: templates/base.html:99
+#: templates/base.html:100
 msgid "Policy"
 msgstr ""
 
-#: templates/base.html:101
+#: templates/base.html:102
 msgid "Terms of service"
 msgstr ""
 
-#: templates/base.html:102
+#: templates/base.html:103
 msgid "Privacy policy"
 msgstr ""
 
-#: templates/base.html:106
+#: templates/base.html:107
 msgid "About Us"
 msgstr ""
 
-#: templates/base.html:108
+#: templates/base.html:109
 msgid "Contact us"
 msgstr ""
 
-#: templates/base.html:112 templates/donate.html:11
+#: templates/base.html:113 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
 msgstr ""
