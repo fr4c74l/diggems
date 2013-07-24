@@ -634,9 +634,9 @@ function init() {
     canvas.style.setProperty('visibility', 'visible', null);
   if ((params.state == 1) || (params.state == 2))
   {
-    timeOut.start_time = (new Date()).getTime();
-    reset_counter.int = window.setInterval(timeOut, 1000);
-    timeOut();
+    turn_timeout.start_time = (new Date()).getTime();
+    reset_counter.int = window.setInterval(turn_timeout, 1000);
+    turn_timeout();
   }
 }
 
@@ -646,16 +646,16 @@ function load_img(name) {
     images[name] = img;
 }
 
-function timeOut()
+function turn_timeout()
 {
-	var timeleft = params.time_left - ((new Date()).getTime() - timeOut.start_time) / 1000;
+	var timeleft = params.time_left - ((new Date()).getTime() - turn_timeout.start_time) / 1000;
 	if (timeleft <= 10)
 	  document.getElementById("clock").style.setProperty('color', '#ff0000');
 	if (timeleft <= 0)
 	{
 		clearInterval(reset_counter.int);
 		timeleft = 0;
-		if ((params.player != params.state) && (params.state == 1 || params.state == 2))
+		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2))
 		{
 		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
 		  document.getElementById("timeout_buttons").style.display = 'block';
@@ -672,12 +672,12 @@ function reset_counter()
     clearInterval(reset_counter.int);
   if (params.state == 1 || params.state == 2)
   {
-    timeOut.start_time = (new Date()).getTime();
+    turn_timeout.start_time = (new Date()).getTime();
     params.time_left = 45;
-    timeOut();
+    turn_timeout();
     document.getElementById("clock").style.setProperty('color', '#000000');
     document.getElementById("timeout_buttons").style.display = 'none';
-    reset_counter.int = window.setInterval(timeOut, 1000);
+    reset_counter.int = window.setInterval(turn_timeout, 1000);
   }
   else
     document.getElementById("clock").innerHTML = "";
