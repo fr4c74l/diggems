@@ -139,7 +139,8 @@ def index(request):
 @transaction.commit_on_success
 def new_game(request):
     if request.method != 'POST':
-        return HttpResponseForbidden()
+        c = Context({'url': '/new_game/'})
+        return render_to_response('post_redirect.html', c)
 
     profile = UserProfile.get(request)
 
@@ -196,7 +197,7 @@ def join_game(request, game_id):
     # retry via POST. Done so that Facebook and other robots do not join
     # the game in place of a real user.
     if request.method != 'POST':
-        url = '/game/' + game_id + '/join/'
+        url = '/game/{}/join/'.format(game_id)
         if token:
             url = url + '?token=' + token
         c = Context({'url': url})

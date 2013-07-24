@@ -13,7 +13,12 @@ Software under Affero GPL license, see LICENSE.txt
 
 <div class="box">
   <h1>{% blocktrans %}Error 403: Somebody is already playing in this place{% endblocktrans %}</h1>
-    <p>{% blocktrans %}Create a new game at the <a href ="/">main page</a>.{% endblocktrans %}</p>
-    </div>
+  <p>{% blocktrans %}You can not play this game anymore, because someone else is already playing it. You may instead:{% endblocktrans %}</p>
+  <ul>
+    <li>- {% blocktrans %}Watch that match <a href="../">here</a>;{% endblocktrans %}</li>
+    <li>- {% blocktrans %}Find another match to join in the <a href="/">index</a>;{% endblocktrans %}</li>
+    <li>- {% blocktrans %}Create a <a href="/new_game/">new match</a> and invite your friends to play.{% endblocktrans %}</li>
+  </ul>
+</div>
 
 {% endblock %}

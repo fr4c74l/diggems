@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-23 17:47-0300\n"
+"POT-Creation-Date: 2013-07-24 01:44-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -181,8 +181,24 @@ msgid "Error 403: Somebody is already playing in this place"
 msgstr "Error 403: Alguien ya está jugando aqui"
 
 #: templates/game403.html:16
-msgid "Create a new game at the <a href =\"/\">main page</a>."
-msgstr "Crie un nuevo juego en la <a href =\"/\">página principal</a>."
+msgid ""
+"You can not play this game anymore, because someone else is already playing "
+"it. You may instead:"
+msgstr ""
+
+#: templates/game403.html:18
+msgid "Watch that match <a href=\"../\">here</a>;"
+msgstr ""
+
+#: templates/game403.html:19
+msgid "Find another match to join in the <a href=\"/\">index</a>;"
+msgstr ""
+
+#: templates/game403.html:20
+msgid ""
+"Create a <a href=\"/new_game/\">new match</a> and invite your friends to "
+"play."
+msgstr ""
 
 #: templates/game404.html:15
 msgid "Error 404: This game has expired!"
@@ -242,6 +258,9 @@ msgstr "Juegos por empezar"
 #: templates/index.html:53
 msgid "Versus"
 msgstr "Versus"
+
+#~ msgid "Create a new game at the <a href =\"/\">main page</a>."
+#~ msgstr "Crie un nuevo juego en la <a href =\"/\">página principal</a>."
 
 #~ msgid "Support"
 #~ msgstr "Soporte"
