@@ -435,4 +435,4 @@ def info(request, page):
             return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request))
         except TemplateDoesNotExist:
             continue
-info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact'))
+info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy'))
