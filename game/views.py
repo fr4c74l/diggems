@@ -125,9 +125,7 @@ def index(request):
         player = game.p1.user
         if player.facebook:
             info['op_name'] = player.facebook.name
-            info['op_picture'] = ('https://graph.facebook.com/'
-                                  + player.facebook.uid
-                                  + '/picture')
+            info['op_picture'] = ('https://graph.facebook.com/{}/picture'.format(player.facebook.uid))
         else:
             info['op_name'] = _('anonymous player')
 
@@ -199,7 +197,7 @@ def join_game(request, game_id):
     if request.method != 'POST':
         url = '/game/{}/join/'.format(game_id)
         if token:
-            url = url + '?token=' + token
+            url = '{}?token={}'.format(url, token)
         c = Context({'url': url})
         return render_to_response('post_redirect.html', c)
 
@@ -250,23 +248,22 @@ def claim_game(request, game_id):
         return HttpResponseForbidden()
     if my_number == game.state or game.timeout_diff() > 0:
         return HttpResponseForbidden()
-        
+
     term = request.POST.get('terminate') == 'y'
     if term:
         points = game.mine.count(tile_encode(19)) + game.mine.count(tile_encode(20))
-        profile.total_score+= points
+        profile.total_score += points
         profile.save()
-        
+
         game.state = my_number + 2
-        
+
     else:
         game.state = my_number;
-        
-        
+
     game.save()
     transaction.commit()
 
-    result = str(game.seq_num) + '\n' + str(game.state)
+    result = '\n'.join(map(str, (game.seq_num, game.state)))
     post_update(game.channel, result)
     
     if term:
@@ -407,7 +404,8 @@ def move(request, game_id):
              if mine[m][n] == 9:
                  revealed.append((m, n, 'x'))
 
-    result = str(game.seq_num) + '\n' + str(game.state) + '\n' + str(player) + '\n' + coded_move + '\n' + '\n'.join(map(lambda x: '%d,%d:%c' % x, revealed))
+    result = itertools.chain((str(game.seq_num), str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
+    result = '\n'.join(result)
 
     # Everything is OK until now, so commit DB transaction
     transaction.commit()
