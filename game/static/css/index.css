@@ -4,7 +4,7 @@
 .list_games {
 	padding: 0px 10px;
 	overflow: hidden;
-	width: 20em;
+/*	width: 20em; */
 }
 
 /* TABLES */
@@ -13,7 +13,7 @@ table {
 	/* border-collapse:collapse; */
 	empty-cells: hide;
 	overflow: visible;
-	width:100%;
+	width:100%; 
 	border-spacing: 20px;
 }
 

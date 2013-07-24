@@ -34,25 +34,16 @@ body {
 	border: 0;
 	width: 100%;
 	height:100%;
-	min-width: 1560px;
-}
-
-/* WRAPPER */
-.wrapper {
-	width:1560px;
-	margin:0 auto;
-	min-height: 100%;
-	overflow: visible;
+	min-width:700px;
 }
 
 .container {
-  width: 960px;
-  margin: 0 auto;
+	max-width: 960px;
+	margin: 0 auto;
 }
 
 #advertisement {
-	width:300px;
-	height:100%;
+	min-width:120px;
 }
 
 .adsbygoogle {
@@ -81,7 +72,6 @@ body {
 	-moz-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fff;
 	-webkit-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fff; 
 	font-family: Diavlo;
-	overflow: hidden;
 }
 
 .box h1, h2, h3 {
@@ -190,13 +180,14 @@ div#image_container {
 }
 
 .tip_jar {
-  display: block;
-  width: 100px;
-  height: 95px;
-  background: url('/static/images/empty_jug.png');
+	margin:2px;
+	display: block;
+	width: 100px;
+	height: 95px;
+	background: url('/static/images/empty_jug.png');
 }
 .tip_jar:hover {
-  background: url('/static/images/full_jug.png');
+	background: url('/static/images/full_jug.png');
 }
 
 /* LANGUAGE MENU */
@@ -275,7 +266,7 @@ div#image_container {
   font-weight: bold;
   float: right;
   position: relative; 
-  min-width: 205px;
+  min-width: 205px; 
   display: block;
   margin: 5px;
 }
@@ -334,14 +325,7 @@ div#image_container {
 	text-align: justify;
 }
 
-/* COLUMNS */
-.col1,
-.col2,
-.col3 {
-	float:left;
-	position:relative;
-	padding:0 0 1em 0;
-}
+/* CONTENT COLUMNS */
 
 .threecol {
 	width: 30%;
@@ -360,6 +344,73 @@ div#image_container {
 .colright {
 	padding-top: 10px;
 	float: right;
+}
+
+/* PAGE COLUMNS 
+This wonderful 3 column liquid Layout was made by Matthew James Taylor and is 
+available in: 
+http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
+*/
+.page_columns {
+	position:relative;
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;
+}
+
+.page_colright,
+.page_colmid,
+.page_colleft {
+	float:left;
+	width:100%;			/* width of page */
+	position:relative;
+}
+
+.colm,
+.coll,
+.colr {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;
+}
+
+.coll,
+.colr {
+	overflow:hidden;
+}
+
+/* right column */
+.page_threecol {
+}
+
+/* center column */
+.page_threecol .page_colmid {
+	right:10%;			/* width of the right column */
+}
+
+/* left column */
+.page_threecol .page_colleft {
+	right:80%;			/* width of the middle column */
+}
+.page_threecol .colm {
+	width:78%;			/* width of center column content (column width minus 
+						padding on either side) */
+	left:101%;			/* 100% plus left padding of center column */
+}
+.page_threecol .coll {
+	width:8%;			/* Width of left column content (column width minus 
+						padding on either side) */
+	left:13%;			/* width of (right column) plus (center column left and 
+						right padding) plus (left column left padding) */
+}
+.page_threecol .colr {
+	width:8%;			/* Width of right column content (column width minus 
+						padding on either side) */
+	left:95%;			/* Please make note of the brackets here:
+						(100% - left column width) plus (center column left and 
+						right padding) plus (left column left and right padding)
+						 plus (right column left padding) */
 }
 
 /* FOOTER */
