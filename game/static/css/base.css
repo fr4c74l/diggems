@@ -185,9 +185,11 @@ div#image_container {
 	width: 100px;
 	height: 95px;
 	background: url('/static/images/empty_jug.png');
+	background-repeat: no-repeat;
 }
 .tip_jar:hover {
 	background: url('/static/images/full_jug.png');
+	background-repeat: no-repeat;
 }
 
 /* LANGUAGE MENU */
