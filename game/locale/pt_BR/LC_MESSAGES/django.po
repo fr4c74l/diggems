@@ -94,7 +94,7 @@ msgstr "Contate-nos"
 #: templates/base.html:125 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
-msgstr "Patronato"
+msgstr "Doações"
 
 #: templates/donate.html:18
 msgid ""
