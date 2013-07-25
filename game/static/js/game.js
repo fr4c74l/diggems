@@ -294,9 +294,9 @@ function set_state(state) {
 	    if(state == 1 || state == 2) {
 		msg = gettext('Wait for your turn.');
 	    }
-	    else if(state == 3 || state == 4) {
+	    else if(state >= 3 && state <= 6) {
 		msg = gettext('Game over, ');
-		if((state - 2) == params.player) {
+		if(((state + 1) % 2) + 1 == params.player) {
 		    if(auth.fb) {
 			/*document.getElementById('brag_button')
 			.style.setProperty('visibility', 'visible', null);*/
@@ -323,7 +323,9 @@ function set_state(state) {
 	     gettext("Red's turn."),
 	     gettext("Blue's turn."),
 	     gettext('Game is over, red player won.'),
-	     gettext('Game is over, blue player won.')];
+	     gettext('Game is over, blue player won.'),
+	     gettext('Game is over, red player won by resignation.'),
+	     gettext('Game is over, blue player won by resignation.')];
 	msg = state_msgs[state];
     }
     var msg_box = document.getElementById('message');
