@@ -171,7 +171,7 @@ msgstr "Vazio!"
 
 #: templates/game.html:58
 msgid "Wait..."
-msgstr "Espere..."
+msgstr "Aguarde..."
 
 #: templates/game.html:58
 msgid "Abort"
