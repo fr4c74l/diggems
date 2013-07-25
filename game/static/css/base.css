@@ -180,7 +180,7 @@ div#image_container {
 }
 
 .tip_jar {
-	margin:2px;
+	padding:3px;
 	display: block;
 	width: 100px;
 	height: 95px;
