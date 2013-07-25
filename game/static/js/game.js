@@ -691,11 +691,16 @@ function claim_game(terminate)
 	var url = '/game/'+ params.game_id + '/claim/';
 	button_request.open('POST', url, true);
 	var data = null;
-	if (terminate)
+	if (terminate == 1)
 	{
 		data = "terminate=y";
 		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	}
+  if (terminate == 2)
+  {
+    data = "terminate=z";
+    button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  }
 	button_request.send(data);
 }
 
