@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-24 19:35-0300\n"
+"POT-Creation-Date: 2013-07-25 12:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
-#: views.py:46 templates/base.html:38
+#: views.py:46 templates/base.html:39
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "es_LA"
@@ -43,55 +43,55 @@ msgstr ""
 "Esta página no existe. Es posible que haya escrito mal la URL. Vuelva a la "
 "<a href=\"/\">página principal</a>."
 
-#: templates/base.html:76 templates/game.html:49 templates/game.html.py:58
+#: templates/base.html:62 templates/game.html:49 templates/game.html.py:58
 msgid "Visitor"
 msgstr "Visitante"
 
-#: templates/base.html:77
+#: templates/base.html:63
 msgid "Score"
 msgstr "Pontuación"
 
-#: templates/base.html:79
+#: templates/base.html:65
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base.html:93
+#: templates/base.html:105
 msgid "Play it now!"
 msgstr "¡Juege ahora!"
 
-#: templates/base.html:94
+#: templates/base.html:106
 msgid "About the game"
 msgstr "Sobre el juego"
 
-#: templates/base.html:95
+#: templates/base.html:107
 msgid "How to play"
 msgstr "Como jugar"
 
-#: templates/base.html:96
+#: templates/base.html:108
 msgid "Source code"
 msgstr "Código fuente"
 
-#: templates/base.html:100
+#: templates/base.html:112
 msgid "Policy"
 msgstr ""
 
-#: templates/base.html:102
+#: templates/base.html:114
 msgid "Terms of service"
 msgstr ""
 
-#: templates/base.html:103
+#: templates/base.html:115
 msgid "Privacy policy"
 msgstr ""
 
-#: templates/base.html:107
+#: templates/base.html:119
 msgid "About Us"
 msgstr ""
 
-#: templates/base.html:109
+#: templates/base.html:121
 msgid "Contact us"
 msgstr ""
 
-#: templates/base.html:113 templates/donate.html:11
+#: templates/base.html:125 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
 msgstr ""
@@ -100,13 +100,13 @@ msgstr ""
 msgid ""
 "This game is free to play and <a href=\"/info/sourcecode\">free software</"
 "a>. We also\n"
-"  don't feel to be fair to charge for competitive advantage of some players "
+"\tdon't feel to be fair to charge for competitive advantage of some players "
 "over others. Anyway, we have\n"
-"  dedicated much of our time to develop this game, and have our costs in "
+"\tdedicated much of our time to develop this game, and have our costs in "
 "keeping it running and in its\n"
-"  continual development. Thus, we shamelessly ask for your patronage: any "
+"\tcontinual development. Thus, we shamelessly ask for your patronage: any "
 "amount you can spare (greater\n"
-"  than PayPal transaction fees) will be appreciated."
+"\tthan PayPal transaction fees) will be appreciated."
 msgstr ""
 
 #: templates/donate.html:23
