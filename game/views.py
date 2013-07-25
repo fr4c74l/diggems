@@ -312,7 +312,7 @@ def game(request, game_id):
     if game.state == 0 and game.token: # Uninitialized private game
         data['token'] = game.token
     else:
-        masked = mine_mask(game.mine, game.state in (2, 3))
+        masked = mine_mask(game.mine, game.state in (3, 4))
         if masked.count('?') != 256:
             data['mine'] = masked
 
