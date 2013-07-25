@@ -251,17 +251,20 @@ def claim_game(request, game_id):
         my_number, me = pdata
     else:
         return HttpResponseForbidden()
-    if my_number == game.state or game.timeout_diff() > 0:
+
+    term = request.POST.get('terminate') # == 'y'
+    if term != 'z' and (my_number == game.state or game.timeout_diff() > 0):
         return HttpResponseForbidden()
 
-    term = request.POST.get('terminate') == 'y'
-    if term:
+    if term == 'y':
         points = game.mine.count(tile_encode(19)) + game.mine.count(tile_encode(20))
         profile.total_score += points
         profile.save()
-
         game.state = my_number + 4 
 
+    elif term == 'z':
+        profile.save()
+        game.state = (my_number | 2) + 1
     else:
         game.state = my_number;
 
