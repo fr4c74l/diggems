@@ -129,18 +129,6 @@ a:hover {
 	color: #3f888b;
 }
 
-ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-li {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
 /* IMAGES */
 img.top {
 	vertical-align: top;
@@ -453,9 +441,16 @@ http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
 	border-bottom: 1px solid #443b2b;
 }
 
+#footer_container ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
 #footer_container li {
+	margin: 0;
 	padding: 3px 0px;
-	list-style-type: none;
+	list-style: none;
 }
 
 #footer_container a {
