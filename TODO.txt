@@ -41,4 +41,3 @@ TODO Later:
 - Warn user about bogus Internet browsers.
 - Publish open-graph story of a player
   - Brag about user result
-- After select a language redirect to the current page
