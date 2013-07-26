@@ -37,7 +37,7 @@ body {
 }
 
 .container {
-	max-width: 960px;
+	max-width: 1200px;
 	margin: 0 auto;
 }
 
@@ -47,7 +47,7 @@ body {
 
 .adsbygoogle {
 	position: relative;
-	top:150px;
+	top: 20px;
 }
 
 .plain {
@@ -307,13 +307,13 @@ div#image_container {
 /* CONTENT */
 #content {
 	margin: 0 auto;
-	padding: 18px 0 20px; 
+	padding-top: 20px;
 }
-
+/*
 .content_wrapper {
 	padding: 50px 0px;
 }
-
+*/
 #content h1 {
 	text-decoration: underline;
 }
@@ -380,28 +380,29 @@ http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
 
 /* center column */
 .page_threecol .page_colmid {
-	right:16%;			/* width of the right column */
+	right:14%;			/* width of the right column */
 }
 
 /* left column */
 .page_threecol .page_colleft {
-	right:68%;			/* width of the middle column */
+	padding: 50px 0px;
+	right:72%;			/* width of the middle column */
 }
 .page_threecol .colm {
-	width:66%;			/* width of center column content (column width minus 
+	width:70%;			/* width of center column content (column width minus 
 						padding on either side) */
 	left:101%;			/* 100% plus left padding of center column */
 }
 .page_threecol .coll {
-	width:14%;			/* Width of left column content (column width minus 
+	width:12%;			/* Width of left column content (column width minus 
 						padding on either side) */
-	left:19%;			/* width of (right column) plus (center column left and 
+	left:17%;			/* width of (right column) plus (center column left and 
 						right padding) plus (left column left padding) */
 }
 .page_threecol .colr {
-	width:14%;			/* Width of right column content (column width minus 
+	width:12%;			/* Width of right column content (column width minus 
 						padding on either side) */
-	left:89%;			/* Please make note of the brackets here:
+	left:91%;			/* Please make note of the brackets here:
 						(100% - left column width) plus (center column left and 
 						right padding) plus (left column left and right padding)
 						 plus (right column left padding) */
