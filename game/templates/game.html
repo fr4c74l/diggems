@@ -53,7 +53,7 @@ Software under Affero GPL license, see LICENSE.txt
 		</a>
 		<div class="pinfo" style="text-align: right;">{% if player %}({% if player == 1 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
 	</div>{% if player %}
-	<div class="box" id="tnt_box"><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></div>
+	<a class="box" id="tnt_box"><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></a>
 	{% endif %}
 	<div class="box pbox" id="p2_box">
 		<a id="p2_link" class="plain{% if p2_info %} undlin{% endif %}" target="_blank"{% if p2_info %} href="//facebook.com/{{ p2_info.uid }}/"{% endif %}>
@@ -64,7 +64,7 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
 		<div>{% blocktrans %}Copy the link to your adversary{% endblocktrans %}:</div>
-		<input type="text" style="display: inline-block; width: 250px;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
+		<input type="text" style="display: inline-block; width: 250px;cursor:text;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
 		<div style="display: inline-block;" class="addthis_toolbox addthis_default_style addthis_16x16_style">
 			<a class="addthis_button_facebook"></a>
 			<a class="addthis_button_twitter"></a>
