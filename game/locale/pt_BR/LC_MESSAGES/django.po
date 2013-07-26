@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-22 20:12-0300\n"
+"POT-Creation-Date: 2013-07-25 12:51-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
 #. Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
-#: views.py:46 templates/base.html:38 templates/donate.html:39
-#: templates/donate.html.py:40
+#: views.py:46 templates/base.html:39
+msgctxt "Facebook"
 msgid "en_US"
 msgstr "pt_BR"
 
-#: views.py:132
+#: views.py:130
 msgid "anonymous player"
 msgstr "jogador anônimo"
 
@@ -43,68 +43,104 @@ msgstr ""
 "Esta página não existe. Você deve ter digitado a URL errado. Volte para <a "
 "href=\"/\">página principal</a>."
 
-#: templates/base.html:61 templates/game.html:49 templates/game.html.py:58
+#: templates/base.html:62 templates/game.html:49 templates/game.html.py:58
 msgid "Visitor"
 msgstr "Visitante"
 
-#: templates/base.html:62
+#: templates/base.html:63
 msgid "Score"
 msgstr "Placar"
 
-#: templates/base.html:64
+#: templates/base.html:65
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/base.html:78
+#: templates/base.html:105
+msgid "Play it now!"
+msgstr "Jogue agora!"
+
+#: templates/base.html:106
 msgid "About the game"
 msgstr "Sobre o jogo"
 
-#: templates/base.html:79
+#: templates/base.html:107
 msgid "How to play"
 msgstr "Como jogar"
 
-#: templates/base.html:80
+#: templates/base.html:108
 msgid "Source code"
-msgstr "Código Fonte"
+msgstr "Código fonte"
 
-#: templates/base.html:84
-msgid "Support"
-msgstr "Suporte"
+#: templates/base.html:112
+msgid "Policy"
+msgstr "Políticas"
 
-#: templates/base.html:86
-msgid "Bug report"
-msgstr "Reporte um Bug"
+#: templates/base.html:114
+msgid "Terms of service"
+msgstr "Termos do serviço"
 
-#: templates/base.html:91 templates/donate.html:11 templates/donate.html.py:17
-msgid "Donation"
+#: templates/base.html:115
+msgid "Privacy policy"
+msgstr "Política de privacidade"
+
+#: templates/base.html:119
+msgid "About Us"
+msgstr "Sobre Nós"
+
+#: templates/base.html:121
+msgid "Contact us"
+msgstr "Contate-nos"
+
+#: templates/base.html:125 templates/donate.html:11
+#: templates/donate.html.py:17
+msgid "Patronage"
 msgstr "Doações"
 
 #: templates/donate.html:18
 msgid ""
-" Place a creative message here to get donations, or we will starve to death "
-"trying to survive developing games."
+"This game is free to play and <a href=\"/info/sourcecode\">free software</"
+"a>. We also\n"
+"\tdon't feel to be fair to charge for competitive advantage of some players "
+"over others. Anyway, we have\n"
+"\tdedicated much of our time to develop this game, and have our costs in "
+"keeping it running and in its\n"
+"\tcontinual development. Thus, we shamelessly ask for your patronage: any "
+"amount you can spare (greater\n"
+"\tthan PayPal transaction fees) will be appreciated."
 msgstr ""
+"Este jogo é gratuito e <a href=\"/info/sourcecode\">software livre</a>. Além "
+"disso, nós consideramos injusto cobrar por vantages competitivas que algum "
+"jogador possa adquirir sobre outros. De todo modo, nós temos dedicado muito "
+"do nosso tempo no desenvolvimento deste jogo, e temos custos tanto para "
+"mantê-lo no ar quanto com o seu continuado desenvolvimento. Por isso, não "
+"temos receio de pedir por seu apoio financeiro: qualquer quantia que você "
+"puder nos dispor (desde que seja maior que as taxas de transação do PayPal) "
+"será apreciada."
 
-#. Translators: Please see currencies codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/api/currency_codes/#id09A6G0U0GYK
-#: templates/donate.html:35
-msgid "USD"
-msgstr "BRL"
+#: templates/donate.html:23
+msgid "Thanks!"
+msgstr "Muito obrigado!"
+
+#: templates/donate.html:30
+msgid "DigGems Patronage"
+msgstr "Suporte ao DigGems"
 
 #. Translators: Please see locale codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
-#: templates/donate.html:37
+#: templates/donate.html:36
 msgid "US"
 msgstr "BR"
 
-#: templates/donate.html:38
-msgid "U$"
-msgstr "R$"
+#: templates/donate.html:45 templates/donate.html.py:46
+msgctxt "PayPal"
+msgid "en_US"
+msgstr "pt_BR"
 
-#: templates/donate.html:39
+#: templates/donate.html:45
 msgid "PayPal - The safer, easier way to pay online!"
 msgstr ""
 "PayPal - A maneira mais simples e segura de pagar suas compras na Internet!"
 
-#: templates/donate.html:51
+#: templates/donate.html:57
 msgid "Donate Bitcoin"
 msgstr "Doar Bitcoin"
 
@@ -135,7 +171,7 @@ msgstr "Vazio!"
 
 #: templates/game.html:58
 msgid "Wait..."
-msgstr "Espere..."
+msgstr "Aguarde..."
 
 #: templates/game.html:58
 msgid "Abort"
@@ -158,8 +194,28 @@ msgid "Error 403: Somebody is already playing in this place"
 msgstr "Erro 403: Alguém já está jogando aqui"
 
 #: templates/game403.html:16
-msgid "Create a new game at the <a href =\"/\">main page</a>."
-msgstr "Crie um novo jogo na <a href = \"/\">página principal</a>."
+msgid ""
+"You can not play this game anymore, because someone else is already playing "
+"it. You may instead:"
+msgstr ""
+"Você não pode mais se juntar a esta partida, porque já tem alguém jogando "
+"neste lugar. Em vez disso, você pode:"
+
+#: templates/game403.html:18
+msgid "Watch that match <a href=\"../\">here</a>;"
+msgstr "Assistir à partida <a href=\"../\">aqui</a>;"
+
+#: templates/game403.html:19
+msgid "Find another match to join in the <a href=\"/\">index</a>;"
+msgstr "Encontrar outra partida para se juntar no <a href=\"/\">índice</a>;"
+
+#: templates/game403.html:20
+msgid ""
+"Create a <a href=\"/new_game/\">new match</a> and invite your friends to "
+"play."
+msgstr ""
+"Criar uma <a href=\"/new_game/\">nova partida</a> e chamar seus amigos para "
+"jogar."
 
 #: templates/game404.html:15
 msgid "Error 404: This game has expired!"
@@ -173,8 +229,8 @@ msgstr ""
 "...ou nunca existiu. Crie um novo na <a href =\"/\">página principal</a>."
 
 #: templates/index.html:19
-msgid "New games"
-msgstr "Novos jogos"
+msgid "New game"
+msgstr "Novo jogo"
 
 #: templates/index.html:21
 msgid "Private game"
@@ -205,7 +261,7 @@ msgid "Waiting the other player"
 msgstr "Esperando o outro jogador"
 
 #: templates/index.html:34
-msgid "On progress"
+msgid "In progress"
 msgstr "Em progresso"
 
 #: templates/index.html:37 templates/index.html.py:55

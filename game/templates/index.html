@@ -18,7 +18,7 @@ Software under Affero GPL license, see LICENSE.txt
 	<tbody>
 		<tr>
 			<td class="box" id="new_game">
-			  <h1>{% trans "New games" %}</h1>
+			  <h1>{% trans "New game" %}</h1>
 				<form action="new_game/" method="post">
 				    {% trans "Private game" %} <input type="checkbox" name="private" value="1" />
 					<input class="button" type="submit" value="{% trans "Create!" %}"  style="float: right;"/>
@@ -33,7 +33,7 @@ Software under Affero GPL license, see LICENSE.txt
 					<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
 						<div>{% if g.token %}{% trans "Private" %}{% else %}{% trans "Public" %}{% endif %}</div>{% if g.state = 0 %}
 						<div>{% trans "Waiting the other player" %}</div>{% else %}
-						<div>{% trans "On progress" %}</div>{% endif %}
+						<div>{% trans "In progress" %}</div>{% endif %}
 					</li>{% endfor %}
 				{% else %}
 				<h4>{% trans "No game found!" %}</h4>
@@ -47,7 +47,7 @@ Software under Affero GPL license, see LICENSE.txt
 				<ul>
 					{% if new_games %}{% for g in new_games %}
 					<li class="list_games">
-							<div style="float:left;">
+							<div style="float:left; padding: 0px 5px 5px 0px;">
 								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
 							</div>
 							{% if g.op_picture %}<img style="float:right;" class="middle thumb box" src="{{g.op_picture}}" /> {% endif %}
