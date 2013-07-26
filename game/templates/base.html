@@ -40,13 +40,12 @@ Software under Affero GPL license, see LICENSE.txt
 		  fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
 		</script>
-
 		{% get_current_language as LANGUAGE_CODE %}
 		{% get_available_languages as LANGUAGES %}
 		<div id="langbar" class="container">
 		<form name='langform' action='/i18n/setlang/' method='POST'>
-			{% for LANG in LANGUAGES  %}
-			<div class="lang_button" {% if LANGUAGE_CODE == LANG.0 %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG.0 }}';document.langform.submit();"> {{ LANG.0 }}</div>
+			{% for LANG_CODE, LANG_NAME in LANGUAGES  %}
+			<div class="lang_button" {% if LANGUAGE_CODE == LANG_CODE %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG_CODE }}';document.langform.submit();"> {{ LANG_CODE }}</div>
 			{% endfor %}
 			<input name='language' type='hidden' >
 		</form>

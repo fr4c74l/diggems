@@ -34,7 +34,7 @@ body {
 	border: 0;
 	width: 100%;
 	height:100%;
-	min-width:700px;
+	min-width:600px;
 }
 
 .container {
@@ -376,33 +376,32 @@ http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
 
 /* center column */
 .page_threecol .page_colmid {
-	right:10%;			/* width of the right column */
+	right:15%;			/* width of the right column */
 }
 
 /* left column */
 .page_threecol .page_colleft {
-	right:80%;			/* width of the middle column */
+	right:70%;			/* width of the middle column */
 }
 .page_threecol .colm {
-	width:78%;			/* width of center column content (column width minus 
+	width:68%;			/* width of center column content (column width minus 
 						padding on either side) */
 	left:101%;			/* 100% plus left padding of center column */
 }
 .page_threecol .coll {
-	width:8%;			/* Width of left column content (column width minus 
+	width:13%;			/* Width of left column content (column width minus 
 						padding on either side) */
-	left:13%;			/* width of (right column) plus (center column left and 
+	left:18%;			/* width of (right column) plus (center column left and 
 						right padding) plus (left column left padding) */
 }
 .page_threecol .colr {
-	width:8%;			/* Width of right column content (column width minus 
+	width:13%;			/* Width of right column content (column width minus 
 						padding on either side) */
-	left:95%;			/* Please make note of the brackets here:
+	left:90%;			/* Please make note of the brackets here:
 						(100% - left column width) plus (center column left and 
 						right padding) plus (left column left and right padding)
 						 plus (right column left padding) */
 }
-
 
 .wrap {
 	position:relative;
