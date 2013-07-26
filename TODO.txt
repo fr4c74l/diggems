@@ -36,14 +36,8 @@ TODO Later:
   - Epistolar mode, with no time deadline
 - Use {{ STATIC_URL }} instead of fullpath of static urls in templates
 - More footer links
-<<<<<<< HEAD
-  - "Contact" page
-- Our own login system, for non-facebook users.
-- Pictures for guest users based on their random internal ID.
-=======
-  - "Contact" page (add a contact form and image of a pack donkey)
+- "Contact" page (add a contact form and image of a pack donkey)
 - Our own login system, for non-facebook users
->>>>>>> master
 - Warn user about bogus Internet browsers.
 - Publish open-graph story of a player.
   - Brag about user result
