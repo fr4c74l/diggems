@@ -45,7 +45,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<div id="langbar" class="container">
 		<form name='langform' action='/i18n/setlang/' method='POST'>
 			{% for LANG_CODE, LANG_NAME in LANGUAGES  %}
-			<div class="lang_button" {% if LANGUAGE_CODE == LANG_CODE %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG_CODE }}';document.langform.submit();"> {{ LANG_CODE }}</div>
+			<a class="lang_button" {% if LANGUAGE_CODE == LANG_CODE %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG_CODE }}';document.langform.submit();"> {{ LANG_CODE }}</a>
 			{% endfor %}
 			<input name='language' type='hidden' >
 		</form>
