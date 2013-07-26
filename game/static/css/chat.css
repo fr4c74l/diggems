@@ -42,15 +42,10 @@
 	font-weight: bold;
 }
 
-#toggle_msg {
-	font-size: large;
-	visibility: hidden;
-	padding: 0 5px;
-}
-
 #close, #toggle{
 	font-size:x-large;
-	padding: 0 5px
+	padding: 0 5px;
+	color: #333;
 }
 
 #close:hover, #toggle:hover{

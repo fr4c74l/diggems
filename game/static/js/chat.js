@@ -103,18 +103,15 @@ function close() {
 function toggle(hidden_area, toggle_button) {
 	var chat_window = document.getElementById("chat_window");
 	var popup_window = document.getElementById("popup_window");
-	var toggle_msg = document.getElementById("toggle_msg");
 	var element = document.getElementById(hidden_area);
 	var button = document.getElementById(toggle_button);
 	if(element.style.display == "block") {
 		element.style.display = "none";
-		toggle_msg.style.visibility = "visible";
 		chat_window.style.height = "0em";
 		popup_window.style.bottom = "4em";
-		button.innerHTML = "+";
+		button.innerHTML = gettext("Chat");
 	} else {
 		element.style.display = "block";
-		toggle_msg.style.visibility = "hidden";
 		chat_window.style.height = "10em";
 		popup_window.style.bottom = "7em";
 		button.innerHTML = "-";
