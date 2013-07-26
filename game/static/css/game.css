@@ -67,6 +67,11 @@
     right: 0px;
 }
 
+#p1_link:hover,
+#p2_link:hover {
+	color: #000;
+}
+
 #p1_pic {
     margin-right: 2px;
     float: left;

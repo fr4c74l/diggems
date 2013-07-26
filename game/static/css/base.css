@@ -28,7 +28,6 @@ body {
 	background-size: auto 100%;
 	font-family: sans;
 	font-size: small;
-	cursor: default;
 	margin: 0;
 	padding: 0;
 	border: 0;
@@ -79,6 +78,10 @@ body {
 	text-shadow: 0.05em 0.05em 0.05em #535353;
 }
 
+.box a:hover {
+	text-decoration: underline;
+}
+
 .button {
 	min-width: 15px;
 	padding: 4px;
@@ -119,6 +122,7 @@ body {
 }
 
 a {
+	cursor: pointer;
 	font-weight: bold;
 	color: #2a595b;
 	text-decoration: none;
@@ -183,6 +187,8 @@ div#image_container {
 .lang_button {
   display: inline;
   border: none;
+  color: #333;
+  font-weight: normal;
 }
 
 .lang_button:hover {
@@ -190,6 +196,8 @@ div#image_container {
   -o-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+  color: #000;
+  font-weight: bold;
   border: 1px #666 solid;
 }
 
