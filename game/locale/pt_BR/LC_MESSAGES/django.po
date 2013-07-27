@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-25 12:51-0300\n"
+"POT-Creation-Date: 2013-07-25 18:05-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -43,7 +43,7 @@ msgstr ""
 "Esta página não existe. Você deve ter digitado a URL errado. Volte para <a "
 "href=\"/\">página principal</a>."
 
-#: templates/base.html:62 templates/game.html:49 templates/game.html.py:58
+#: templates/base.html:62 templates/game.html:50 templates/game.html.py:59
 msgid "Visitor"
 msgstr "Visitante"
 
@@ -157,31 +157,35 @@ msgstr "Terminar Jogo"
 msgid "Take Player's Turn"
 msgstr "Tomar a Vez"
 
-#: templates/game.html:51 templates/game.html.py:60
+#: templates/game.html:41
+msgid "Give Up"
+msgstr ""
+
+#: templates/game.html:52 templates/game.html.py:61
 msgid "You"
 msgstr "Você"
 
-#: templates/game.html:51 templates/game.html.py:60
+#: templates/game.html:52 templates/game.html.py:61
 msgid "Your adversary"
 msgstr "Seu oponente"
 
-#: templates/game.html:58
+#: templates/game.html:59
 msgid "Empty!"
 msgstr "Vazio!"
 
-#: templates/game.html:58
+#: templates/game.html:59
 msgid "Wait..."
 msgstr "Aguarde..."
 
-#: templates/game.html:58
+#: templates/game.html:59
 msgid "Abort"
 msgstr "Abortar"
 
-#: templates/game.html:58 templates/index.html:49
+#: templates/game.html:59 templates/index.html:49
 msgid "Join!"
 msgstr "Juntar-se"
 
-#: templates/game.html:63
+#: templates/game.html:64
 msgid "Copy the link to your adversary"
 msgstr "Copie o link para seu oponente"
 
