@@ -33,7 +33,9 @@ def render_with_extra(template_name, user, data={}, status=200):
     except ZeroDivisionError:
         win_ratio = None
 
-    extra = {'FB_APP_ID': FB_APP_ID,
+    extra = {'FB_APP_ID': settings.FB_APP_ID,
+             'GOOGLE_AD_ID': settings.GOOGLE_AD_ID,
+             'GOOGLE_AD_SLOTS': settings.GOOGLE_AD_SLOTS,
              'fb': user.facebook,
              'stats': {'score': user.total_score,
                        'victories': user.games_won,

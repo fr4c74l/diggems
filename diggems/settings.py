@@ -18,6 +18,11 @@ FB_LIKE_URL = 'http://my.main.url/'
 ## Long pool server
 EVENT_SERVER = '127.0.0.1:8080'
 
+## Google ads settings
+GOOGLE_AD_ID = 'place_google_ads_id_here'
+
+GOOGLE_AD_SLOTS = ['slot1_placeholder', 'slot2_placeholder']
+
 # Django settings:
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
