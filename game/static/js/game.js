@@ -4,8 +4,8 @@
 
 var ctx;
 var mine;
+var event;
 var move_request = new XMLHttpRequest();
-var event_request = new XMLHttpRequest();
 var button_request = new XMLHttpRequest();
 
 var images = {};
@@ -413,13 +413,13 @@ function register_event() {
     if(params.state >= 3 || register_event.last_status == 410)
 	return; // Game is over
 
-    event_request.open('GET', '/event/'+ params.channel, true);
+    event_request.open('GET', '/event/' + params.channel, true);
     if(register_event.etag)
 	event_request.setRequestHeader('If-None-Match', register_event.etag);
     event_request.setRequestHeader('If-Modified-Since', params.last_change);
     event_request.onreadystatechange = function(ev){
 	if (event_request.readyState == 4) {
-	    register_event.last_status == event_request.status;
+	    register_event.last_status = event_request.status;
 	    if(event_request.status == 200) {
 		register_event.error_count = 0;
 		register_event.etag = event_request.getResponseHeader('Etag')
@@ -624,7 +624,8 @@ function init() {
     your_turn_blinker.setBlinking(params.state == params.player);
 
     // Receive updates from server
-    register_event();
+    event = new Event('/event/' + params.channel, params.last_change);
+    event.register_handler('g', handle_event);
 
     if(params.player) { // Not a spectator
 	// Expect for user input
