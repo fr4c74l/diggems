@@ -1,7 +1,7 @@
 function Event(channel_url, last_known_change) {
     this.url = channel_url;
     this.last_etag = null;
-    this.last_change = null;
+    this.last_change = last_known_change;
     this.request = new XMLHttpRequest();
     this.error_count = 0;
     this.handlers = {};
