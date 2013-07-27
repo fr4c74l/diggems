@@ -47,7 +47,7 @@ Event.prototype._register_event = function() {
             this.request.setRequestHeader('If-None-Match', this.last_etag);
         if (this.last_change)
             this.request.setRequestHeader('If-Modified-Since', this.last_change);
-        this.request.onreadystatechange = this._callback;
+        this.request.onreadystatechange = this._callback.bind(this);
         this.request.send(null);
 };
 
