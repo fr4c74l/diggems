@@ -33,7 +33,7 @@ Event.prototype._callback = function() {
 
 		if(this.error_count > 1) {
 		    var delay = (this.error_count - 1) * 500;
-		    this._timer = setTimeout(this._register_event, delay);
+		    this._timer = setTimeout(this._register_event.bind(this), delay);
 		}
 		else
 		    this._register_event();
