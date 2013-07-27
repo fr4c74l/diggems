@@ -28,36 +28,26 @@ body {
 	background-size: auto 100%;
 	font-family: sans;
 	font-size: small;
-	cursor: default;
 	margin: 0;
 	padding: 0;
 	border: 0;
 	width: 100%;
 	height:100%;
-	min-width: 1560px;
-}
-
-/* WRAPPER */
-.wrapper {
-	width:1560px;
-	margin:0 auto;
-	min-height: 100%;
-	overflow: visible;
+	min-width:800px;
 }
 
 .container {
-  width: 960px;
-  margin: 0 auto;
+	max-width: 1200px;
+	margin: 0 auto;
 }
 
 #advertisement {
-	width:300px;
-	height:100%;
+	min-width:120px;
 }
 
 .adsbygoogle {
 	position: relative;
-	top:150px;
+	top: 20px;
 }
 
 .plain {
@@ -81,7 +71,6 @@ body {
 	-moz-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fff;
 	-webkit-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fff; 
 	font-family: Diavlo;
-	overflow: hidden;
 }
 
 .box h1, h2, h3 {
@@ -89,6 +78,9 @@ body {
 	text-shadow: 0.05em 0.05em 0.05em #535353;
 }
 
+.box a:hover {
+	text-decoration: underline;
+}
 
 .button {
 	min-width: 15px;
@@ -130,6 +122,7 @@ body {
 }
 
 a {
+	cursor: pointer;
 	font-weight: bold;
 	color: #2a595b;
 	text-decoration: none;
@@ -137,18 +130,6 @@ a {
 
 a:hover {
 	color: #3f888b;
-}
-
-ul {
-	list-style: none;
-	padding: 0;
-	margin: 0;
-}
-
-li {
-	list-style: none;
-	padding: 0;
-	margin: 0;
 }
 
 /* IMAGES */
@@ -190,19 +171,24 @@ div#image_container {
 }
 
 .tip_jar {
-  display: block;
-  width: 100px;
-  height: 95px;
-  background: url('/static/images/empty_jug.png');
+	padding:3px;
+	display: block;
+	width: 100px;
+	height: 95px;
+	background: url('/static/images/empty_jug.png');
+	background-repeat: no-repeat;
 }
 .tip_jar:hover {
-  background: url('/static/images/full_jug.png');
+	background: url('/static/images/full_jug.png');
+	background-repeat: no-repeat;
 }
 
 /* LANGUAGE MENU */
 .lang_button {
   display: inline;
   border: none;
+  color: #333;
+  font-weight: normal;
 }
 
 .lang_button:hover {
@@ -210,6 +196,8 @@ div#image_container {
   -o-border-radius: 3px;
   -webkit-border-radius: 3px;
   border-radius: 3px;
+  color: #000;
+  font-weight: bold;
   border: 1px #666 solid;
 }
 
@@ -265,7 +253,7 @@ div#image_container {
 }
 
 #subtitle {
-    font-weight: normal;
+	font-weight: normal;
 	color: #9a64c8;
 }
 
@@ -275,7 +263,7 @@ div#image_container {
   font-weight: bold;
   float: right;
   position: relative; 
-  min-width: 205px;
+  min-width: 205px; 
   display: block;
   margin: 5px;
 }
@@ -319,13 +307,13 @@ div#image_container {
 /* CONTENT */
 #content {
 	margin: 0 auto;
-	padding: 18px 0 20px; 
+	padding-top: 20px;
 }
-
+/*
 .content_wrapper {
 	padding: 50px 0px;
 }
-
+*/
 #content h1 {
 	text-decoration: underline;
 }
@@ -334,14 +322,7 @@ div#image_container {
 	text-align: justify;
 }
 
-/* COLUMNS */
-.col1,
-.col2,
-.col3 {
-	float:left;
-	position:relative;
-	padding:0 0 1em 0;
-}
+/* CONTENT COLUMNS */
 
 .threecol {
 	width: 30%;
@@ -362,9 +343,89 @@ div#image_container {
 	float: right;
 }
 
+/* PAGE COLUMNS 
+This wonderful 3 column liquid Layout was made by Matthew James Taylor and is 
+available in: 
+http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
+*/
+
+.page_columns {
+	position:relative;
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;
+	margin-bottom: 20px;
+}
+
+.page_colright,
+.page_colmid,
+.page_colleft {
+	float:left;
+	width:100%;			/* width of page */
+	position:relative;
+}
+
+.colm,
+.coll,
+.colr {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;
+}
+
+/* right column */
+.page_threecol {
+}
+
+/* center column */
+.page_threecol .page_colmid {
+	right:14%;			/* width of the right column */
+}
+
+/* left column */
+.page_threecol .page_colleft {
+	padding: 50px 0px;
+	right:72%;			/* width of the middle column */
+}
+.page_threecol .colm {
+	width:70%;			/* width of center column content (column width minus 
+						padding on either side) */
+	left:101%;			/* 100% plus left padding of center column */
+}
+.page_threecol .coll {
+	width:12%;			/* Width of left column content (column width minus 
+						padding on either side) */
+	left:17%;			/* width of (right column) plus (center column left and 
+						right padding) plus (left column left padding) */
+}
+.page_threecol .colr {
+	width:12%;			/* Width of right column content (column width minus 
+						padding on either side) */
+	left:91%;			/* Please make note of the brackets here:
+						(100% - left column width) plus (center column left and 
+						right padding) plus (left column left and right padding)
+						 plus (right column left padding) */
+}
+
+.wrap {
+	position:relative;
+	min-height:100%;
+}
+
+.inner_wrap {
+	padding-bottom: 200px;
+}
+
+.inner_wrap:after {
+	content:" ";
+	display:block;
+	clear:both;
+}
+
 /* FOOTER */
 #footer {
-	position: relative;
+	position: absolute;
 	bottom: 0;
 	width: 100%;
 	height: 200px;
@@ -375,7 +436,7 @@ div#image_container {
 
 #footer_container {
 	overflow: hidden;
-	margin: 	0 auto;
+	margin: 0 auto;
 	padding-bottom: 10px;
 }
 
@@ -384,9 +445,16 @@ div#image_container {
 	border-bottom: 1px solid #443b2b;
 }
 
+#footer_container ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
 #footer_container li {
+	margin: 0;
 	padding: 3px 0px;
-	list-style-type: none;
+	list-style: none;
 }
 
 #footer_container a {

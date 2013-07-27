@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-22 20:12-0300\n"
+"POT-Creation-Date: 2013-07-25 18:06-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -19,15 +19,15 @@ msgstr ""
 
 #: static/js/game.js:234 static/js/game.js.c:278
 msgid "Your turn! Play!"
-msgstr "Tú turno! Juege!"
+msgstr "¡Tú turno! ¡Juege!"
 
 #: static/js/game.js:263
 msgid "DigGems: Game "
-msgstr ""
+msgstr "DigGems: Juego "
 
 #: static/js/game.js:295
 msgid "Wait for your turn."
-msgstr "Espere tu turno"
+msgstr "Espere tu turno."
 
 #: static/js/game.js:298
 msgid "Game over, "
@@ -35,7 +35,7 @@ msgstr "Juego terminado, "
 
 #: static/js/game.js:304
 msgid "you win!"
-msgstr "tú ganaste!"
+msgstr "¡tú ganaste!"
 
 #: static/js/game.js:307
 msgid "you lose."
@@ -43,20 +43,30 @@ msgstr "tú perdiste."
 
 #: static/js/game.js:323
 msgid "Red's turn."
-msgstr ""
+msgstr "Turno del rojo."
 
 #: static/js/game.js:324
 msgid "Blue's turn."
-msgstr ""
+msgstr "Turno del azul"
 
 #: static/js/game.js:325
 msgid "Game is over, red player won."
-msgstr ""
+msgstr "Juego terminó, el rojo ganó."
 
 #: static/js/game.js:326
 msgid "Game is over, blue player won."
-msgstr ""
+msgstr "Juego terminó, el azul ganó."
 
-#: static/js/game.js:355
+#: static/js/game.js:327
+#, fuzzy
+msgid "Game is over, red player won by resignation."
+msgstr "Juego terminó, el rojo ganó."
+
+#: static/js/game.js:328
+#, fuzzy
+msgid "Game is over, blue player won by resignation."
+msgstr "Juego terminó, el azul ganó."
+
+#: static/js/game.js:357
 msgid "Guest"
-msgstr ""
+msgstr "Visitante"

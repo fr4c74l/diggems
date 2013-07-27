@@ -4,8 +4,8 @@
 
 var ctx;
 var mine;
+var event;
 var move_request = new XMLHttpRequest();
-var event_request = new XMLHttpRequest();
 var button_request = new XMLHttpRequest();
 
 var images = {};
@@ -248,8 +248,6 @@ function notify_state(msg) {
     }
     catch(e){
     }
-    // Blink title to alert user, if its turn.
-    your_turn_blinker.setBlinking(params.state == params.player);
 
     // Notification stuff
     if(!nt
@@ -294,9 +292,9 @@ function set_state(state) {
 	    if(state == 1 || state == 2) {
 		msg = gettext('Wait for your turn.');
 	    }
-	    else if(state == 3 || state == 4) {
+	    else if(state >= 3 && state <= 6) {
 		msg = gettext('Game over, ');
-		if((state - 2) == params.player) {
+		if(((state + 1) % 2) + 1 == params.player) {
 		    if(auth.fb) {
 			/*document.getElementById('brag_button')
 			.style.setProperty('visibility', 'visible', null);*/
@@ -314,6 +312,9 @@ function set_state(state) {
 	canvas.style.cursor = cursor;
 	canvas.onmousemove = hover_indicator;
 
+        // Blink title to alert user, if its turn.
+        your_turn_blinker.setBlinking(state == params.player);
+
 	if(params.state != state && (state == params.player || state > 2))
 	    notify_state(msg);
     } else {
@@ -323,7 +324,9 @@ function set_state(state) {
 	     gettext("Red's turn."),
 	     gettext("Blue's turn."),
 	     gettext('Game is over, red player won.'),
-	     gettext('Game is over, blue player won.')];
+	     gettext('Game is over, blue player won.'),
+	     gettext('Game is over, red player won by resignation.'),
+	     gettext('Game is over, blue player won by resignation.')];
 	msg = state_msgs[state];
     }
     var msg_box = document.getElementById('message');
@@ -411,13 +414,13 @@ function register_event() {
     if(params.state >= 3 || register_event.last_status == 410)
 	return; // Game is over
 
-    event_request.open('GET', '/event/'+ params.channel, true);
+    event_request.open('GET', '/event/' + params.channel, true);
     if(register_event.etag)
 	event_request.setRequestHeader('If-None-Match', register_event.etag);
     event_request.setRequestHeader('If-Modified-Since', params.last_change);
     event_request.onreadystatechange = function(ev){
 	if (event_request.readyState == 4) {
-	    register_event.last_status == event_request.status;
+	    register_event.last_status = event_request.status;
 	    if(event_request.status == 200) {
 		register_event.error_count = 0;
 		register_event.etag = event_request.getResponseHeader('Etag')
@@ -622,7 +625,8 @@ function init() {
     your_turn_blinker.setBlinking(params.state == params.player);
 
     // Receive updates from server
-    register_event();
+    event = new Event('/event/' + params.channel, params.last_change);
+    event.register_handler('g', handle_event);
 
     if(params.player) { // Not a spectator
 	// Expect for user input
@@ -634,9 +638,9 @@ function init() {
     canvas.style.setProperty('visibility', 'visible', null);
   if ((params.state == 1) || (params.state == 2))
   {
-    timeOut.start_time = (new Date()).getTime();
-    reset_counter.int = window.setInterval(timeOut, 1000);
-    timeOut();
+    turn_timeout.start_time = (new Date()).getTime();
+    reset_counter.int = window.setInterval(turn_timeout, 1000);
+    turn_timeout();
   }
 }
 
@@ -646,16 +650,16 @@ function load_img(name) {
     images[name] = img;
 }
 
-function timeOut()
+function turn_timeout()
 {
-	var timeleft = params.time_left - ((new Date()).getTime() - timeOut.start_time) / 1000;
+	var timeleft = params.time_left - ((new Date()).getTime() - turn_timeout.start_time) / 1000;
 	if (timeleft <= 10)
 	  document.getElementById("clock").style.setProperty('color', '#ff0000');
 	if (timeleft <= 0)
 	{
 		clearInterval(reset_counter.int);
 		timeleft = 0;
-		if ((params.player != params.state) && (params.state == 1 || params.state == 2))
+		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2))
 		{
 		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
 		  document.getElementById("timeout_buttons").style.display = 'block';
@@ -672,12 +676,12 @@ function reset_counter()
     clearInterval(reset_counter.int);
   if (params.state == 1 || params.state == 2)
   {
-    timeOut.start_time = (new Date()).getTime();
+    turn_timeout.start_time = (new Date()).getTime();
     params.time_left = 45;
-    timeOut();
+    turn_timeout();
     document.getElementById("clock").style.setProperty('color', '#000000');
     document.getElementById("timeout_buttons").style.display = 'none';
-    reset_counter.int = window.setInterval(timeOut, 1000);
+    reset_counter.int = window.setInterval(turn_timeout, 1000);
   }
   else
     document.getElementById("clock").innerHTML = "";
@@ -689,11 +693,16 @@ function claim_game(terminate)
 	var url = '/game/'+ params.game_id + '/claim/';
 	button_request.open('POST', url, true);
 	var data = null;
-	if (terminate)
+	if (terminate == 1)
 	{
 		data = "terminate=y";
 		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	}
+  if (terminate == 2)
+  {
+    data = "terminate=z";
+    button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  }
 	button_request.send(data);
 }
 

@@ -14,8 +14,17 @@
     
     display: block;
     position: relative;
-    width: 60px;
+    width: 70px;
     margin-bottom: 25px;
+}
+
+#snd_pts_box{
+    text-align: left;
+    display: block;
+    position: absolute;
+    top: 0px;
+    width: 50px;
+    left: 153px;
 }
 
 #h_pts_box {
@@ -36,7 +45,7 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 60px;
+    width: 70px;
 }
 
 #game_box {
@@ -65,6 +74,11 @@
     position: absolute;
     bottom: 67px;
     right: 0px;
+}
+
+#p1_link:hover,
+#p2_link:hover {
+	color: #000;
 }
 
 #p1_pic {
