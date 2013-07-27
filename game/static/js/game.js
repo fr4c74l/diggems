@@ -248,8 +248,6 @@ function notify_state(msg) {
     }
     catch(e){
     }
-    // Blink title to alert user, if its turn.
-    your_turn_blinker.setBlinking(params.state == params.player);
 
     // Notification stuff
     if(!nt
@@ -313,6 +311,9 @@ function set_state(state) {
 	var canvas = document.getElementById('game_canvas');
 	canvas.style.cursor = cursor;
 	canvas.onmousemove = hover_indicator;
+
+        // Blink title to alert user, if its turn.
+        your_turn_blinker.setBlinking(state == params.player);
 
 	if(params.state != state && (state == params.player || state > 2))
 	    notify_state(msg);
