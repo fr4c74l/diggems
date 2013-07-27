@@ -1,5 +1,5 @@
 Priority:
-- Add GG button
+- Show GG button
 - Footer bar with links
   - Fractal name and logo
 - Bug: Title blinks wrongly: when it is not my turn and after the game is over.

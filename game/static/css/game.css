@@ -18,6 +18,15 @@
     margin-bottom: 25px;
 }
 
+#snd_pts_box{
+    text-align: left;
+    display: block;
+    position: absolute;
+    top: 0px;
+    width: 50px;
+    left: 153px;
+}
+
 #h_pts_box {
     text-align: center;
     font-size: 150%;
