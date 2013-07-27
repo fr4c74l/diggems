@@ -261,10 +261,16 @@ def claim_game(request, game_id):
         profile.total_score += points
         profile.save()
         game.state = my_number + 4 
-
     elif term == 'z':
-        profile.save()
-        game.state = (my_number | 2) + 1
+        for pnum,player in ((1,game.p1),(2,game.p2)):
+            points = game.mine.count(tile_encode(pnum + 18))
+            prof = player.user
+            prof.total_score += points
+            prof.games_finished += 1
+            if pnum != my_number:
+                prof.games_won += 1
+                game.state = pnum + 4
+            prof.save()
     else:
         game.state = my_number;
 
