@@ -215,7 +215,7 @@ def join_game(request, game_id):
     game.state = 1
     game.save()
 
-    outdata = map(unicode, [game.seq_num, game.state])
+    outdata = map(unicode, [u'g', game.seq_num, game.state])
     fb = profile.facebook
     if fb:
         outdata += [fb.uid, escape(fb.name)]
@@ -281,7 +281,7 @@ def claim_game(request, game_id):
     game.save()
     transaction.commit()
 
-    result = '\n'.join(map(str, (game.seq_num, game.state)))
+    result = '\n'.join(map(str, (u'g', game.seq_num, game.state)))
     post_update(game.channel, result)
     
     if term:
@@ -428,7 +428,7 @@ def move(request, game_id):
              if mine[m][n] == 9:
                  revealed.append((m, n, 'x'))
 
-    result = itertools.chain((str(game.seq_num), str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
+    result = itertools.chain(('g', str(game.seq_num), str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
     result = '\n'.join(result)
 
     # Everything is OK until now, so commit DB transaction
