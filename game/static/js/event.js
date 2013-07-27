@@ -20,7 +20,7 @@ Event.prototype._callback = function() {
 
                 var data = this.request.responseText;
                 // TODO: assert charAt(1) is '\n'
-		this.handlers(data.charAt(0))(this.request.responseText.slice(2));
+		this.handlers[data.charAt(0)](this.request.responseText.slice(2));
 		this._register_event();
 	    }
 	    else {
