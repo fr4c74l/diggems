@@ -5,6 +5,7 @@ Priority:
 
 TODO Later:
 - Rematch button after game is over
+- Ask user to login on FB so his game stats will be recorded on his ID.
 - Internationalization (incomplete)
   - Spanish
 - Mobile friendly version?
