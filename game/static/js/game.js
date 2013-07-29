@@ -661,7 +661,7 @@ function turn_timeout()
 		timeleft = 0;
 		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2))
 		{
-		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
+		  document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
 		  document.getElementById("timeout_buttons").style.display = 'block';
 		}	
 	}
@@ -684,7 +684,7 @@ function reset_counter()
   }
   else
     document.getElementById("clock").innerHTML = "";
-  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
+  document.getElementById("timer_box").style.setProperty('visibility', 'visible');
 }
 
 function claim_game(terminate)

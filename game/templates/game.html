@@ -34,7 +34,7 @@ Software under Affero GPL license, see LICENSE.txt
 
 <div id="main">
 	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span><span> / 26</span></div>
-	<div class="box" id="h_pts_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
+	<div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
 	<div class = "box" id="timeout_buttons">
 	<div class="button" id="timeout_terminate" onclick="claim_game(1);">{% trans "Terminate Game" %}</div>
 	<div class="button" id="timeout_claim" onclick="claim_game(0);">{% trans "Take Player's Turn" %}</div>
