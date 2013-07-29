@@ -45,7 +45,9 @@ def render_with_extra(template_name, user, data={}, status=200):
     return HttpResponse(t.render(c), status=status)
 
 def fb_channel(request):
-    resp = HttpResponse('<script src="//connect.facebook.net/{}/all.js"></script>'.format(pgettext("Facebook", "en_US")))
+    resp = HttpResponse(
+        '<script src="//connect.facebook.net/{}/all.js"></script>'.format(pgettext("Facebook", "en_US")),
+        content_type='text/html')
     secs = 60*60*24*365
     resp['Pragma'] = 'public'
     resp['Cache-Control'] = 'max-age=' + str(secs)
