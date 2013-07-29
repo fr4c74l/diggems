@@ -664,9 +664,8 @@ function turn_timeout()
 		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
 		  document.getElementById("timeout_buttons").style.display = 'block';
 		}	
-	} else {
-	    document.getElementById("clock").innerHTML = Math.round(timeleft);
 	}
+	document.getElementById("clock").innerHTML = Math.round(timeleft);
 }
 
 function reset_counter()
