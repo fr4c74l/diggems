@@ -259,7 +259,7 @@ def claim_game(request, game_id):
         profile.save()
         game.state = my_number + 4 
 
-    # If player gives up...
+    # If one of the players give up...
     elif term == 'z':
         for pnum,player in ((1,game.p1),(2,game.p2)):
             points = game.mine.count(tile_encode(pnum + 18))

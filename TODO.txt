@@ -3,13 +3,11 @@ Priority:
 - Footer bar with links
   - Fractal name and logo
 - Bug: Title blinks wrongly: when it is not my turn and after the game is over.
-- Create a page to thank donations
 
 TODO Later:
 - Rematch button after game is over
-- new states for when game claimed
 - Internationalization (incomplete)
-- Advertsiment.
+  - Spanish
 - Mobile friendly version?
 - Display activity on user input.
 - Create a settings icon and menu
@@ -26,18 +24,20 @@ TODO Later:
   - Weekly
     - Everybody
     - Friends
-- Add icon indicating the unrevealed gems (a gem with a question mark, perhaps?)
-- Limit drawing inside the tile space.
 - Add clickable objects below the canvas for accessibility.
 - Add menu for view/play all games that are occurring
 - Add general and in-game chat
-    - Random color names in chat for guest users based on their internal ID
+  - Random color names in chat for guest users based on their internal ID
 - Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
   - Epistolar mode, with no time deadline
-- Use {{ STATIC_URL }} instead of fullpath of static urls in templates
-- More footer links
-  - "Contact" page (add a contact form and image of a pack donkey)
 - Our own login system, for non-facebook users
-- Warn user about bogus Internet browsers.
 - Publish open-graph story of a player
   - Brag about user result
+- Warn user about bogus Internet browsers.
+
+TODO "Irrelevant":
+ - More footer links
+  - "Contact" page (add a contact form and image of a pack donkey)
+ - Use {{ STATIC_URL }} instead of fullpath of static urls in templates
+ - Add clickable objects below the canvas for accessibility.
+

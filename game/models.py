@@ -80,6 +80,13 @@ class Player(models.Model):
     last_move = models.CharField(max_length=3, blank=True, null=True)
     user = models.ForeignKey(UserProfile)
 
+#States:
+# 0 -> Game has not started yet
+# 1 -> Player's 1 turn
+# 2 -> Player's 2 turn
+# X + 2 -> Player X won
+# X + 4 -> Game ended abnormally and player X won
+
 class Game(models.Model):
     mine = models.CharField(max_length=256)
     state = models.SmallIntegerField(default=0, db_index=True)
