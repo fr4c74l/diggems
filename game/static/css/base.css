@@ -410,11 +410,10 @@ http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
 
 .wrap {
 	position:relative;
-	min-height:100%;
 }
 
 .inner_wrap {
-	padding-bottom: 200px;
+	padding-bottom: 250px;
 }
 
 .inner_wrap:after {

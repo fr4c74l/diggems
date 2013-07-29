@@ -1,12 +1,12 @@
-{% load i18n %}
-{% comment %}
+{% load i18n %}{% comment %}
 
 Copyright 2011 Lucas Clemente Vella
 Software under Affero GPL license, see LICENSE.txt
 
-{% endcomment %}
-<html>
-<head>
+{% endcomment %}{% comment %}
+Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for explanation of these codes.
+{% endcomment %}<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{% trans "en" context "XHTML" %}">
+<head >
     <title>DigGems: {% block title %}{% endblock %}</title>
     <link rel="stylesheet" media="screen" type="text/css" href="/static/css/base.css" />
     {% block header_extra %}{% endblock %}
@@ -35,7 +35,7 @@ Software under Affero GPL license, see LICENSE.txt
 		  var js, fjs = d.getElementsByTagName(s)[0];
 		  if (d.getElementById(id)) {return;}
 		  js = d.createElement(s); js.id = id;
-		  {% comment %}Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml{% endcomment %}
+		  {% comment %}Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml{% endcomment %}
 		  js.src = "//connect.facebook.net/{% trans "en_US" context "Facebook" %}/all.js";
 		  fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
@@ -43,11 +43,11 @@ Software under Affero GPL license, see LICENSE.txt
 		{% get_current_language as LANGUAGE_CODE %}
 		{% get_available_languages as LANGUAGES %}
 		<div id="langbar" class="container">
-		<form name='langform' action='/i18n/setlang/' method='POST'>
+		<form name='langform' action='/i18n/setlang/' method='post'>
 			{% for LANG_CODE, LANG_NAME in LANGUAGES  %}
 			<a class="lang_button" {% if LANGUAGE_CODE == LANG_CODE %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG_CODE }}';document.langform.submit();"> {{ LANG_CODE }}</a>
 			{% endfor %}
-			<input name='language' type='hidden' >
+			<input name='language' type='hidden' />
 		</form>
 		</div>
 		<div id="header" class="container">
@@ -56,7 +56,7 @@ Software under Affero GPL license, see LICENSE.txt
 				<span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
 			</a>
 			<div id="user_info">
-				<img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
+				<img id="auth_user_pic" class="box" src="{% if fb %}//graph.facebook.com/{{ fb.uid }}/picture{% else %}/static/images/beta.png" style="visibility: hidden;{% endif %}" />
 				<div id="user_stats">
 					<div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %} {% trans "Visitor" %} {% endif %}</span></div>
 					<div id="score"> {% trans "Score" %}: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
@@ -77,8 +77,8 @@ Software under Affero GPL license, see LICENSE.txt
 							</div>
 						</div>
 						<div class="coll">
-							<div id="advertisement">
-								<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+							<div id="money1">
+								<script async="async" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
 								<!-- adsense120 -->
 								<ins class="adsbygoogle"
 								     style="display:inline-block;width:120px;height:600px"
@@ -90,8 +90,8 @@ Software under Affero GPL license, see LICENSE.txt
 							</div>
 						</div>
 						<div class="colr">
-							<div id="advertisement" style="float:right">
-								<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+							<div id="money2" style="float:right">
+								<script async="async" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
 								<!-- adsenseR -->
 								<ins class="adsbygoogle"
 									style="display:inline-block;width:120px;height:600px"
