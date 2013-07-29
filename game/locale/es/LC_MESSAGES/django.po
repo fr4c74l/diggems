@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-07-25 18:05-0300\n"
+"POT-Creation-Date: 2013-07-28 23:28-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,12 +18,12 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
 #. Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
-#: views.py:46 templates/base.html:39
+#: views.py:48 templates/base.html:39
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "es_LA"
 
-#: views.py:130
+#: views.py:132
 msgid "anonymous player"
 msgstr "jugador anónimo"
 
@@ -43,55 +43,55 @@ msgstr ""
 "Esta página no existe. Es posible que haya escrito mal la URL. Vuelva a la "
 "<a href=\"/\">página principal</a>."
 
-#: templates/base.html:62 templates/game.html:50 templates/game.html.py:59
+#: templates/base.html:61 templates/game.html:51 templates/game.html.py:60
 msgid "Visitor"
 msgstr "Visitante"
 
-#: templates/base.html:63
+#: templates/base.html:62
 msgid "Score"
 msgstr "Pontuación"
 
-#: templates/base.html:65
+#: templates/base.html:64
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base.html:105
+#: templates/base.html:116
 msgid "Play it now!"
 msgstr "¡Juege ahora!"
 
-#: templates/base.html:106
+#: templates/base.html:117
 msgid "About the game"
 msgstr "Sobre el juego"
 
-#: templates/base.html:107
+#: templates/base.html:118
 msgid "How to play"
 msgstr "Como jugar"
 
-#: templates/base.html:108
+#: templates/base.html:119
 msgid "Source code"
 msgstr "Código fuente"
 
-#: templates/base.html:112
+#: templates/base.html:123
 msgid "Policy"
 msgstr ""
 
-#: templates/base.html:114
+#: templates/base.html:125
 msgid "Terms of service"
 msgstr ""
 
-#: templates/base.html:115
+#: templates/base.html:126
 msgid "Privacy policy"
 msgstr ""
 
-#: templates/base.html:119
+#: templates/base.html:130
 msgid "About Us"
 msgstr ""
 
-#: templates/base.html:121
+#: templates/base.html:132
 msgid "Contact us"
 msgstr ""
 
-#: templates/base.html:125 templates/donate.html:11
+#: templates/base.html:136 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
 msgstr ""
@@ -140,45 +140,49 @@ msgstr "Donar Bitcoin"
 msgid "Game %(game_id)s"
 msgstr "Juego %(game_id)s"
 
-#: templates/game.html:38
+#: templates/game.html:39
 msgid "Terminate Game"
 msgstr "Terminar el juego"
 
-#: templates/game.html:39
+#: templates/game.html:40
 msgid "Take Player's Turn"
 msgstr "Tomar el turno"
 
-#: templates/game.html:41
+#: templates/game.html:42
 msgid "Give Up"
 msgstr ""
 
-#: templates/game.html:52 templates/game.html.py:61
+#: templates/game.html:53 templates/game.html.py:62
 msgid "You"
 msgstr "Usted"
 
-#: templates/game.html:52 templates/game.html.py:61
+#: templates/game.html:53 templates/game.html.py:62
 msgid "Your adversary"
 msgstr "Tu adversario"
 
-#: templates/game.html:59
+#: templates/game.html:60
 msgid "Empty!"
 msgstr "Vazio!"
 
-#: templates/game.html:59
+#: templates/game.html:60
 msgid "Wait..."
 msgstr "Espere..."
 
-#: templates/game.html:59
+#: templates/game.html:60
 msgid "Abort"
 msgstr "Abortar"
 
-#: templates/game.html:59 templates/index.html:49
+#: templates/game.html:60 templates/index.html:51
 msgid "Join!"
 msgstr "Unirse!"
 
-#: templates/game.html:64
+#: templates/game.html:65
 msgid "Copy the link to your adversary"
 msgstr "Copie este link para tu oponente"
+
+#: templates/game.html:77
+msgid "Accept the challenge and play immediately!"
+msgstr ""
 
 #: templates/game403.html:10
 msgid "Unauthorized"
@@ -219,51 +223,51 @@ msgid ""
 msgstr ""
 "...o nunca existió. Crie uno nuevo en la <a href =\"/\">página principal</a>."
 
-#: templates/index.html:19
+#: templates/index.html:21
 msgid "New game"
 msgstr "Nuevo juego"
 
-#: templates/index.html:21
+#: templates/index.html:23
 msgid "Private game"
 msgstr "Juego privado"
 
-#: templates/index.html:22
+#: templates/index.html:24
 msgid "Create!"
 msgstr "Crear!"
 
-#: templates/index.html:26
+#: templates/index.html:28
 msgid "Your games"
 msgstr "Sus juegos"
 
-#: templates/index.html:31 templates/index.html.py:52
+#: templates/index.html:33 templates/index.html.py:54
 msgid "Game"
 msgstr "Juego"
 
-#: templates/index.html:32
+#: templates/index.html:34
 msgid "Private"
 msgstr "Privado"
 
-#: templates/index.html:32
+#: templates/index.html:34
 msgid "Public"
 msgstr "Público"
 
-#: templates/index.html:33
+#: templates/index.html:35
 msgid "Waiting the other player"
 msgstr "Esperando el otro jugador"
 
-#: templates/index.html:34
+#: templates/index.html:36
 msgid "In progress"
 msgstr "En curso"
 
-#: templates/index.html:37 templates/index.html.py:55
+#: templates/index.html:39 templates/index.html.py:57
 msgid "No game found!"
 msgstr "Ningún juego encontrado!"
 
-#: templates/index.html:44
+#: templates/index.html:46
 msgid "Games to start"
 msgstr "Juegos por empezar"
 
-#: templates/index.html:53
+#: templates/index.html:55
 msgid "Versus"
 msgstr "Versus"
 
