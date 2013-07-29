@@ -2,6 +2,7 @@ Priority:
 - Show GG button
 - Footer bar with links
   - Fractal name and logo
+- Doesn't style "Guest" user as link in game view, since it is not a link.
 
 TODO Later:
 - Rematch button after game is over
