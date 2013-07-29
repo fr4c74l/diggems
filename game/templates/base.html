@@ -6,14 +6,14 @@ Software under Affero GPL license, see LICENSE.txt
 {% endcomment %}{% comment %}
 Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for explanation of these codes.
 {% endcomment %}<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{% trans "en" context "XHTML" %}">
-<head >
+<head>
     <title>DigGems: {% block title %}{% endblock %}</title>
     <link rel="stylesheet" media="screen" type="text/css" href="/static/css/base.css" />
     {% block header_extra %}{% endblock %}
 </head>
 <body>
 	<div class="wrap">
-		<div id="fb-root"></div>
+		<div id="fb-root" />
 		<script src="/static/js/login.js" />
 		<script>
 		<![CDATA[
