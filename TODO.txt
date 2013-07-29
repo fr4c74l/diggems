@@ -2,7 +2,6 @@ Priority:
 - Show GG button
 - Footer bar with links
   - Fractal name and logo
-- Bug: Title blinks wrongly: when it is not my turn and after the game is over.
 
 TODO Later:
 - Rematch button after game is over
@@ -15,6 +14,7 @@ TODO Later:
   - Button to enable desktop notification.
 - Timeout uninitialized game if host has left.
 - Change user display if player or opponent logs in.
+- Set correct score and win ratio when user logs in.
 - Real-time update of user stats.
 - Real-time update of index page.
 - Scoreboards
