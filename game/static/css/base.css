@@ -41,8 +41,12 @@ body {
 	margin: 0 auto;
 }
 
-#advertisement {
+#money1, #money2 {
 	min-width:120px;
+}
+
+#money2 {
+	float:right;
 }
 
 .adsbygoogle {
