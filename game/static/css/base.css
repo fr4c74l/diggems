@@ -42,7 +42,8 @@ body {
 }
 
 #money1, #money2 {
-	min-width:120px;
+	width: 120px;
+	height: 600px;
 }
 
 #money2 {

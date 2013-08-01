@@ -79,30 +79,10 @@ Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for 
 							</div>
 						</div>
 						<div class="coll">
-							<div id="money1">
-								<script async="async" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
-								<!-- adsense120 -->
-								<ins class="adsbygoogle"
-								     style="display:inline-block;width:120px;height:600px"
-								     data-ad-client= "{{ GOOGLE_AD_ID }}"
-								     data-ad-slot="{{ GOOGLE_AD_SLOTS.0}}"></ins>
-								<script>
-								<![CDATA[(adsbygoogle = window.adsbygoogle || []).push({});]]>
-								</script>
-							</div>
+							<object id="money1" data="{% url 'game.views.adhack' 0 %}" type="text/html"/>
 						</div>
 						<div class="colr">
-							<div id="money2">
-								<script async="async" src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" />
-								<!-- adsenseR -->
-								<ins class="adsbygoogle"
-									style="display:inline-block;width:120px;height:600px"
-									data-ad-client="{{ GOOGLE_AD_ID }}"
-									data-ad-slot="{{GOOGLE_AD_SLOTS.1}}"></ins>
-								<script>
-								<![CDATA[(adsbygoogle = window.adsbygoogle || []).push({});]]>
-								</script>
-							</div>
+							<object id="money2" data="{% url 'game.views.adhack' 1 %}" />
 						</div>
 					</div>
 				</div>

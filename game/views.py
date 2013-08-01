@@ -34,8 +34,6 @@ def render_with_extra(template_name, user, data={}, status=200):
         win_ratio = None
 
     extra = {'FB_APP_ID': settings.FB_APP_ID,
-             'GOOGLE_AD_ID': settings.GOOGLE_AD_ID,
-             'GOOGLE_AD_SLOTS': settings.GOOGLE_AD_SLOTS,
              'fb': user.facebook,
              'stats': {'score': user.total_score,
                        'victories': user.games_won,
@@ -105,7 +103,7 @@ def fb_login(request):
 
     t = loader.get_template('auth_fb.json')
     c = Context({'fb': fb})
-    return HttpResponse(t.render(c), mimetype='application/json')
+    return HttpResponse(t.render(c), content_type='application/json')
 
 @transaction.commit_on_success
 def fb_logout(request):
@@ -116,6 +114,13 @@ def fb_logout(request):
         request.session['user_id'] = profile.id
 
     return HttpResponse()
+
+def adhack(request, ad_id):
+    ad_id = int(ad_id)
+    return render_to_response('adhack.html',
+        Context({'GOOGLE_AD_ID': settings.GOOGLE_AD_ID,
+                 'GOOGLE_AD_SLOT': settings.GOOGLE_AD_SLOTS[ad_id]}),
+        content_type='text/html; charset=utf-8')
 
 def index(request):
     profile = UserProfile.get(request)
