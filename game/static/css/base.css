@@ -56,11 +56,13 @@ body {
 }
 
 .plain {
+	cursor: default;
 	color: inherit;
 	text-decoration: inherit;
 }
 
 .undlin:hover {
+	cursor: pointer;
 	text-decoration: underline;
 }
 
@@ -81,10 +83,6 @@ body {
 .box h1, h2, h3 {
 	color: #222;
 	text-shadow: 0.05em 0.05em 0.05em #535353;
-}
-
-.box a:hover {
-	text-decoration: underline;
 }
 
 .button {
