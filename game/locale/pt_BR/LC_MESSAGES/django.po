@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-02 12:24-0300\n"
+"POT-Creation-Date: 2013-08-02 13:38-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -49,8 +49,7 @@ msgctxt "XHTML"
 msgid "en"
 msgstr ""
 
-#: templates/base.html:63 templates/game (cópia).html:50 (cópia).html.py:59
-#: templates/game.html:42 templates/game.html.py:53
+#: templates/base.html:63 templates/game.html:41 templates/game.html.py:52
 msgid "Visitor"
 msgstr "Visitante"
 
@@ -151,61 +150,54 @@ msgstr ""
 msgid "Donate Bitcoin"
 msgstr "Doar Bitcoin"
 
-#: templates/game (cópia).html:10 templates/game.html:10
+#: templates/game.html:9
 #, python-format
 msgid "Game %(game_id)s"
 msgstr "Jogo %(game_id)s"
 
-#: templates/game (cópia).html:41 templates/game.html:69
-msgid "Terminate Game"
-msgstr "Terminar Jogo"
-
-#: templates/game (cópia).html:42 templates/game.html:70
-msgid "Take Player's Turn"
-msgstr "Tomar a Vez"
-
-#: templates/game (cópia).html:52 (cópia).html.py:61 templates/game.html:44
-#: templates/game.html.py:55
+#: templates/game.html:43 templates/game.html.py:54
 msgid "You"
 msgstr "Você"
 
-#: templates/game (cópia).html:52 (cópia).html.py:61 templates/game.html:44
-#: templates/game.html.py:55
+#: templates/game.html:43 templates/game.html.py:54
 msgid "Your adversary"
 msgstr "Seu oponente"
 
-#: templates/game (cópia).html:59 templates/game.html:53
+#: templates/game.html:52
 msgid "Empty!"
 msgstr "Vazio!"
 
-#: templates/game (cópia).html:59
-msgid "Wait..."
-msgstr "Aguarde..."
+#: templates/game.html:52
+msgid "Waiting player..."
+msgstr "Esperando o outro jogador..."
 
-#: templates/game (cópia).html:59 templates/game.html:64
+#: templates/game.html:64
 msgid "Abort"
 msgstr "Abortar"
 
-#: templates/game (cópia).html:59 templates/game.html:64
-#: templates/index.html:51
+#: templates/game.html:64 templates/index.html:51
 msgid "Join!"
 msgstr "Juntar-se"
-
-#: templates/game (cópia).html:69 templates/game.html:77
-msgid "Copy the link to your adversary"
-msgstr "Copie o link para seu oponente"
-
-#: templates/game (cópia).html:82 templates/game.html:90
-msgid "Accept the challenge and play immediately!"
-msgstr "Aceite o desafio e jogue imediatamente!"
-
-#: templates/game.html:53
-msgid "Waiting player..."
-msgstr "Esperando o outro jogador..."
 
 #: templates/game.html:67
 msgid "Give Up"
 msgstr "Desistir"
+
+#: templates/game.html:69
+msgid "Terminate Game"
+msgstr "Terminar Jogo"
+
+#: templates/game.html:70
+msgid "Take Player's Turn"
+msgstr "Tomar a Vez"
+
+#: templates/game.html:78
+msgid "Copy the link to your adversary"
+msgstr "Copie o link para seu oponente"
+
+#: templates/game.html:91
+msgid "Accept the challenge and play immediately!"
+msgstr "Aceite o desafio e jogue imediatamente!"
 
 #: templates/game403.html:10
 msgid "Unauthorized"
@@ -297,3 +289,6 @@ msgstr "Jogos por começar"
 #: templates/index.html:55
 msgid "Versus"
 msgstr "Contra"
+
+#~ msgid "Wait..."
+#~ msgstr "Aguarde..."
