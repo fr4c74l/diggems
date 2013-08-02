@@ -106,6 +106,7 @@ body {
 
 .button:hover {
 	color: #f9f9f9;
+	background-color: #6acd40;
 	cursor: pointer;
 }
 

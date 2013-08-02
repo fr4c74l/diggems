@@ -2,9 +2,11 @@ Priority:
 - Show GG button
 - Footer bar with links
   - Fractal name and logo
+- cancel bomb (press esc or something) and allow activate only in player's turn
+- create icons for buttons (abort, resign, terminate game, take player's turn)
+- Rematch button after game is over
 
 TODO Later:
-- Rematch button after game is over
 - Ask user to login on FB so his game stats will be recorded on his ID.
 - Internationalization (incomplete)
   - Spanish

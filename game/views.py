@@ -37,7 +37,8 @@ def render_with_extra(template_name, user, data={}, status=200):
              'fb': user.facebook,
              'stats': {'score': user.total_score,
                        'victories': user.games_won,
-                       'win_ratio': win_ratio}
+                       'win_ratio': win_ratio},
+             'profile': user,
             }
     c.update(extra)
     return HttpResponse(t.render(c), status=status)
@@ -140,7 +141,7 @@ def index(request):
 
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'profile': profile}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
