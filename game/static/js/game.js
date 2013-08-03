@@ -633,6 +633,14 @@ function init() {
     event = new Event('/event/' + params.channel, params.last_change);
     event.register_handler('g', handle_event);
 
+    // Init chat stuff
+    chat.init(
+	document.getElementById("chat_textfield"),
+	document.getElementById("input_field"),
+	document.getElementById("send_button"),
+	event, 'chat/'
+    );
+
     if(params.player) { // Not a spectator
 	// Expect for user input
 	canvas.addEventListener('click', on_click, false);

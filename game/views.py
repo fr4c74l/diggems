@@ -145,7 +145,7 @@ def index(request):
     else:
         user_id = _('Guest') + '-' + profile.id[:6]
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'profile': profile}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'profile': profile, 'user_id': user_id}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -468,14 +468,22 @@ def info(request, page):
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
 
-def main_chat(request):
+def chat_post(request, game_id=None):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
 
-    profile = UserProfile.get(request)
     msg = request.body
     if not msg:
         return HttpResponseBadRequest()
+
+    profile = UserProfile.get(request)
+    if game_id is None:
+        event_channel = "main_channel"
+    else:
+        game = get_object_or_404(Game, pk=game_id)
+        if not game.what_player(profile):
+            return HttpResponseForbidden()
+        event_channel = game.channel
 
     if profile.facebook:
         user_id = profile.facebook.name
@@ -491,6 +499,6 @@ def main_chat(request):
         'msg': escape(msg)
     }
 
-    post_update("main_channel", json.dumps(data))
+    post_update(event_channel, 'c\n' + json.dumps(data))
 
     return HttpResponse()

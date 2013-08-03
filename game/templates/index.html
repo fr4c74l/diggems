@@ -13,7 +13,8 @@ Software under Affero GPL license, see LICENSE.txt
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/index.css" />
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
-	<script src="/static/js/chat.js"></script>
+	<script src="/static/js/event.js" />
+	<script src="/static/js/chat.js" />
 {% endblock %}
 {% block content %}
 <table>
@@ -70,6 +71,18 @@ Software under Affero GPL license, see LICENSE.txt
 					<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />
 			</td>
 		</tr>
+		<script>
+			<![CDATA[
+			var event = new Event('/event/main_channel', (new Date()).toUTCString());
+
+			chat.init(
+				document.getElementById("chat_textfield"),
+				document.getElementById("input_field"),
+				document.getElementById("send_button"),
+				event, 'main_chat/'
+			);
+			]]>
+		</script>
 		<tr>
 			<td class="box" colspan="2">
 				<div class="fb-like" style="display: inline-block;" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>
