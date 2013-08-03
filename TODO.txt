@@ -2,6 +2,7 @@ Priority:
 - Show GG button
 - Footer bar with links
   - Fractal name and logo
+- Change "Visitor" to "Guest"
 
 TODO Later:
 - Rematch button after game is over
