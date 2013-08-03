@@ -14,58 +14,54 @@ Software under Affero GPL license, see LICENSE.txt
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
 {% endblock %}
 {% block content %}
-<table>
-	<tbody>
-		<tr>
-			<td class="box" id="new_game">
-			  <h1>{% trans "New game" %}</h1>
-				<form action="new_game/" method="post">
-				    {% trans "Private game" %} <input type="checkbox" name="private" value="1" />
-					<input class="button" type="submit" value="{% trans "Create!" %}"  style="float: right;"/>
-				</form>
-			</td>
-			<td class="box top" id="your_game" rowspan="2">
-			  <h1>{% trans "Your games" %}</h1>
-				{% if your_games %}
-				<ul>
-					{% for g in your_games %}
-					<li class="list_games">
-					<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
-						<div>{% if g.token %}{% trans "Private" %}{% else %}{% trans "Public" %}{% endif %}</div>{% if g.state = 0 %}
-						<div>{% trans "Waiting the other player" %}</div>{% else %}
-						<div>{% trans "In progress" %}</div>{% endif %}
-					</li>{% endfor %}
-				</ul>
-				{% else %}
-				<h4>{% trans "No game found!" %}</h4>
-				{% endif %}
-			</td>
-		</tr>
-		<tr>
-			<td class="box top" id="join_game">
-			  <h1>{% trans "Games to start" %}</h1>
-				{% if new_games %}{% for g in new_games %}
-				<ul>
-					<li class="list_games">
-							<div style="float:left; padding: 0px 5px 5px 0px;">
-								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
-							</div>
-							<img style="float:right;" class="middle thumb box" src="{% if g.op_picture %} {{g.op_picture}} {% else %} {{profile|mugshot}} {% endif %} " />
-							<a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a>:
-							{% trans "Versus" %} {{ g.op_name }}
-					</li>
-				</ul>
-				{% endfor %}{% else %}<h4>{% trans "No game found!" %}</h4>{% endif %}
-			</td>
-		</tr>
-		<tr>
-			<td class="box" colspan="2">
-				<div class="fb-like" style="display: inline-block;" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>
-				<div style="float: right; display: inline-block;"><script id='flattrbtn'>
-				<![CDATA[(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent('{{ like_url }}');f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');]]>
-				</script></div>
-			</td>
-		</tr>
-	</tbody>
-</table>
+
+<div class="box" id="your_games">
+	{% if your_games|length == 1 %}
+	<h1>{% trans "Return to game" %}</h1>
+	{% else %}
+	<h1>{% trans "Your games" %}</h1>
+	<ul>
+		{% for g in your_games %}
+		<li class="list_games">
+		<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
+			<div>{% if g.token %}{% trans "Private" %}{% else %}{% trans "Public" %}{% endif %}</div>{% if g.state = 0 %}
+			<div>{% trans "Waiting the other player" %}</div>{% else %}
+			<div>{% trans "In progress" %}</div>{% endif %}
+		</li>{% endfor %}
+	</ul>
+	{% endif %}
+</div>
+
+<div class="game_buttons_menu" >
+	<div class="left_menu_button">
+		<form action="new_game/" method="post">
+		 <!--   {% trans "Private game" %} <input type="checkbox" name="private" value="1" /> -->
+			<input id="new_game_button" class="button game_button" type="submit" value="{% trans "Play!" %}" />
+		</form>
+	</div>
+
+	<div class="right_menu_button">
+		<form action="game/{{ g.id }}/join/" method="post">
+			<input id="play_with_friends" class="button game_button" type="submit" value="{% trans "Play with a friend!" %}" />
+		</form>
+	</div>
+
+	<div class="right_menu_button" style="margin: 2px 0px;">
+		<form action="game/{{ g.id }}/join/" method="post">
+			<input id="accept_challenge" class="button game_button" type="submit" value="{% trans "Accept challenge!" %}" />
+		</form>
+	</div>
+
+	<div class="box right_menu_button" id="game_statistics">
+		<h4> {% trans "Game statistics" %}</h4>
+	</div>
+
+</div>
+
+<div class="likebox box" >
+	<div class="fb-like" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>
+	<div style="float: right; display: inline-block;"><script id='flattrbtn'>
+	<![CDATA[(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent('{{ like_url }}');f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');]]>
+	</script></div>
+</div>
 {% endblock %}

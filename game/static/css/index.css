@@ -1,6 +1,14 @@
 /* Copyright 2013 Fractal Jogos e Tecnologia
  * Software under Affero GPL license, see LICENSE.txt */
 
+.likebox {
+	clear: both;
+}
+
+.fb-like {
+	display: inline-block;
+}
+
 .list_games {
 	padding: 0px 10px;
 	overflow: hidden;
@@ -19,40 +27,59 @@ li {
 	margin: 0;
 }
 
-/* TABLES */
-
-table {
-	/* border-collapse:collapse; */
-	empty-cells: hide;
-	overflow: visible;
-	width:100%; 
-	border-spacing: 20px;
+.game_button {
+	width: 100%;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
 }
 
-tr {
-	width:50%;
+.game_buttons_menu {
+	overflow: hidden; 
+	width: 100%;
+	margin-bottom: 10px;
 }
 
-#new_game {
-	vertical-align: bottom;
+.left_menu_button {
+	margin: 0 auto;
+	width: 49%;
+	float: left;
 }
 
-#join_game {
+.right_menu_button {
+	margin: 0 auto;
+	width: 49%;
+	float: right;
 }
 
-#your_game {
+#new_game_button {
+	font-size: 50px;
+	height: 250px;
 }
 
-td.top {
-	vertical-align: top;
-}
-td h1 {
-	text-align: left;
+#play_with_friends {
+	font-size: 25px;
+	height: 125px;
 }
 
-caption {
-	font-weight:bold;
-	margin-bottom:.33em;
+#accept_challenge {
+	font-size: 20px;
+	height: 62px;
+}
+
+#your_games {
+	display: none;
+}
+
+#game_statistics {
+	margin: 2px 0px;
+	padding: 1px;
+	height: 55px;
+}
+
+h4 {
+	margin: 3px;
 }
 
 /* FORMS */
