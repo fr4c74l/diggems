@@ -460,10 +460,15 @@ function mouse_tile(ev) {
 	var totalOffsetY = 0;
 	var currentElement = ev.target;
 
-	do{
+	while(currentElement.offsetParent) {
 	    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
 	    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-	} while(currentElement = currentElement.offsetParent);
+	    currentElement = currentElement.offsetParent;
+	}
+
+	// Caveat: On Firefox, with XHTML, <body> scroll is 0 and we must use window scroll...
+	totalOffsetX -= window.scrollX;
+	totalOffsetY -= window.scrollY;
 
 	m = ev.clientX - totalOffsetX;
 	n = ev.clientY - totalOffsetY;
