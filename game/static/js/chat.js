@@ -97,4 +97,4 @@ var chat = (function (){
 	}
 	
 	window.addEventListener('load', in_game_init, false);
-})()
+})();
