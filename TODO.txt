@@ -33,6 +33,7 @@ TODO Later:
   - Display activity on message send
     - Clear input field on send, to avoid double send...
   - Retrieve old chat messages
+  - Hide chat display from spectator
 - Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
   - Epistolar mode, with no time deadline
 - Our own login system, for non-facebook users
