@@ -34,8 +34,6 @@ def render_with_extra(template_name, user, data={}, status=200):
         win_ratio = None
 
     extra = {'FB_APP_ID': settings.FB_APP_ID,
-             'GOOGLE_AD_ID': settings.GOOGLE_AD_ID,
-             'GOOGLE_AD_SLOTS': settings.GOOGLE_AD_SLOTS,
              'fb': user.facebook,
              'stats': {'score': user.total_score,
                        'victories': user.games_won,
@@ -45,7 +43,9 @@ def render_with_extra(template_name, user, data={}, status=200):
     return HttpResponse(t.render(c), status=status)
 
 def fb_channel(request):
-    resp = HttpResponse('<script src="//connect.facebook.net/{}/all.js"></script>'.format(pgettext("Facebook", "en_US")))
+    resp = HttpResponse(
+        '<script src="//connect.facebook.net/{}/all.js"></script>'.format(pgettext("Facebook", "en_US")),
+        content_type='text/html')
     secs = 60*60*24*365
     resp['Pragma'] = 'public'
     resp['Cache-Control'] = 'max-age=' + str(secs)
@@ -103,7 +103,7 @@ def fb_login(request):
 
     t = loader.get_template('auth_fb.json')
     c = Context({'fb': fb})
-    return HttpResponse(t.render(c), mimetype='application/json')
+    return HttpResponse(t.render(c), content_type='application/json')
 
 @transaction.commit_on_success
 def fb_logout(request):
@@ -114,6 +114,13 @@ def fb_logout(request):
         request.session['user_id'] = profile.id
 
     return HttpResponse()
+
+def adhack(request, ad_id):
+    ad_id = int(ad_id)
+    return render_to_response('adhack.html',
+        Context({'GOOGLE_AD_ID': settings.GOOGLE_AD_ID,
+                 'GOOGLE_AD_SLOT': settings.GOOGLE_AD_SLOTS[ad_id]}),
+        content_type='text/html; charset=utf-8')
 
 def index(request):
     profile = UserProfile.get(request)
@@ -138,7 +145,7 @@ def index(request):
     else:
         user_id = _('Guest') + '-' + profile.id[:6]
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'user_id': user_id}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'profile': profile}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -264,7 +271,7 @@ def claim_game(request, game_id):
         profile.save()
         game.state = my_number + 4 
 
-    # If player gives up...
+    # If one of the players give up...
     elif term == 'z':
         for pnum,player in ((1,game.p1),(2,game.p2)):
             points = game.mine.count(tile_encode(pnum + 18))

@@ -41,8 +41,13 @@ body {
 	margin: 0 auto;
 }
 
-#advertisement {
-	min-width:120px;
+#money1, #money2 {
+	width: 120px;
+	height: 600px;
+}
+
+#money2 {
+	float:right;
 }
 
 .adsbygoogle {
@@ -51,11 +56,13 @@ body {
 }
 
 .plain {
+	cursor: default;
 	color: inherit;
 	text-decoration: inherit;
 }
 
 .undlin:hover {
+	cursor: pointer;
 	text-decoration: underline;
 }
 
@@ -76,10 +83,6 @@ body {
 .box h1, h2, h3, h4, h5 {
 	color: #222;
 	text-shadow: 0.05em 0.05em 0.05em #535353;
-}
-
-.box a:hover {
-	text-decoration: underline;
 }
 
 .button {
@@ -410,11 +413,10 @@ http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
 
 .wrap {
 	position:relative;
-	min-height:100%;
 }
 
 .inner_wrap {
-	padding-bottom: 200px;
+	padding-bottom: 250px;
 }
 
 .inner_wrap:after {

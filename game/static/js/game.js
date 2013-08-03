@@ -248,8 +248,6 @@ function notify_state(msg) {
     }
     catch(e){
     }
-    // Blink title to alert user, if its turn.
-    your_turn_blinker.setBlinking(params.state == params.player);
 
     // Notification stuff
     if(!nt
@@ -313,6 +311,9 @@ function set_state(state) {
 	var canvas = document.getElementById('game_canvas');
 	canvas.style.cursor = cursor;
 	canvas.onmousemove = hover_indicator;
+
+        // Blink title to alert user, if its turn.
+        your_turn_blinker.setBlinking(state == params.player);
 
 	if(params.state != state && (state == params.player || state > 2))
 	    notify_state(msg);
@@ -459,10 +460,15 @@ function mouse_tile(ev) {
 	var totalOffsetY = 0;
 	var currentElement = ev.target;
 
-	do{
+	while(currentElement.offsetParent) {
 	    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
 	    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-	} while(currentElement = currentElement.offsetParent);
+	    currentElement = currentElement.offsetParent;
+	}
+
+	// Caveat: On Firefox, with XHTML, <body> scroll is 0 and we must use window scroll...
+	totalOffsetX -= window.scrollX;
+	totalOffsetY -= window.scrollY;
 
 	m = ev.clientX - totalOffsetX;
 	n = ev.clientY - totalOffsetY;
@@ -660,12 +666,11 @@ function turn_timeout()
 		timeleft = 0;
 		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2))
 		{
-		  document.getElementById("h_pts_box").style.setProperty('visibility', 'hidden', null);
+		  document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
 		  document.getElementById("timeout_buttons").style.display = 'block';
 		}	
-	} else {
-	    document.getElementById("clock").innerHTML = Math.round(timeleft);
 	}
+	document.getElementById("clock").innerHTML = Math.round(timeleft);
 }
 
 function reset_counter()
@@ -684,7 +689,7 @@ function reset_counter()
   }
   else
     document.getElementById("clock").innerHTML = "";
-  document.getElementById("h_pts_box").style.setProperty('visibility', 'visible');
+  document.getElementById("timer_box").style.setProperty('visibility', 'visible');
 }
 
 function claim_game(terminate)

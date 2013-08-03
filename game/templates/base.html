@@ -1,11 +1,11 @@
-{% load i18n %}
-{% comment %}
+{% load i18n %}{% comment %}
 
 Copyright 2011 Lucas Clemente Vella
 Software under Affero GPL license, see LICENSE.txt
 
-{% endcomment %}
-<html>
+{% endcomment %}{% comment %}
+Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for explanation of these codes.
+{% endcomment %}<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{% trans "en" context "XHTML" %}">
 <head>
     <title>DigGems: {% block title %}{% endblock %}</title>
     <link rel="stylesheet" media="screen" type="text/css" href="/static/css/base.css" />
@@ -13,9 +13,10 @@ Software under Affero GPL license, see LICENSE.txt
 </head>
 <body>
 	<div class="wrap">
-		<div id="fb-root"></div>
-		<script src="/static/js/login.js"></script>
+		<div id="fb-root" />
+		<script src="/static/js/login.js" />
 		<script>
+		<![CDATA[
 		var auth = {
 		  "fb": {% if fb %}{% include "auth_fb.json" %}{% else %}null{% endif %}
 		};
@@ -34,10 +35,11 @@ Software under Affero GPL license, see LICENSE.txt
 		  var js, fjs = d.getElementsByTagName(s)[0];
 		  if (d.getElementById(id)) {return;}
 		  js = d.createElement(s); js.id = id;
-		  {% comment %}Translators: Please see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml{% endcomment %}
+		  {% comment %}Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml{% endcomment %}
 		  js.src = "//connect.facebook.net/{% trans "en_US" context "Facebook" %}/all.js";
 		  fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
+		]]>
 		</script>
 		{% get_current_language as LANGUAGE_CODE %}
 		{% get_available_languages as LANGUAGES %}
@@ -46,16 +48,16 @@ Software under Affero GPL license, see LICENSE.txt
 				{% for LANG_CODE, LANG_NAME in LANGUAGES  %}
 				<a class="lang_button" {% if LANGUAGE_CODE == LANG_CODE %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG_CODE }}';document.langform.submit();"> {{ LANG_CODE }}</a>
 				{% endfor %}
-				<input name='language' type='hidden' >
+				<input name='language' type='hidden' />
 			</form>
 		</div>
 		<div id="header" class="container">
-			<a style="position: relative;" class="plain" href="/">
+			<a style="position: relative;" href="/">
 				<img id="icon" class="logo" src="/static/images/icon64.png" />
 				<span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
 			</a>
 			<div id="user_info">
-				<img id="auth_user_pic" class="box" {% if fb %}src="//graph.facebook.com/{{ fb.uid }}/picture"{% else %}style="visibility: hidden;"{% endif %} />
+				<img id="auth_user_pic" class="box" src="{% if fb %}//graph.facebook.com/{{ fb.uid }}/picture{% else %}/static/images/beta.png" style="visibility: hidden;{% endif %}" />
 				<div id="user_stats">
 					<div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %} {% trans "Visitor" %} {% endif %}</span></div>
 					<div id="score"> {% trans "Score" %}: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
@@ -76,30 +78,10 @@ Software under Affero GPL license, see LICENSE.txt
 							</div>
 						</div>
 						<div class="coll">
-							<div id="advertisement">
-								<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-								<!-- adsense120 -->
-								<ins class="adsbygoogle"
-								     style="display:inline-block;width:120px;height:600px"
-								     data-ad-client= "{{ GOOGLE_AD_ID }}"
-								     data-ad-slot="{{ GOOGLE_AD_SLOTS.0}}"></ins>
-								<script>
-								(adsbygoogle = window.adsbygoogle || []).push({});
-								</script>
-							</div>
+							<object id="money1" data="{% url 'game.views.adhack' 0 %}" type="text/html"/>
 						</div>
 						<div class="colr">
-							<div id="advertisement" style="float:right">
-								<script async src="http://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-								<!-- adsenseR -->
-								<ins class="adsbygoogle"
-									style="display:inline-block;width:120px;height:600px"
-									data-ad-client="{{ GOOGLE_AD_ID }}"
-									data-ad-slot="{{GOOGLE_AD_SLOTS.1}}"></ins>
-								<script>
-								(adsbygoogle = window.adsbygoogle || []).push({});
-								</script>
-							</div>
+							<object id="money2" data="{% url 'game.views.adhack' 1 %}" />
 						</div>
 					</div>
 				</div>
@@ -119,20 +101,20 @@ Software under Affero GPL license, see LICENSE.txt
 				  </ul>
 				</div>
 				<div class="fourcol colleft">
-				  <h3>{% trans "Policy" %} </h3>
+				  <h3>{% trans "Policy" %}</h3>
 				  <ul>
 					<li><a href="/info/terms/">{% trans "Terms of service" %}</a></li>
 					<li><a href="/info/privacy/">{% trans "Privacy policy" %}</a></li>
 				  </ul>
 				</div>
 				<div class="fourcol colleft">
-				  <h3>{% trans "About Us" %} </h3>
+				  <h3>{% trans "About Us" %}</h3>
 				  <ul>
 					<li><a href="/info/contact/">{% trans "Contact us" %}</a></li>
 				  </ul>
 				</div>
 				<div class="fourcol colright">
-					<h3>{% trans "Patronage" %} </h3>
+					<h3>{% trans "Patronage" %}</h3>
 					<a class="tip_jar" href="{% url 'game.views.donate' %}"></a>
 				</div>
 			</div>

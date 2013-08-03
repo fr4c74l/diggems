@@ -1,5 +1,7 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load mugshot %}
+
 {% comment %}
 
 Copyright 2011 Lucas Clemente Vella
@@ -26,8 +28,8 @@ Software under Affero GPL license, see LICENSE.txt
 			</td>
 			<td class="box top" id="your_game" rowspan="2">
 			  <h1>{% trans "Your games" %}</h1>
-				<ul>
 				{% if your_games %}
+				<ul>
 					{% for g in your_games %}
 					<li class="list_games">
 					<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
@@ -35,27 +37,27 @@ Software under Affero GPL license, see LICENSE.txt
 						<div>{% trans "Waiting the other player" %}</div>{% else %}
 						<div>{% trans "In progress" %}</div>{% endif %}
 					</li>{% endfor %}
+				</ul>
 				{% else %}
 				<h4>{% trans "No game found!" %}</h4>
 				{% endif %}
-				</ul>
 			</td>
 		</tr>
 		<tr>
 			<td class="box top" id="join_game">
 			  <h1>{% trans "Games to start" %}</h1>
+				{% if new_games %}{% for g in new_games %}
 				<ul>
-					{% if new_games %}{% for g in new_games %}
 					<li class="list_games">
 							<div style="float:left; padding: 0px 5px 5px 0px;">
 								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
 							</div>
-							{% if g.op_picture %}<img style="float:right;" class="middle thumb box" src="{{g.op_picture}}" /> {% endif %}
+							<img style="float:right;" class="middle thumb box" src="{% if g.op_picture %} {{g.op_picture}} {% else %} {{profile|mugshot}} {% endif %} " />
 							<a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a>:
 							{% trans "Versus" %} {{ g.op_name }}
 					</li>
-					{% endfor %}{% else %}<h4>{% trans "No game found!" %}</h4>{% endif %}
 				</ul>
+				{% endfor %}{% else %}<h4>{% trans "No game found!" %}</h4>{% endif %}
 			</td>
 		</tr>
 		<tr class="chat">
@@ -71,7 +73,9 @@ Software under Affero GPL license, see LICENSE.txt
 		<tr>
 			<td class="box" colspan="2">
 				<div class="fb-like" style="display: inline-block;" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>
-				<div style="float: right; display: inline-block;"><script id='flattrbtn'>(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent('{{ like_url }}');f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');</script></div>
+				<div style="float: right; display: inline-block;"><script id='flattrbtn'>
+				<![CDATA[(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent('{{ like_url }}');f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');]]>
+				</script></div>
 			</td>
 		</tr>
 	</tbody>

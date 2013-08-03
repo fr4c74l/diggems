@@ -33,6 +33,8 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
+DEFAULT_CONTENT_TYPE = 'application/xhtml+xml'
+
 DATABASES = {
     'default': {
         'ENGINE': 'diggems.green_pool_psql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.

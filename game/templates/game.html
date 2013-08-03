@@ -15,8 +15,9 @@ Software under Affero GPL license, see LICENSE.txt
 	<script src="/static/js/chat.js"></script>
 {% endblock %}
 {% block content %}
-<script type="text/javascript" src="{% url "django.views.i18n.javascript_catalog" %}"></script>
+<script type="text/javascript" src="{% url "django.views.i18n.javascript_catalog" %}" />
 <script>
+	<![CDATA[
 	var params = {
 	"game_id": {{ game_id }},
 	"state": {{ state }},
@@ -31,26 +32,26 @@ Software under Affero GPL license, see LICENSE.txt
 	"player": {{ player }}{% if tnt_used %},
 	"tnt_used": true{% endif %}{% endif %}
 	};
+	]]>
 </script>
-<script src="/static/js/event.js"></script>
-<script src="/static/js/game.js"></script>
+<script src="/static/js/event.js" />
+<script src="/static/js/game.js" />
 
 <div id="main">
 	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span><span> / 26</span></div>
-	<div class="box" id="h_pts_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
+	<div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
 	<div class = "box" id="timeout_buttons">
-	<div class="button" id="timeout_terminate" onclick="claim_game(1);">{% trans "Terminate Game" %}</div>
-	<div class="button" id="timeout_claim" onclick="claim_game(0);">{% trans "Take Player's Turn" %}</div>
+		<div class="button" id="timeout_terminate" onclick="claim_game(1);">{% trans "Terminate Game" %}</div>
+		<div class="button" id="timeout_claim" onclick="claim_game(0);">{% trans "Take Player's Turn" %}</div>
 	</div>
-	<!--<div class="button" id="snd_pts_box" onclick="claim_game(2);">{% trans "Give Up" %}</div>-->
+	{# <div class="button" id="snd_pts_box" onclick="claim_game(2);">{% trans "Give Up" %}</div> #}
 	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
 	<div id="game_box" class="box">
-		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416">
-		</canvas>
+		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416" />
 	</div>
 	<div class="box pbox" id="p1_box">
 		<a id="p1_link" class="plain{% if p1_info %} undlin{% endif %}" target="_blank"{% if p1_info %} href="//facebook.com/{{ p1_info.uid }}/"{% endif %}>
-			<img id="p1_pic" width="40px" height="40px" style="{% if not p1_info %}display: none;{% endif %}"{% if p1_info %} src="//graph.facebook.com/{{ p1_info.uid }}/picture"{% endif %} />
+			<img id="p1_pic" width="40" height="40" style="{% if not p1_info %}display: none;{% endif %}"{% if p1_info %} src="//graph.facebook.com/{{ p1_info.uid }}/picture"{% endif %} />
 			<div id="p1_name" class="pname">{% if p1_info %}{{ p1_info.name }}{% else %}{% blocktrans %}Visitor{% endblocktrans %}{% endif %}</div>
 		</a>
 		<div class="pinfo" style="text-align: right;">{% if player %}({% if player == 1 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
@@ -59,29 +60,30 @@ Software under Affero GPL license, see LICENSE.txt
 	{% endif %}
 	<div class="box pbox" id="p2_box">
 		<a id="p2_link" class="plain{% if p2_info %} undlin{% endif %}" target="_blank"{% if p2_info %} href="//facebook.com/{{ p2_info.uid }}/"{% endif %}>
-			<img id="p2_pic" width="40px" height="40px" style="{% if not p2_info %}display: none;{% endif %}"{% if p2_info %} src="//graph.facebook.com/{{ p2_info.uid }}/picture"{% endif %} />
+			<img id="p2_pic" width="40" height="40" style="{% if not p2_info %}display: none;{% endif %}"{% if p2_info %} src="//graph.facebook.com/{{ p2_info.uid }}/picture"{% endif %} />
 			<div id="p2_name" class="pname">{% if state == 0 %}{% if not player and not token %}{% blocktrans %}Empty!{% endblocktrans %}{% else %}{% blocktrans %}Wait...{% endblocktrans %}{% endif %}{% if player or not token %}<form style="float: right;" action="{% if player %}abort{% else %}join{% endif %}/" method="post"><input class="button" type="submit" value="{% if player %}{% blocktrans %}Abort{% endblocktrans %}{% else %}{% blocktrans %}Join!{% endblocktrans %}{% endif %}" /></form>{% endif %}{% elif p2_info %}{{ p2_info.name }}{% else %}{% blocktrans %}Visitor{% endblocktrans %}{% endif %}</div>
 		</a>
 		<div class="pinfo" style="text-align: left;">{% if player %}({% if player == 2 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
 	</div>
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
 		<div>{% blocktrans %}Copy the link to your adversary{% endblocktrans %}:</div>
-		<input type="text" style="display: inline-block; width: 250px;cursor:text;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly/>
+		<input type="text" style="display: inline-block; width: 250px;cursor:text;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly="readonly" />
 		<div style="display: inline-block;" class="addthis_toolbox addthis_default_style addthis_16x16_style">
-			<a class="addthis_button_facebook"></a>
-			<a class="addthis_button_twitter"></a>
-			<a class="addthis_button_google_plusone_share"></a>
+			<a class="addthis_button_facebook" />
+			<a class="addthis_button_twitter" />
+			<a class="addthis_button_google_plusone_share" />
 		</div>
 		<script>
+			<![CDATA[
 			var addthis_config = { data_track_clickback: false };
 			var addthis_share = {
 				title: "DigGems: Game {{ game_id }}",
 				url: "{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}",
-				description: gettext("Accept the challange and play immediately!"),
+				description: "{% trans "Accept the challenge and play immediately!" %}",
 			};
+			]]>
 		</script> 
-		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e">
-		</script>{% endif %}
+		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e" />{% endif %}
 	</div>
 </div>
 
@@ -110,8 +112,10 @@ Software under Affero GPL license, see LICENSE.txt
 {% comment %}
 TODO: Place this together with the enable/disable sound button.
 <script>
+<![CDATA[
 if(nt && nt.checkPermission() == 1)
 document.write('<span onclick=\"nt.requestPermission();\">Clique para permitir notificação.</span>');
+]]>
 </script>
 {% endcomment %}
 {% endblock %}
