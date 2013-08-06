@@ -40,10 +40,28 @@ Software under Affero GPL license, see LICENSE.txt
 			<img id="p1_pic" width="40" height="40" style="{% if not p1_info %}display: none;{% endif %}"{% if p1_info %} src="//graph.facebook.com/{{ p1_info.uid }}/picture"{% endif %}/>
 			<div id="p1_name" class="pname">{% if p1_info %}{{ p1_info.name }}{% else %}{% blocktrans %}Visitor{% endblocktrans %}{% endif %}</div>
 		</a>
-		<div class="pinfo" style="text-align: left;">{% if player %}({% if player == 1 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
+		<div class="pinfo" style="left: 0;">{% if player %}({% if player == 1 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
+		{% if player == 1 %}
+			<a id="tnt_box" style="right: 0;" ><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></a>
+		{% endif %}
 	</div>
 
-	<div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
+	<div id="middle_box" >
+		<div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
+		<div class = "box" id="timeout_buttons">
+			<div class="button" id="timeout_terminate" onclick="claim_game(1);">{% trans "Terminate Game" %}</div>
+			<div class="button" id="timeout_claim" onclick="claim_game(0);">{% trans "Take Player's Turn" %}</div>
+		</div>
+		<div id="quit_buttons" >
+			{% if state == 0 %}
+				{% if player or not token %}
+				<form id="abort" action="{% if player %}abort{% else %}join{% endif %}/" method="post"><input class="button" type="submit" value="{% if player %}{% blocktrans %}Abort{% endblocktrans %}{% else %}{% blocktrans %}Join!{% endblocktrans %}{% endif %}" /></form>
+				{% endif %} 
+			{% else %}
+				<div class="button" id="resign" onclick="claim_game(2);">{% trans "Give Up" %}</div>
+			{% endif %} 
+		</div>
+	</div>
 
 	<div class="box pbox" id="p2_box">
 		<img id="p2_pic" width="40" height="40" style="{% if not p2_info %}display: none;{% endif %}"{% if p2_info %} src="//graph.facebook.com/{{ p2_info.uid }}/picture"{% endif %} />
@@ -51,27 +69,19 @@ Software under Affero GPL license, see LICENSE.txt
 		<a id="p2_link" class="plain{% if p2_info %} undlin{% endif %}" target="_blank"{% if p2_info %} href="//facebook.com/{{ p2_info.uid }}/"{% endif %}>
 		<div id="p2_name" class="pname">{% if state == 0 %}{% if not player and not token %}{% blocktrans %}Empty!{% endblocktrans %}{% else %}{% blocktrans %}Waiting player...{% endblocktrans %}{% endif %}{% elif p2_info %}{{ p2_info.name }}{% else %}{% blocktrans %}Visitor{% endblocktrans %}{% endif %}</div>
 		</a>
-		<div class="pinfo" style="text-align: right;">{% if player %}({% if player == 2 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
+		<div class="pinfo" style="right: 0;">{% if player %}({% if player == 2 %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your adversary{% endblocktrans %}{% endif %}){% endif %}</div>
+		{% if player == 2 %}
+			<a id="tnt_box" style="left: 0;"><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></a>
+		{% endif %}
 	</div>
 
 	<div id="game_box" class="box">
 		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416" />
-		<div id="game_settings">
-			{% if player %}<a id="tnt_box"><img id="tnt" src="/static/images/{% if tnt_used %}explosion{% else %}crate{% endif %}.png" /></a>{% endif %}
+<!--		<div id="game_settings">
 			<div id="buttons" >
-			{% if state == 0 %}
-				{% if player or not token %}
-					<form id="abort" action="{% if player %}abort{% else %}join{% endif %}/" method="post"><input class="button" type="submit" value="{% if player %}{% blocktrans %}Abort{% endblocktrans %}{% else %}{% blocktrans %}Join!{% endblocktrans %}{% endif %}" /></form>
-				{% endif %} 
-			{% else %}
-				<div class="button" id="resign" onclick="claim_game(2);">{% trans "Give Up" %}</div>
-				<div id="timeout_buttons">
-					<div class="button" id="timeout_terminate" onclick="claim_game(1);">{% trans "Terminate Game" %}</div>
-					<div class="button" id="timeout_claim" onclick="claim_game(0);">{% trans "Take Player's Turn" %}</div>
-				</div>
-			{% endif %}
 			</div>
 		</div>
+ -->
 	</div>
 
 	<div class="box{% if state != 0 %} big{% endif %}" id="message">{% if player and state == 0 %}
