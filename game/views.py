@@ -7,6 +7,8 @@ import datetime
 import urllib2
 import json
 import ssl
+import hashlib
+import locale
 from diggems import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
@@ -16,7 +18,8 @@ from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader, TemplateDoesNotExist
-from django.utils.html import escape
+from django.template.defaultfilters import floatformat
+from django.utils.html import escape, mark_safe
 from django.utils.translation import ugettext as _, pgettext
 from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
@@ -24,20 +27,43 @@ from models import *
 from https_conn import https_opener
 from django.utils.translation import to_locale, get_language
 
+def get_user_info(user, with_private=False):
+    if user.facebook:
+        info = {
+            'name': escape(user.facebook.name),
+            'pic_url': '//graph.facebook.com/{}/picture'.format(user.facebook.uid),
+            'profile_url': '//facebook.com/{}/'.format(user.facebook.uid)
+        }
+        if with_private:
+            info['auth_fb'] = {'uid': user.facebook.uid}
+    else:
+        info = {
+            'name': mark_safe(user.guest_name()),
+            'pic_url': '//www.gravatar.com/avatar/{}.jpg?d=identicon'.format(hashlib.md5(user.id).hexdigest()),
+        }
+
+    # For now, score info is private
+    if with_private:
+        stats = {
+            'score': user.total_score,
+            'victories': user.games_won,
+        }
+
+        try:
+            stats['win_ratio'] = floatformat((float(user.games_won) / user.games_finished) * 100.0)
+        except ZeroDivisionError:
+            pass
+
+        info['stats'] = stats
+
+    return info
+
 def render_with_extra(template_name, user, data={}, status=200):
     t = loader.get_template(template_name)
     c = Context(data)
 
-    try:
-        win_ratio = (float(user.games_won) / user.games_finished) * 100.0
-    except ZeroDivisionError:
-        win_ratio = None
-
     extra = {'FB_APP_ID': settings.FB_APP_ID,
-             'fb': user.facebook,
-             'stats': {'score': user.total_score,
-                       'victories': user.games_won,
-                       'win_ratio': win_ratio}
+             'user': get_user_info(user, True)
             }
     c.update(extra)
     return HttpResponse(t.render(c), status=status)
@@ -101,9 +127,8 @@ def fb_login(request):
 
     request.session['user_id'] = profile.id
 
-    t = loader.get_template('auth_fb.json')
-    c = Context({'fb': fb})
-    return HttpResponse(t.render(c), content_type='application/json')
+    user_info = json.dumps(get_user_info(profile, True))
+    return HttpResponse(user_info, content_type='application/json')
 
 @transaction.commit_on_success
 def fb_logout(request):
@@ -130,14 +155,9 @@ def index(request):
     chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:5]
     new_games = []
     for game in chosen:
-        info = {'id': game.id}
-        player = game.p1.user
-        if player.facebook:
-            info['op_name'] = player.facebook.name
-            info['op_picture'] = ('https://graph.facebook.com/{}/picture'.format(player.facebook.uid))
-        else:
-            info['op_name'] = _('anonymous player')
-
+        info = {'id': game.id,
+                'user': get_user_info(game.p1.user)
+               }
         new_games.append(info)
 
     context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'profile': profile}
@@ -216,13 +236,18 @@ def join_game(request, game_id):
     game.p2 = p2
     game.state = 1
     game.save()
+    transaction.commit()
 
+    # TODO: make these asynchronous:
+    
+    # Game state change
     outdata = map(unicode, [u'g', game.seq_num, game.state])
-    fb = profile.facebook
-    if fb:
-        outdata += [fb.uid, escape(fb.name)]
-
     post_update(game.channel, u'\n'.join(outdata))
+
+    # Player info display
+    outdata = 'p\n2\n' + json.dumps(get_user_info(profile))
+    post_update(game.channel, outdata)
+
     return HttpResponseRedirect('/game/' + game_id)
 
 @transaction.commit_on_success
@@ -306,15 +331,14 @@ def game(request, game_id):
             'seq_num': game.seq_num,
             'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
             'channel': game.channel,
-            'p1_last_move': game.p1.last_move}
-
-    if(game.p1.user.facebook):
-        data['p1_info'] = game.p1.user.facebook.pub_info()
+            'p1_last_move': game.p1.last_move,
+            'player_info': {1: get_user_info(game.p1.user),
+                            2: None},
+           }
 
     if(game.p2):
         data['p2_last_move'] = game.p2.last_move
-        if(game.p2.user.facebook):
-            data['p2_info'] = game.p2.user.facebook.pub_info()
+        data['player_info'][2] = get_user_info(game.p2.user)
         if (game.state <= 2):
             data['time_left'] = max(0, game.timeout_diff())
 

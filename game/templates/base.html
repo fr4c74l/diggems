@@ -1,9 +1,9 @@
-{% load i18n %}{% comment %}
+{% comment %}
 
 Copyright 2011 Lucas Clemente Vella
 Software under Affero GPL license, see LICENSE.txt
 
-{% endcomment %}{% comment %}
+{% endcomment %}{% load i18n %}{% load json %}{% comment %}
 Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for explanation of these codes.
 {% endcomment %}<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="{% trans "en" context "XHTML" %}">
 <head>
@@ -17,9 +17,8 @@ Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for 
 		<script src="/static/js/login.js" />
 		<script>
 		<![CDATA[
-		var auth = {
-		  "fb": {% if fb %}{% include "auth_fb.json" %}{% else %}null{% endif %}
-		};
+		/* TODO: Remove this variable: */
+		var user = {{ user|json_dump }};
 
 		window.fbAsyncInit = function() {
 			FB.init({
@@ -36,7 +35,7 @@ Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for 
 		  var js, fjs = d.getElementsByTagName(s)[0];
 		  if (d.getElementById(id)) {return;}
 		  js = d.createElement(s); js.id = id;
-		  {% comment %}Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml{% endcomment %}
+		  {# Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml #}
 		  js.src = "//connect.facebook.net/{% trans "en_US" context "Facebook" %}/all.js";
 		  fjs.parentNode.insertBefore(js, fjs);
 		}(document, 'script', 'facebook-jssdk'));
@@ -58,12 +57,15 @@ Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for 
 				<span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
 			</a>
 			<div id="user_info">
-				<img id="auth_user_pic" class="box" src="{% if fb %}//graph.facebook.com/{{ fb.uid }}/picture{% else %}/static/images/beta.png" style="visibility: hidden;{% endif %}" />
+				<img id="auth_user_pic" class="box" src="{{ user.pic_url }}" />
 				<div id="user_stats">
-					<div id="logged_as"><span id="auth_username">{% if fb %}{{ fb.name }}{% else %} {% trans "Guest" %} {% endif %}</span></div>
-					<div id="score"> {% trans "Score" %}: <img src="/static/images/rb.png"/>: {{stats.score}} <img src="/static/images/trophy.png" />: {{stats.victories}}{% if stats.win_ratio %} ({{ stats.win_ratio|floatformat }}%){% endif %}</div>
-					<div id="auth_fb_button"{% if fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
-					<div id="auth_logout"{% if not fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();"> {% trans "Logout" %}</div>
+					<div id="logged_as"><span id="auth_username">{{ user.name|capfirst }}</span></div>
+					<div id="score">
+					  {% trans "Score" %}: <img src="/static/images/rb.png"/>: <span id="_points">{{ user.stats.score }}</span>
+					  <img src="/static/images/trophy.png" />: <span id="_victories">{{ user.stats.victories }}{% if user.stats.win_ratio %} ({{ user.stats.win_ratio }}%){% endif %}</span>
+					</div>
+					<div id="auth_fb_button"{% if user.auth_fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
+					<div id="auth_logout"{% if not user.auth_fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();"> {% trans "Logout" %}</div>
 				</div>
 			</div>
 		</div>

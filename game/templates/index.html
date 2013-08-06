@@ -1,13 +1,13 @@
 {% extends "base.html" %}
-{% load i18n %}
-{% load mugshot %}
-
 {% comment %}
 
 Copyright 2011 Lucas Clemente Vella
 Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
+
+{% load i18n %}
+
 {% block title %}Index{% endblock %}
 {% block header_extra %}
 	<link rel="stylesheet" media="screen" type="text/css" href="static/css/index.css" />
@@ -50,9 +50,9 @@ Software under Affero GPL license, see LICENSE.txt
 							<div style="float:left; padding: 0px 5px 5px 0px;">
 								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
 							</div>
-							<img style="float:right;" class="middle thumb box" src="{% if g.op_picture %} {{g.op_picture}} {% else %} {{profile|mugshot}} {% endif %} " />
+							<img style="float:right;" class="middle thumb box" src="{{ g.user.pic_url }} " />
 							<a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a>:
-							{% trans "Versus" %} {{ g.op_name }}
+							{% trans "Versus" %} {{ g.user.name }}
 					</li>
 				</ul>
 				{% endfor %}{% else %}<h4>{% trans "No game found!" %}</h4>{% endif %}

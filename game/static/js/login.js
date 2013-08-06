@@ -9,25 +9,34 @@ function new_post_request(url) {
     return request;
 }
 
-/* Based on the state of "auth", updates the user interface. */
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+/* Based on the state of "user", updates the user interface. */
 function auth_render() {
     var fb_button = document.getElementById('auth_fb_button');
     var username = document.getElementById('auth_username');
+    var victories = document.getElementById('_victories');
+    var points = document.getElementById('_points');
+
     var picture = document.getElementById('auth_user_pic');
-    var logout = document.getElementById('auth_logout')
+    var logout = document.getElementById('auth_logout');
 
-    if(auth.fb) {
-	username.innerHTML = auth.fb.name;
+    username.innerHTML = user.name.capitalize();
+    picture.src = user.pic_url;
 
-	picture.src = 'https://graph.facebook.com/' + auth.fb.uid + '/picture';
-	picture.style.setProperty('visibility', 'visible', null);
+    var victories_text = user.stats.victories;
+    if (user.stats.win_ratio) {
+	victories_text += " (" + win_ratio + "%)";
+    }
+    victories.innerHTML = victories_text;
+    points.innerHTML = user.stats.score;
 
+    if (user.auth.fb) {
 	fb_button.style.setProperty('display', 'none', null);
 	logout.style.setProperty('visibility', 'visible', null);
     } else {
-	username.innerHTML = 'Visitante';
-
-	picture.style.setProperty('visibility', 'hidden', null);
 	fb_button.style.setProperty('display', 'inline-block', null);
 	logout.style.setProperty('visibility', 'hidden', null);
     }
@@ -42,12 +51,12 @@ function server_fb_login(fb_login)
 	if (request.readyState == 4) {
 	    if(request.status == 200) {
 		try {
-		    auth.fb = JSON.parse(request.responseText);
+		    user = JSON.parse(request.responseText);
 		} catch(err) {
-		    auth.fb = null;
+		    user.auth_fb = null;
 		}
 	    } else {
-		auth.fb = null;
+		user.auth_fb = null;
 	    }
 
 	    auth_render();
@@ -59,7 +68,7 @@ function server_fb_login(fb_login)
 /* Turn the player back into a guest user on server. */
 function server_fb_logout()
 {
-    auth.fb = null;
+    user.auth_fb = null;
     var request = new_post_request('/fb/logout/');
     request.send();
     auth_render();
@@ -68,14 +77,14 @@ function server_fb_logout()
 /* Handle response from Facebook login events. */
 function on_fb_login(res) {
   if(res.authResponse) {
-      if(auth.fb && auth.fb.uid == res.authResponse.userID) {
+      if(user.auth_fb && user.auth_fb.uid == res.authResponse.userID) {
 	  auth_render();
       } else {
-	  auth.fb = null;
+	  user.auth_fb = null;
 	  server_fb_login(res.authResponse);
       }
   } else {
-      if(auth.fb) {
+      if(user.auth_fb) {
 	  server_fb_logout();
       } else {
 	  auth_render();

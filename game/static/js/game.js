@@ -295,7 +295,7 @@ function set_state(state) {
 	    else if(state >= 3 && state <= 6) {
 		msg = gettext('Game over, ');
 		if(((state + 1) % 2) + 1 == params.player) {
-		    if(auth.fb) {
+		    if(user.auth.fb) {
 			/*document.getElementById('brag_button')
 			.style.setProperty('visibility', 'visible', null);*/
 		    }
@@ -339,6 +339,24 @@ function set_state(state) {
     params.state = state;
 }
 
+function hangle_player_data_event(msg) {
+    var pnum = int(data.charAt(0));
+    var data = JSON.parse(data.slice(2));
+
+	var link = document.getElementById('p2_link');
+	link.href = "//facebook.com/" + uid + "/";
+	link.className += " undlin";
+
+	var pic = document.getElementById('p2_pic');
+	pic.src = "//graph.facebook.com/" + uid + "/picture";
+	pic.style.display = "inline-block";
+
+	name.innerHTML = pname;
+}
+
+	// The second (blue) player just connected.
+	// Display know info about the other player.
+	blue_player_display(lines.slice(2));
 function blue_player_display(info) {
     var name = document.getElementById('p2_name');
     if (info && info.length == 2) {
@@ -354,9 +372,6 @@ function blue_player_display(info) {
 	pic.style.display = "inline-block";
 
 	name.innerHTML = pname;
-    } else {
-	name.innerHTML = gettext("Guest");
-    }
 }
 
 function handle_event(msg) {
@@ -632,6 +647,7 @@ function init() {
     // Receive updates from server
     event = new Event('/event/' + params.channel, params.last_change);
     event.register_handler('g', handle_event);
+    event.register_handler('p', hangle_player_data_event);
 
     if(params.player) { // Not a spectator
 	// Expect for user input
