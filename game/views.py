@@ -30,15 +30,15 @@ from django.utils.translation import to_locale, get_language
 def get_user_info(user, with_private=False):
     if user.facebook:
         info = {
-            'name': escape(user.facebook.name),
+            'name': user.facebook.name,
             'pic_url': '//graph.facebook.com/{}/picture'.format(user.facebook.uid),
             'profile_url': '//facebook.com/{}/'.format(user.facebook.uid)
         }
         if with_private:
-            info['auth_fb'] = {'uid': user.facebook.uid}
+            info['auth'] = {'fb': {'uid': user.facebook.uid}}
     else:
         info = {
-            'name': mark_safe(user.guest_name()),
+            'name': user.guest_name(),
             'pic_url': '//www.gravatar.com/avatar/{}.jpg?d=identicon'.format(hashlib.md5(user.id).hexdigest()),
         }
 
@@ -128,6 +128,23 @@ def fb_login(request):
     request.session['user_id'] = profile.id
 
     user_info = json.dumps(get_user_info(profile, True))
+
+    # Send this new user info to every channel where user is a player:
+    query = Game.objects.none()
+    msgs = [None]*3
+    for p in (1, 2):
+        # Games where player p is this user
+        q = Game.objects.filter(**{'p{}__user__equals'.format(p): profile})
+        q.extra(select={'for_player': str(p)})
+        query |= q
+
+        # Build the message to send to the game channels regarding player p
+        msgs[p] = 'p\n{}\n{}'.format(p, user_info)
+
+    # TODO: make this asyncronous...
+    for game in query:
+        post_update(game.channel, msgs[game.for_player])
+
     return HttpResponse(user_info, content_type='application/json')
 
 @transaction.commit_on_success

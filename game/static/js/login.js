@@ -53,10 +53,10 @@ function server_fb_login(fb_login)
 		try {
 		    user = JSON.parse(request.responseText);
 		} catch(err) {
-		    user.auth_fb = null;
+		    auth.fb = null;
 		}
 	    } else {
-		user.auth_fb = null;
+		auth.fb = null;
 	    }
 
 	    auth_render();
@@ -68,7 +68,7 @@ function server_fb_login(fb_login)
 /* Turn the player back into a guest user on server. */
 function server_fb_logout()
 {
-    user.auth_fb = null;
+    auth.fb = null;
     var request = new_post_request('/fb/logout/');
     request.send();
     auth_render();
@@ -77,14 +77,14 @@ function server_fb_logout()
 /* Handle response from Facebook login events. */
 function on_fb_login(res) {
   if(res.authResponse) {
-      if(user.auth_fb && user.auth_fb.uid == res.authResponse.userID) {
+      if(auth.fb && auth.fb.uid == res.authResponse.userID) {
 	  auth_render();
       } else {
-	  user.auth_fb = null;
+	  auth.fb = null;
 	  server_fb_login(res.authResponse);
       }
   } else {
-      if(user.auth_fb) {
+      if(auth.fb) {
 	  server_fb_logout();
       } else {
 	  auth_render();
