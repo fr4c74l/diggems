@@ -46,10 +46,10 @@ Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for 
 		{% get_available_languages as LANGUAGES %}
 		<div id="langbar" class="container">
 		<form name='langform' action='/i18n/setlang/' method='post'>
-			{% for LANG_CODE, LANG_NAME in LANGUAGES  %}
-			<a class="lang_button" {% if LANGUAGE_CODE == LANG_CODE %} id="selected" {% endif %} onclick="document.langform.language.value='{{ LANG_CODE }}';document.langform.submit();"> {{ LANG_CODE }}</a>
-			{% endfor %}
 			<input name='language' type='hidden' />
+			{% for LANG_CODE, LANG_NAME in LANGUAGES  %}
+			<a class="lang_button" {% if LANGUAGE_CODE == LANG_CODE %} id="selected" {% endif %} onclick="document.forms.langform.language.value='{{ LANG_CODE }}';document.forms.langform.submit();"> {{ LANG_CODE }}</a>
+			{% endfor %}
 		</form>
 		</div>
 		<div id="header" class="container">
