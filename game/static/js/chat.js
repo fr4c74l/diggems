@@ -71,30 +71,43 @@ var chat = (function (){
 })();
 
 (function() {
-	function toggle(hidden_area, toggle_button) {
-		var chat_window = document.getElementById("chat_window");
-		var popup_window = document.getElementById("popup_window");
-		var element = document.getElementById(hidden_area);
-		var button = document.getElementById(toggle_button);
-		if(element.style.display == "block") {
-			element.style.display = "none";
-			chat_window.style.height = "0em";
-			popup_window.style.bottom = "4em";
-			button.innerHTML = gettext("Chat");
-		} else {
-			element.style.display = "block";
-			chat_window.style.height = "10em";
-			popup_window.style.bottom = "7em";
-			button.innerHTML = "-";
+	function toggle_chat() {
+		if ( $("#chat_area").is(':visible') ) {
+			$( this ).text("Chat");
+			$( this ).append(chat_icon);
 		}
+		else {
+			$( this ).text("-");
+			$("#chat_icon").remove;
+		}
+		$("#chat_window").animate({
+			left: "5px",
+			top: "50%"
+		});
+		$("#chat_area").animate({
+		width: "toggle",
+		height: "toggle",
+		opacity: "toggle"
+		}, 500);
+		return false;
 	}
-	
 	function in_game_init()
 	{
-		toggle_window = document.getElementById("toggle");
-		if(toggle_window)
-			toggle_window.addEventListener("click",  function (ev) {toggle('chat_area' ,'toggle'); }, false);
+		$("#chat_window").draggable( {
+			cursor: "move", 
+			containment: ".wrap",
+			scroll: false,
+			snap: ".wrap"
+		}); 
+		// click or press <ESC> to show/hide chat
+		$("#toggle").click(toggle_chat);
+		$(document).keydown(function(e) { 
+			if (e.which == 27 ) {
+				$("#toggle").trigger("click");
+			}
+		});
 	}
 	
+	var chat_icon = $('<img id="chat_icon" />').attr('src', '/static/images/chat-default.png');
 	window.addEventListener('load', in_game_init, false);
 })();
