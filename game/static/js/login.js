@@ -46,21 +46,23 @@ function user_info_render(user) {
     }
 }
 
+/* Handle event from server login/out response. */
+function server_handle_response(ev) {
+    if (request.readyState == 4) {
+        if(request.status == 200) {
+	    var user = JSON.parse(request.responseText);
+	    auth = user.auth ? user.auth : null;
+	    user_info_render(user);
+	}
+    }
+}
+
 /* Updates the server with Facebook login info, and retrieves
  * correct auth information. */
 function server_fb_login(fb_login)
 {
     var request = new_post_request('/fb/login/')
-    request.onreadystatechange = function(ev){
-	if (request.readyState == 4) {
-	    if(request.status == 200) {
-		var user = JSON.parse(request.responseText);
-		auth = user.auth;
-		user_info_render(user);
-	    }
-	}
-	// TODO: Handle error... but how?
-    }
+    request.onreadystatechange = handle_auth_response;
     request.send('token='+fb_login.accessToken);
 }
 
@@ -68,7 +70,7 @@ function server_fb_login(fb_login)
 function server_fb_logout()
 {
     var request = new_post_request('/fb/logout/');
-    // TODO: Logout user...
+    request.onreadystatechange = handle_auth_response;
     request.send();
 }
 
