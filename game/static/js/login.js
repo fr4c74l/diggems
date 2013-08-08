@@ -13,8 +13,12 @@ String.prototype.capitalize = function() {
     return this.charAt(0).toUpperCase() + this.slice(1);
 }
 
+function is_fb_auth() {
+    return auth && auth.fb;
+}
+
 /* Based on the state of "user", updates the user interface. */
-function auth_render() {
+function user_info_render(user) {
     var fb_button = document.getElementById('auth_fb_button');
     var username = document.getElementById('auth_username');
     var victories = document.getElementById('_victories');
@@ -33,7 +37,7 @@ function auth_render() {
     victories.innerHTML = victories_text;
     points.innerHTML = user.stats.score;
 
-    if (user.auth.fb) {
+    if (is_fb_auth()) {
 	fb_button.style.setProperty('display', 'none', null);
 	logout.style.setProperty('visibility', 'visible', null);
     } else {
@@ -50,17 +54,12 @@ function server_fb_login(fb_login)
     request.onreadystatechange = function(ev){
 	if (request.readyState == 4) {
 	    if(request.status == 200) {
-		try {
-		    user = JSON.parse(request.responseText);
-		} catch(err) {
-		    auth.fb = null;
-		}
-	    } else {
-		auth.fb = null;
+		var user = JSON.parse(request.responseText);
+		auth = user.auth;
+		user_info_render(user);
 	    }
-
-	    auth_render();
 	}
+	// TODO: Handle error... but how?
     }
     request.send('token='+fb_login.accessToken);
 }
@@ -68,28 +67,20 @@ function server_fb_login(fb_login)
 /* Turn the player back into a guest user on server. */
 function server_fb_logout()
 {
-    auth.fb = null;
     var request = new_post_request('/fb/logout/');
+    // TODO: Logout user...
     request.send();
-    auth_render();
 }
 
 /* Handle response from Facebook login events. */
 function on_fb_login(res) {
-  if(res.authResponse) {
-      if(auth.fb && auth.fb.uid == res.authResponse.userID) {
-	  auth_render();
-      } else {
-	  auth.fb = null;
-	  server_fb_login(res.authResponse);
-      }
-  } else {
-      if(auth.fb) {
-	  server_fb_logout();
-      } else {
-	  auth_render();
-      }
-  }
+    if(res.authResponse) {
+	if(!is_fb_auth() || auth.fb.uid != res.authResponse.userID) {
+	    server_fb_login(res.authResponse);
+	}
+    } else if(is_fb_auth()) {
+	server_fb_logout();
+    }
 }
 
 /* Button callback to logout the user. */

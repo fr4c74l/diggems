@@ -127,24 +127,24 @@ def fb_login(request):
 
     request.session['user_id'] = profile.id
 
-    user_info = json.dumps(get_user_info(profile, True))
+    # Just public user info
+    user_info = json.dumps(get_user_info(profile, False))
 
     # Send this new user info to every channel where user is a player:
-    query = Game.objects.none()
-    msgs = [None]*3
     for p in (1, 2):
         # Games where player p is this user
-        q = Game.objects.filter(**{'p{}__user__equals'.format(p): profile})
-        q.extra(select={'for_player': str(p)})
-        query |= q
+        query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile}).values('channel')
 
         # Build the message to send to the game channels regarding player p
-        msgs[p] = 'p\n{}\n{}'.format(p, user_info)
+        msg = 'p\n{}\n{}'.format(p, user_info)
 
-    # TODO: make this asyncronous...
-    for game in query:
-        post_update(game.channel, msgs[game.for_player])
+        # TODO: find a way to make this a single query, because I could not.
+        # TODO: make this asyncronous.
+        for game in query:
+            post_update(game['channel'], msg)
 
+    # Full user info
+    user_info = json.dumps(get_user_info(profile, True))
     return HttpResponse(user_info, content_type='application/json')
 
 @transaction.commit_on_success
