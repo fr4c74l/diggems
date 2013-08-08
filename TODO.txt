@@ -14,8 +14,6 @@ TODO Later:
   - Button to enable/disable sound.
   - Button to enable desktop notification.
 - Timeout uninitialized game if host has left.
-- Change user display if player or opponent logs in.
-- Set correct score and win ratio when user logs in.
 - Real-time update of user stats.
 - Real-time update of index page.
 - Scoreboards
