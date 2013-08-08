@@ -122,43 +122,60 @@ function Tile(x0,y0) {
 }
 
 Tile.prototype.draw = function() {
-    var TEXT_COLOR = [
-	'rgb(0,0,255)',
-	'rgb(0,160,0)',
-	'rgb(255,0,0)',
-	'rgb(0,0,127)',
-	'rgb(160,0,0)',
-	'rgb(0,255,255)',
-	'rgb(160,,160)',
-	'rgb(0,0,0)'
-    ];
+    ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
+    ctx.fillRect(this.x, this.y, 25, 25);
+};
 
-    if(this.s >= 0 && this.s <= 8) {
-	ctx.fillStyle = 'rgb(255,216,161)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	if(this.s > 0) {
-	    ctx.fillStyle = TEXT_COLOR[this.s-1];
+Tile.TEXT_COLOR = [
+    'rgb(0,0,255)',
+    'rgb(0,160,0)',
+    'rgb(255,0,0)',
+    'rgb(0,0,127)',
+    'rgb(160,0,0)',
+    'rgb(0,255,255)',
+    'rgb(160,,160)',
+    'rgb(0,0,0)'
+];
+
+Tile.prototype.set_state = function(s) {
+    if (s == this.s)
+	return;
+    this.s = s;
+
+    if (s == 0) {
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(255,216,161)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	};
+    } else if(s > 0 && s <= 8) {
+	var text_color = Tile.TEXT_COLOR[s - 1];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(255,216,161)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	    ctx.fillStyle = text_color;
 	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
-	}
-    }
-    else if(this.s == 'r' || this.s == 'b') {
-	ctx.fillStyle = 'rgb(251,170,56)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
-	ctx.drawImage(icon, this.x + 2, this.y + 5);
-    }
-    else {
-	ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
-	ctx.fillRect(this.x, this.y, 25, 25);
+	};
+    } else if(s == 'r' || s == 'b') {
+	var icon = images[(s == 'b') ? 'saphire' : 'ruby'];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(251,170,56)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	    ctx.drawImage(icon, this.x + 2, this.y + 5);
+	};
+    } else if(s == 'x') {
+	var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(227,133,0)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
 
-	if(this.s == 'x') {
-	    var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
 	    ctx.globalCompositeOperation = 'lighter';
 	    ctx.drawImage(icon, this.x + 2, this.y + 5);
 	    ctx.globalCompositeOperation = 'source-over';
-	}
+	};
+    } else {
+	this.draw = Tile.prototype.draw;
     }
-};
+}
 
 function update_points() {
     var p1 = 0;
@@ -395,7 +412,7 @@ function handle_event(msg) {
 
 	        // Just assume correct valid values were delivered...
 
-	        mine[m][n].s = res[3];
+	        mine[m][n].set_state(res[3]);
 	        mine[m][n].draw();
 	    }
         }
@@ -590,7 +607,7 @@ function init() {
 
     if(params.mine)
 	for(var i = 0; i < 256; ++i)
-	    mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
+	    mine[Math.floor(i/16)][i%16].set_state(params.mine.charAt(i));
 
     // Text presets
     ctx = canvas.getContext('2d');
