@@ -119,6 +119,7 @@ function Tile(x0,y0) {
   this.hover = false;
   this.x = x0 * 26;
   this.y = y0 * 26;
+  this.blink_state = 0;
 }
 
 Tile.prototype.draw = function() {
@@ -177,6 +178,25 @@ Tile.prototype.set_state = function(s) {
     }
 }
 
+// Class ActivityIndicator
+function ActivityIndicator(tile) {
+    this.tile = tile;
+    this.start_time = (new Date()).getTime();
+    this.timer = setInterval(function() {
+	var t = ((new Date()).getTime() - this.start_time) * ActivityIndicator.SPEED;
+	this.tile.blink_state = (1 - Math.cos()) / 2;
+	this.tile.draw();
+    }.bind(this), 100);
+}
+
+ActivityIndicator.SPEED = Math.PI / 1000; // One full blink per second...
+
+ActivityIndicator.prototype.clear = function() {
+    clearInterval(this.timer);
+    this.tile.blink_state = 0;
+}
+// End of class ActivityIndicator
+
 function update_points() {
     var p1 = 0;
     var p2 = 0;
@@ -219,6 +239,7 @@ function update_points() {
     document.getElementById('game_box').style.background = bg_color;
 }
 
+// Class Title Blinker
 function TitleBlinker(msg) {
     this.original = document.title;
     this.changed = msg;
@@ -516,10 +537,13 @@ function on_click(ev) {
     move_request.open('POST', url, true);
     move_request.onreadystatechange = function(ev){
 	if (move_request.readyState == 4) {
-	    if(move_request.status == 200) {
+	    if(move_request.status != 200) {
+		// Error: server didn't accept click, probably just a
+		// syncronization error due to network delay that will
+		// correct itself automatically.
+
 		// TODO: stop activity indication
 	    }
-	    // TODO: else: treat error
 	}
     };
     move_request.send(null);
