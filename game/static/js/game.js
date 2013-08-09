@@ -333,7 +333,7 @@ function set_state(state) {
 	    else if(state >= 3 && state <= 6) {
 		msg = gettext('Game over, ');
 		if(((state + 1) % 2) + 1 == params.player) {
-		    if(auth.fb) {
+		    if(is_fb_auth()) {
 			/*document.getElementById('brag_button')
 			.style.setProperty('visibility', 'visible', null);*/
 		    }
