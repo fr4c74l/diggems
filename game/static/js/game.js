@@ -119,11 +119,23 @@ function Tile(x0,y0) {
   this.hover = false;
   this.x = x0 * 26;
   this.y = y0 * 26;
+  
+  // Activity indication
   this.blink_state = 0;
+  this.ai = null;
 }
 
 Tile.prototype.draw = function() {
-    ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
+    if (this.blink_state) {
+	var color = this.hover ? [251,170,56] : [227,133,0];
+	for (var i = 0; i < 3; ++i) {
+	    var delta = 200 - orig_color[i];
+	    color[i] = Math.round(color[i] + delta * this.blink_state);
+	}
+	ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+    } else {
+	ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
+    }
     ctx.fillRect(this.x, this.y, 25, 25);
 };
 
@@ -181,19 +193,37 @@ Tile.prototype.set_state = function(s) {
 // Class ActivityIndicator
 function ActivityIndicator(tile) {
     this.tile = tile;
+    if (tile.ai)
+	tile.ai.clear();
+    tile.ai = this;
+
     this.start_time = (new Date()).getTime();
     this.timer = setInterval(function() {
 	var t = ((new Date()).getTime() - this.start_time) * ActivityIndicator.SPEED;
 	this.tile.blink_state = (1 - Math.cos()) / 2;
 	this.tile.draw();
     }.bind(this), 100);
+
+    ActivityIndicator[tile.x, + ',' + tile.y] = this;
 }
 
 ActivityIndicator.SPEED = Math.PI / 1000; // One full blink per second...
+ActivityIndicator.all = {};
 
 ActivityIndicator.prototype.clear = function() {
     clearInterval(this.timer);
+
+    delete ActivityIndicator[this.tile.x, + ',' + this.tile.y];
     this.tile.blink_state = 0;
+    this.tile.ai = null;
+
+    this.tile = null;
+}
+
+ActivityIndicator.clear_all = function() {
+    for (var ai in ActivityIndicator.all) {
+	ai.clear();
+    }
 }
 // End of class ActivityIndicator
 
