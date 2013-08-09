@@ -347,9 +347,9 @@ function player_display(pnum, data) {
 /* In case updated user information came from the async
  * event channel with message type 'p', like when player
  * two joins the game, chages the user info display. */
-function handle_player_data_event(msg) {
-    var pnum = int(data.charAt(0));
-    var data = JSON.parse(data.slice(2));
+function handle_player_data_event(data) {
+    var pnum = parseInt(data.charAt(0));
+    data = JSON.parse(data.slice(2));
 
     pnum = 'p' + pnum + '_';
 
@@ -368,7 +368,8 @@ function handle_player_data_event(msg) {
     
     var pic = document.getElementById(pnum + 'pic');
     if (!pic) {
-	pic = document.createElement(pnum + 'pic');
+	pic = document.createElement('img');
+	pic.id = pnum + 'pic';
 	pic.width = pic.height = 40;
 	link.insertBefore(pic, link.firstChild);
     }

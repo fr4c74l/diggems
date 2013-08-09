@@ -48,9 +48,9 @@ function user_info_render(user) {
 
 /* Handle event from server login/out response. */
 function server_handle_response(ev) {
-    if (request.readyState == 4) {
-        if(request.status == 200) {
-	    var user = JSON.parse(request.responseText);
+    if (ev.target.readyState == 4) {
+        if(ev.target.status == 200) {
+	    var user = JSON.parse(ev.target.responseText);
 	    auth = user.auth ? user.auth : null;
 	    user_info_render(user);
 	}
@@ -62,7 +62,7 @@ function server_handle_response(ev) {
 function server_fb_login(fb_login)
 {
     var request = new_post_request('/fb/login/')
-    request.onreadystatechange = handle_auth_response;
+    request.onreadystatechange = server_handle_response;
     request.send('token='+fb_login.accessToken);
 }
 
@@ -70,7 +70,7 @@ function server_fb_login(fb_login)
 function server_fb_logout()
 {
     var request = new_post_request('/fb/logout/');
-    request.onreadystatechange = handle_auth_response;
+    request.onreadystatechange = server_handle_response;
     request.send();
 }
 

@@ -155,7 +155,9 @@ def fb_logout(request):
         profile.save()
         request.session['user_id'] = profile.id
 
-    return HttpResponse()
+        user_info = json.dumps(get_user_info(profile, True))
+        return HttpResponse(user_info, content_type='application/json')
+    return HttpResponseForbidden()
 
 def adhack(request, ad_id):
     ad_id = int(ad_id)
