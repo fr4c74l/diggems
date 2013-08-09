@@ -119,46 +119,83 @@ function Tile(x0,y0) {
   this.hover = false;
   this.x = x0 * 26;
   this.y = y0 * 26;
+  this.blink_state = 0;
 }
 
 Tile.prototype.draw = function() {
-    var TEXT_COLOR = [
-	'rgb(0,0,255)',
-	'rgb(0,160,0)',
-	'rgb(255,0,0)',
-	'rgb(0,0,127)',
-	'rgb(160,0,0)',
-	'rgb(0,255,255)',
-	'rgb(160,,160)',
-	'rgb(0,0,0)'
-    ];
+    ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
+    ctx.fillRect(this.x, this.y, 25, 25);
+};
 
-    if(this.s >= 0 && this.s <= 8) {
-	ctx.fillStyle = 'rgb(255,216,161)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	if(this.s > 0) {
-	    ctx.fillStyle = TEXT_COLOR[this.s-1];
+Tile.TEXT_COLOR = [
+    'rgb(0,0,255)',
+    'rgb(0,160,0)',
+    'rgb(255,0,0)',
+    'rgb(0,0,127)',
+    'rgb(160,0,0)',
+    'rgb(0,255,255)',
+    'rgb(160,,160)',
+    'rgb(0,0,0)'
+];
+
+Tile.prototype.set_state = function(s) {
+    if (s == this.s)
+	return;
+    this.s = s;
+
+    if (s == 0) {
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(255,216,161)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	};
+    } else if(s > 0 && s <= 8) {
+	var text_color = Tile.TEXT_COLOR[s - 1];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(255,216,161)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	    ctx.fillStyle = text_color;
 	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
-	}
-    }
-    else if(this.s == 'r' || this.s == 'b') {
-	ctx.fillStyle = 'rgb(251,170,56)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
-	ctx.drawImage(icon, this.x + 2, this.y + 5);
-    }
-    else {
-	ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
-	ctx.fillRect(this.x, this.y, 25, 25);
+	};
+    } else if(s == 'r' || s == 'b') {
+	var icon = images[(s == 'b') ? 'saphire' : 'ruby'];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(251,170,56)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	    ctx.drawImage(icon, this.x + 2, this.y + 5);
+	};
+    } else if(s == 'x') {
+	var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(227,133,0)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
 
-	if(this.s == 'x') {
-	    var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
 	    ctx.globalCompositeOperation = 'lighter';
 	    ctx.drawImage(icon, this.x + 2, this.y + 5);
 	    ctx.globalCompositeOperation = 'source-over';
-	}
+	};
+    } else {
+	this.draw = Tile.prototype.draw;
     }
-};
+}
+
+// Class ActivityIndicator
+function ActivityIndicator(tile) {
+    this.tile = tile;
+    this.start_time = (new Date()).getTime();
+    this.timer = setInterval(function() {
+	var t = ((new Date()).getTime() - this.start_time) * ActivityIndicator.SPEED;
+	this.tile.blink_state = (1 - Math.cos()) / 2;
+	this.tile.draw();
+    }.bind(this), 100);
+}
+
+ActivityIndicator.SPEED = Math.PI / 1000; // One full blink per second...
+
+ActivityIndicator.prototype.clear = function() {
+    clearInterval(this.timer);
+    this.tile.blink_state = 0;
+}
+// End of class ActivityIndicator
 
 function update_points() {
     var p1 = 0;
@@ -202,6 +239,7 @@ function update_points() {
     document.getElementById('game_box').style.background = bg_color;
 }
 
+// Class Title Blinker
 function TitleBlinker(msg) {
     this.original = document.title;
     this.changed = msg;
@@ -395,7 +433,7 @@ function handle_event(msg) {
 
 	        // Just assume correct valid values were delivered...
 
-	        mine[m][n].s = res[3];
+	        mine[m][n].set_state(res[3]);
 	        mine[m][n].draw();
 	    }
         }
@@ -499,10 +537,13 @@ function on_click(ev) {
     move_request.open('POST', url, true);
     move_request.onreadystatechange = function(ev){
 	if (move_request.readyState == 4) {
-	    if(move_request.status == 200) {
+	    if(move_request.status != 200) {
+		// Error: server didn't accept click, probably just a
+		// syncronization error due to network delay that will
+		// correct itself automatically.
+
 		// TODO: stop activity indication
 	    }
-	    // TODO: else: treat error
 	}
     };
     move_request.send(null);
@@ -590,7 +631,7 @@ function init() {
 
     if(params.mine)
 	for(var i = 0; i < 256; ++i)
-	    mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
+	    mine[Math.floor(i/16)][i%16].set_state(params.mine.charAt(i));
 
     // Text presets
     ctx = canvas.getContext('2d');
