@@ -50,7 +50,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<a id="p{{pid}}_link" class="plain{% if pinfo and pinfo.profile_url %} undlin" href="{{ pinfo.profile_url }}{% endif %}" target="_blank">
 			{% if pinfo %}<img id="p{{pid}}_pic" width="40" height="40" src="{{ pinfo.pic_url }}"/>
 			{% endif %}<div id="p{{pid}}_name" class="pname">{% if pinfo %}{{ pinfo.name|capfirst }}{% else %}
-				{% if not player and not token %}{% blocktrans %}Empty!{% endblocktrans %}{% else %}{% blocktrans %}Waiting...{% endblocktrans %}{% endif %}
+				{% if not player and not token %}{% blocktrans %}Empty!{% endblocktrans %}{% else %}{% blocktrans %}Wait...{% endblocktrans %}{% endif %}
 				{% if player or not token %}<form style="float: right;" action="{% if player %}abort{% else %}join{% endif %}/" method="post">
 					<input class="button" type="submit" value="{% if player %}{% blocktrans %}Abort{% endblocktrans %}{% else %}{% blocktrans %}Join!{% endblocktrans %}{% endif %}" />
 				</form>{% endif %}
