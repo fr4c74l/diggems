@@ -89,6 +89,7 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 </div>
 
+{% if player %}
 <div class="popup" id="popup_window">
 	<div class="chat box" id="chat_window">
 		<!-- TODO Uncomment the line below after create a function to add chat-->
@@ -101,6 +102,7 @@ Software under Affero GPL license, see LICENSE.txt
 		</div>
 	</div>
 </div>
+{% endif %}
 
 <!-- TODO: Have button to disable the audio. -->
 <audio id="ring" preload="auto">
