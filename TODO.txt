@@ -34,6 +34,12 @@ TODO Later:
     - Everybody
     - Friends
 - Add clickable objects below the canvas for accessibility.
+- Chat related
+  - Random color names in chat for guest users based on their internal ID
+  - Fix in-game chat layout
+  - Display activity on message send
+    - Clear input field on send, to avoid double send...
+  - Retrieve old chat messages
 - Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
   - Epistolar mode, with no time deadline
 - Our own login system, for non-facebook users
@@ -47,4 +53,3 @@ TODO "Irrelevant":
   - "Contact" page (add a contact form and image of a pack donkey)
  - Use {{ STATIC_URL }} instead of fullpath of static urls in templates
  - Add clickable objects below the canvas for accessibility.
-

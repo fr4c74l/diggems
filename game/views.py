@@ -3,7 +3,6 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 import itertools
-import datetime
 import urllib2
 import json
 import ssl
@@ -12,6 +11,7 @@ import locale
 from diggems import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
+from datetime import datetime, time
 
 from django.shortcuts import get_object_or_404, render_to_response
 from django.http import *
@@ -179,7 +179,7 @@ def index(request):
                }
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'profile': profile}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -345,6 +345,11 @@ def game(request, game_id):
     except ObjectDoesNotExist:
         return render_with_extra('game404.html', profile, status=404)
 
+    if profile.facebook:
+        user_id = profile.facebook.name
+    else:
+        user_id = _('Guest') + '-' + profile.id[:6]
+
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
@@ -499,3 +504,39 @@ def info(request, page):
         except TemplateDoesNotExist:
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
+
+def chat_post(request, game_id=None):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+
+    msg = request.body
+    if not msg:
+        return HttpResponseBadRequest()
+
+    profile = UserProfile.get(request)
+    if game_id is None:
+        event_channel = "main_channel"
+    else:
+        game = get_object_or_404(Game, pk=game_id)
+        if not game.what_player(profile):
+            return HttpResponseForbidden()
+        event_channel = game.channel
+
+    if profile.facebook:
+        username = profile.facebook.name
+    else:
+        username = profile.guest_name()
+
+    utcnow = datetime.datetime.utcnow()
+    midnight_utc = datetime.datetime.combine(utcnow.date(), time(0))
+    delta = utcnow - midnight_utc
+
+    data = {
+        'time_in_sec': delta.seconds,
+        'username': username,
+        'msg': escape(msg)
+    }
+
+    post_update(event_channel, 'c\n' + json.dumps(data))
+
+    return HttpResponse()

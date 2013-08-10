@@ -10,8 +10,11 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% block title %}Index{% endblock %}
 {% block header_extra %}
-	<link rel="stylesheet" media="screen" type="text/css" href="static/css/index.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/index.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
+	<script src="/static/js/event.js" />
+	<script src="/static/js/chat.js" />
 {% endblock %}
 {% block content %}
 <table>
@@ -58,6 +61,28 @@ Software under Affero GPL license, see LICENSE.txt
 				{% endfor %}{% else %}<h4>{% trans "No game found!" %}</h4>{% endif %}
 			</td>
 		</tr>
+		<tr class="chat">
+			<td class="box" colspan="2">
+				<h3>{% trans "Global Chat Room " %}</h3>
+				<ul id="chat_textfield">
+					<!--TODO: <li class="notice">Put chat login/logout messages here!</li> -->
+				</ul>
+					<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
+					<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />
+			</td>
+		</tr>
+		<script>
+			<![CDATA[
+			var event = new Event('/event/main_channel', (new Date()).toUTCString());
+
+			chat.init(
+				document.getElementById("chat_textfield"),
+				document.getElementById("input_field"),
+				document.getElementById("send_button"),
+				event, 'main_chat/'
+			);
+			]]>
+		</script>
 		<tr>
 			<td class="box" colspan="2">
 				<div class="fb-like" style="display: inline-block;" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>

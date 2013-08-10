@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% comment %}
 
 Copyright 2011 Lucas Clemente Vella
@@ -10,6 +11,7 @@ Software under Affero GPL license, see LICENSE.txt
 {% block title %}{% blocktrans %}Game {{ game_id }}{% endblocktrans %}{% endblock %}
 {% block header_extra %}
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/game.css" />
+	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
 {% endblock %}
 {% block content %}
 <script type="text/javascript" src="{% url "django.views.i18n.javascript_catalog" %}" />
@@ -33,6 +35,9 @@ Software under Affero GPL license, see LICENSE.txt
 </script>
 <script src="/static/js/event.js" />
 <script src="/static/js/game.js" />
+<script src="/static/js/jquery-2.0.3.min.js"/>
+<script src="/static/js/jquery-ui.min.js" />
+<script src="/static/js/chat.js" />
 
 <div id="main">
 	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span><span> / 26</span></div>
@@ -82,6 +87,21 @@ Software under Affero GPL license, see LICENSE.txt
 		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e" />{% endif %}
 	</div>
 </div>
+
+{% if player %}
+<div class="popup" id="popup_window">
+	<div class="chat box" id="chat_window">
+		<!-- TODO Uncomment the line below after create a function to add chat-->
+		<div style="float:right"><a id="toggle"> - </a><!--<a id="close">x</a> --></div>
+		<div id="chat_area">
+			<h3>{% blocktrans %} Game {{ game_id }} Chat Room {% endblocktrans %}</h3>
+			<ul id="chat_textfield" style="width: 375px;"></ul>
+				<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
+				<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />
+		</div>
+	</div>
+</div>
+{% endif %}
 
 <!-- TODO: Have button to disable the audio. -->
 <audio id="ring" preload="auto">
