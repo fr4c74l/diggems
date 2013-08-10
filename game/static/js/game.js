@@ -407,11 +407,6 @@ function set_state(state) {
     params.state = state;
 }
 
-/* If player info changed, this function updates the display
- * with the new data */
-function player_display(pnum, data) {
-}
-
 /* In case updated user information came from the async
  * event channel with message type 'p', like when player
  * two joins the game, chages the user info display. */
