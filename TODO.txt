@@ -19,6 +19,7 @@ Priority:
   - Javascript inform user connect/disconnect.
   - Create a animation to indicate if some msg receive in game
   - Fix length of input_field in index for small screens
+- TNT activity indicator must blink all affected tiles...
 
 TODO Later:
 - Ask user to login on FB so his game stats will be recorded on his ID.

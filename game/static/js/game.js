@@ -199,14 +199,14 @@ function ActivityIndicator(tile) {
     this.start_time = (new Date()).getTime();
     this.timer = setInterval(function() {
 	var t = ((new Date()).getTime() - this.start_time) * ActivityIndicator.SPEED;
-	this.tile.blink_state = (1 - Math.cos(t)) / 2;
+	this.tile.blink_state = (1 + Math.sin(t)) / 2;
 	this.tile.draw();
     }.bind(this), 50);
 
     ActivityIndicator.all[tile.x + ',' + tile.y] = this;
 }
 
-ActivityIndicator.SPEED = Math.PI / 1000; // One full blink per second...
+ActivityIndicator.SPEED = Math.PI / 500; // Two full blinks per second...
 ActivityIndicator.all = {};
 
 ActivityIndicator.prototype.clear = function() {
