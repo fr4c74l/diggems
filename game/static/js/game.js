@@ -290,19 +290,21 @@ function set_state(state) {
 	    highlight_tile.clear();
 
 	    if(state == 1 || state == 2) {
-		msg = gettext('Wait for your turn.');
+		    msg = gettext('Wait for your turn.');
 	    }
-	    else if(state >= 3 && state <= 6) {
-		msg = gettext('Game over, ');
-		if(((state + 1) % 2) + 1 == params.player) {
-		    if(auth.fb) {
+	    else 
+      if(state >= 3 && state <= 6) {
+		    msg = gettext('Game over, ');
+		    if(((state + 1) % 2) + 1 == params.player) {
+		      if(auth.fb) {
 			/*document.getElementById('brag_button')
 			.style.setProperty('visibility', 'visible', null);*/
+		      }
+		      msg += gettext('you win!');
 		    }
-		    msg += gettext('you win!');
-		}
-		else
-		    msg += gettext('you lose.');
+		    else
+		      msg += gettext('you lose.');
+        document.getElementById("rematch_button").style.display = 'block';
 	    }
 	    else
 		return; // What else can I do?
@@ -708,6 +710,11 @@ function claim_game(terminate)
     button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   }
 	button_request.send(data);
+}
+
+function rematch(player)
+{
+
 }
 
 // Load resources

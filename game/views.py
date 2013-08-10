@@ -130,6 +130,7 @@ def index(request):
     chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:5]
     new_games = []
     for game in chosen:
+        print type(game)
         info = {'id': game.id}
         player = game.p1.user
         if player.facebook:
@@ -151,32 +152,15 @@ def new_game(request):
 
     profile = UserProfile.get(request)
 
-    mine = [[0] * 16 for i in xrange(16)]
-
-    indexes = list(itertools.product(xrange(16), repeat=2))
-    gems = true_random.sample(indexes, 51)
-
-    for (m, n) in gems:
-        mine[m][n] = 9
-
-    for m, n in indexes:
-        if mine[m][n] == 0:
-            def inc_count(x, y):
-                if mine[x][y] == 9:
-                    mine[m][n] += 1
-            for_each_surrounding(m, n, inc_count)
-
     p1 = Player(user=profile)
     p1.save()
 
-    game = Game()
-    game.mine = mine_encode(mine)
     if request.REQUEST.get('private', default=False):
-        game.token = gen_token()
-    game.channel = gen_token()
+        game = Game(True)
+    else:
+        game = Game(False)
     game.p1 = p1
     game.save()
-    create_channel(game.channel)
 
     return HttpResponseRedirect('/game/' + str(game.id))
 
@@ -337,6 +321,37 @@ def game(request, game_id):
             data['mine'] = masked
 
     return render_with_extra('game.html', profile, data)
+
+
+@transaction.commit_on_success
+def rematch(request, game_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    game = get_object_or_404(Game, pk=game_id)
+    if game.state <= 2:
+        return HttpResponseForbidden()
+    pdata = game.what_player(UserProfile.get(request))
+    if not pdata:
+        return HttpResponseForbidden()
+    
+    obj, created = Rematch.objects.get_or_create(game=game)
+    player, me = pdata
+    if me == 1:
+        obj.p1_click = True
+    elif me == 2:
+        obj.p2_click = True
+
+    if obj.p1_click and obj.p2_click:
+        cg = Game(False)
+        cg.p1 = Player(user=game.p2.user)
+        cg.p1.save()
+        cg.p2 = Player(user=game.p1.user)
+        cg.p2.save()
+        cg.state = 1
+        cg.save()
+        post_update(game.channel, 'r\n' + game_id)
+
+    return HttpResponse()
 
 @transaction.commit_on_success
 def move(request, game_id):

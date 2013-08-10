@@ -27,6 +27,8 @@
     left: 153px;
 }
 
+#rematch_button{
+}
 #timer_box {
     text-align: center;
     font-size: 150%;
@@ -114,7 +116,6 @@
 }
 
 #message {
-    height: 35px;
     text-align: center;
 }
 

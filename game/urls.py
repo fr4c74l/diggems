@@ -6,6 +6,7 @@ _in_game = patterns('game.views',
     (r'^join/$', 'join_game'),
     (r'^abort/$', 'abort_game'),
     (r'^claim/$', 'claim_game'),
+    #(r'^rematch/$', 'rematch'),
     (r'^$', 'game'),
 )
 

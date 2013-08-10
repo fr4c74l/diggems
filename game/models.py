@@ -1,7 +1,8 @@
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
-import game_helpers
+from game_helpers import *
+import itertools
 import datetime
 from django.db import models
 from django.db.models import F
@@ -60,7 +61,7 @@ class UserProfile(models.Model):
             if not user_id:
                 # New guest user, create a temporary guest profile
                 prof = UserProfile()
-                prof.id = game_helpers.gen_token()
+                prof.id = gen_token()
                 request.session['user_id'] = prof.id
         else:
             # Authenticated by us
@@ -87,6 +88,9 @@ class Player(models.Model):
 # X + 2 -> Player X won
 # X + 4 -> Game ended abnormally and player X won
 
+#
+
+
 class Game(models.Model):
     mine = models.CharField(max_length=256)
     state = models.SmallIntegerField(default=0, db_index=True)
@@ -112,7 +116,35 @@ class Game(models.Model):
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
 
+    def __init__(self, is_private=False,*args, **kwargs):
+        super(Game, self).__init__(*args, **kwargs)
+        mine = [[0] * 16 for i in xrange(16)]
+        indexes = list(itertools.product(xrange(16), repeat=2))
+        gems = true_random.sample(indexes, 51)
+
+        for (m, n) in gems:
+            mine[m][n] = 9
+
+        for m, n in indexes:
+            if mine[m][n] == 0:
+                def inc_count(x, y):
+                    if mine[x][y] == 9:
+                        mine[m][n] += 1
+                for_each_surrounding(m, n, inc_count)
+        self.mine = mine_encode(mine)
+        if is_private:
+            self.token = gen_token()
+        self.channel = gen_token()
+        create_channel(self.channel)
+
+
 def delete_game_channel(sender, **kwargs):
     game_helpers.delete_channel(kwargs['instance'].channel)
 
 pre_delete.connect(delete_game_channel, sender=Game)
+
+class Rematch(models.Model):
+    game = models.OneToOneField(Game, primary_key=True)
+    p1_click = models.BooleanField(default=False)
+    p2_click = models.BooleanField(default=False)
+
