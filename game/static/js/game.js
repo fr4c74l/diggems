@@ -119,11 +119,23 @@ function Tile(x0,y0) {
   this.hover = false;
   this.x = x0 * 26;
   this.y = y0 * 26;
+  
+  // Activity indication
   this.blink_state = 0;
+  this.ai = null;
 }
 
 Tile.prototype.draw = function() {
-    ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
+    if (this.blink_state) {
+	var color = this.hover ? [251,170,56] : [227,133,0];
+	for (var i = 0; i < 3; ++i) {
+	    var delta = 200 - orig_color[i];
+	    color[i] = Math.round(color[i] + delta * this.blink_state);
+	}
+	ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+    } else {
+	ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
+    }
     ctx.fillRect(this.x, this.y, 25, 25);
 };
 
@@ -181,19 +193,37 @@ Tile.prototype.set_state = function(s) {
 // Class ActivityIndicator
 function ActivityIndicator(tile) {
     this.tile = tile;
+    if (tile.ai)
+	tile.ai.clear();
+    tile.ai = this;
+
     this.start_time = (new Date()).getTime();
     this.timer = setInterval(function() {
 	var t = ((new Date()).getTime() - this.start_time) * ActivityIndicator.SPEED;
 	this.tile.blink_state = (1 - Math.cos()) / 2;
 	this.tile.draw();
     }.bind(this), 100);
+
+    ActivityIndicator[tile.x, + ',' + tile.y] = this;
 }
 
 ActivityIndicator.SPEED = Math.PI / 1000; // One full blink per second...
+ActivityIndicator.all = {};
 
 ActivityIndicator.prototype.clear = function() {
     clearInterval(this.timer);
+
+    delete ActivityIndicator[this.tile.x, + ',' + this.tile.y];
     this.tile.blink_state = 0;
+    this.tile.ai = null;
+
+    this.tile = null;
+}
+
+ActivityIndicator.clear_all = function() {
+    for (var ai in ActivityIndicator.all) {
+	ai.clear();
+    }
 }
 // End of class ActivityIndicator
 
@@ -333,7 +363,7 @@ function set_state(state) {
 	    else if(state >= 3 && state <= 6) {
 		msg = gettext('Game over, ');
 		if(((state + 1) % 2) + 1 == params.player) {
-		    if(auth.fb) {
+		    if(is_fb_auth()) {
 			/*document.getElementById('brag_button')
 			.style.setProperty('visibility', 'visible', null);*/
 		    }
@@ -377,24 +407,41 @@ function set_state(state) {
     params.state = state;
 }
 
-function blue_player_display(info) {
-    var name = document.getElementById('p2_name');
-    if (info && info.length == 2) {
-	var uid = info[0];
-	var pname = info.slice(1).join('<br \>');
+/* If player info changed, this function updates the display
+ * with the new data */
+function player_display(pnum, data) {
+}
 
-	var link = document.getElementById('p2_link');
-	link.href = "//facebook.com/" + uid + "/";
-	link.className += " undlin";
+/* In case updated user information came from the async
+ * event channel with message type 'p', like when player
+ * two joins the game, chages the user info display. */
+function handle_player_data_event(data) {
+    var pnum = parseInt(data.charAt(0));
+    data = JSON.parse(data.slice(2));
 
-	var pic = document.getElementById('p2_pic');
-	pic.src = "//graph.facebook.com/" + uid + "/picture";
-	pic.style.display = "inline-block";
+    pnum = 'p' + pnum + '_';
 
-	name.innerHTML = pname;
+    var name = document.getElementById(pnum + 'name');
+    name.innerHTML = '';
+    name.appendChild(document.createTextNode(data.name.capitalize()));
+
+    var link = document.getElementById(pnum + 'link');
+    if (data.profile_url) {
+	link.href = data.profile_url;
+	link.classList.add('undlin');
     } else {
-	name.innerHTML = gettext("Guest");
+	link.removeAttribute('href');
+	link.classList.remove('undlin');
     }
+    
+    var pic = document.getElementById(pnum + 'pic');
+    if (!pic) {
+	pic = document.createElement('img');
+	pic.id = pnum + 'pic';
+	pic.width = pic.height = 40;
+	link.insertBefore(pic, link.firstChild);
+    }
+    pic.src = data.pic_url;
 }
 
 function handle_event(msg) {
@@ -406,15 +453,8 @@ function handle_event(msg) {
     params.seq_num = seq_num;
 
     var new_state = parseInt(lines[1]);
-    var old_state = params.state;
     set_state(new_state);
-    if(old_state == 0) {
-	// The second (blue) player just connected.
-	// Display know info about the other player.
-	blue_player_display(lines.slice(2));
-	reset_counter();
-	return;
-    }
+
     if (lines.length > 2){
         var player = parseInt(lines[2]);
         var lclick = last_click_decode(player, lines[3]);
@@ -443,7 +483,7 @@ function handle_event(msg) {
         last_click[player-1] = lclick;
         lclick.draw();
     }
-    
+
     update_points();
     reset_counter();
 }
@@ -673,6 +713,7 @@ function init() {
     // Receive updates from server
     event = new Event('/event/' + params.channel, params.last_change);
     event.register_handler('g', handle_event);
+    event.register_handler('p', handle_player_data_event);
 
     // Init chat stuff
     chat.init(
