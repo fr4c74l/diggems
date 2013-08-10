@@ -8,25 +8,44 @@
     margin: 0 auto;
 }
 
-#middle_box {
-   text-align: center;
+#p1_pts_box {
+    background: rgba(255,0,0,0.25);
+    text-align: left;
+    
+    display: block;
+    position: relative;
+    width: 70px;
+    margin-bottom: 25px;
+}
+
+#snd_pts_box{
+    text-align: left;
+    display: block;
+    position: absolute;
+    top: 0px;
+    width: 50px;
+    left: 153px;
+}
+
+#timer_box {
+    text-align: center;
     font-size: 150%;
     display: block;
     position: absolute;
     top: 0px;
+    width: 50px;
     left: 183px;
 }
 
-#quit_buttons {
-	margin: 10px auto;
-}
-
-#timer_box {
-    width: 50px;
-}
-
 #p2_pts_box {
+    background: rgba(0,0,255,0.25);
     text-align: right;
+    
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    width: 70px;
 }
 
 #game_box {
@@ -37,10 +56,11 @@
 }
 
 .pbox {
-	text-align: left;
-	display: block;
-	width: 150px;
-	height: 65px;
+    text-align: center;
+    text-align: center;
+    display: block;
+    width: 150px;
+    height: 40px;
 }
 
 #p1_box {
@@ -51,9 +71,8 @@
 
 #p2_box {
     background: rgba(0,0,255,0.25);
-    display: block;
     position: absolute;
-    top: 0px;
+    bottom: 67px;
     right: 0px;
 }
 
@@ -64,46 +83,38 @@
 
 #p1_pic {
     margin-right: 2px;
-    float: right;
+    float: left;
 }
 
 #p2_pic {
     margin-left: 2px;
-    float: left;
+    float: right;
 }
 
 .pinfo {
-	font-size: x-small;
-	position: absolute;
-	padding: 5px;
-	bottom: 0;
+    font-size: x-small;
+    position: relative;
+    bottom: -4px;
 }
 
 .pname {
-	white-space: normal;
-/*    height: 30px; */
-	overflow: hidden;
-	padding-top: 5px;
-	text-overflow: ellipsis;
-}
-
-#p2_name {
-	text-align: right;
+    white-space: normal;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 #tnt_box {
-	position: absolute;
-	padding: 5px 7px;
-	bottom: 0;
-	width: 32px;
-	height: 32px;
-}
-
-.big {
-	font-size: x-large;
+    position: absolute;
+    padding: 9px;
+    bottom: 63px;
+    right: 184px;
+    width: 52px;
+    height: 52px;
 }
 
 #message {
+    height: 35px;
     text-align: center;
 }
 
@@ -111,33 +122,25 @@
     width: 390px;
 }
 
-#timeout_terminate,
-#timeout_claim,
-#resign,
-#abort {
-	/*float: left;
-	overflow: hidden;
-	margin: 2px;
-	width: 25%; 
-	text-align: center;
-	display: block; */
+#timeout_terminate {
+  text-align: center;
+  display: block;
+  /*position: absolute;*/
+}
+
+#timeout_claim {
+  text-align: center;
+  display: block;
+  /*position: absolute;*/
 }
 
 #timeout_buttons {
-	display: none;
-}
-
-#game_settings {
-	position:relative;
-	padding: 5px;
-	height: 60px;
-	margin: 0 auto;
-}
-
-#buttons {
+  top: 0px;
+  left: 125px;
+  display: none;
+	width: 180px;
 	position: absolute;
-	bottom: 5px;
-	width: 100%;
+	padding: 3px;
 }
 
 img.tntbtn {
