@@ -5,7 +5,6 @@
 var ctx;
 var mine;
 var event;
-var move_request = new XMLHttpRequest();
 var button_request = new XMLHttpRequest();
 
 var images = {};
@@ -129,7 +128,7 @@ Tile.prototype.draw = function() {
     if (this.blink_state) {
 	var color = this.hover ? [251,170,56] : [227,133,0];
 	for (var i = 0; i < 3; ++i) {
-	    var delta = 200 - orig_color[i];
+	    var delta = 200 - color[i];
 	    color[i] = Math.round(color[i] + delta * this.blink_state);
 	}
 	ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
@@ -200,11 +199,11 @@ function ActivityIndicator(tile) {
     this.start_time = (new Date()).getTime();
     this.timer = setInterval(function() {
 	var t = ((new Date()).getTime() - this.start_time) * ActivityIndicator.SPEED;
-	this.tile.blink_state = (1 - Math.cos()) / 2;
+	this.tile.blink_state = (1 - Math.cos(t)) / 2;
 	this.tile.draw();
-    }.bind(this), 100);
+    }.bind(this), 50);
 
-    ActivityIndicator[tile.x, + ',' + tile.y] = this;
+    ActivityIndicator.all[tile.x + ',' + tile.y] = this;
 }
 
 ActivityIndicator.SPEED = Math.PI / 1000; // One full blink per second...
@@ -213,16 +212,17 @@ ActivityIndicator.all = {};
 ActivityIndicator.prototype.clear = function() {
     clearInterval(this.timer);
 
-    delete ActivityIndicator[this.tile.x, + ',' + this.tile.y];
+    delete ActivityIndicator.all[this.tile.x + ',' + this.tile.y];
     this.tile.blink_state = 0;
     this.tile.ai = null;
+    this.tile.draw();
 
     this.tile = null;
 }
 
 ActivityIndicator.clear_all = function() {
     for (var ai in ActivityIndicator.all) {
-	ai.clear();
+	ActivityIndicator.all[ai].clear();
     }
 }
 // End of class ActivityIndicator
@@ -353,6 +353,9 @@ function set_state(state) {
 	    // Not my turn, set default cursor...
 	    cursor = 'default';
 	    
+	    // Stop any tile that could be blinking
+	    ActivityIndicator.clear_all();
+
 	    // and stop highlighting tiles:
 	    hover_indicator = null;
 	    highlight_tile.clear();
@@ -469,7 +472,11 @@ function handle_event(msg) {
 	        // Just assume correct valid values were delivered...
 
 	        mine[m][n].set_state(res[3]);
-	        mine[m][n].draw();
+		if (mine[pos.m][pos.n].ai) {
+		    mine[pos.m][pos.n].ai.clear();
+		} else {
+		    mine[m][n].draw();
+		}
 	    }
         }
 
@@ -563,21 +570,25 @@ function on_click(ev) {
 
     close_last_nt();
 
-    // TODO: indicate activity
+    new ActivityIndicator(mine[pos.m][pos.n]);
 
     var url = '/game/'+ params.game_id + '/move/?m=' + pos.m + '&n=' + pos.n;
     if(tnt.active) {
 	url += '&tnt=y';
     }
+
+    var move_request = new XMLHttpRequest();
     move_request.open('POST', url, true);
     move_request.onreadystatechange = function(ev){
-	if (move_request.readyState == 4) {
-	    if(move_request.status != 200) {
+	if (ev.target.readyState == 4) {
+	    if(ev.target.status != 200) {
 		// Error: server didn't accept click, probably just a
 		// syncronization error due to network delay that will
 		// correct itself automatically.
 
-		// TODO: stop activity indication
+		if (mine[pos.m][pos.n].ai) {
+		    mine[pos.m][pos.n].ai.clear();
+		}
 	    }
 	}
     };

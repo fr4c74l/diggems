@@ -7,7 +7,6 @@ Priority:
     - General game status
   - In-game popup while waiting for opponent
   - Facebook invite
-- Display activity on user input.
 - Rematch button after game is over
 - Publish open-graph story of a player
   - Brag about user result
