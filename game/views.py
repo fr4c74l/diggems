@@ -179,12 +179,7 @@ def index(request):
                }
         new_games.append(info)
 
-    if profile.facebook:
-        user_id = profile.facebook.name
-    else:
-        user_id = _('Guest') + '-' + profile.id[:6]
-
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'profile': profile, 'user_id': user_id}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -528,16 +523,17 @@ def chat_post(request, game_id=None):
         event_channel = game.channel
 
     if profile.facebook:
-        user_id = profile.facebook.name
+        username = profile.facebook.name
     else:
-        user_id = _('Guest') + '-' + profile.id[:6]
+        username = profile.guest_name()
+
     utcnow = datetime.datetime.utcnow()
     midnight_utc = datetime.datetime.combine(utcnow.date(), time(0))
     delta = utcnow - midnight_utc
 
     data = {
         'time_in_sec': delta.seconds,
-        'user_id': user_id,
+        'username': username,
         'msg': escape(msg)
     }
 
