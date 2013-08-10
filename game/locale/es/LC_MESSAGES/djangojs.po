@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-02 13:38-0300\n"
+"POT-Creation-Date: 2013-08-09 01:32-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,60 +17,55 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/js/chat (cópia).js:112
-msgid "Chat"
-msgstr ""
-
-#: static/js/game.js:234 static/js/game.js.c:276
+#: static/js/game.js:272 static/js/game.js.c:314
 msgid "Your turn! Play!"
 msgstr "¡Tú turno! ¡Juege!"
 
-#: static/js/game.js:261
+#: static/js/game.js:299
 msgid "DigGems: Game "
 msgstr "DigGems: Juego "
 
-#: static/js/game.js:293
+#: static/js/game.js:331
 msgid "Wait for your turn."
 msgstr "Espere tu turno."
 
-#: static/js/game.js:296
+#: static/js/game.js:334
 msgid "Game over, "
 msgstr "Juego terminado, "
 
-#: static/js/game.js:302
+#: static/js/game.js:340
 msgid "you win!"
 msgstr "¡tú ganaste!"
 
-#: static/js/game.js:305
+#: static/js/game.js:343
 msgid "you lose."
 msgstr "tú perdiste."
 
-#: static/js/game.js:324
+#: static/js/game.js:362
 msgid "Red's turn."
 msgstr "Turno del rojo."
 
-#: static/js/game.js:325
+#: static/js/game.js:363
 msgid "Blue's turn."
 msgstr "Turno del azul"
 
-#: static/js/game.js:326
+#: static/js/game.js:364
 msgid "Game is over, red player won."
 msgstr "Juego terminó, el rojo ganó."
 
-#: static/js/game.js:327
+#: static/js/game.js:365
 msgid "Game is over, blue player won."
 msgstr "Juego terminó, el azul ganó."
 
-#: static/js/game.js:328
+#: static/js/game.js:366
 #, fuzzy
 msgid "Game is over, red player won by resignation."
 msgstr "Juego terminó, el rojo ganó."
 
-#: static/js/game.js:329
+#: static/js/game.js:367
 #, fuzzy
 msgid "Game is over, blue player won by resignation."
 msgstr "Juego terminó, el azul ganó."
 
-#: static/js/game.js:358
-msgid "Guest"
-msgstr "Visitante"
+#~ msgid "Guest"
+#~ msgstr "Visitante"

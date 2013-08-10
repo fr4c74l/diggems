@@ -80,7 +80,7 @@ body {
 	font-family: Diavlo;
 }
 
-.box h1, h2, h3 {
+.box h1, h2, h3, h4, h5 {
 	color: #222;
 	text-shadow: 0.05em 0.05em 0.05em #535353;
 }

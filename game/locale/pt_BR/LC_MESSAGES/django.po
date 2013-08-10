@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-02 13:38-0300\n"
+"POT-Creation-Date: 2013-08-09 01:31-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
+#: models.py:27
+msgid "guest"
+msgstr "visitante"
+
 #. Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
-#: views.py:48 templates/base.html:40
+#: views.py:73 templates/base.html:38
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "pt_BR"
-
-#: views.py:140
-msgid "anonymous player"
-msgstr "jogador anônimo"
 
 #: templates/404.html:10 templates/game404.html:10
 msgid "Broken Link"
@@ -47,57 +47,53 @@ msgstr ""
 #: templates/base.html:8
 msgctxt "XHTML"
 msgid "en"
-msgstr ""
+msgstr "pt"
 
-#: templates/base.html:63 templates/game.html:41 templates/game.html.py:52
-msgid "Visitor"
-msgstr "Visitante"
-
-#: templates/base.html:64
+#: templates/base.html:63
 msgid "Score"
 msgstr "Placar"
 
-#: templates/base.html:66
+#: templates/base.html:67
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/base.html:98
+#: templates/base.html:99
 msgid "Play it now!"
 msgstr "Jogue agora!"
 
-#: templates/base.html:99
+#: templates/base.html:100
 msgid "About the game"
 msgstr "Sobre o jogo"
 
-#: templates/base.html:100
+#: templates/base.html:101
 msgid "How to play"
 msgstr "Como jogar"
 
-#: templates/base.html:101
+#: templates/base.html:102
 msgid "Source code"
 msgstr "Código fonte"
 
-#: templates/base.html:105
+#: templates/base.html:106
 msgid "Policy"
 msgstr "Políticas"
 
-#: templates/base.html:107
+#: templates/base.html:108
 msgid "Terms of service"
 msgstr "Termos do serviço"
 
-#: templates/base.html:108
+#: templates/base.html:109
 msgid "Privacy policy"
 msgstr "Política de privacidade"
 
-#: templates/base.html:112
+#: templates/base.html:113
 msgid "About Us"
 msgstr "Sobre Nós"
 
-#: templates/base.html:114
+#: templates/base.html:115
 msgid "Contact us"
 msgstr "Contate-nos"
 
-#: templates/base.html:118 templates/donate.html:11
+#: templates/base.html:119 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
 msgstr "Doações"
@@ -150,52 +146,48 @@ msgstr ""
 msgid "Donate Bitcoin"
 msgstr "Doar Bitcoin"
 
-#: templates/game.html:9
+#: templates/game.html:10
 #, python-format
 msgid "Game %(game_id)s"
 msgstr "Jogo %(game_id)s"
 
-#: templates/game.html:43 templates/game.html.py:54
-msgid "You"
-msgstr "Você"
-
-#: templates/game.html:43 templates/game.html.py:54
-msgid "Your adversary"
-msgstr "Seu oponente"
-
-#: templates/game.html:52
-msgid "Empty!"
-msgstr "Vazio!"
-
-#: templates/game.html:52
-msgid "Waiting player..."
-msgstr "Esperando o outro jogador..."
-
-#: templates/game.html:64
-msgid "Abort"
-msgstr "Abortar"
-
-#: templates/game.html:64 templates/index.html:51
-msgid "Join!"
-msgstr "Juntar-se"
-
-#: templates/game.html:67
-msgid "Give Up"
-msgstr "Desistir"
-
-#: templates/game.html:69
+#: templates/game.html:41
 msgid "Terminate Game"
 msgstr "Terminar Jogo"
 
-#: templates/game.html:70
+#: templates/game.html:42
 msgid "Take Player's Turn"
 msgstr "Tomar a Vez"
 
-#: templates/game.html:78
+#: templates/game.html:53
+msgid "Empty!"
+msgstr "Vazio!"
+
+#: templates/game.html:53
+msgid "Wait..."
+msgstr "Aguarde..."
+
+#: templates/game.html:55
+msgid "Abort"
+msgstr "Abortar"
+
+#: templates/game.html:55 templates/index.html:51
+msgid "Join!"
+msgstr "Juntar-se"
+
+#: templates/game.html:59
+msgid "You"
+msgstr "Você"
+
+#: templates/game.html:59
+msgid "Your opponent"
+msgstr "Seu adversário"
+
+#: templates/game.html:65
 msgid "Copy the link to your adversary"
 msgstr "Copie o link para seu oponente"
 
-#: templates/game.html:91
+#: templates/game.html:78
 msgid "Accept the challenge and play immediately!"
 msgstr "Aceite o desafio e jogue imediatamente!"
 
@@ -290,5 +282,5 @@ msgstr "Jogos por começar"
 msgid "Versus"
 msgstr "Contra"
 
-#~ msgid "Wait..."
-#~ msgstr "Aguarde..."
+#~ msgid "Give Up"
+#~ msgstr "Desistir"
