@@ -1,22 +1,32 @@
 Priority:
-- Show GG button
-- Footer bar with links
-  - Fractal name and logo
+- New interface:
+  - Show GG button
+  - Easier index page
+  - Real-time update of index page.
+    - Accept challenge
+    - General game status
+  - In-game popup while waiting for opponent
+  - Facebook invite
+- Display activity on user input.
+- Rematch button after game is over
+- Publish open-graph story of a player
+  - Brag about user result
+- Create a settings icon and menu
+  - Button to enable/disable sound.
+  - Button to enable desktop notification.
+- Rudimentary traking of user state (online/offline)
+- Add general and in-game chat
+  - Random color names in chat for guest users based on their internal ID
+  - Javascript inform user connect/disconnect.
 
 TODO Later:
-- Rematch button after game is over
 - Ask user to login on FB so his game stats will be recorded on his ID.
 - Internationalization (incomplete)
   - Spanish
 - Mobile friendly version?
-- Display activity on user input.
-- Create a settings icon and menu
-  - Button to enable/disable sound.
-  - Button to enable desktop notification.
 - Timeout uninitialized game if host has left.
   - Do not timeout if user is still online.
 - Real-time update of user stats.
-- Real-time update of index page.
 - Scoreboards
   - All time
     - Everybody
@@ -25,15 +35,13 @@ TODO Later:
     - Everybody
     - Friends
 - Add clickable objects below the canvas for accessibility.
-- Add menu for view/play all games that are occurring
-- Add general and in-game chat
-  - Random color names in chat for guest users based on their internal ID
 - Add some game mods, like pro-mode where player has 5 sec to play before passing the turn
   - Epistolar mode, with no time deadline
 - Our own login system, for non-facebook users
-- Publish open-graph story of a player
-  - Brag about user result
 - Warn user about bogus Internet browsers.
+- Fractal name and logo
+- Ruler to identify the mine tiles
+- Tutorial page
 
 TODO "Irrelevant":
  - More footer links
