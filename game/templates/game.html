@@ -89,7 +89,7 @@ Software under Affero GPL license, see LICENSE.txt
 
 <div class="chat box_border_top" id="chat_window">
 	<!-- TODO Uncomment the line below after create a function to add chat-->
-	<div class="chat_menu" id="toggle">{# <img id="chat_activity" src="/static/images/online.png" /> #}{% blocktrans %} Game {{ game_id }} Chat Room {% endblocktrans %}</div>
+	<div class="chat_menu" id="toggle">{% blocktrans %}Game {{ game_id }} chat room{% endblocktrans %}</div>
 	<div id="chat_area">
 		<ul id="chat_textfield"/>
 		<div id="chat_interact"{% if not player %} style="display:none;"{% endif %}>
