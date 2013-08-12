@@ -474,8 +474,8 @@ function handle_event(msg) {
 	        // Just assume correct valid values were delivered...
 
 	        mine[m][n].set_state(res[3]);
-		if (mine[pos.m][pos.n].ai) {
-		    mine[pos.m][pos.n].ai.clear();
+		if (mine[m][n].ai) {
+		    mine[m][n].ai.clear();
 		} else {
 		    mine[m][n].draw();
 		}
