@@ -88,7 +88,6 @@ var chat = (function (){
 			}
 		});
 	}
-	
-	var chat_icon = $('<img id="chat_icon" />').attr('src', '/static/images/chat-default.png');
+
 	window.addEventListener('load', in_game_init, false);
 })();
