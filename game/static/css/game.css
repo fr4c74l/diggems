@@ -40,7 +40,6 @@
 #p2_pts_box {
     background: rgba(0,0,255,0.25);
     text-align: right;
-    
     display: block;
     position: absolute;
     top: 0px;
@@ -57,23 +56,39 @@
 
 .pbox {
     text-align: center;
-    text-align: center;
-    display: block;
+	display:inline-block;
     width: 150px;
     height: 40px;
 }
 
+.box_container {
+	position: relative;
+	bottom:0;
+	left:0;
+	height: 70px;
+}
+
 #p1_box {
     background: rgba(255,0,0,0.25);
-    position: relative;
-    margin-bottom: 10px;
+    position: absolute;
+	bottom:0;
+	left:0;
 }
 
 #p2_box {
     background: rgba(0,0,255,0.25);
-    position: absolute;
-    bottom: 67px;
-    right: 0px;
+	position: absolute;
+	bottom: 0;
+	right:0;
+}
+
+#tnt_box {
+    padding: 9px;
+    width: 52px;
+    height: 52px;
+	position: absolute;
+	bottom: -4px;
+	right: 184px;
 }
 
 #p1_link:hover,
@@ -104,17 +119,12 @@
     text-overflow: ellipsis;
 }
 
-#tnt_box {
-    position: absolute;
-    padding: 9px;
-    bottom: 63px;
-    right: 184px;
-    width: 52px;
-    height: 52px;
+.big {
+	font-size: x-large;
 }
 
 #message {
-    height: 35px;
+	margin-top: 16px;
     text-align: center;
 }
 
