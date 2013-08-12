@@ -36,7 +36,6 @@ Software under Affero GPL license, see LICENSE.txt
 <script src="/static/js/event.js" />
 <script src="/static/js/game.js" />
 <script src="/static/js/jquery-2.0.3.min.js"/>
-<script src="/static/js/jquery-ui.min.js" />
 <script src="/static/js/chat.js" />
 
 <div id="main">
@@ -88,20 +87,18 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 </div>
 
-<div class="popup" id="popup_window">
-	<div class="chat box" id="chat_window">
-		<!-- TODO Uncomment the line below after create a function to add chat-->
-		<div style="float:right"><a id="toggle"> - </a><!--<a id="close">x</a> --></div>
-		<div id="chat_area">
-			<h3>{% blocktrans %} Game {{ game_id }} Chat Room {% endblocktrans %}</h3>
-			<ul id="chat_textfield" style="width: 375px;" />
-			<div id="chat_interact"{% if not player %} style="display:none;"{% endif %}>
-				<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
-				<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />
-			</div>
+<div class="chat box_border_top" id="chat_window">
+	<!-- TODO Uncomment the line below after create a function to add chat-->
+	<div class="chat_menu" id="toggle">{# <img id="chat_activity" src="/static/images/online.png" /> #}{% blocktrans %} Game {{ game_id }} Chat Room {% endblocktrans %}</div>
+	<div id="chat_area">
+		<ul id="chat_textfield"/>
+		<div id="chat_interact"{% if not player %} style="display:none;"{% endif %}>
+			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
+			{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 		</div>
 	</div>
 </div>
+
 
 <!-- TODO: Have button to disable the audio. -->
 <audio id="ring" preload="auto">

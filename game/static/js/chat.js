@@ -63,7 +63,7 @@ var chat = (function (){
 			url = post_url;
 
 			input_field.addEventListener("keypress", handle_key_press, false);
-			button.addEventListener("click", send_message, false);
+			//button.addEventListener("click", send_message, false);
 
 			event.register_handler('c', handle_event);
 		}
@@ -72,33 +72,14 @@ var chat = (function (){
 
 (function() {
 	function toggle_chat() {
-		if ( $("#chat_area").is(':visible') ) {
-			$( this ).text("Chat");
-			$( this ).append(chat_icon);
-		}
-		else {
-			$( this ).text("-");
-			$("#chat_icon").remove;
-		}
-		$("#chat_window").animate({
-			left: "5px",
-			top: "50%"
-		});
 		$("#chat_area").animate({
-		width: "toggle",
 		height: "toggle",
 		opacity: "toggle"
-		}, 500);
+		}, 300);
 		return false;
 	}
 	function in_game_init()
 	{
-		$("#chat_window").draggable( {
-			cursor: "move", 
-			containment: ".wrap",
-			scroll: false,
-			snap: ".wrap"
-		}); 
 		// click or press <ESC> to show/hide chat
 		$("#toggle").click(toggle_chat);
 		$(document).keydown(function(e) { 
