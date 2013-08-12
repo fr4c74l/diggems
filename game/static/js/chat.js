@@ -16,6 +16,9 @@ var chat = (function (){
 			chat_request.setRequestHeader("Content-type", "text/plain");
 			chat_request.send(msg);
 		}
+
+		// Clean input field
+		input_field.value="";
 	}
 
 	function handle_key_press(e)
@@ -51,9 +54,6 @@ var chat = (function (){
 
 		chat_ul.appendChild(li);
 		chat_ul.scrollTop = chat_ul.scrollHeight;
-
-		// Clean input field
-		input_field.value="";
 	}
 
 	return {
