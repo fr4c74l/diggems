@@ -402,6 +402,8 @@ function set_state(state) {
     }
     var msg_box = document.getElementById('message');
     if (!params.state && state) {
+		if(params.player)
+			document.getElementById("chat_interact").style.display="block";
 	// Just started the game, prepare box for messages
 	msg_box.className += " big";
     }
