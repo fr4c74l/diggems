@@ -116,8 +116,9 @@ class Game(models.Model):
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
 
-    def __init__(self, is_private=False,*args, **kwargs):
-        super(Game, self).__init__(*args, **kwargs)
+    @staticmethod
+    def create(is_private=False):
+        g = Game()
         mine = [[0] * 16 for i in xrange(16)]
         indexes = list(itertools.product(xrange(16), repeat=2))
         gems = true_random.sample(indexes, 51)
@@ -131,12 +132,12 @@ class Game(models.Model):
                     if mine[x][y] == 9:
                         mine[m][n] += 1
                 for_each_surrounding(m, n, inc_count)
-        self.mine = mine_encode(mine)
+        g.mine = mine_encode(mine)
         if is_private:
-            self.token = gen_token()
-        self.channel = gen_token()
+            g.token = gen_token()
+        g.channel = gen_token()
         create_channel(self.channel)
-
+        return g
 
 def delete_game_channel(sender, **kwargs):
     game_helpers.delete_channel(kwargs['instance'].channel)

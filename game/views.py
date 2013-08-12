@@ -155,10 +155,7 @@ def new_game(request):
     p1 = Player(user=profile)
     p1.save()
 
-    if request.REQUEST.get('private', default=False):
-        game = Game(True)
-    else:
-        game = Game(False)
+    game = Game.create(request.REQUEST.get('private', default=False))
     game.p1 = p1
     game.save()
 
@@ -342,7 +339,7 @@ def rematch(request, game_id):
         obj.p2_click = True
 
     if obj.p1_click and obj.p2_click:
-        cg = Game(False)
+        cg = Game.create()
         cg.p1 = Player(user=game.p2.user)
         cg.p1.save()
         cg.p2 = Player(user=game.p1.user)
