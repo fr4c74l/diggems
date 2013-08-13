@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-12 18:20-0300\n"
+"POT-Creation-Date: 2013-08-13 11:05-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -26,10 +26,6 @@ msgstr "visitante"
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "pt_BR"
-
-#: views.py:351
-msgid "Guest"
-msgstr "Visitante"
 
 #: templates/404.html:10 templates/game404.html:10
 msgid "Broken Link"
@@ -99,8 +95,8 @@ msgstr "Contate-nos"
 
 #: templates/base.html:118 templates/donate.html:11
 #: templates/donate.html.py:17
-msgid "Donations"
-msgstr "Doações"
+msgid "Patronage"
+msgstr "Mecenato"
 
 #: templates/donate.html:18
 msgid ""
@@ -128,7 +124,7 @@ msgid "Thanks!"
 msgstr "Muito obrigado!"
 
 #: templates/donate.html:30
-msgid "DigGems Donations"
+msgid "DigGems Patronage"
 msgstr "Suporte ao DigGems"
 
 #. Translators: Please see locale codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
@@ -296,11 +292,14 @@ msgstr "Contra"
 msgid "Global chat room"
 msgstr "Sala de chat global"
 
+#~ msgid "Guest"
+#~ msgstr "Visitante"
+
+#~ msgid "Donations"
+#~ msgstr "Doações"
+
 #~ msgid "Donation"
 #~ msgstr "Doar Bitcoin"
-
-#~ msgid "Patronage"
-#~ msgstr "Doações"
 
 #~ msgid "Give Up"
 #~ msgstr "Desistir"

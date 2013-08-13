@@ -8,13 +8,13 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
 
-{% block title %}{% trans "Donations" %}{% endblock %}
+{% block title %}{% trans "Patronage" %}{% endblock %}
 
 {% block content %}
 {% get_current_language as LANGUAGE_CODE %}
 {% get_available_languages as LANGUAGES %}
 <div class="box">
-	<h1>{% trans "Donations" %}</h1>
+	<h1>{% trans "Patronage" %}</h1>
 	<p>{% blocktrans %}This game is free to play and <a href="/info/sourcecode">free software</a>. We also
 	don't feel to be fair to charge for competitive advantage of some players over others. Anyway, we have
 	dedicated much of our time to develop this game, and have our costs in keeping it running and in its
@@ -27,7 +27,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<form action="https://www.paypal.com/cgi-bin/webscr" method="post" target="_blank">
 			<input type="hidden" name="cmd" value="_donations" />
 			<input type="hidden" name="business" value="financial@fr4c74l.com" />
-			<input type="hidden" name="item_name" value="{% trans "DigGems Donations" %}" />
+			<input type="hidden" name="item_name" value="{% trans "DigGems Patronage" %}" />
 			<input type="hidden" name="item_number" value="donation" />
 			<input type="hidden" name="no_shipping" value="1" />
 			<input type="hidden" name="rm" value="1" />
