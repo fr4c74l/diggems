@@ -348,7 +348,7 @@ def game(request, game_id):
     if profile.facebook:
         user_id = profile.facebook.name
     else:
-        user_id = profile.guest_name(self)
+        user_id = profile.guest_name()
 
     data = {'state': game.state,
             'game_id': game_id,
