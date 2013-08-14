@@ -4,14 +4,14 @@ import gipc
 class Channel(object):
     pass # TODO
 
-_from_workers = None
-_workers_endpoint = None
+_workers2channel = None
+_channel2workers = None
 
 _rpc_map = {}
 _rpc_next_id = 0
 
 def _rpc(func):
-    global _rpc_next_id, _rpc_map
+    global _workers2channel, _rpc_next_id, _rpc_map
     func_id = _rpc_next_id
     _rpc_next_id += 1
     
@@ -19,7 +19,7 @@ def _rpc(func):
 
     def proxy_call(*args, **kwar):
         msg = (func_id, args, kwar)
-        _workers_endpoint.put(msg)
+        _workers2channel[1].put(msg)
         # No return value allowed
     return proxy_call
 
@@ -37,6 +37,16 @@ def post_update(channel_name, message):
 
 # Must be called on each worker, for it to receive websockets and listen to them
 def websocket_acceptor(worker_id, ws_handler):
+    global _channel2workers
+    from_channel = _channel2workers[worker_id][0]
+
+    # Close uneeded pipes
+    for r, w in _channel2workers:
+        w.close()
+        if from_channel != r:
+            r.close()
+    del _channel2workers
+
     while 1:
         ws = None # TODO: black magic to receive websockt from another process
     
@@ -45,20 +55,22 @@ def websocket_acceptor(worker_id, ws_handler):
         gevent.spawn(ws_handler, ws, headers)
 
 # Must be run on the channels manager process
-def serve_forever(sock_name):
-    def rpc_caller():
-        global _rpc_map
-        while 1:
-            (func_id, args, kwar) = from_workers.get()
-            _rpc_map[func_id](*args, **kwar)
-    gevent.spawn(rpc_caller)
+def rpc_dispatcher():
+    global _rpc_map, _workers2channel
+    receiver = _workers2channel[0]
 
-    # TODO: gevent websocket server
-    # and black magic to handle each to a worker
+    # Not needed anymore from this process
+    _workers2channel[1].close()
+    del _workers2channel
+
+    # Dispatch events
+    while 1:
+        (func_id, args, kwar) = receiver.get()
+        _rpc_map[func_id](*args, **kwar)
 
 # Must be called before everything in the starter process, to create the shared pipes
 def init(worker_count):
-    global _from_workers, _workers_endpoint
-    (_from_workers, _workers_endpoint) = gipc.pipe()
-    
-    # TODO: communication pipes for each worker
+    global _workers2channel, _channel2workers
+    _workers2channel = gipc.pipe()
+
+    _channel2workers = [gipc.pipe() for i in xrange(worker_count)]
