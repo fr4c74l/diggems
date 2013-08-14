@@ -102,7 +102,11 @@ def recv_with_fd(src_fd):
         if -ret not in (errno.EWOULDBLOCK, errno.EAGAIN):
             raise os.error(-ret, os.strerror(-ret))
 
-    print flags[0]
+    if flags[0] == socket.MSG_TRUNC:
+        # TODO: do something if message is truncated
+        # or better: never let it happen
+        pass
+
     subject_fd = subject_fd[0] if subject_fd[0] else None
     buf = ffi.buffer(buf)[:ret]
 
@@ -116,9 +120,11 @@ def send_with_fd(dest_fd, message, subject_fd):
             break
         if -ret not in (errno.EWOULDBLOCK, errno.EAGAIN):
             raise os.error(-ret, os.strerror(-ret))
-        select([], [dest_fd.fileno()], [])
+        select([], [dest_fd], [])
     if ret != len(message):
-        print "Message not sent entirely!" 
+        # TODO: Weird! Can this ever happen? Maybe if message is too big.
+        # Do something about it...
+        pass
 
 i = 0
 
@@ -128,7 +134,7 @@ def sender():
     def next_msg():
         global i
         i += 1
-        return 'msg {}'.format(i)
+        return ' msg {} '.format(i)
 
     def a():
         while 1:
@@ -158,14 +164,16 @@ def receiver():
         (msg, fd) = recv_with_fd(r)
         print msg
         if fd:
-            def pipe_reader(r):
+            def pipe_reader(r, omsg):
                 msg = gevent.os.nb_read(r, 1024)
                 while msg:
-                    print 'Received from received pipe:', msg
+                    print 'pipe', omsg, ':', msg
                     msg = gevent.os.nb_read(r, 1024)
                 os.close(r)
                 print "done with pipe ", r
-            gevent.spawn(pipe_reader, fd)
+            gevent.spawn(pipe_reader, fd, msg)
+        else:
+            print "File descriptor didn't come with", msg
 
 pipe = gevent.socket.socketpair(socket.AF_UNIX, socket.SOCK_SEQPACKET)
 
