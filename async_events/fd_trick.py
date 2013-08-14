@@ -118,9 +118,10 @@ def send_with_fd(dest_fd, message, subject_fd):
         ret = C.send_with_fd(dest_fd.fileno(), buf, len(message), subject_fd)
         if ret >= 0:
             break
-        if -ret not in (errno.EWOULDBLOCK, errno.EAGAIN):
+        if -ret in (errno.EPERM, errno.EWOULDBLOCK, errno.EAGAIN):
+            select([], [dest_fd], [])
+        else:
             raise os.error(-ret, os.strerror(-ret))
-        select([], [dest_fd], [])
     if ret != len(message):
         # TODO: Weird! Can this ever happen? Maybe if message is too big.
         # Do something about it...
