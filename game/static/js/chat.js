@@ -2,17 +2,30 @@ var chat = (function (){
 	var chat_ul;
 	var input_field;
 	var url;
+	var open = true;
+	var blink_id = 0;
 
 	var chat_request = new XMLHttpRequest();
 	var sec_in_day = (24 * 60 * 60);
 
-	function send_message()
-	{
+	function chat_toggle() {
+		$("#chat_area").animate({
+		height: "toggle",
+		opacity: "toggle"
+		}, 300);
+		open = !open;
+		if (open){
+			clearInterval(blink_id);
+			blink_id = 0;
+		}
+		return false;
+	}
+
+	function send_message() {
 		chat_request.open('POST',url,true);
 
 		var msg = input_field.value;
-		if (msg != "")
-		{
+		if (msg != "") {
 			chat_request.setRequestHeader("Content-type", "text/plain");
 			chat_request.send(msg);
 		}
@@ -21,8 +34,7 @@ var chat = (function (){
 		input_field.value="";
 	}
 
-	function handle_key_press(e)
-	{
+	function handle_key_press(e) {
 		var key = e.keyCode || e.which;
 		if (key == 13)  //enter keycode
 			send_message();
@@ -54,6 +66,25 @@ var chat = (function (){
 
 		chat_ul.appendChild(li);
 		chat_ul.scrollTop = chat_ul.scrollHeight;
+
+		if(!open) {
+			if(blink_id == 0){
+				blink_id = blink("#chat_window");
+			}
+		}
+	}
+
+	function blink(id) {
+		return setInterval( function() {
+			$(id).css("-webkit-transition","all 0.5s ease")
+			.css("-moz-transition","all 0.5s ease")
+			.css("-o-transition","all 0.5s ease")
+			.css("transition", "all 0.5s ease")
+			.css("backgroundColor","#08c308").delay(200).queue(function() {
+				$(this).css({ background: 'rgba(255,255,255,0.5)' }); 
+				$(this).dequeue();
+			}); 
+		}, 800);
 	}
 
 	return {
@@ -65,23 +96,16 @@ var chat = (function (){
 			input_field.addEventListener("keypress", handle_key_press, false);
 			//button.addEventListener("click", send_message, false);
 
+			// click or press <ESC> to show/hide chat
+			$("#toggle").click(chat_toggle);
+
 			event.register_handler('c', handle_event);
 		}
 	}
 })();
 
 (function() {
-	function toggle_chat() {
-		$("#chat_area").animate({
-		height: "toggle",
-		opacity: "toggle"
-		}, 300);
-		return false;
-	}
-	function in_game_init()
-	{
-		// click or press <ESC> to show/hide chat
-		$("#toggle").click(toggle_chat);
+	function in_game_init() {
 		$(document).keydown(function(e) { 
 			if (e.which == 27 ) {
 				$("#toggle").trigger("click");
