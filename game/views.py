@@ -512,31 +512,30 @@ def chat_post(request, game_id=None):
     msg = request.body
     if not msg:
         return HttpResponseBadRequest()
+    elif(len(msg) <= 80):
+        profile = UserProfile.get(request)
+        if game_id is None:
+            event_channel = "main_channel"
+        else:
+            game = get_object_or_404(Game, pk=game_id)
+            if not game.what_player(profile):
+                return HttpResponseForbidden()
+            event_channel = game.channel
 
-    profile = UserProfile.get(request)
-    if game_id is None:
-        event_channel = "main_channel"
-    else:
-        game = get_object_or_404(Game, pk=game_id)
-        if not game.what_player(profile):
-            return HttpResponseForbidden()
-        event_channel = game.channel
+        if profile.facebook:
+            username = profile.facebook.name
+        else:
+            username = profile.guest_name()
 
-    if profile.facebook:
-        username = profile.facebook.name
-    else:
-        username = profile.guest_name()
+        utcnow = datetime.datetime.utcnow()
+        midnight_utc = datetime.datetime.combine(utcnow.date(), time(0))
+        delta = utcnow - midnight_utc
 
-    utcnow = datetime.datetime.utcnow()
-    midnight_utc = datetime.datetime.combine(utcnow.date(), time(0))
-    delta = utcnow - midnight_utc
-
-    data = {
-        'time_in_sec': delta.seconds,
-        'username': username,
-        'msg': escape(msg)
-    }
-
-    post_update(event_channel, 'c\n' + json.dumps(data))
+        data = {
+            'time_in_sec': delta.seconds,
+            'username': username,
+            'msg': escape(msg)
+        }
+        post_update(event_channel, 'c\n' + json.dumps(data))
 
     return HttpResponse()

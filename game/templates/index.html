@@ -67,7 +67,7 @@ Software under Affero GPL license, see LICENSE.txt
 				<ul id="chat_textfield">
 					<!--TODO: <li class="notice">Put chat login/logout messages here!</li> -->
 				</ul>
-					<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
+					<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" maxlength="80" />
 					{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 			</td>
 		</tr>

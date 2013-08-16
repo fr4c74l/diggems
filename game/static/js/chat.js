@@ -17,6 +17,7 @@ var chat = (function (){
 		if (open){
 			clearInterval(blink_id);
 			blink_id = 0;
+			input_field.focus();
 		}
 		return false;
 	}
