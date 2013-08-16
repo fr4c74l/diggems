@@ -2,13 +2,13 @@ var chat = (function (){
 	var chat_ul;
 	var input_field;
 	var url;
+	var msg_length = 80;
 	var open = true;
 	var blink_id = 0;
-
 	var chat_request = new XMLHttpRequest();
 	var sec_in_day = (24 * 60 * 60);
 
-	function chat_toggle() {
+	function toggle_chat() {
 		$("#chat_area").animate({
 		height: "toggle",
 		opacity: "toggle"
@@ -35,10 +35,16 @@ var chat = (function (){
 		input_field.value="";
 	}
 
+	function max_length_warn() {
+		if ($("#length_notify").is(":hidden")) {
+			$("#length_notify").show("slow").delay(2000).slideUp();
+		}
+	}
+
 	function handle_key_press(e) {
 		var key = e.keyCode || e.which;
 		if (key == 13)  //enter keycode
-			send_message();
+			(input_field.value.length > msg_length) ? max_length_warn() : send_message();
 	}
 
 	function format_date_string(hours, minutes, seconds){
@@ -50,7 +56,6 @@ var chat = (function (){
 
 	function handle_event(msg) {
 		data = JSON.parse(msg);
-
 		var date = new Date();
 		var offset = data['time_in_sec'] - (date.getTimezoneOffset() * 60) + sec_in_day;
 		offset %= sec_in_day;
@@ -58,20 +63,28 @@ var chat = (function (){
 		var minutes = Math.floor(offset / 60) % 60;
 		var hours = Math.floor(offset / 3600);
 		var time_fmt = "(" + format_date_string(hours, minutes, seconds) + ") ";
-
 		var li = document.createElement('li');
-		li.className = "message";
-		var li_text = "<span style='color:#999;font-size:small;'>" + time_fmt + "</span><span style='color:#000;font-size:small;font-weight: bold;'>" + data['username'] + ' : ' + "</span>" +
-						"<span style='color:#000'>" + data['msg'] + "</span>";
-		li.innerHTML = li_text;
+		var li_text;
 
+		if(data.notice) {
+			li.className = "notice";
+			switch(data.notice) {
+				case 'join':
+					li_text = data['username'] + gettext(" joins the chat.");
+					break;
+				case 'leave':
+					li_text = data['username'] + gettext(" leaves.");
+					break;
+			}
+		}else if(data.message) {
+			li.className = "message";
+			li_text = "<span style='color:#999;font-size:small;'>" + time_fmt + "</span><span style='color:#000;font-size:small;font-weight: bold;'>" + data['username'] + ' : ' + "</span>" + "<span style='color:#000'>" + data['message'] + "</span>";
+		}
+		li.innerHTML = li_text;
 		chat_ul.appendChild(li);
 		chat_ul.scrollTop = chat_ul.scrollHeight;
-
-		if(!open) {
-			if(blink_id == 0){
-				blink_id = blink("#chat_window");
-			}
+		if(!open && blink_id == 0){
+			blink_id = blink("#chat_window");
 		}
 	}
 
@@ -97,8 +110,10 @@ var chat = (function (){
 			input_field.addEventListener("keypress", handle_key_press, false);
 			//button.addEventListener("click", send_message, false);
 
-			// click or press <ESC> to show/hide chat
-			$("#toggle").click(chat_toggle);
+			// click or press <ESC> to show/hide game chat
+			if ($("#toggle_game_chat").length>0) {
+				$("#toggle_game_chat").click(toggle_chat);
+			}
 
 			event.register_handler('c', handle_event);
 		}
@@ -107,11 +122,13 @@ var chat = (function (){
 
 (function() {
 	function in_game_init() {
-		$(document).keydown(function(e) { 
-			if (e.which == 27 ) {
-				$("#toggle").trigger("click");
-			}
-		});
+		if ($("#toggle_game_chat").length>0) {
+			$(document).keydown(function(e) { 
+				if (e.which == 27 ) {
+					$("#toggle_game_chat").trigger("click");
+				}
+			});
+		}
 	}
 
 	window.addEventListener('load', in_game_init, false);

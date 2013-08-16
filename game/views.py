@@ -534,7 +534,7 @@ def chat_post(request, game_id=None):
         data = {
             'time_in_sec': delta.seconds,
             'username': username,
-            'msg': escape(msg)
+            'message': escape(msg)
         }
         post_update(event_channel, 'c\n' + json.dumps(data))
 

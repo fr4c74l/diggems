@@ -5,7 +5,6 @@ function Event(channel_url, last_known_change) {
     this.request = new XMLHttpRequest();
     this.error_count = 0;
     this.handlers = {};
-    
     this._timer = null;
 
     this._register_event();
@@ -18,8 +17,8 @@ Event.prototype._callback = function() {
 		this.last_etag = this.request.getResponseHeader('Etag');
 		this.last_change = this.request.getResponseHeader('Last-Modified');
 
-                var data = this.request.responseText;
-                // TODO: assert charAt(1) is '\n'
+		var data = this.request.responseText;
+		// TODO: assert charAt(1) is '\n'
 		this.handlers[data.charAt(0)](this.request.responseText.slice(2));
 		this._register_event();
 	    }
