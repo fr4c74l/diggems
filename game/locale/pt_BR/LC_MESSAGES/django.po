@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-09 01:31-0300\n"
+"POT-Creation-Date: 2013-08-13 11:05-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,7 +22,7 @@ msgid "guest"
 msgstr "visitante"
 
 #. Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
-#: views.py:73 templates/base.html:38
+#: views.py:73 templates/base.html:37
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "pt_BR"
@@ -49,54 +49,54 @@ msgctxt "XHTML"
 msgid "en"
 msgstr "pt"
 
-#: templates/base.html:63
+#: templates/base.html:62
 msgid "Score"
 msgstr "Placar"
 
-#: templates/base.html:67
+#: templates/base.html:66
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/base.html:99
+#: templates/base.html:98
 msgid "Play it now!"
 msgstr "Jogue agora!"
 
-#: templates/base.html:100
+#: templates/base.html:99
 msgid "About the game"
 msgstr "Sobre o jogo"
 
-#: templates/base.html:101
+#: templates/base.html:100
 msgid "How to play"
 msgstr "Como jogar"
 
-#: templates/base.html:102
+#: templates/base.html:101
 msgid "Source code"
 msgstr "Código fonte"
 
-#: templates/base.html:106
+#: templates/base.html:105
 msgid "Policy"
 msgstr "Políticas"
 
-#: templates/base.html:108
+#: templates/base.html:107
 msgid "Terms of service"
 msgstr "Termos do serviço"
 
-#: templates/base.html:109
+#: templates/base.html:108
 msgid "Privacy policy"
 msgstr "Política de privacidade"
 
-#: templates/base.html:113
+#: templates/base.html:112
 msgid "About Us"
 msgstr "Sobre Nós"
 
-#: templates/base.html:115
+#: templates/base.html:114
 msgid "Contact us"
 msgstr "Contate-nos"
 
-#: templates/base.html:119 templates/donate.html:11
+#: templates/base.html:118 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
-msgstr "Doações"
+msgstr "Mecenato"
 
 #: templates/donate.html:18
 msgid ""
@@ -146,50 +146,56 @@ msgstr ""
 msgid "Donate Bitcoin"
 msgstr "Doar Bitcoin"
 
-#: templates/game.html:10
+#: templates/game.html:11
 #, python-format
 msgid "Game %(game_id)s"
 msgstr "Jogo %(game_id)s"
 
-#: templates/game.html:41
+#: templates/game.html:45
 msgid "Terminate Game"
 msgstr "Terminar Jogo"
 
-#: templates/game.html:42
+#: templates/game.html:46
 msgid "Take Player's Turn"
 msgstr "Tomar a Vez"
 
-#: templates/game.html:53
+#: templates/game.html:57
 msgid "Empty!"
 msgstr "Vazio!"
 
-#: templates/game.html:53
+#: templates/game.html:57
 msgid "Wait..."
 msgstr "Aguarde..."
 
-#: templates/game.html:55
+#: templates/game.html:59
 msgid "Abort"
 msgstr "Abortar"
 
-#: templates/game.html:55 templates/index.html:51
+#: templates/game.html:59 templates/index.html:54
 msgid "Join!"
 msgstr "Juntar-se"
 
-#: templates/game.html:59
+#: templates/game.html:63
 msgid "You"
 msgstr "Você"
 
-#: templates/game.html:59
+#: templates/game.html:63
 msgid "Your opponent"
 msgstr "Seu adversário"
 
-#: templates/game.html:65
+#: templates/game.html:69
 msgid "Copy the link to your adversary"
 msgstr "Copie o link para seu oponente"
 
-#: templates/game.html:78
+#: templates/game.html:82
 msgid "Accept the challenge and play immediately!"
 msgstr "Aceite o desafio e jogue imediatamente!"
+
+# python-format
+#: templates/game.html:92
+#, python-format
+msgid "Game %(game_id)s chat room"
+msgstr "Chat do Jogo %(game_id)s"
 
 #: templates/game403.html:10
 msgid "Unauthorized"
@@ -234,53 +240,66 @@ msgid ""
 msgstr ""
 "...ou nunca existiu. Crie um novo na <a href =\"/\">página principal</a>."
 
-#: templates/index.html:21
+#: templates/index.html:24
 msgid "New game"
 msgstr "Novo jogo"
 
-#: templates/index.html:23
+#: templates/index.html:26
 msgid "Private game"
 msgstr "Jogo privado"
 
-#: templates/index.html:24
+#: templates/index.html:27
 msgid "Create!"
 msgstr "Criar!"
 
-#: templates/index.html:28
+#: templates/index.html:31
 msgid "Your games"
 msgstr "Seus jogos"
 
-#: templates/index.html:33 templates/index.html.py:54
+#: templates/index.html:36 templates/index.html.py:57
 msgid "Game"
 msgstr "Jogo"
 
-#: templates/index.html:34
+#: templates/index.html:37
 msgid "Private"
 msgstr "Privado"
 
-#: templates/index.html:34
+#: templates/index.html:37
 msgid "Public"
 msgstr "Público"
 
-#: templates/index.html:35
+#: templates/index.html:38
 msgid "Waiting the other player"
 msgstr "Esperando o outro jogador"
 
-#: templates/index.html:36
+#: templates/index.html:39
 msgid "In progress"
 msgstr "Em progresso"
 
-#: templates/index.html:40 templates/index.html.py:58
+#: templates/index.html:43 templates/index.html.py:61
 msgid "No game found!"
 msgstr "Nenhum jogo encontrado!"
 
-#: templates/index.html:46
+#: templates/index.html:49
 msgid "Games to start"
 msgstr "Jogos por começar"
 
-#: templates/index.html:55
+#: templates/index.html:58
 msgid "Versus"
 msgstr "Contra"
+
+#: templates/index.html:66
+msgid "Global chat room"
+msgstr "Sala de chat global"
+
+#~ msgid "Guest"
+#~ msgstr "Visitante"
+
+#~ msgid "Donations"
+#~ msgstr "Doações"
+
+#~ msgid "Donation"
+#~ msgstr "Doar Bitcoin"
 
 #~ msgid "Give Up"
 #~ msgstr "Desistir"
