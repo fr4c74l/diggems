@@ -11,25 +11,37 @@ Software under Affero GPL license, see LICENSE.txt
 	<link rel="stylesheet" media="screen" type="text/css" href="static/css/index.css" />
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
+	<script src="/static/js/jquery-2.0.3.min.js"/>
 	<script src="/static/js/event.js" />
 	<script src="/static/js/chat.js" />
 {% endblock %}
 {% block content %}
 
 <div class="box" id="your_games">
-	{% if your_games|length == 1 %}
-	<h1>{% trans "Return to game" %}</h1>
-	{% else %}
-	<h1>{% trans "Your games" %}</h1>
-	<ul>
-		{% for g in your_games %}
-		<li class="list_games">
-		<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
+	{% if your_games|length > 0 %}
+		<script> <![CDATA[ 
+			if ($("#your_games").is(":hidden")) {
+				$("#your_games").slideDown("slow"); 
+			}
+		]]> </script>
+		{% if your_games|length == 1 %}
+		<h1>{% trans "Return to game" %}</h1>
+		{% else %}
+		<h1>{% trans "Your games" %}</h1>
+		{% endif %}
+		<ul>
+			{% for g in your_games %}
+			<li class="list_games {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+			<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
+			<div>
 			<div>{% if g.token %}{% trans "Private" %}{% else %}{% trans "Public" %}{% endif %}</div>{% if g.state = 0 %}
 			<div>{% trans "Waiting the other player" %}</div>{% else %}
 			<div>{% trans "In progress" %}</div>{% endif %}
-		</li>{% endfor %}
-	</ul>
+			</div>
+			<div style="float:right;padding: 0px 5px 5px 0px;" ><a class="button" href="game/{{ g.id }}/">{% trans "Play now!" %}</a></div>
+			</li>
+			{% endfor %}
+		</ul>
 	{% endif %}
 </div>
 

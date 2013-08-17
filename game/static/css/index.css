@@ -10,10 +10,23 @@
 }
 
 .list_games {
-	padding: 0px 10px;
+	margin: 6px 0;
+	padding: 2px 10px;
 	overflow: hidden;
-/*	width: 20em; */
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
 }
+
+.odd {
+	background-color: rgba(255, 255, 255, 0.3);
+}
+
+.even {
+	background-color: rgba(30, 30, 30, 0.3);
+}
+
 
 ul {
 	list-style: none;
@@ -70,6 +83,10 @@ li {
 
 #your_games {
 	display: none;
+	margin-bottom: 10px;
+	overflow: auto;
+	min-height: 50px;
+	max-height: 170px;
 }
 
 #game_statistics {
@@ -78,14 +95,11 @@ li {
 	height: 55px;
 }
 
-h4 {
-	margin: 3px;
-}
-
 /* FORMS */
 
 form {
 	-moz-border-radius: 8px;
 	-webkit-border-radius: 8px;
+	-o-border-radius: 8px;
 	border-radius: 8px;
 }
