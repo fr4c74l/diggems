@@ -19,7 +19,7 @@ Software under Affero GPL license, see LICENSE.txt
 
 <div class="box" id="your_games">
 	{% if your_games|length > 0 %}
-		<script> <![CDATA[ 
+		<script type="text/javascript"> <![CDATA[ 
 			if ($("#your_games").is(":hidden")) {
 				$("#your_games").slideDown("slow"); 
 			}
@@ -48,13 +48,12 @@ Software under Affero GPL license, see LICENSE.txt
 <div class="game_buttons_menu" >
 	<div class="left_menu_button">
 		<form action="new_game/" method="post">
-		 <!--   {% trans "Private game" %} <input type="checkbox" name="private" value="1" /> -->
 			<input id="new_game_button" class="button game_button" type="submit" value="{% trans "Play!" %}" />
 		</form>
 	</div>
 
 	<div class="right_menu_button">
-		<form action="game/{{ g.id }}/join/" method="post">
+		<form action="new_game/?private=True" method="post">
 			<input id="play_with_friends" class="button game_button" type="submit" value="{% trans "Play with a friend!" %}" />
 		</form>
 	</div>
@@ -73,9 +72,7 @@ Software under Affero GPL license, see LICENSE.txt
 
 <div class="chat box" style="margin-bottom:10px;">
 		<h3>{% trans "Global Chat Room " %}</h3>
-		<ul id="chat_textfield">
-		<!--TODO: <li class="notice">Put chat login/logout messages here!</li> -->
-		</ul>
+		<ul id="chat_textfield"/>
 		<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
 		{#<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />#}
 </div>

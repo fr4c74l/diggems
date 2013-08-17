@@ -1,6 +1,74 @@
 /* Copyright 2013 Fractal Jogos e Tecnologia
  * Software under Affero GPL license, see LICENSE.txt */
 
+/* GAME LOADING MENU */
+
+.overlay{
+	background:transparent url(/static/images/overlay.png) repeat top left;
+	position:fixed;
+	top:0px;
+	bottom:0px;
+	left:0px;
+	right:0px;
+	z-index:100;
+}
+
+#load_menu {
+	background: rgba(255,255,255,0.8);
+	margin: 0 auto;
+	width: 400px;
+	position:fixed;
+	top:-50%;
+	left:30%;
+	right:30%;
+	z-index:101;
+}
+
+#load_menu p {
+	text-align: center;
+	font-size: 20px;
+}
+
+#loading {
+	margin-bottom: 10px;
+	font-size: 17px;
+}
+
+.fb_button {
+	width: 100%;
+	font-size: 30px;
+	height: 100px;
+	-moz-border-radius: 8px;
+	-o-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+	background-color: #6079ab;
+	border: 1px outset #3b5998;
+	text-shadow: #3b5998 -1px 0;
+}
+
+.fb_button:hover {
+	background-color: #3b5998;
+	text-shadow: #6079ab 0 -1px 0;
+}
+
+.fb_button:active {
+	background-color: #6079ab;
+	border: 1px inset #6079ab;
+}
+
+#invite_link {
+	margin:10px 0;
+}
+
+.addthis {
+	margin:10px;
+	position:absolute;
+	right:0;
+	bottom:0;
+}
+
+/* GAME */
 #main {
     display: block;
     position: relative;

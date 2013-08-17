@@ -210,6 +210,7 @@ def new_game(request):
 
     game = Game()
     game.mine = mine_encode(mine)
+
     if request.REQUEST.get('private', default=False):
         game.token = gen_token()
     game.channel = gen_token()

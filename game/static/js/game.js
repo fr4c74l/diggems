@@ -405,9 +405,11 @@ function set_state(state) {
 		if(params.player)
 			document.getElementById("chat_interact").style.display="block";
 	// Just started the game, prepare box for messages
-	msg_box.className += " big";
+		if(msg_box)
+			msg_box.className += " big";
     }
-    msg_box.innerHTML = msg;
+	if(msg_box)
+		msg_box.innerHTML = msg;
 
     params.state = state;
 }
@@ -444,6 +446,13 @@ function handle_player_data_event(data) {
     pic.src = data.pic_url;
 }
 
+function close_game_menu() {
+	$('#load_menu').animate({'top':'-50%'},500,function(){
+		$('#overlay').fadeOut('fast');
+	});
+	return false;
+}
+
 function handle_event(msg) {
     var lines = msg.split('\n');
     var seq_num = parseInt(lines[0]);
@@ -454,6 +463,9 @@ function handle_event(msg) {
 
     var new_state = parseInt(lines[1]);
     set_state(new_state);
+
+	if (new_state != 0 && params.seq_num == 2 )
+		close_game_menu();
 
     if (lines.length > 2){
         var player = parseInt(lines[2]);
@@ -745,6 +757,20 @@ function init() {
     reset_counter.int = window.setInterval(turn_timeout, 1000);
     turn_timeout();
   }
+
+	// loading game menu
+	$('#overlay').fadeIn('fast',function(){
+			$('#load_menu').animate({'top':'160px'},500);
+		});
+	var text = $("#loading").text()
+	setInterval(function(){
+		for (i = 1; i <= 3; i++) {
+			setTimeout(function() {
+				$("#loading").append(".");
+			}, i * 500);
+		}
+		$("#loading").html(text);
+	}, 2000);
 }
 
 function load_img(name) {

@@ -61,6 +61,20 @@ body {
 	text-decoration: inherit;
 }
 
+.notice {
+	padding: 5px;
+	margin: 5px 0;
+	text-align: center;
+	font-size: medium;
+	background-color: #ffebeb;
+	color: #cc3838;
+	font-weight: bold;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
 .undlin:hover {
 	cursor: pointer;
 	text-decoration: underline;
