@@ -331,8 +331,7 @@ def claim_game(request, game_id):
 
     result = '\n'.join(map(str, (u'g', game.seq_num, game.state)))
     post_update(game.channel, result)
-    
-    #p1 won
+
     if game.state == 3 or game.state == 5:
         publish_score(game.p1.user, game.p2.user)
     #p2 won

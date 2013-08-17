@@ -78,7 +78,22 @@ def gen_token():
 
 # user: is the player who won the game
 # adv: is the player who lost the game
-def publish_score(user, adv):  
+def publish_score(user, adv):
+
+    #Publish who won the game
+    def try_publish_won():
+        app_token = cache.get('app_token')
+        if not app_token:
+            try:
+                app_token = https_opener.open('https://graph.facebook.com/oauth/access_token?client_id=' + FB_APP_ID + '&client_secret=' + FB_APP_KEY + '&grant_type=client_credentials').read()
+                cache.set('app_token', app_token, 3600)
+            except urllib2.HTTPError:
+                # TODO: Log error before returning...
+                return
+                
+        #TODO: See if failed, and pop some permissions dialogs for publish
+        print https_opener.open('https://graph.facebook.com/{}/diggemstest:win?{}&profile={}&method=post'.format(user.facebook.uid, app_token, adv.facebook.uid)).read()
+        
     def try_publish_score(usr):
         # Publish score...
         # TODO: log Facebook connection error, but do not raise exception
@@ -94,7 +109,8 @@ def publish_score(user, adv):
         # There is a small chance that a race condition will make the score
         # stored at Facebook to be inconsistent. But since it is temporary
         # until the next game play, the risk seems acceptable.
-        https_opener.open('https://graph.facebook.com/{}/scores'.format(usr.facebook.uid), 'score={}&{}'.format(usr.total_score, app_token)).read()
+        #print 'https://graph.facebook.com/{}/scores'.format(usr.facebook.uid), 'score={}&{}'.format(usr.total_score, app_token)
+        #https_opener.open('https://graph.facebook.com/{}/scores'.format(usr.facebook.uid), 'score={}&{}'.format(usr.total_score, app_token)).read()
         
     #publish user score
     if user.facebook:
@@ -105,7 +121,7 @@ def publish_score(user, adv):
         except urllib2.HTTPError:
             # App access token must have expired, reset it and try just once more
             cache.delete('app_token')
-            try_publish_score()
+            try_publish_score(user)
             
     #Publish adversary score        
     if adv.facebook:
@@ -116,12 +132,14 @@ def publish_score(user, adv):
         except urllib2.HTTPError:
             # App access token must have expired, reset it and try just once more
             cache.delete('app_token')
-            try_publish_score()
+            try_publish_score(adv)
+        if user.facebook:
+            try:
+                try_publish_won()
+            except urllib2.HTTPError:
+                cache.delete('app_token')
+                try_publish_won()
             
-    #Publish who won the game
-    print 'https://graph.facebook.com/{}/diggemstest:win?access_token={}&profile={}'.format(usr.facebook.uid, app_token, adv.facebook.uid)
-    https_opener.open('https://graph.facebook.com/{}/diggemstest:win?access_token={}&profile={}'.format(usr.facebook.uid, app_token, adv.facebook.uid)).read()
-
 def log_exception(f):
     def ret(*a, **ka):
         try:
