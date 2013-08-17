@@ -76,8 +76,10 @@ true_random = random.SystemRandom()
 def gen_token():
     return radix64.encode(true_random.getrandbits(132))
 
-def publish_score(user):
-    def try_publish_score():
+# user: is the player who won the game
+# adv: is the player who lost the game
+def publish_score(user, adv):  
+    def try_publish_score(usr):
         # Publish score...
         # TODO: log Facebook connection error, but do not raise exception
         # TODO: make it asyncronous
@@ -92,17 +94,33 @@ def publish_score(user):
         # There is a small chance that a race condition will make the score
         # stored at Facebook to be inconsistent. But since it is temporary
         # until the next game play, the risk seems acceptable.
-        https_opener.open('https://graph.facebook.com/{}/scores'.format(user.facebook.uid), 'score={}&{}'.format(user.total_score, app_token)).read()
-
+        https_opener.open('https://graph.facebook.com/{}/scores'.format(usr.facebook.uid), 'score={}&{}'.format(usr.total_score, app_token)).read()
+        
+    #publish user score
     if user.facebook:
         # Reload to ensure most accurate score
         user = models.UserProfile.objects.get(pk=user.pk)
         try:
-            try_publish_score()
+            try_publish_score(user)
         except urllib2.HTTPError:
             # App access token must have expired, reset it and try just once more
             cache.delete('app_token')
             try_publish_score()
+            
+    #Publish adversary score        
+    if adv.facebook:
+        # Reload to ensure most accurate score
+        adv = models.UserProfile.objects.get(pk=adv.pk)
+        try:
+            try_publish_score(adv)
+        except urllib2.HTTPError:
+            # App access token must have expired, reset it and try just once more
+            cache.delete('app_token')
+            try_publish_score()
+            
+    #Publish who won the game
+    print 'https://graph.facebook.com/{}/diggemstest:win?access_token={}&profile={}'.format(usr.facebook.uid, app_token, adv.facebook.uid)
+    https_opener.open('https://graph.facebook.com/{}/diggemstest:win?access_token={}&profile={}'.format(usr.facebook.uid, app_token, adv.facebook.uid)).read()
 
 def log_exception(f):
     def ret(*a, **ka):

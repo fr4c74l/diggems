@@ -311,6 +311,8 @@ def claim_game(request, game_id):
         game.state = my_number + 4 
 
     # If one of the players give up...
+    #TODO: You better fix this, lowlife fucking piece of , z? before was 
+    #Yes or No, now that YOU added a state, YOU FIX IT!!!
     elif term == 'z':
         for pnum,player in ((1,game.p1),(2,game.p2)):
             points = game.mine.count(tile_encode(pnum + 18))
@@ -330,9 +332,13 @@ def claim_game(request, game_id):
     result = '\n'.join(map(str, (u'g', game.seq_num, game.state)))
     post_update(game.channel, result)
     
-    if term:
-        publish_score(me)
-    
+    #p1 won
+    if game.state == 3 or game.state == 5:
+        publish_score(game.p1.user, game.p2.user)
+    #p2 won
+    elif game.state == 4 or game.state == 6:
+        publish_score(game.p2.user, game.p1.user)
+            
     return HttpResponse()
 
 @transaction.commit_on_success
@@ -484,9 +490,12 @@ def move(request, game_id):
 
     # ... and then publish the scores on FB, if game is over.
     # (TODO: If only this could be done asyncronously...)
-    if game.state >= 3: 
-        publish_score(game.p1.user)
-        publish_score(game.p2.user)
+    #p1 won
+    if game.state == 3 or game.state == 5:
+        publish_score(game.p1.user, game.p2.user)
+    #p2 won
+    elif game.state == 4 or game.state == 6:
+        publish_score(game.p2.user, game.p1.user)
 
     return HttpResponse()
 
