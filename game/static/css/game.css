@@ -192,8 +192,9 @@
 }
 
 #message {
+	display:none;
 	margin-top: 16px;
-    text-align: center;
+	text-align: center;
 }
 
 #join_link {
