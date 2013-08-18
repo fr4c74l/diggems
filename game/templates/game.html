@@ -121,7 +121,7 @@ Software under Affero GPL license, see LICENSE.txt
 		{% endif %}
 	</div>
 
-	<div class="box big" id="message"></div>
+	<div class="box big" id="message" {% if state != 0 %} style="display:block;" {% endif %}></div>
 </div>
 
 <div class="chat box_border_top" id="chat_window">

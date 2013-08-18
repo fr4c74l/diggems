@@ -18,8 +18,6 @@ Priority:
 - Add general and in-game chat
   - Random color names in chat for guest users based on their internal ID
   - Javascript inform user connect/disconnect.
-  - Create a animation to indicate if some msg receive in game
-  - Fix length of input_field in index for small screens
 - TNT activity indicator must blink all affected tiles...
 
 TODO Later:
@@ -51,6 +49,7 @@ TODO Later:
 - Fractal name and logo
 - Ruler to identify the mine tiles
 - Tutorial page
+- Remove jquery stuffs and use CSS3 keyframes and pure js animations
 
 TODO "Irrelevant":
  - More footer links

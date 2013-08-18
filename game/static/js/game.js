@@ -440,7 +440,6 @@ function handle_player_data_event(data) {
 	link.insertBefore(pic, link.firstChild);
     }
     pic.src = data.pic_url;
-	document.getElementById('message').style.setProperty('display', 'block', null);
 }
 
 function close_game_menu() {
@@ -759,8 +758,8 @@ function init() {
 
 	// loading game menu
 	$('#overlay').fadeIn('fast',function(){
-			$('#load_menu').animate({'top':'160px'},500);
-		});
+		$('#load_menu').animate({'top':'160px'},500);
+	});
 	var text = $("#loading").text()
 	setInterval(function(){
 		for (i = 1; i <= 3; i++) {
