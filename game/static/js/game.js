@@ -768,8 +768,6 @@ function turn_timeout()
 			$("#timeout_buttons").animate({
 			height: "toggle",
 			width: "toggle",
-/*			height: ($(this).height()*2),
-			width: ($(this).width()*2), */
 			opacity: "toggle"}, 200);
 		}
 	}
