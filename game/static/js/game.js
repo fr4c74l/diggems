@@ -762,11 +762,16 @@ function turn_timeout()
 	{
 		clearInterval(reset_counter.int);
 		timeleft = 0;
-		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2))
-		{
-		  document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
-		  document.getElementById("timeout_buttons").style.display = 'block';
-		}	
+		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2)) {
+			document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
+//			document.getElementById("timeout_buttons").style.display = 'block';
+			$("#timeout_buttons").animate({
+			height: "toggle",
+			width: "toggle",
+/*			height: ($(this).height()*2),
+			width: ($(this).width()*2), */
+			opacity: "toggle"}, 200);
+		}
 	}
 	document.getElementById("clock").innerHTML = Math.round(timeleft);
 }

@@ -38,18 +38,26 @@ Software under Affero GPL license, see LICENSE.txt
 <script src="/static/js/jquery-2.0.3.min.js"/>
 <script src="/static/js/chat.js" />
 
+<div class = "box" id="timeout_buttons">
+	<div class="button" id="timeout_terminate" onclick="claim_game(1);">{% trans "Terminate Game" %}</div>
+	<div class="button" id="timeout_claim" onclick="claim_game(0);">{% trans "Take Player's Turn" %}</div>
+</div>
+
 <div id="main">
 	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span><span> / 26</span></div>
-	<div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
-	<div class = "box" id="timeout_buttons">
-		<div class="button" id="timeout_terminate" onclick="claim_game(1);">{% trans "Terminate Game" %}</div>
-		<div class="button" id="timeout_claim" onclick="claim_game(0);">{% trans "Take Player's Turn" %}</div>
+
+	<div id="middle_box">
+		<div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
+		<div class="button" id="give_up" onclick="claim_game(2);">{% trans "Give Up" %}</div>
 	</div>
-	{# <div class="button" id="snd_pts_box" onclick="claim_game(2);">{% trans "Give Up" %}</div> #}
+
 	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
+
 	<div id="game_box" class="box">
 		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416" />
-	</div>{% for pid, pinfo in player_info.items %}
+	</div>
+
+	{% for pid, pinfo in player_info.items %}
 	<div class="box pbox" id="p{{pid}}_box">
 		<a id="p{{pid}}_link" class="plain{% if pinfo and pinfo.profile_url %} undlin" href="{{ pinfo.profile_url }}{% endif %}" target="_blank">
 			{% if pinfo %}<img id="p{{pid}}_pic" width="40" height="40" src="{{ pinfo.pic_url }}"/>
