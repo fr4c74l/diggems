@@ -18,7 +18,7 @@
 	margin: 0 auto;
 	width: 400px;
 	position:fixed;
-	top:-50%;
+	top:-100%;
 	left:30%;
 	right:30%;
 	z-index:101;
@@ -32,6 +32,21 @@
 #loading {
 	margin-bottom: 10px;
 	font-size: 17px;
+}
+
+#game_over {
+	background: rgba(255,255,255,0.95);
+	margin: 0 auto;
+	width: 200px;
+	position:relative;
+	left: -100%;
+	bottom: 50%;
+	display: none;
+	z-index:101;
+}
+
+#game_over_msg {
+	margin-bottom: 10px;
 }
 
 .fb_button {

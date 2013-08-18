@@ -91,8 +91,13 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 	{# <div class="button" id="snd_pts_box" onclick="claim_game(2);">{% trans "Give Up" %}</div> #}
 	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
+
 	<div id="game_box" class="box">
 		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416" />
+		<div class="box" id="game_over">
+			<h3 id="game_over_msg" />
+			<a class="button small_inline_button" href="/">{% trans "Cancel" %}</a>
+		</div>
 	</div>
 
 	<div class="box_container">

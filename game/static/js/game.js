@@ -360,23 +360,24 @@ function set_state(state) {
 	    hover_indicator = null;
 	    highlight_tile.clear();
 
-	    if(state == 1 || state == 2) {
+		if(state == 1 || state == 2) {
 		msg = gettext('Wait for your turn.');
-	    }
-	    else if(state >= 3 && state <= 6) {
-		msg = gettext('Game over, ');
-		if(((state + 1) % 2) + 1 == params.player) {
-		    if(is_fb_auth()) {
-			/*document.getElementById('brag_button')
-			.style.setProperty('visibility', 'visible', null);*/
-		    }
-		    msg += gettext('you win!');
+		}
+		else if(state >= 3 && state <= 6) {
+			msg = gettext('Game over, ');
+			if(((state + 1) % 2) + 1 == params.player) {
+				if(is_fb_auth()) {
+				/*document.getElementById('brag_button')
+				.style.setProperty('visibility', 'visible', null);*/
+				}
+				msg += gettext('you win!');
+			}
+			else
+				msg += gettext('you lose.');
+			game_over_notification(msg);
 		}
 		else
-		    msg += gettext('you lose.');
-	    }
-	    else
-		return; // What else can I do?
+			return; // What else can I do?
 	}
 
 	var canvas = document.getElementById('game_canvas');
@@ -442,7 +443,26 @@ function handle_player_data_event(data) {
     pic.src = data.pic_url;
 }
 
-function close_game_menu() {
+//TODO: Implement a library for all game animations
+function game_over_notification(msg) {
+	var go_msg = document.getElementById('game_over_msg');
+	$("#game_over").css('display', 'block').animate({'left':'2%', 'bottom':'50%'},500);
+	go_msg.innerHTML = msg;
+}
+
+function load_text_animation(text_id) {
+	var text = $(text_id).text()
+	setInterval(function(){
+		for (i = 1; i <= 3; i++) {
+			setTimeout(function() {
+				$(text_id).append(".");
+			}, i * 500);
+		}
+		$(text_id).html(text);
+	}, 2000);
+}
+
+function hidden_invite_menu() {
 	$('#load_menu').animate({'top':'-50%'},500,function(){
 		$('#overlay').fadeOut('fast');
 	});
@@ -461,7 +481,7 @@ function handle_event(msg) {
     set_state(new_state);
 
 	if (new_state != 0 && params.seq_num == 2 ){
-		close_game_menu();
+		hidden_invite_menu();
 		// show message box
 		document.getElementById('message').style.setProperty('display', 'block', null);
 	}
@@ -760,15 +780,7 @@ function init() {
 	$('#overlay').fadeIn('fast',function(){
 		$('#load_menu').animate({'top':'160px'},500);
 	});
-	var text = $("#loading").text()
-	setInterval(function(){
-		for (i = 1; i <= 3; i++) {
-			setTimeout(function() {
-				$("#loading").append(".");
-			}, i * 500);
-		}
-		$("#loading").html(text);
-	}, 2000);
+	load_text_animation("#loading");
 }
 
 function load_img(name) {
