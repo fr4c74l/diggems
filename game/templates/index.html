@@ -53,19 +53,22 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 
 	<div class="right_menu_button">
-		<form action="new_game/?private=True" method="post">
-			<input id="play_with_friends" class="button game_button" type="submit" value="{% trans "Play with a friend!" %}" />
-		</form>
-	</div>
+		<div>
+			<form action="new_game/?private=True" method="post">
+				<input id="play_with_friends" class="button game_button" type="submit" value="{% trans "Play with a friend!" %}" />
+			</form>
+		</div>
 
-	<div class="right_menu_button" style="margin: 2px 0px;">
-		<form action="game/{{ g.id }}/join/" method="post">
-			<input id="accept_challenge" class="button game_button" type="submit" value="{% trans "Accept challenge!" %}" />
-		</form>
-	</div>
-
-	<div class="box right_menu_button" id="game_statistics">
-		<h4> {% trans "Game statistics" %}</h4>
+		{% if new_games|length > 0 %}
+		<div style="margin: 2px 0px;">
+			<form action="game/{% with new_games|first as g %}{{ g.id }}{% endwith %}/join/" method="post">
+				<input id="accept_challenge" class="button game_button" type="submit" value="{% trans 'Accept challenge!' %}" />
+			</form>
+		</div>
+		{% endif %}
+		<div class="box" id="game_statistics">
+			<h4> {% trans "Game statistics" %}</h4>
+		</div>
 	</div>
 
 </div>
