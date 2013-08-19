@@ -10,7 +10,9 @@ import os
 
 from gevent.select import select
 from gevent import socket
-from geventwebsocket.websocket import websocket
+from geventwebsocket.websocket import WebSocket
+from geventwebsocket.logging import create_logger
+from diggems.settings import DEBUG
 
 # TODO: Use python 3 for this stuff
 #(Gevent on python 3? Pypy on python 3? Both? Unrealistic...)
@@ -129,20 +131,25 @@ def send_with_fd(dest_fd, message, subject_fd):
         # Do something about it...
         pass
 
-class RecvStream(object):
-    __slots__ = ('read', 'write')
-
-    def __init__(self, handler):
-        self.sock = socket.fromfd(handler, socket.AF_INET, socket.SOCK_STREAM)
-        self.write = self.sock.sendall
-        self.buf = None
-        self.offset = 0
-
-    def read(self, size):
-        raise NotImplementedError("I didn't expect reads to occur from this copy of the socket...")
 
 def websocket_from_fd(fd):
-    pass
+    class RecvStream(object):
+        __slots__ = ('read', 'write')
+    
+        def __init__(self, handler):
+            self.sock = socket.fromfd(handler, socket.AF_INET, socket.SOCK_STREAM)
+            self.write = self.sock.sendall
+            self.buf = None
+            self.offset = 0
+    
+        def read(self, size):
+            raise NotImplementedError("I didn't expect reads to occur from this copy of the socket...")
+
+    class PseudoHandler(object):
+        def __init__(self, fd):
+            self.logger = create_logger('ws_'.format(fd), DEBUG)
+
+    return WebSocket(None, RecvStream(fd), PseudoHandler(fd))
 
 i = 0
 
