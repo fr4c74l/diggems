@@ -139,37 +139,7 @@ class RecvStream(object):
         self.offset = 0
 
     def read(self, size):
-        if self.buf:
-            buf_rem = len(self.buf) - self.offset
-            if buf_rem >= size:
-                end = self.offset + size
-                ret = self.buf[self.offset:end]
-                self.offset = end
-                return ret
-
-            ret = [self.buf[self.offset:]]
-            self.buf = None
-            size -= buf_rem
-        else:
-            ret = []
-
-        while size:
-            buf = self.sock.recv(4096)
-            bsize = len(buf)
-            if bsize == 0:
-                break
-            if bsize <= size:
-                extracted = buf
-                size -= bsize
-            else:
-                extracted = buf[:size]
-                self.buf = buf
-                self.offset = size
-                size = 0
-
-            ret.append(buf)
-
-        return ''.join(ret)
+        raise NotImplementedError("I didn't expect reads to occur from this copy of the socket...")
 
 def websocket_from_fd(fd):
     pass
