@@ -2,7 +2,11 @@ import gevent
 import gipc
 
 class Channel(object):
-    pass # TODO
+    def __init__(self):
+        self.seqnum = 0
+
+    def register_channel(self, starting_point, ws):
+        pass
 
 _workers2channel = None
 _channel2workers = None

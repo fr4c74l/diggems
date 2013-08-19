@@ -9,6 +9,8 @@ import gipc
 import os
 
 from gevent.select import select
+from gevent import socket
+from geventwebsocket.websocket import websocket
 
 # TODO: Use python 3 for this stuff
 #(Gevent on python 3? Pypy on python 3? Both? Unrealistic...)
@@ -37,7 +39,7 @@ C = ffi.verify("""
         msg.msg_iov = &vec;
         msg.msg_iovlen = 1;
         msg.msg_control = cbuf;
-        msg.msg_controllen = sizeof cbuf;
+        socket.fromfd(fd, family, type[, proto])msg.msg_controllen = sizeof cbuf;
         cmsg = CMSG_FIRSTHDR(&msg);
         cmsg->cmsg_level = SOL_SOCKET;
         cmsg->cmsg_type = SCM_RIGHTS;
@@ -104,7 +106,7 @@ def recv_with_fd(src_fd):
 
     if flags[0] == socket.MSG_TRUNC:
         # TODO: do something if message is truncated
-        # or better: never let it happen
+        # or better: never let it happen...
         pass
 
     subject_fd = subject_fd[0] if subject_fd[0] else None
@@ -126,6 +128,51 @@ def send_with_fd(dest_fd, message, subject_fd):
         # TODO: Weird! Can this ever happen? Maybe if message is too big.
         # Do something about it...
         pass
+
+class RecvStream(object):
+    __slots__ = ('read', 'write')
+
+    def __init__(self, handler):
+        self.sock = socket.fromfd(handler, socket.AF_INET, socket.SOCK_STREAM)
+        self.write = self.sock.sendall
+        self.buf = None
+        self.offset = 0
+
+    def read(self, size):
+        if self.buf:
+            buf_rem = len(self.buf) - self.offset
+            if buf_rem >= size:
+                end = self.offset + size
+                ret = self.buf[self.offset:end]
+                self.offset = end
+                return ret
+
+            ret = [self.buf[self.offset:]]
+            self.buf = None
+            size -= buf_rem
+        else:
+            ret = []
+
+        while size:
+            buf = self.sock.recv(4096)
+            bsize = len(buf)
+            if bsize == 0:
+                break
+            if bsize <= size:
+                extracted = buf
+                size -= bsize
+            else:
+                extracted = buf[:size]
+                self.buf = buf
+                self.offset = size
+                size = 0
+
+            ret.append(buf)
+
+        return ''.join(ret)
+
+def websocket_from_fd(fd):
+    pass
 
 i = 0
 
