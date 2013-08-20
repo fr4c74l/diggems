@@ -1,5 +1,7 @@
 import gevent
 import gipc
+import weakref
+import sys
 
 class Channel(object):
     def __init__(self):
@@ -8,8 +10,14 @@ class Channel(object):
     def register_channel(self, starting_point, ws):
         pass
 
-_workers2channel = None
-_channel2workers = None
+_ws_refs = weakref.WeakValueDictionary()
+
+# To generate new ids for websocket on worker (warps after trillons of years):
+_ws_id_iterator = None 
+
+_worker_count = 1
+
+_workers2channel = gipc.pipe()
 
 _rpc_map = {}
 _rpc_next_id = 0
@@ -20,6 +28,8 @@ def _rpc(func):
     _rpc_next_id += 1
     
     _rpc_map[func_id] = func
+
+    # TODO: to be continued: treat special case of marked websocket parameters
 
     def proxy_call(*args, **kwar):
         msg = (func_id, args, kwar)
@@ -39,24 +49,30 @@ def delete_channel(channel_name):
 def post_update(channel_name, message):
     pass # TODO
 
-# Must be called on each worker, for it to receive websockets and listen to them
-def websocket_acceptor(worker_id, ws_handler):
-    global _channel2workers
-    from_channel = _channel2workers[worker_id][0]
-
-    # Close uneeded pipes
-    for r, w in _channel2workers:
-        w.close()
-        if from_channel != r:
-            r.close()
-    del _channel2workers
-
+def _id_cycler(start, end):
+    val = start
     while 1:
-        ws = None # TODO: black magic to receive websockt from another process
-    
-        headers = None # TODO: find out how to have the cookie headers to identify the user
-    
-        gevent.spawn(ws_handler, ws, headers)
+        yield val
+        val += 1
+
+        # The values will be so distant apart that this will probably
+        # never happen... But, who knows?
+        if val >= end:
+            val = start
+
+# Must be called on each worker, before handling websocket connections
+def worker_init(worker_id):
+    global _worker_count, _ws_id_iterator
+    assert worker_id < _worker_count
+
+    total_space = (2 * sys.maxint + 1)
+    share = total_space / _worker_count
+    start = -sys.maxint - 1 + share * worker_id
+    end = start + share
+
+    # Should I just use xrange instead? The gap will be too large
+    # for the values to ever warps around (on 64 bits machines).
+    _ws_id_iterator = _id_cycler(start, end)
 
 # Must be run on the channels manager process
 def rpc_dispatcher():
@@ -72,9 +88,7 @@ def rpc_dispatcher():
         (func_id, args, kwar) = receiver.get()
         _rpc_map[func_id](*args, **kwar)
 
-# Must be called before everything in the starter process, to create the shared pipes
+# Must be called before everything in the starter process...
 def init(worker_count):
-    global _workers2channel, _channel2workers
-    _workers2channel = gipc.pipe()
-
-    _channel2workers = [gipc.pipe() for i in xrange(worker_count)]
+    global _worker_count
+    _worker_count = worker_count
