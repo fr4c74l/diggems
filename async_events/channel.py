@@ -3,6 +3,7 @@ import gipc
 import weakref
 import inspect
 import sys
+import os
 import pickle
 import fd_trick
 
@@ -11,7 +12,8 @@ from decorator import FunctionMaker
 
 class Channel(object):
     def __init__(self):
-        self.seqnum = 0
+        self.next_seqnum = 0
+        self.first_seqnum = 0
 
     def register_channel(self, starting_point, ws):
         pass
@@ -28,7 +30,7 @@ _rpc_next_id = 0
 
 (_call_endpoint, _handle_endpoint) = socket.socketpair(socket.AF_UNIX, socket.SOCK_SEQPACKET)
 
-def websocket_serialize(websocket):
+def _ws_serialize(websocket):
     try:
         uid = websocket.unique_id
     except AttributeError:
@@ -37,7 +39,7 @@ def websocket_serialize(websocket):
 
     return (websocket.handler.socket.fileno(), uid)
 
-def websocket_from_fd(fd):
+def _ws_from_fd(fd):
     class RecvStream(object):
         __slots__ = ('read', 'write')
     
@@ -55,6 +57,16 @@ def websocket_from_fd(fd):
             self.logger = create_logger('ws_'.format(fd), DEBUG)
 
     return WebSocket(None, RecvStream(fd), PseudoHandler(fd))
+
+def _ws_deserialize(ws_fd, ws_uid):
+    try:
+        ws = _ws_refs[ws_uid]
+        os.close(ws_fd)
+    except KeyError:
+        ws = _ws_from_fd(ws_fd)
+        #ws.unique_id = ws_uid
+        _ws_refs[ws_uid] = ws
+    return ws
 
 def _rpc(func):
     global _rpc_next_id, _rpc_map
@@ -75,17 +87,19 @@ def _rpc(func):
 
     def ws_proxy_call(*args, **kwar):
         if len(args) > ws_idx:
-            (ws_fd, ws_uid) = websocket_serialize(args[ws_idx])
+            (ws_fd, ws_uid) = _ws_serialize(args[ws_idx])
             args = list(args)
             args[ws_idx] = ws_uid
+            ws_locator = ws_idx
         else:
             try:
                 ws = kwar['ws']
             except KeyError:
                 ws = defaults[ws_idx]
-            (ws_fd, ws_uid) = websocket_serialize(ws)
+            (ws_fd, ws_uid) = _ws_serialize(ws)
             kwar['ws'] = ws_uid
-        msg = pickle.dumps((func_id, args, kwar), pickle.HIGHEST_PROTOCOL)
+            ws_locator = None
+        msg = pickle.dumps((func_id, args, kwar, ws_locator), pickle.HIGHEST_PROTOCOL)
         ret = fd_trick.send_with_fd(_call_endpoint, msg, ws_fd)
         if ret != len(message):
             # TODO: Weird! Can this ever happen? Maybe if message is too big.
@@ -115,6 +129,10 @@ def delete_channel(channel_name):
 
 @_rpc
 def post_update(channel_name, message):
+    pass # TODO
+
+@_rpc
+def register_websocket(channel_name, ws, start_from=None):
     pass # TODO
 
 def _id_cycler(start, end):
@@ -152,8 +170,15 @@ def rpc_dispatcher():
 
     # Dispatch events
     while 1:
-        # TODO: to be continued
-        (func_id, args, kwar) = _handle_endpoint.get()
+        msg, fd = fd_trick.recv_with_fd(_call_endpoint)
+        if fd is not None:
+            func_id, args, kwar, ws_locator = pickle.loads(msg)
+            if ws_locator is not None:
+                args[ws_locator] = _ws_deserialize(fd, args[ws_locator])
+            else:
+                kwar['ws'] = _ws_deserialize(fd, kwar['ws'])
+        else:
+            func_id, args, kwar = pickle.loads(msg)
         _rpc_map[func_id](*args, **kwar)
 
 # Must be called before everything in the starter process...
