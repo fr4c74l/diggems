@@ -1,9 +1,9 @@
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
-from game_helpers import *
 import itertools
 import datetime
+from game_helpers import *
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_delete
@@ -136,11 +136,11 @@ class Game(models.Model):
         if is_private:
             g.token = gen_token()
         g.channel = gen_token()
-        create_channel(self.channel)
+        create_channel(g.channel)
         return g
 
 def delete_game_channel(sender, **kwargs):
-    game_helpers.delete_channel(kwargs['instance'].channel)
+    delete_channel(kwargs['instance'].channel)
 
 pre_delete.connect(delete_game_channel, sender=Game)
 

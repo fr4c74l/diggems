@@ -19,10 +19,10 @@ from django.template import Context, RequestContext, loader, TemplateDoesNotExis
 from django.utils.html import escape
 from django.utils.translation import ugettext as _, pgettext
 from django.core.exceptions import ObjectDoesNotExist
-from game_helpers import *
 from models import *
 from https_conn import https_opener
 from django.utils.translation import to_locale, get_language
+from game_helpers import *
 
 def render_with_extra(template_name, user, data={}, status=200):
     t = loader.get_template(template_name)
@@ -130,7 +130,6 @@ def index(request):
     chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:5]
     new_games = []
     for game in chosen:
-        print type(game)
         info = {'id': game.id}
         player = game.p1.user
         if player.facebook:
@@ -332,22 +331,26 @@ def rematch(request, game_id):
         return HttpResponseForbidden()
     
     obj, created = Rematch.objects.get_or_create(game=game)
-    player, me = pdata
+    me, player = pdata
     if me == 1:
         obj.p1_click = True
     elif me == 2:
         obj.p2_click = True
 
+    obj.save()
+
     if obj.p1_click and obj.p2_click:
         cg = Game.create()
-        cg.p1 = Player(user=game.p2.user)
-        cg.p1.save()
-        cg.p2 = Player(user=game.p1.user)
-        cg.p2.save()
+        p = Player(user=game.p2.user)
+        p.save()
+        cg.p1 = p
+        p = Player(user=game.p1.user)
+        p.save()
+        cg.p2 = p
         cg.state = 1
         cg.save()
         post_update(game.channel, 'r\n' + game_id)
-
+    
     return HttpResponse()
 
 @transaction.commit_on_success

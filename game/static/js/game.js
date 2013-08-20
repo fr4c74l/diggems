@@ -712,9 +712,12 @@ function claim_game(terminate)
 	button_request.send(data);
 }
 
-function rematch(player)
+function rematch(game_id)
 {
-
+  var url = '/game/' + game_id + '/rematch/';
+  button_request.open('POST', url, true);
+  button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	button_request.send(null);
 }
 
 // Load resources

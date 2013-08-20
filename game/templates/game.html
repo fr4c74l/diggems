@@ -85,7 +85,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e" />{% endif %}
 	</div>
   {% if state >= 3 %}
-  <a href=""><div class="button" id="rematch_button" onclick=""> {% trans "Rematch" %} </div> </a>
+  <div class="button" id="rematch_button" onclick="rematch({{game_id}});"> {% trans "Rematch" %} </div>
   {% endif %}
   </div>
 </div>
