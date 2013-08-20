@@ -41,7 +41,7 @@ C = ffi.verify("""
         msg.msg_iov = &vec;
         msg.msg_iovlen = 1;
         msg.msg_control = cbuf;
-        socket.fromfd(fd, family, type[, proto])msg.msg_controllen = sizeof cbuf;
+        msg.msg_controllen = sizeof cbuf;
         cmsg = CMSG_FIRSTHDR(&msg);
         cmsg->cmsg_level = SOL_SOCKET;
         cmsg->cmsg_type = SCM_RIGHTS;
@@ -92,8 +92,10 @@ C = ffi.verify("""
     }
 """)
 
+_recv_buf = ffi.new('char[]', 4096)
+
 def recv_with_fd(src_fd):
-    buf = ffi.new('char[]', 4096)
+    global _recv_buf
     while 1:
         select([src_fd], [], [])
         subject_fd = ffi.new('int *')
@@ -126,30 +128,7 @@ def send_with_fd(dest_fd, message, subject_fd):
             select([], [dest_fd], [])
         else:
             raise os.error(-ret, os.strerror(-ret))
-    if ret != len(message):
-        # TODO: Weird! Can this ever happen? Maybe if message is too big.
-        # Do something about it...
-        pass
-
-
-def websocket_from_fd(fd):
-    class RecvStream(object):
-        __slots__ = ('read', 'write')
-    
-        def __init__(self, handler):
-            self.sock = socket.fromfd(handler, socket.AF_INET, socket.SOCK_STREAM)
-            self.write = self.sock.sendall
-            self.buf = None
-            self.offset = 0
-    
-        def read(self, size):
-            raise NotImplementedError("I didn't expect reads to occur from this copy of the socket...")
-
-    class PseudoHandler(object):
-        def __init__(self, fd):
-            self.logger = create_logger('ws_'.format(fd), DEBUG)
-
-    return WebSocket(None, RecvStream(fd), PseudoHandler(fd))
+    return ret
 
 i = 0
 
@@ -164,23 +143,24 @@ def sender():
     def a():
         while 1:
             w.send(next_msg())
-            gevent.sleep(1)
-    gevent.spawn(a)
+            #gevent.sleep(1)
+    #gevent.spawn(a)
 
     def b():
         while 1:
             pair = os.pipe()
-            map(gevent.os.make_nonblocking, pair)
+            #map(gevent.os.make_nonblocking, pair)
             send_with_fd(w, next_msg(), pair[0])
             os.close(pair[0])
+            os.close(pair[1])
 
             def pipe_writer(w):
                 for i in xrange(10):
                     gevent.sleep(0.1)
                     gevent.os.nb_write(w, next_msg())
                 os.close(w)
-            gevent.spawn(pipe_writer, pair[1])
-            gevent.sleep(3)
+            #gevent.spawn(pipe_writer, pair[1])
+            #gevent.sleep(3)
     gevent.spawn(b)
 
 def receiver():
@@ -200,8 +180,19 @@ def receiver():
         else:
             print "File descriptor didn't come with", msg
 
-pipe = gevent.socket.socketpair(socket.AF_UNIX, socket.SOCK_SEQPACKET)
+import time
 
-gipc.start_process(receiver)
+def receiver_timing():
+    r = pipe[0]
+    ini = time.time()
+    for i in xrange(1000000):
+        (mgs, fd) = recv_with_fd(r)
+        if fd:
+            os.close(fd)
+    end = time.time()
+    print end - ini
+
+#gipc.start_process(receiver)
+gipc.start_process(receiver_timing)
 
 sender()
