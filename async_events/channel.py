@@ -10,6 +10,7 @@ import struct
 
 from gevent import socket
 from decorator import FunctionMaker
+from geventwebsocket.websocket import WebSocket, WebSocketError
 
 class _Subscriber(object):
     def __init__(self, ws):
@@ -31,55 +32,52 @@ class Channel(object):
         self.msg_history = {}
         self.subscribers = {}
 
-        # Linked lists...
-        self.delivering = _ListHead()
-        self.waiting = _ListHead()
-
     def subscribe(self, ws, from_seqnum=None):
         sb = _Subscriber(ws)
         self.subscribers[ws.unique_id] = sb
         if from_seqnum and self.next_seqnum > from_seqnum:
             sb.deliverer = gevent.spawn(self._deliver, sb, from_seqnum)
-            place = self.delivering
-        else:
-            place = self.waiting
-        self._node_attach(place, sb)
 
-    def unsubscribe(self, ws_id):
-        pass
+    def unsubscribe(self, sb):
+        if sb.deliverer:
+            sb.deliverer.kill()
+        del self.subscribers[sb.ws.unique_id]
 
     def post_message(self, msg):
-        msg = struct.pack("<Hi") #... continue
-        # TODO: format message to be ready to send
-        pass
+        seqnum = self.next_seqnum
+        self.next_seqnum += 1
+        # Message must not be bigger than 64k...
+        # TODO: ensure it.
+        msg = struct.pack("<HI", len(msg), seqnum)
+
+        undelivering = [sb for sb in self.subscribers.itervalues() if not sb.deliverer]
+        spawn_count = 0
+        for sb in undelivering:
+            sb.deliverer = gevent.spawn(self._deliver, sb, seqnum)
+            # Yield at each 100 greenlets so that they may complete
+            # and release memory...
+            spawn_count += 1
+            if spawn_count >= 100:
+                spawn_count = 0
+                gevent.sleep(0)
 
     def _deliver(self, sb, seqnum):
         ws = sb.ws
-        while seqnum < self.next_seqnum:
-            if seqnum < self.first_seqnum:
-                seqnum = self.first_seqnum
-            msg = self.msg_history[seqnum]
-            ws.send(msg)
-            seqnum += 1
+
+        try:
+            while seqnum < self.next_seqnum:
+                if seqnum < self.first_seqnum:
+                    seqnum = self.first_seqnum
+                msg = self.msg_history[seqnum]
+                ws.send(msg)
+                seqnum += 1
+        except socket.error, WebSocketError:
+            # We want no part on websockts that can't deliver
+            sb.deliver = None
+            self.unsubscribe(sb)
+            return
 
         sb.deliver = None
-        self._node_detach(sb)
-        self._node_attach(self.waiting, node)
-
-    @staticmethod
-    def _node_detach(at, node):
-        node.prev.next = node.next
-        if node.next:
-            node.next.prev = node.prev
-
-    @staticmethod
-    def _node_attach(at, node):
-        node.next = at.next
-        node.prev = at
-        if at.next:
-            at.next.prev = node
-        at.next = node
-    
 
 _ws_refs = weakref.WeakValueDictionary()
 
@@ -109,8 +107,6 @@ def _ws_from_fd(fd):
         def __init__(self, handler):
             self.sock = socket.fromfd(handler, socket.AF_INET, socket.SOCK_STREAM)
             self.write = self.sock.sendall
-            self.buf = None
-            self.offset = 0
     
         def read(self, size):
             raise NotImplementedError("I didn't expect reads to occur from this copy of the socket...")
@@ -138,6 +134,9 @@ def _rpc(func):
     func_id = _rpc_next_id
     _rpc_next_id += 1
     _rpc_map[func_id] = func
+    
+    # For local usage of the function, append a _ in the name
+    #globals()['_' + func.__name__] = func
 
     # Handle special parameter 'websocket'
     func_meta = inspect.getargspec(func)
@@ -195,7 +194,11 @@ def post_update(channel_name, message):
     pass # TODO
 
 @_rpc
-def register_websocket(channel_name, ws, start_from=None):
+def subscribe_websocket(channel_name, ws, start_from=None):
+    pass # TODO
+
+@_rpc
+def unsubscribe_websocket(channel_name, ws_id):
     pass # TODO
 
 def _id_cycler(start, end):
