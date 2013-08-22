@@ -17,16 +17,9 @@ class _Subscriber(object):
         self.ws = ws
         self.deliverer = None
 
-        # Node
-        self.prev = None
-        self.next = None
-
-class _ListHead(object):
-    def __init__(self):
-        self.next = None
-
 class Channel(object):
-    def __init__(self):
+    def __init__(self, ch_id):
+        self.ch_id = ch_id
         self.next_seqnum = 0
         self.first_seqnum = 0
         self.msg_history = {}
@@ -40,8 +33,9 @@ class Channel(object):
 
     def unsubscribe(self, sb):
         if sb.deliverer:
-            sb.deliverer.kill()
+            sb.deliverer.kill(block=True)
         del self.subscribers[sb.ws.unique_id]
+        self._try_self_destroy()
 
     def post_message(self, msg):
         seqnum = self.next_seqnum
@@ -49,6 +43,8 @@ class Channel(object):
         # Message must not be bigger than 64k...
         # TODO: ensure it.
         msg = struct.pack("<HI", len(msg), seqnum)
+
+        self.msg_history[seqnum] = msg
 
         undelivering = [sb for sb in self.subscribers.itervalues() if not sb.deliverer]
         spawn_count = 0
@@ -60,6 +56,20 @@ class Channel(object):
             if spawn_count >= 100:
                 spawn_count = 0
                 gevent.sleep(0)
+
+        gevent.spawn_later(300, self._trash_old, seqnum)
+
+    def _trash_old(self, seqnum):
+        i = self.first_seqnum
+        while i <= seqnum:
+            del self.msg_history[i]
+            i += 1
+        self.first_seqnum = i
+        self._try_self_destroy()
+
+    def _try_self_destroy(self):
+        if not self.subscribers and not self.msg_history:
+            del _channels[self.ch_id]
 
     def _deliver(self, sb, seqnum):
         ws = sb.ws
@@ -79,10 +89,15 @@ class Channel(object):
 
         sb.deliver = None
 
+    def force_stop(self):
+        for sb in self.subscribers:
+            if sb.deliverer:
+                sb.deliverer.kill(block=False)
+
 _ws_refs = weakref.WeakValueDictionary()
 
 # To generate new ids for websocket on worker (warps after trillons of years):
-_ws_id_iterator = None 
+_ws_id_iterator = None
 
 _worker_count = 1
 
@@ -103,11 +118,11 @@ def _ws_serialize(websocket):
 def _ws_from_fd(fd):
     class RecvStream(object):
         __slots__ = ('read', 'write')
-    
+
         def __init__(self, handler):
             self.sock = socket.fromfd(handler, socket.AF_INET, socket.SOCK_STREAM)
             self.write = self.sock.sendall
-    
+
         def read(self, size):
             raise NotImplementedError("I didn't expect reads to occur from this copy of the socket...")
 
@@ -181,25 +196,31 @@ def _rpc(func):
     evaldict['_call_'] = ws_proxy_call if ws_idx >= 0 else proxy_call
     return FunctionMaker.create(func, "return _call_(%(shortsignature)s)", evaldict)
 
-@_rpc
-def create_channel(channel_name):
-    pass # TODO
+class _ChannelDict(dict):
+    def __missing__(self, key):
+        new_ch = Channel(key)
+        self[key] = new_ch
+        return new_ch
 
-@_rpc
-def delete_channel(channel_name):
-    pass # TODO
+_channels = _ChannelDict()
 
 @_rpc
 def post_update(channel_name, message):
-    pass # TODO
+    _channels[channel_name].post_message(message)
 
 @_rpc
 def subscribe_websocket(channel_name, ws, start_from=None):
-    pass # TODO
+    _channels[channel_name].subscribe(ws, start_from)
 
 @_rpc
 def unsubscribe_websocket(channel_name, ws_id):
-    pass # TODO
+    ch = _channels[channel_name]
+    ch.unsubscribe(ch.subscribers[ws_id])
+
+@_rpc
+def delete_channel(channel_name):
+    _channels[channel_name].force_stop()
+    del _channels[channel_name]
 
 def _id_cycler(start, end):
     val = start
