@@ -219,8 +219,9 @@ def unsubscribe_websocket(channel_name, ws_id):
 
 @_rpc
 def delete_channel(channel_name):
-    _channels[channel_name].force_stop()
-    del _channels[channel_name]
+    if channel_name in _channel:
+        _channels[channel_name].force_stop()
+        del _channels[channel_name]
 
 def _id_cycler(start, end):
     val = start

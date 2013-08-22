@@ -13,6 +13,7 @@ from gevent.socket import wait_read, wait_write
 from gevent_fastcgi.server import FastCGIServer
 from gevent_fastcgi.wsgi import WSGIRequestHandler
 
+from async_events import channel
 from diggems import wsgi
 
 # Patch to make psycopg2 green
@@ -33,9 +34,7 @@ def gevent_wait_callback(conn, timeout=None):
             raise psycopg2.OperationalError(
                 "Bad result from poll: %r" % state)
 
-peer_pipes = None
-
-def server(worker_id, event_pipe):
+def server(worker_id):
     # The name of the Unix sockets:
     http_sockname = 'http{}.socket'.format(worker_id)
     ws_sockname = 'ws{}.socket'.format(worker_id)
@@ -64,23 +63,29 @@ def main():
     except:
         proc_count = multiprocessing.cpu_count()
 
-    # Create the pipes to publish on remote channels
-    pipe_readers, peer_pipes = zip(*[gipc.pipe() for i in xrange(proc_count)])
+    channel.init(proc_count)
 
-    # If a worker dies for any reason, restart it unless it is time to quit
     running = True
-    workers = [None] * proc_count
+
+    # If a process dies for any reason, restart it unless it is time to quit
     def reloader(i):
         while running:
             print 'Starting worker {}.'.format(i)
-            workers[i] = gipc.start_process(server, (i, pipe_readers[i]), daemon=True, name='worker{}'.format(i))
-            workers[i].join()
+            proc = gipc.start_process(server, (i,), daemon=True, name='worker{}'.format(i))
+            proc.join()
             print 'Worker {} has just quit!'.format(i)
         print 'Done with worker {}'.format(i)
 
     # Spawn the reloaders for the workers
-    reloaders = [gevent.spawn(reloader, i) for i in xrange(1, proc_count)]
-    reloader(0) # No need to spawn an extra greenlet for the first worker
+    reloaders = [gevent.spawn(reloader, i) for i in xrange(proc_count)]
+
+    # Channel manager process reloader:
+    while running:
+        print 'Starting channel manager process.'
+        proc = gipc.start_process(channel.rpc_dispatcher, daemon=True, name='channel_mngr')
+        proc.join()
+        print 'Channel manager process has quit.'
+    print 'Done with channel manager'
 
     gevent.join_all(reloaders)
     print 'All done, quiting'
