@@ -4,19 +4,82 @@ import weakref
 import inspect
 import sys
 import os
-import pickle
+import cPickle as pickle
 import fd_trick
+import struct
 
 from gevent import socket
 from decorator import FunctionMaker
+
+class _Subscriber(object):
+    def __init__(self, ws):
+        self.ws = ws
+        self.deliverer = None
+
+        # Node
+        self.prev = None
+        self.next = None
+
+class _ListHead(object):
+    def __init__(self):
+        self.next = None
 
 class Channel(object):
     def __init__(self):
         self.next_seqnum = 0
         self.first_seqnum = 0
+        self.msg_history = {}
+        self.subscribers = {}
 
-    def register_channel(self, starting_point, ws):
+        # Linked lists...
+        self.delivering = _ListHead()
+        self.waiting = _ListHead()
+
+    def subscribe(self, ws, from_seqnum=None):
+        sb = _Subscriber(ws)
+        self.subscribers[ws.unique_id] = sb
+        if from_seqnum and self.next_seqnum > from_seqnum:
+            sb.deliverer = gevent.spawn(self._deliver, sb, from_seqnum)
+            place = self.delivering
+        else:
+            place = self.waiting
+        self._node_attach(place, sb)
+
+    def unsubscribe(self, ws_id):
         pass
+
+    def post_message(self, msg):
+        msg = struct.pack("<Hi") #... continue
+        # TODO: format message to be ready to send
+        pass
+
+    def _deliver(self, sb, seqnum):
+        ws = sb.ws
+        while seqnum < self.next_seqnum:
+            if seqnum < self.first_seqnum:
+                seqnum = self.first_seqnum
+            msg = self.msg_history[seqnum]
+            ws.send(msg)
+            seqnum += 1
+
+        sb.deliver = None
+        self._node_detach(sb)
+        self._node_attach(self.waiting, node)
+
+    @staticmethod
+    def _node_detach(at, node):
+        node.prev.next = node.next
+        if node.next:
+            node.next.prev = node.prev
+
+    @staticmethod
+    def _node_attach(at, node):
+        node.next = at.next
+        node.prev = at
+        if at.next:
+            at.next.prev = node
+        at.next = node
+    
 
 _ws_refs = weakref.WeakValueDictionary()
 
@@ -64,7 +127,7 @@ def _ws_deserialize(ws_fd, ws_uid):
         os.close(ws_fd)
     except KeyError:
         ws = _ws_from_fd(ws_fd)
-        #ws.unique_id = ws_uid
+        ws.unique_id = ws_uid
         _ws_refs[ws_uid] = ws
     return ws
 
