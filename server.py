@@ -2,6 +2,7 @@
 import os
 import sys
 import multiprocessing
+import traceback
 
 import gevent
 import gipc
@@ -34,6 +35,16 @@ def gevent_wait_callback(conn, timeout=None):
             raise psycopg2.OperationalError(
                 "Bad result from poll: %r" % state)
 
+def watcher(func):
+    try:
+        while 1:
+            func()
+    except:
+        traceback.print_exc()
+        # Must quit the process so the watcher process can restart
+        print 'Quiting the faulty process...'
+        sys.exit(1)
+
 def server(worker_id):
     # The name of the Unix sockets:
     http_sockname = 'http{}.socket'.format(worker_id)
@@ -45,13 +56,14 @@ def server(worker_id):
         except: pass
 
     # Serve wepsocket events application
-    #TODO...
+    ws_server = pywsgi.WSGIServer(ws_sockname, websocket_app, handler_class=WebSocketHandler)
 
     # Serve the Django application
-    server = FastCGIServer(http_sockname, WSGIRequestHandler(wsgi.application), max_conns=50000)
+    http_server = FastCGIServer(http_sockname, WSGIRequestHandler(wsgi.application), max_conns=50000)
 
     print 'Worker {} serving...'.format(worker_id)
-    server.serve_forever()
+    gevent.spawn(watcher, ws_server.serve_forever)
+    watcher(http_server.serve_forever)
 
 def main():
     # Make green psycopg:
