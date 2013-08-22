@@ -18,6 +18,7 @@ Priority:
   - Random color names in chat for guest users based on their internal ID
   - Javascript inform user connect/disconnect.
 - TNT activity indicator must blink all affected tiles...
+- Bug: real time user info display doesn't really works, login button still displays if user has no previous diggems cookie, but is logged in Facebook (and authorized diggems). User is auto-logged, but "login" button is still displayed.
 
 TODO Later:
 - Ask user to login on FB so his game stats will be recorded on his ID.
