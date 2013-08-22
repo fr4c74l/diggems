@@ -2,20 +2,16 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 import game_helpers
+import datetime
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext as _
 
 class FacebookCache(models.Model):
     uid = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=100)
-    access_token = models.CharField(max_length=500)
-    expires = models.DateTimeField()
-    
-    def pub_info(self):
-        return {'uid': self.uid,
-                'name': self.name}
 
 class UserProfile(models.Model):
     id = models.CharField(max_length=22, primary_key=True)
@@ -27,14 +23,23 @@ class UserProfile(models.Model):
     total_score = models.IntegerField(default=0)
     last_seen = models.DateTimeField(auto_now=True, db_index=True)
 
+    def guest_name(self):
+        return '~'.join((_('guest'), self.id[:4]))
+
     def merge(self, other):
+        # Update players user to the unified one
         Player.objects.filter(user=other).update(user=self)
-        # Can't allow someone to play against itself
+
+        # Can't allow someone to play against itself, delete those games
         Game.objects.filter(p1__user__exact=F('p2__user')).delete()
-        self.games_finished = F('games_finished') + other.games_finished
-        self.games_won = F('games_won') + other.games_won
-        self.total_score = F('total_score') + other.total_score
+        
+        # Update scores
+        self.games_finished += other.games_finished
+        self.games_won += other.games_won
+        self.total_score += other.total_score
         self.save()
+
+        # No longer needed
         other.delete()
 
     @staticmethod
@@ -65,6 +70,7 @@ class UserProfile(models.Model):
             if user_id:
                 del request.session['user_id']
 
+        # Must always save, to update timestamp
         prof.save()
         return prof
 
@@ -74,15 +80,23 @@ class Player(models.Model):
     last_move = models.CharField(max_length=3, blank=True, null=True)
     user = models.ForeignKey(UserProfile)
 
+#States:
+# 0 -> Game has not started yet
+# 1 -> Player's 1 turn
+# 2 -> Player's 2 turn
+# X + 2 -> Player X won
+# X + 4 -> Game ended abnormally and player X won
+
 class Game(models.Model):
     mine = models.CharField(max_length=256)
     state = models.SmallIntegerField(default=0, db_index=True)
     seq_num = models.IntegerField(default=0)
     token = models.CharField(max_length=22, blank=True, null=True)
     channel = models.CharField(max_length=22, unique=True)
-    p1 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p1')
+    p1 = models.OneToOneField(Player, related_name='game_as_p1')
     p2 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p2')
-
+    last_move_time = models.DateTimeField(auto_now=True)
+    
     def save(self, *args, **kwargs):
         self.seq_num = self.seq_num + 1
         super(Game, self).save(*args, **kwargs)
@@ -94,6 +108,9 @@ class Game(models.Model):
             return (2, self.p2)
         else:
             return None
+            
+    def timeout_diff(self):
+        return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
 
 def delete_game_channel(sender, **kwargs):
     game_helpers.delete_channel(kwargs['instance'].channel)

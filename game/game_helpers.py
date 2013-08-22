@@ -8,10 +8,8 @@ import models
 import http_cli
 from django.core.cache import cache
 from django.db.models import F
-from diggems.settings import EVENT_SERVER
-
-FB_APP_ID = '264111940275149'
-FB_APP_KEY = '8a9260360907fd0cdffc1deafeb16b24'
+from https_conn import https_opener
+from diggems.settings import EVENT_SERVER, FB_APP_ID, FB_APP_KEY
 
 ## Tile codes:
 # 0     -> empty hidden tile
@@ -71,8 +69,10 @@ def for_each_surrounding(m, n, func):
         if 0 <= x <= 15 and 0 <= y <= 15:
             func(x, y)
 
+true_random = random.SystemRandom()
+
 def gen_token():
-    return radix64.encode(random.getrandbits(132))
+    return radix64.encode(true_random.getrandbits(132))
 
 def publish_score(user):
     def try_publish_score():
@@ -101,22 +101,34 @@ def publish_score(user):
         try:
             try_publish_score()
         except urllib2.HTTPError:
-            # App access token must have expired, try just once more
+            # App access token must have expired, reset it and try just once more
             cache.delete('app_token')
             try_publish_score()
 
 # Event dealing:
 def create_channel(channel):
-    conn = http_cli.get_conn(EVENT_SERVER)
-    with conn.put('/ctrl_event/' + channel, headers={'Content-Length': 0}) as req:
-        resp = req.read()
+    try:
+        conn = httplib.HTTPConnection(EVENT_SERVER)
+        conn.request('PUT', '/ctrl_event/' + channel,
+                     headers={'Content-Length': 0})
+        resp = conn.getresponse()
+    except:
+        pass # TODO: log error
 
 def delete_channel(channel):
-    conn = http_cli.get_conn(EVENT_SERVER)
-    with conn.delete('/ctrl_event/' + channel) as req:
-        resp = req.read()
+    try:
+        conn = httplib.HTTPConnection(EVENT_SERVER)
+        conn.request('DELETE', '/ctrl_event/' + channel)
+        resp = conn.getresponse()
+    except:
+        pass # TODO: log error
 
 def post_update(channel, msg):
-    conn = http_cli.get_conn(EVENT_SERVER)
-    with conn.post('/ctrl_event/' + channel, msg, headers={'Content-Type': 'text/plain'}) as req:
-        resp = req.read()
+    try:
+        conn = httplib.HTTPConnection(EVENT_SERVER)
+        conn.request('POST', '/ctrl_event/' + channel, msg,
+                     headers={'Content-Type': 'text/plain'})
+        resp = conn.getresponse()
+    except:
+        pass # TODO: log error
+

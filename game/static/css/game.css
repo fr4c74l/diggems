@@ -1,3 +1,6 @@
+/* Copyright 2013 Fractal Jogos e Tecnologia
+ * Software under Affero GPL license, see LICENSE.txt */
+
 #main {
     display: block;
     position: relative;
@@ -8,20 +11,18 @@
 #p1_pts_box {
     background: rgba(255,0,0,0.25);
     text-align: left;
-    
     display: block;
     position: relative;
-    width: 130px;
-    margin-bottom: 10px;
+    width: 70px;
+    margin-bottom: 25px;
 }
 
-#h_pts_box {
+#middle_box {
     text-align: center;
-
+    font-size: 150%;
     display: block;
     position: absolute;
-    top: 0px;
-    width: 50px;
+    top: -25px;
     left: 183px;
 }
 
@@ -33,7 +34,7 @@
     position: absolute;
     top: 0px;
     right: 0px;
-    width: 130px;
+    width: 70px;
 }
 
 #game_box {
@@ -64,6 +65,34 @@
     right: 0px;
 }
 
+#p1_link:hover,
+#p2_link:hover {
+	color: #000;
+}
+
+#p1_pic {
+    margin-right: 2px;
+    float: left;
+}
+
+#p2_pic {
+    margin-left: 2px;
+    float: right;
+}
+
+.pinfo {
+    font-size: x-small;
+    position: relative;
+    bottom: -4px;
+}
+
+.pname {
+    white-space: normal;
+    height: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 #tnt_box {
     position: absolute;
     padding: 9px;
@@ -80,6 +109,35 @@
 
 #join_link {
     width: 390px;
+}
+
+#timer_box {
+	margin: 5px 0;
+	position: relative;
+	top: 0;
+	width: 50px;
+}
+
+#give_up{
+	display: block;
+	position: relative;
+	bottom: 0;
+}
+
+#timeout_terminate,
+#timeout_claim {
+	text-align: center;
+	display: block;
+}
+
+#timeout_buttons {
+	display: none;
+	position: absolute;
+	top: -10px;
+	left: 36%;
+	padding: 3px;
+	width: 180px;
+	z-index: 101;
 }
 
 img.tntbtn {

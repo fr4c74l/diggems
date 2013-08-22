@@ -1,7 +1,22 @@
+/* Copyright 2013 Fractal Jogos e Tecnologia
+ * Software under Affero GPL license, see LICENSE.txt */
 
-ul.list_games {
+.list_games {
 	padding: 0px 10px;
 	overflow: hidden;
+/*	width: 20em; */
+}
+
+ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+li {
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
 /* TABLES */
@@ -10,7 +25,7 @@ table {
 	/* border-collapse:collapse; */
 	empty-cells: hide;
 	overflow: visible;
-	width:100%;
+	width:100%; 
 	border-spacing: 20px;
 }
 
@@ -19,16 +34,13 @@ tr {
 }
 
 #new_game {
-	min-width: 300px;
 	vertical-align: bottom;
 }
 
 #join_game {
-	min-width: 300px;
 }
 
 #your_game {
-	min-width: 300px;
 }
 
 td.top {

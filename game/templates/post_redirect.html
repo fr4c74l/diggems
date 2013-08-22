@@ -1,8 +1,13 @@
-<html>
+{% comment %}
+
+Copyright 2013 Fractal Jogos e Tecnologia
+Software under Affero GPL license, see LICENSE.txt
+
+{% endcomment %}<html xmlns="http://www.w3.org/1999/xhtml">
 <body>
-<form method='post' action='{{ url }}' id='redirect'></form>
-<script type='text/javascript'>
-  document.getElementById('redirect').submit();
+<form method='post' action='{{ url }}' id='redirect' />
+<script>
+  <![CDATA[document.getElementById('redirect').submit();]]>
 </script>
 </body>
 </html>

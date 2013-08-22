@@ -1,10 +1,11 @@
 // Copyright 2011 Lucas Clemente Vella
+// Copyright 2013 Fractal Jogos e Tecnologia
 // Software distributed under Affero GPL, see http://gnu.org/licenses/agpl.txt
 
 var ctx;
 var mine;
-var move_request = new XMLHttpRequest();
-var event_request = new XMLHttpRequest();
+var event;
+var button_request = new XMLHttpRequest();
 
 var images = {};
 
@@ -114,48 +115,117 @@ function toggle_tnt(ev) {
 // Class Tile
 function Tile(x0,y0) {
   this.s = '?';
+  this.hover = false;
   this.x = x0 * 26;
   this.y = y0 * 26;
+  
+  // Activity indication
+  this.blink_state = 0;
+  this.ai = null;
 }
 
 Tile.prototype.draw = function() {
-    var TEXT_COLOR = [
-	'rgb(0,0,255)',
-	'rgb(0,160,0)',
-	'rgb(255,0,0)',
-	'rgb(0,0,127)',
-	'rgb(160,0,0)',
-	'rgb(0,255,255)',
-	'rgb(160,,160)',
-	'rgb(0,0,0)'
-    ];
-
-    if(this.s >= 0 && this.s <= 8) {
-	ctx.fillStyle = 'rgb(255,216,161)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	if(this.s > 0) {
-	    ctx.fillStyle = TEXT_COLOR[this.s-1];
-	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
+    if (this.blink_state) {
+	var color = this.hover ? [251,170,56] : [227,133,0];
+	for (var i = 0; i < 3; ++i) {
+	    var delta = 200 - color[i];
+	    color[i] = Math.round(color[i] + delta * this.blink_state);
 	}
+	ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+    } else {
+	ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
     }
-    else if(this.s == 'r' || this.s == 'b') {
-	ctx.fillStyle = 'rgb(251,170,56)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
-	ctx.drawImage(icon, this.x + 2, this.y + 5);
-    }
-    else {
-	ctx.fillStyle = 'rgb(227,133,0)';
-	ctx.fillRect(this.x, this.y, 25, 25);
+    ctx.fillRect(this.x, this.y, 25, 25);
+};
 
-	if(this.s == 'x') {
-	    var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
+Tile.TEXT_COLOR = [
+    'rgb(0,0,255)',
+    'rgb(0,160,0)',
+    'rgb(255,0,0)',
+    'rgb(0,0,127)',
+    'rgb(160,0,0)',
+    'rgb(0,255,255)',
+    'rgb(160,,160)',
+    'rgb(0,0,0)'
+];
+
+Tile.prototype.set_state = function(s) {
+    if (s == this.s)
+	return;
+    this.s = s;
+
+    if (s == 0) {
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(255,216,161)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	};
+    } else if(s > 0 && s <= 8) {
+	var text_color = Tile.TEXT_COLOR[s - 1];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(255,216,161)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	    ctx.fillStyle = text_color;
+	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
+	};
+    } else if(s == 'r' || s == 'b') {
+	var icon = images[(s == 'b') ? 'saphire' : 'ruby'];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(251,170,56)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	    ctx.drawImage(icon, this.x + 2, this.y + 5);
+	};
+    } else if(s == 'x') {
+	var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(227,133,0)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+
 	    ctx.globalCompositeOperation = 'lighter';
 	    ctx.drawImage(icon, this.x + 2, this.y + 5);
 	    ctx.globalCompositeOperation = 'source-over';
-	}
+	};
+    } else {
+	this.draw = Tile.prototype.draw;
     }
-};
+}
+
+// Class ActivityIndicator
+function ActivityIndicator(tile) {
+    this.tile = tile;
+    if (tile.ai)
+	tile.ai.clear();
+    tile.ai = this;
+
+    this.start_time = (new Date()).getTime();
+    this.timer = setInterval(function() {
+	var t = ((new Date()).getTime() - this.start_time) * ActivityIndicator.SPEED;
+	this.tile.blink_state = (1 + Math.sin(t)) / 2;
+	this.tile.draw();
+    }.bind(this), 50);
+
+    ActivityIndicator.all[tile.x + ',' + tile.y] = this;
+}
+
+ActivityIndicator.SPEED = Math.PI / 500; // Two full blinks per second...
+ActivityIndicator.all = {};
+
+ActivityIndicator.prototype.clear = function() {
+    clearInterval(this.timer);
+
+    delete ActivityIndicator.all[this.tile.x + ',' + this.tile.y];
+    this.tile.blink_state = 0;
+    this.tile.ai = null;
+    this.tile.draw();
+
+    this.tile = null;
+}
+
+ActivityIndicator.clear_all = function() {
+    for (var ai in ActivityIndicator.all) {
+	ActivityIndicator.all[ai].clear();
+    }
+}
+// End of class ActivityIndicator
 
 function update_points() {
     var p1 = 0;
@@ -176,10 +246,60 @@ function update_points() {
 
     display_tnt();
 
+    var hidden = 51 - p1 - p2;
     document.getElementById('p1_pts').innerHTML = String(p1);
     document.getElementById('p2_pts').innerHTML = String(p2);
-    document.getElementById('h_pts').innerHTML = String(51 - p1 - p2);
+
+    var prop1, prop2;
+    if (p1 > p2) {
+	prop1 = 1;
+	prop2 = p2 / p1;
+    } else if (p2 > p1) {
+	prop2 = 1;
+	prop1 = p1 / p2;
+    } else {
+	prop1 = prop2 = 1;
+    }
+    
+    var g = hidden * 5;
+    var rem_total = 255 - g;
+    var r = g + Math.round(prop1 * rem_total);
+    var b = g + Math.round(prop2 * rem_total);
+    var bg_color = 'rgba(' + r + ',' + g + ',' + b + ',0.25)'
+    document.getElementById('game_box').style.background = bg_color;
 }
+
+// Class Title Blinker
+function TitleBlinker(msg) {
+    this.original = document.title;
+    this.changed = msg;
+    this.blinking = false;
+    this.is_displaying = false;
+}
+
+TitleBlinker.prototype.blink = function() {
+    if (this.is_displaying) {
+	document.title = this.original;
+    } else {
+	document.title = this.changed;
+    }
+    this.is_displaying = !this.is_displaying;
+}
+
+TitleBlinker.prototype.setBlinking = function(to_blink) {
+    if (to_blink == this.blinking)
+	return;
+    if (to_blink) {
+	this.timer = window.setInterval(this.blink.bind(this), 1000);
+    } else if (this.timer) {
+	document.title = this.original;
+	window.clearInterval(this.timer);
+	this.timer = null;
+    }
+    this.blinking = to_blink;
+}
+
+var your_turn_blinker = new TitleBlinker(gettext('Your turn! Play!'));
 
 function close_last_nt() {
     if(last_nt) {
@@ -191,7 +311,11 @@ function close_last_nt() {
 function notify_state(msg) {
     // Sound stuff
     var ring = document.getElementById('ring');
-    ring.play();
+    try{
+        ring.play();
+    }
+    catch(e){
+    }
 
     // Notification stuff
     if(!nt
@@ -202,7 +326,7 @@ function notify_state(msg) {
     if(msg != '') {
 	try{
 	    close_last_nt();
-	    last_nt = nt.createNotification('/static/images/icon32.png', 'DigGems: Jogo ' + params.game_id, msg);
+	    last_nt = nt.createNotification('/static/images/icon32.png', gettext('DigGems: Game ') + params.game_id, msg);
 	    last_nt.show();
 	} catch(err) {
 	    // Do nothing...
@@ -212,27 +336,55 @@ function notify_state(msg) {
 
 // TODO: localization
 function set_state(state) {
-    var msg;
+    var msg = '';
     if(params.player) {
+	var cursor;
+	var hover_indicator;
 	if(state == params.player) {
-	    msg = 'Sua vez! Jogue!';
+	    msg = gettext('Your turn! Play!');
+	    
+	    // Set shovel cursor in game_canvas area
+	    cursor = 'url(' + images['shovel'].src + '),auto';
+
+	    // Mark the to be affected tiles
+	    hover_indicator = highlight_tile;
 	}
-	else if(state == 1 || state == 2) {
-	    msg = 'Aguarde sua vez.';
-	}
-	else if(state == 3 || state == 4) {
-	    msg = 'O jogo acabou, ';
-	    if((state - 2) == params.player) {
-		if(auth.fb)
-		    document.getElementById('brag_button')
-		    .style.setProperty('visibility', 'visible', null);
-		msg += 'você venceu!';
+	else {
+	    // Not my turn, set default cursor...
+	    cursor = 'default';
+	    
+	    // Stop any tile that could be blinking
+	    ActivityIndicator.clear_all();
+
+	    // and stop highlighting tiles:
+	    hover_indicator = null;
+	    highlight_tile.clear();
+
+	    if(state == 1 || state == 2) {
+		msg = gettext('Wait for your turn.');
+	    }
+	    else if(state >= 3 && state <= 6) {
+		msg = gettext('Game over, ');
+		if(((state + 1) % 2) + 1 == params.player) {
+		    if(is_fb_auth()) {
+			/*document.getElementById('brag_button')
+			.style.setProperty('visibility', 'visible', null);*/
+		    }
+		    msg += gettext('you win!');
+		}
+		else
+		    msg += gettext('you lose.');
 	    }
 	    else
-		msg += 'você perdeu.';
+		return; // What else can I do?
 	}
-	else
-	    return; // What else can I do?
+
+	var canvas = document.getElementById('game_canvas');
+	canvas.style.cursor = cursor;
+	canvas.onmousemove = hover_indicator;
+
+        // Blink title to alert user, if its turn.
+        your_turn_blinker.setBlinking(state == params.player);
 
 	if(params.state != state && (state == params.player || state > 2))
 	    notify_state(msg);
@@ -240,38 +392,56 @@ function set_state(state) {
 	// Spectator mode.
 	var state_msgs =
 	    ['',
-	     'Vez do vermelho.',
-	     'Vez do azul.',
-	     'O jogo acabou, o vermelho venceu.',
-	     'O jogo acabou, o azul venceu.'];
+	     gettext("Red's turn."),
+	     gettext("Blue's turn."),
+	     gettext('Game is over, red player won.'),
+	     gettext('Game is over, blue player won.'),
+	     gettext('Game is over, red player won by resignation.'),
+	     gettext('Game is over, blue player won by resignation.')];
 	msg = state_msgs[state];
     }
     var msg_box = document.getElementById('message');
     if (!params.state && state) {
+		if(params.player)
+			document.getElementById("chat_interact").style.display="block";
 	// Just started the game, prepare box for messages
-	msg_box.innerHTML = '';
 	msg_box.className += " big";
     }
     msg_box.innerHTML = msg;
+
     params.state = state;
 }
 
-function blue_player_display(info) {
-    var name = document.getElementById('p2_name');
-    if (info && info.length == 2) {
-	var uid = info[0];
-	var pname = info.slice(1).join('<br \>');
+/* In case updated user information came from the async
+ * event channel with message type 'p', like when player
+ * two joins the game, chages the user info display. */
+function handle_player_data_event(data) {
+    var pnum = parseInt(data.charAt(0));
+    data = JSON.parse(data.slice(2));
 
-	document.getElementById('p2_link').href = "//facebook.com/" + uid + "/";
+    pnum = 'p' + pnum + '_';
 
-	var pic = document.getElementById('p2_pic');
-	pic.src = "//graph.facebook.com/" + uid + "/picture";
-	pic.style.display = "inline-block";
+    var name = document.getElementById(pnum + 'name');
+    name.innerHTML = '';
+    name.appendChild(document.createTextNode(data.name.capitalize()));
 
-	name.innerHTML = pname;
+    var link = document.getElementById(pnum + 'link');
+    if (data.profile_url) {
+	link.href = data.profile_url;
+	link.classList.add('undlin');
     } else {
-	name.innerHTML = "Visitante";
+	link.removeAttribute('href');
+	link.classList.remove('undlin');
     }
+    
+    var pic = document.getElementById(pnum + 'pic');
+    if (!pic) {
+	pic = document.createElement('img');
+	pic.id = pnum + 'pic';
+	pic.width = pic.height = 40;
+	link.insertBefore(pic, link.firstChild);
+    }
+    pic.src = data.pic_url;
 }
 
 function handle_event(msg) {
@@ -283,56 +453,56 @@ function handle_event(msg) {
     params.seq_num = seq_num;
 
     var new_state = parseInt(lines[1]);
-    var old_state = params.state;
     set_state(new_state);
-    if(old_state == 0) {
-	// The second (blue) player just connected.
-	// Display know info about the other player.
-	blue_player_display(lines.slice(2));
-	return;
+
+    if (lines.length > 2){
+        var player = parseInt(lines[2]);
+        var lclick = last_click_decode(player, lines[3]);
+        
+        if (player == params.player && lclick.bombed) {
+	    params.tnt_used = true;
+	    tnt.active = false;
+        }
+        
+        var parser = /(\d+),(\d+):(.)/;
+        for(var i = 4; i < lines.length; ++i) {
+	    var res = parser.exec(lines[i]);
+	    if(res) {
+	        var m = parseInt(res[1]);
+	        var n = parseInt(res[2]);
+
+	        // Just assume correct valid values were delivered...
+
+	        mine[m][n].set_state(res[3]);
+		if (mine[m][n].ai) {
+		    mine[m][n].ai.clear();
+		} else {
+		    mine[m][n].draw();
+		}
+	    }
+        }
+
+        if(last_click[player-1])
+	    last_click[player-1].clear();
+        last_click[player-1] = lclick;
+        lclick.draw();
     }
-
-    var player = parseInt(lines[2]);
-    var lclick = last_click_decode(player, lines[3]);
-    
-    if (player == params.player && lclick.bombed) {
-	params.tnt_used = true;
-	tnt.active = false;
-    }
-    
-    var parser = /(\d+),(\d+):(.)/;
-    for(var i = 4; i < lines.length; ++i) {
-	var res = parser.exec(lines[i]);
-	if(res) {
-	    var m = parseInt(res[1]);
-	    var n = parseInt(res[2]);
-
-	    // Just assume correct valid values were delivered...
-
-	    mine[m][n].s = res[3];
-	    mine[m][n].draw();
-	}
-    }
-
-    if(last_click[player-1])
-	last_click[player-1].clear();
-    last_click[player-1] = lclick;
-    lclick.draw();
 
     update_points();
+    reset_counter();
 }
 
 function register_event() {
     if(params.state >= 3 || register_event.last_status == 410)
 	return; // Game is over
 
-    event_request.open('GET', '/event/'+ params.channel, true);
+    event_request.open('GET', '/event/' + params.channel, true);
     if(register_event.etag)
 	event_request.setRequestHeader('If-None-Match', register_event.etag);
     event_request.setRequestHeader('If-Modified-Since', params.last_change);
     event_request.onreadystatechange = function(ev){
 	if (event_request.readyState == 4) {
-	    register_event.last_status == event_request.status;
+	    register_event.last_status = event_request.status;
 	    if(event_request.status == 200) {
 		register_event.error_count = 0;
 		register_event.etag = event_request.getResponseHeader('Etag')
@@ -361,10 +531,7 @@ function register_event() {
     event_request.send(null);
 }
 
-function on_click(ev) {
-    if(ev.button != 0 || params.player != params.state)
-	return;
-
+function mouse_tile(ev) {
     var m;
     var n;
     if (ev.offsetX !== undefined && ev.offsetY !== undefined) {
@@ -373,43 +540,119 @@ function on_click(ev) {
     } else {
 	var totalOffsetX = 0;
 	var totalOffsetY = 0;
-	var canvasX = 0;
-	var canvasY = 0;
-	var currentElement = this;
+	var currentElement = ev.target;
 
-	do{
+	while(currentElement.offsetParent) {
 	    totalOffsetX += currentElement.offsetLeft - currentElement.scrollLeft;
 	    totalOffsetY += currentElement.offsetTop - currentElement.scrollTop;
-	} while(currentElement = currentElement.offsetParent);
+	    currentElement = currentElement.offsetParent;
+	}
 
-	m = ev.pageX - totalOffsetX;
-	n = ev.pageY - totalOffsetY;
+	// Caveat: On Firefox, with XHTML, <body> scroll is 0 and we must use window scroll...
+	totalOffsetX -= window.scrollX;
+	totalOffsetY -= window.scrollY;
+
+	m = ev.clientX - totalOffsetX;
+	n = ev.clientY - totalOffsetY;
     }
 
     m = Math.floor(m / 26);
     n = Math.floor(n / 26);
+    
+    return {'m': m, 'n': n};
+}
 
-    if(!tnt.active && mine[m][n].s != '?')
+function on_click(ev) {
+    if(ev.button != 0 || params.player != params.state)
+	return;
+
+    var pos = mouse_tile(ev);
+    if(!tnt.active && mine[pos.m][pos.n].s != '?')
 	return;
 
     close_last_nt();
 
-    // TODO: indicate activity
+    new ActivityIndicator(mine[pos.m][pos.n]);
 
-    var url = '/game/'+ params.game_id + '/move/?m=' + m + '&n=' + n;
+    var url = '/game/'+ params.game_id + '/move/?m=' + pos.m + '&n=' + pos.n;
     if(tnt.active) {
 	url += '&tnt=y';
     }
+
+    var move_request = new XMLHttpRequest();
     move_request.open('POST', url, true);
     move_request.onreadystatechange = function(ev){
-	if (move_request.readyState == 4) {
-	    if(move_request.status == 200) {
-		// TODO: stop activity indication
+	if (ev.target.readyState == 4) {
+	    if(ev.target.status != 200) {
+		// Error: server didn't accept click, probably just a
+		// syncronization error due to network delay that will
+		// correct itself automatically.
+
+		if (mine[pos.m][pos.n].ai) {
+		    mine[pos.m][pos.n].ai.clear();
+		}
 	    }
-	    // TODO: else: treat error
 	}
     };
     move_request.send(null);
+}
+
+// Hover effect on tile
+function highlight_tile(ev) {
+    var pos = mouse_tile(ev);
+    var to_redraw = Array();
+
+    if(highlight_tile.old) {
+	var old = highlight_tile.old;
+	if(tnt.active == old.active && old.m == pos.m && old.n == pos.n) {
+	    return;
+	}
+
+	highlight_tile.set_hover(old.active, old, false, to_redraw);
+    }
+    highlight_tile.set_hover(tnt.active, pos, true, to_redraw);
+
+    highlight_tile.old = {'active': tnt.active, 'm': pos.m, 'n': pos.n};
+
+    // Redraw affected tiles.
+    highlight_tile.redraw_hidden(to_redraw);
+}
+
+highlight_tile.redraw_hidden = function(to_redraw) {
+    for (var k in to_redraw) {
+	pos = to_redraw[k];
+	var tile = mine[pos.m][pos.n];
+	if (tile.s == '?')
+	    tile.draw();
+    }
+}
+
+highlight_tile.set_hover = function(tnt, bpos, hover, to_redraw) {
+    if(tnt) {
+	for(var dm = -2; dm <= 2; ++dm) {
+	    for(var dn = -2; dn <= 2; ++dn) {
+		var m = bpos.m + dm;
+		var n = bpos.n + dn;
+		if (m >= 0 && m <= 15 && n >= 0 && n <= 15) {
+		    mine[m][n].hover = hover;
+		    to_redraw[m + ',' + n] = {'m': m, 'n': n};
+		}
+	    }
+	}
+    } else {
+	mine[bpos.m][bpos.n].hover = hover;
+	to_redraw[bpos.m + ',' + bpos.n] = bpos;
+    }
+}
+
+highlight_tile.clear = function() {
+    if(!highlight_tile.old)
+	return;
+
+    var to_redraw = Array();
+    var old = highlight_tile.old;
+    highlight_tile.set_hover(old.active, old, false, to_redraw);
+    highlight_tile.redraw_hidden(to_redraw);
 }
 
 function init() {
@@ -420,6 +663,7 @@ function init() {
     ring.addEventListener('ended', function() { ring.load(); }, false);
 
     var canvas = document.getElementById('game_canvas');
+    
     if (!canvas || !canvas.getContext) {
 	// Panic return
 	// TODO: add friendly message explaining why IE sucks
@@ -435,7 +679,7 @@ function init() {
 
     if(params.mine)
 	for(var i = 0; i < 256; ++i)
-	    mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
+	    mine[Math.floor(i/16)][i%16].set_state(params.mine.charAt(i));
 
     // Text presets
     ctx = canvas.getContext('2d');
@@ -448,10 +692,8 @@ function init() {
     ctx.lineWidth = 3;
 
     // Shadows presets
-    // TODO: Fix buggy shadows drawing...
     ctx.shadowOffsetX = 1;
     ctx.shadowOffsetY = 1;
-    ctx.shadowBlur = 1;
     ctx.shadowColor = "black";
 
     // Draw map
@@ -473,8 +715,21 @@ function init() {
     set_state(params.state);
     update_points();
 
+    // Set title alert if must
+    your_turn_blinker.setBlinking(params.state == params.player);
+
     // Receive updates from server
-    register_event();
+    event = new Event('/event/' + params.channel, params.last_change);
+    event.register_handler('g', handle_event);
+    event.register_handler('p', handle_player_data_event);
+
+    // Init chat stuff
+    chat.init(
+	document.getElementById("chat_textfield"),
+	document.getElementById("input_field"),
+	document.getElementById("send_button"),
+	event, 'chat/'
+    );
 
     if(params.player) { // Not a spectator
 	// Expect for user input
@@ -484,26 +739,12 @@ function init() {
     
     // Everything is setup, show the canvas
     canvas.style.setProperty('visibility', 'visible', null);
-}
-
-// Will publish the result of a match to the wall.
-// ATTENTION: This thing is completely unsafe and fakeable!
-// TODO: FIX SECURITY PROBLEM!
-function publish_results()
-{
-    if((params.state - 2) != params.player
-       || !auth.fb)
-	return;
-
-    var dialog = {
-        method: 'feed',
-	// TODO: put right link here
-        link: 'http://vella.no-ip.org/',
-        picture: 'http://vella.no-ip.org/static/images/logo.png',
-        name: 'Resultado DigGems',
-        caption: 'Partida Ganha',
-        description: 'Using Dialogs to interact with users.'
-    };
+  if ((params.state == 1) || (params.state == 2))
+  {
+    turn_timeout.start_time = (new Date()).getTime();
+    reset_counter.int = window.setInterval(turn_timeout, 1000);
+    turn_timeout();
+  }
 }
 
 function load_img(name) {
@@ -512,11 +753,70 @@ function load_img(name) {
     images[name] = img;
 }
 
+function turn_timeout()
+{
+	var timeleft = params.time_left - ((new Date()).getTime() - turn_timeout.start_time) / 1000;
+	if (timeleft <= 10)
+	  document.getElementById("clock").style.setProperty('color', '#ff0000');
+	if (timeleft <= 0)
+	{
+		clearInterval(reset_counter.int);
+		timeleft = 0;
+		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2)) {
+			document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
+//			document.getElementById("timeout_buttons").style.display = 'block';
+			$("#timeout_buttons").animate({
+			height: "toggle",
+			width: "toggle",
+			opacity: "toggle"}, 200);
+		}
+	}
+	document.getElementById("clock").innerHTML = Math.round(timeleft);
+}
+
+function reset_counter()
+{
+  document.getElementById("timeout_buttons").style.display = 'none';
+  if (reset_counter.int)
+    clearInterval(reset_counter.int);
+  if (params.state == 1 || params.state == 2)
+  {
+    turn_timeout.start_time = (new Date()).getTime();
+    params.time_left = 45;
+    turn_timeout();
+    document.getElementById("clock").style.setProperty('color', '#000000');
+    document.getElementById("timeout_buttons").style.display = 'none';
+    reset_counter.int = window.setInterval(turn_timeout, 1000);
+  }
+  else
+    document.getElementById("clock").innerHTML = "";
+  document.getElementById("timer_box").style.setProperty('visibility', 'visible');
+}
+
+function claim_game(terminate)
+{
+	var url = '/game/'+ params.game_id + '/claim/';
+	button_request.open('POST', url, true);
+	var data = null;
+	if (terminate == 1)
+	{
+		data = "terminate=y";
+		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+	}
+  if (terminate == 2)
+  {
+    data = "terminate=z";
+    button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+  }
+	button_request.send(data);
+}
+
 // Load resources
 load_img("saphire");
 load_img("ruby");
 load_img("crate");
 load_img("tnt");
 load_img("explosion");
+load_img("shovel");
 
 window.addEventListener('load', init, false);

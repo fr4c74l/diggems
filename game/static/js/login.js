@@ -9,28 +9,51 @@ function new_post_request(url) {
     return request;
 }
 
-/* Based on the state of "auth", updates the user interface. */
-function auth_render() {
+String.prototype.capitalize = function() {
+    return this.charAt(0).toUpperCase() + this.slice(1);
+}
+
+function is_fb_auth() {
+    return auth && auth.fb;
+}
+
+/* Based on the state of "user", updates the user interface. */
+function user_info_render(user) {
     var fb_button = document.getElementById('auth_fb_button');
     var username = document.getElementById('auth_username');
+    var victories = document.getElementById('_victories');
+    var points = document.getElementById('_points');
+
     var picture = document.getElementById('auth_user_pic');
-    var logout = document.getElementById('auth_logout')
+    var logout = document.getElementById('auth_logout');
 
-    if(auth.fb) {
-	username.innerHTML = auth.fb.name;
+    username.innerHTML = user.name.capitalize();
+    picture.src = user.pic_url;
 
-	picture.src = 'https://graph.facebook.com/' + auth.fb.uid + '/picture';
-	picture.style.setProperty('visibility', 'visible', null);
+    var victories_text = user.stats.victories;
+    if (user.stats.win_ratio) {
+	victories_text += " (" + win_ratio + "%)";
+    }
+    victories.innerHTML = victories_text;
+    points.innerHTML = user.stats.score;
 
+    if (is_fb_auth()) {
 	fb_button.style.setProperty('display', 'none', null);
 	logout.style.setProperty('visibility', 'visible', null);
     } else {
-	username.innerHTML = 'Visitante';
-	
-	
-	picture.style.setProperty('visibility', 'hidden', null);
 	fb_button.style.setProperty('display', 'inline-block', null);
 	logout.style.setProperty('visibility', 'hidden', null);
+    }
+}
+
+/* Handle event from server login/out response. */
+function server_handle_response(ev) {
+    if (ev.target.readyState == 4) {
+        if(ev.target.status == 200) {
+	    var user = JSON.parse(ev.target.responseText);
+	    auth = user.auth ? user.auth : null;
+	    user_info_render(user);
+	}
     }
 }
 
@@ -39,65 +62,36 @@ function auth_render() {
 function server_fb_login(fb_login)
 {
     var request = new_post_request('/fb/login/')
-    request.onreadystatechange = function(ev){
-	if (request.readyState == 4) {
-	    if(request.status == 200) {
-		try {
-		    auth.fb = JSON.parse(request.responseText);
-		} catch(err) {
-		    auth.fb = null;
-		}
-	    } else {
-		auth.fb = null;
-	    }
-
-	    auth_render();
-	}
-    }
-    request.send('token='+fb_login.accessToken+'&expires='+fb_login.expiresIn);
+    request.onreadystatechange = server_handle_response;
+    request.send('token='+fb_login.accessToken);
 }
 
 /* Turn the player back into a guest user on server. */
 function server_fb_logout()
 {
-    auth.fb = null;
     var request = new_post_request('/fb/logout/');
+    request.onreadystatechange = server_handle_response;
     request.send();
-    auth_render();
 }
 
 /* Handle response from Facebook login events. */
 function on_fb_login(res) {
-  if(res.authResponse) {
-      if(auth.fb && auth.fb.uid == res.authResponse.userID
-	 && auth.fb.access_token == res.authResponse.accessToken) {
-	  auth_render();
-      } else {
-	  auth.fb = null;
-	  server_fb_login(res.authResponse);
-      }
-  } else {
-      if(auth.fb) {
-	  server_fb_logout();
-      } else {
-	  auth_render();
-      }
-  }
+    if(res.authResponse) {
+	if(!is_fb_auth() || auth.fb.uid != res.authResponse.userID) {
+	    server_fb_login(res.authResponse);
+	}
+    } else if(is_fb_auth()) {
+	server_fb_logout();
+    }
 }
 
 /* Button callback to logout the user. */
 function fb_logout() {
-    FB.logout();
-    server_fb_logout();
+    if(FB) {
+	FB.logout();
+	server_fb_logout();
+    } else {
+	// Retry in half second...
+	setTimeout(fb_logout, 500);
+    }
 }
-
-/* Button callback to initiate client side login process via Facebook. */
-/*function fb_login() {
-    FB.login(on_fb_login,
-	     {"scope": "publish_actions"});
-}*/
-
-/* Initial check of login status. */
-window.addEventListener('load', function() {
-    FB.Event.subscribe('auth.authResponseChange', on_fb_login);
-}, false);

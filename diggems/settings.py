@@ -1,9 +1,29 @@
+# -*- coding: utf-8 -*-
+
 # Django settings for diggems project.
 import os.path
 
 INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
-EVENT_SERVER = 'http://127.0.0.1:8080/'
 
+# Diggems specific settings:
+DB_POOL_MAX_CONN = 40
+
+## Facebook app settings
+FB_APP_ID = '676057105742978'
+FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
+
+## URL that will be reffered when someone clicks FB "Like":
+FB_LIKE_URL = 'http://my.main.url/'
+
+## Long pool server
+EVENT_SERVER = '127.0.0.1:8080'
+
+## Google ads settings
+GOOGLE_AD_ID = 'place_google_ads_id_here'
+
+GOOGLE_AD_SLOTS = ['slot1_placeholder', 'slot2_placeholder']
+
+# Django settings:
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
@@ -12,6 +32,8 @@ ADMINS = (
 )
 
 MANAGERS = ADMINS
+
+DEFAULT_CONTENT_TYPE = 'application/xhtml+xml'
 
 DATABASES = {
     'default': {
@@ -37,7 +59,7 @@ TIME_ZONE = 'America/Sao_Paulo'
 
 # Language code for this installation. All choices can be found here:
 # http://www.i18nguy.com/unicode/language-identifiers.html
-LANGUAGE_CODE = 'pt-br'
+LANGUAGE_CODE = 'en'
 
 SITE_ID = 1
 
@@ -50,7 +72,18 @@ USE_I18N = True
 USE_L10N = True
 
 # If you set this to False, Django will not use timezone-aware datetimes.
-USE_TZ = True
+USE_TZ = False
+
+# Supported languages
+LANGUAGES = (
+    ('en', 'English'),
+    ('pt-br', 'Portuguese'),
+    ('es', 'Spanish'),
+)
+
+LOCALE_PATHS = (
+    INSTALATION_DIR + 'game/locale/',
+)
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/var/www/example.com/media/"
@@ -86,6 +119,8 @@ STATICFILES_FINDERS = (
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
+STATICFILES_STORAGE = 'diggems.nginx_staticgzip_storage.NginxStaticGZIPStorage'
+
 # Make this unique, and don't share it with anybody.
 SECRET_KEY = '$z_2d_$-r-gmzvk4z0d*eo-1b5wi8$2_dxueukhihhpfx2+1s1'
 
@@ -96,10 +131,15 @@ TEMPLATE_LOADERS = (
 #     'django.template.loaders.eggs.Loader',
 )
 
+TEMPLATE_CONTEXT_PROCESSORS = (
+    'django.core.context_processors.i18n',
+)
+
 MIDDLEWARE_CLASSES = (
-    'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.csrf.CsrfViewMiddleware', # TODO: is this really needed?
+    'django.middleware.locale.LocaleMiddleware',
+    'django.middleware.common.CommonMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware', # TODO: is this really needed?
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
@@ -131,8 +171,11 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'south',
     'game',
 )
+
+SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

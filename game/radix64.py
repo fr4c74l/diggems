@@ -18,8 +18,6 @@ def encode(n):
     return ''.join(reversed(s))
 
 def decode(s):
-    if s[0] == SIGN_CHARACTER:
-        return -num_decode(s[1:])
     n = 0
     for c in s:
         n = n * BASE + ALPHABET_REVERSE[c]

@@ -1,7 +1,12 @@
+# Copyright 2013 Fractal Jogos e Tecnologia
+# Software under Affero GPL license, see LICENSE.txt
+
 from django.core.management.base import BaseCommand, CommandError
+from django.db import transaction
 from game.models import *
 import datetime
 
+@transaction.commit_on_success
 class Command(BaseCommand):
     help = 'Cleanup the old games and unseen guest users.'
 

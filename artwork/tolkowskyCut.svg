@@ -14,7 +14,7 @@
    inkscape:export-xdpi="123.4"
    inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/tolkowskyCut.png"
    sodipodi:docname="tolkowskyCut.svg"
-   inkscape:version="0.47 r22583"
+   inkscape:version="0.48.4 r9939"
    version="1.1"
    id="svg2"
    height="1071.5807"
@@ -26,18 +26,18 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.55374927"
-     inkscape:cx="462.59583"
-     inkscape:cy="509.86888"
+     inkscape:zoom="0.78311973"
+     inkscape:cx="1082.2001"
+     inkscape:cy="300.57662"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="false"
      inkscape:snap-grids="false"
      inkscape:snap-to-guides="true"
-     inkscape:window-width="1024"
-     inkscape:window-height="695"
-     inkscape:window-x="0"
-     inkscape:window-y="25"
+     inkscape:window-width="1366"
+     inkscape:window-height="721"
+     inkscape:window-x="-3"
+     inkscape:window-y="-3"
      inkscape:window-maximized="1"
      showguides="true"
      inkscape:guide-bbox="true"
@@ -46,6 +46,17 @@
      inkscape:snap-bbox="true" />
   <defs
      id="defs4">
+    <linearGradient
+       id="linearGradient4508">
+      <stop
+         style="stop-color:#c80000;stop-opacity:1;"
+         offset="0"
+         id="stop4510" />
+      <stop
+         style="stop-color:#0000c4;stop-opacity:1;"
+         offset="1"
+         id="stop4512" />
+    </linearGradient>
     <linearGradient
        inkscape:collect="always"
        id="linearGradient4222">
@@ -1720,6 +1731,26 @@
        inkscape:vp_y="0 : 1000 : 0"
        inkscape:vp_x="0 : 0.5 : 1"
        sodipodi:type="inkscape:persp3d" />
+    <linearGradient
+       id="linearGradient4222-0-6">
+      <stop
+         style="stop-color:#494dda;stop-opacity:1;"
+         offset="0"
+         id="stop4224-6-7" />
+      <stop
+         style="stop-color:#7774f1;stop-opacity:0;"
+         offset="1"
+         id="stop4226-1-9" />
+    </linearGradient>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4508"
+       id="linearGradient4560"
+       x1="971.28528"
+       y1="993.43231"
+       x2="1216.4585"
+       y2="992.15533"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <metadata
      id="metadata7">
@@ -3419,5 +3450,381 @@
        d="m 550.22581,592.96115 12.96589,-30.6936 11.5985,-3.1589 -24.56439,33.8525 z"
        id="path4669-6-9-4"
        sodipodi:nodetypes="cccc" />
+    <g
+       id="g3695"
+       style="fill-opacity:1;fill:url(#linearGradient4560)">
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1133.9093,1048.1203 26.5806,-35.612 20.7458,-5.8795 17.018,-7.94181 13.2902,-7.94171 -77.6346,57.37502 z"
+         id="path5569-8-3-5-8"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1129.0222,950.54428 33.7179,-42.3193 31.4815,11.1819 -65.1994,31.1374 z"
+         id="path5563-6-1-9-4"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);stroke:none;fill-opacity:1.0"
+         d="m 1079.0866,926.20818 50.1225,24.5042"
+         id="path5561-0-0-4-5"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1162.3004,908.70788 -84.9009,16.5024 51.3187,25.5436 33.5822,-42.046 z"
+         id="path5557-3-3-9-3"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1162.7759,908.19818 31.3447,10.9177 -24.5932,-33.0882 -6.7515,22.1705 z"
+         id="path5555-3-6-0-7"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1182.7642,890.00828 52.5945,40.5918 -41.3689,-11.4817 -11.2256,-29.1101 z"
+         id="path5551-6-7-9-2"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1238.988,946.79518 -0.6849,-8.2082 -2.7485,-7.8664 -41.3177,-11.5143 45.0936,36.3728 -0.3424,-8.7839 z"
+         id="path5549-1-3-1-4"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1211.044,983.45768 8.7544,-4.2878 13.0264,-13.7996 6.447,-9.7336 -44.3471,-35.1457 16.1193,62.9667 z"
+         id="path5547-8-2-7-1"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1211.2503,983.79328 -16.8881,-64.012 -64.8341,30.6645 81.7222,33.3475 z"
+         id="path5545-7-2-7-5"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1160.4122,1004.5827 20.1715,-3.9264 17.9651,-8.29572 12.4169,-8.8008 -81.6634,-32.7024 31.1099,53.72532 z"
+         id="path5543-0-1-1-6"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="ccccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1159.7003,1004.0636 -21.2849,8.6379 -37.0308,5.9757 -24.7078,0.3806 52.7587,-69.50512 30.2648,54.51062 0,3e-4 z"
+         id="path5541-5-5-1-4"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1160.4122,1004.0636 -21.4715,8.4759 -37.8317,6.318 -23.7819,-0.169 0,7.5253 24.511,-1.9058 36.943,-5.9695 21.388,-6.229 0.2431,-8.0459 z"
+         id="path5539-1-3-5-6"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1211.0663,991.42208 -0.3437,-7.6028 -12.9994,8.7984 -17.6661,8.15332 -19.6449,3.2926 -0.1623,8.2737 20.5781,-5.6782 17.5705,-8.38141 12.6678,-6.85561 z"
+         id="path5537-1-3-9-2"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1238.9142,963.95388 -4.6614,6.9551 -13.5395,13.2681 -9.2616,6.9094 0.2431,-7.2672 7.2809,-4.0175 14.2182,-14.2748 6.2497,-10.2573 -0.5294,8.6842 z"
+         id="path5535-0-8-7-6"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1106.6385,1074.9749 105.1649,-85.07632 -76.5593,56.87132 -28.6056,28.205 z"
+         id="path5533-3-2-7-0"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1104.7547,1067.6516 55.9005,-55.841 -27.4642,37.1539 -28.4363,18.6871 z"
+         id="path5531-0-8-6-0"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1094.5414,1086.3493 40.6852,-39.3369 -30.958,20.8987 -9.7272,18.4382 z"
+         id="path5529-0-5-7-6"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1077.7271,1026.239 24.6386,-2.0293 36.3745,-6.0029 21.1497,-5.8377 -55.6213,56.6309 -26.5415,-42.761 z"
+         id="path5527-4-8-3-0"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1094.5458,1085.6403 -17.9168,-61.0161 27.9551,43.8848 -10.0383,17.1313 z"
+         id="path5288-5-0-6-0"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="ccccccccc"
+         id="path4661-4-8-5-3"
+         d="m 1077.382,865.10338 76.813,9.8684 15.3359,10.6684 -6.8345,22.8039 -85.4477,16.8028 -85.08097,-16.0181 -7.342,-23.1196 15.87667,-11.4042 76.6796,-9.6016 z"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         id="path4663-2-6-6-1"
+         d="m 1128.2828,950.91908 -102.9722,-0.613 51.8633,-25.0357 51.1089,25.6487 z"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         id="path4665-4-9-3-2"
+         d="m 1128.4713,950.73048 -102.5478,-0.283 51.439,67.61092 51.1088,-67.32792 z"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         id="path4667-9-3-9-8"
+         d="m 1094.5245,1086.3292 -17.162,-59.5955 -17.2564,59.8784 17.8221,12.1643 16.5963,-12.4472 z"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         id="path4669-9-3-4-1"
+         d="m 1194.3847,919.70678 -12.9658,-30.6936 -11.5985,-3.1589 24.5643,33.8525 z"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1022.17,1049.9129 -28.25607,-37.7062 -21.025,-5.8797 -17.0181,-7.94181 -12.8714,-7.52281 79.17057,59.05052 z"
+         id="path5569-1-9-7-8-6"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1025.5212,950.66138 -33.71787,-42.3193 -32.04,11.6008 65.75787,30.7185 z"
+         id="path5563-3-4-4-1-7"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 992.24303,908.82498 84.90087,16.5024 -51.3186,25.5436 -33.58227,-42.046 z"
+         id="path5557-4-9-3-2-3"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 991.76753,908.31528 -31.6239,11.4762 24.8724,-33.6466 6.7515,22.1704 z"
+         id="path5555-1-8-7-9-5"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 972.89613,889.42728 -53.7113,41.2899 41.3688,-11.4817 12.3425,-29.8082 z"
+         id="path5551-1-16-1-3-5"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 915.55543,946.91228 0.6849,-8.2082 2.7485,-7.8664 41.3177,-11.5143 -45.0936,36.3728 0.3425,-8.7839 z"
+         id="path5549-3-3-3-9-0"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 943.49943,983.57478 -8.7544,-4.2878 -12.8868,-13.2411 -6.5866,-10.2921 45.4642,-36.6816 -17.2364,64.5026 z"
+         id="path5547-0-9-9-0-6"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 943.29303,983.91038 16.8882,-64.012 64.83407,30.6645 -81.72227,33.3475 z"
+         id="path5545-3-3-6-8-6"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 994.13133,1004.6998 -20.1716,-3.9263 -17.9651,-8.29582 -12.4168,-8.8008 82.84807,-33.4923 -32.29457,54.51522 z"
+         id="path5543-2-3-4-8-4"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="ccccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 994.84313,1004.1808 21.28487,8.6378 37.0308,5.9757 24.7756,0.3327 -52.1523,-68.61942 -30.93897,53.67282 0,4e-4 z"
+         id="path5541-1-4-2-5-2"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 994.13133,1004.1808 21.47137,8.4759 37.8317,6.3179 23.7819,-0.169 0,7.5253 -24.511,-1.9058 -36.943,-5.9695 -21.38797,-6.229 -0.243,-8.0458 z"
+         id="path5539-7-6-0-0-1"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 943.47713,991.53918 0.3437,-7.6027 12.9994,8.7983 17.666,8.15332 19.6451,3.2927 0.1622,8.2736 -20.578,-5.6782 -17.5705,-8.38141 -12.6679,-6.85561 z"
+         id="path5537-5-1-2-9-3"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="ccccccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 915.62923,964.07098 4.6615,6.9551 13.5394,13.2682 9.5409,7.1886 0.7343,-7.5464 -8.5376,-4.0176 -14.0785,-14.2748 -6.3895,-10.2573 0.5295,8.6842 z"
+         id="path5535-6-5-9-6-4"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1043.9556,1071.1427 -100.37777,-79.45152 76.55927,56.87132 23.8185,22.5802 z"
+         id="path5533-5-6-5-3-5"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1049.7887,1067.7687 -55.90047,-55.2825 27.46417,36.5954 28.4363,18.6871 z"
+         id="path5531-4-1-7-8-5"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1060.1354,1086.6332 -41.2135,-39.1088 31.3529,20.5038 9.8606,18.605 z"
+         id="path5529-2-7-4-5-1"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1076.8163,1026.3561 -24.6385,-2.0293 -36.3746,-6.0028 -21.98737,-6.1171 56.17977,56.1203 26.8207,-41.9711 z"
+         id="path5527-2-2-6-6-3"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="cccc"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         d="m 1059.9976,1086.7015 17.7772,-61.5414 -27.6758,42.6283 9.8986,18.9131 z"
+         id="path5288-1-2-4-1-9"
+         inkscape:connector-curvature="0" />
+      <path
+         inkscape:export-ydpi="9.6288404"
+         inkscape:export-xdpi="9.6288404"
+         inkscape:export-filename="/home/rodrigo/src/fractal/diggems-src/diggems/static/images/saphire2.png"
+         sodipodi:nodetypes="ccccc"
+         id="path4669-6-9-9-1-7"
+         d="m 960.15863,919.82398 12.9659,-30.6936 12.157,-3.0194 -25.1228,33.713 -10e-5,0 z"
+         style="fill:url(#linearGradient4560);fill-opacity:1.0;stroke:none"
+         inkscape:connector-curvature="0" />
+    </g>
   </g>
 </svg>

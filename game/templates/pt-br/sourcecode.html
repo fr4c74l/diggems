@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% comment %}
+
+Copyright 2013 Fractal Jogos e Tecnologia
+Software under Affero GPL license, see LICENSE.txt
+
+{% endcomment %}
+{% load static %}
+{% block title %}Código fonte{% endblock %}
+
+{% block content %}
+<div class="box">
+	<h1>Código fonte</h1>
+	<a style="margin-left: 10px; float: right" href="http://www.gnu.org/licenses/agpl-3.0.html">
+	<img src="http://www.gnu.org/graphics/agplv3-155x51.png" />
+	</a>
+	<p>Este jogo é um <a href="http://www.gnu.org/philosophy/free-sw.pt-br.html">
+	<em>software</em> livre</a>. Isso significa que toda a sua tecnologia e o software
+	que funciona em nosso servidor estão publicamente disponíveis na Internet, para
+	qualquer um baixar e usar, desde que as condições de sua licença de uso, a
+	<a href="http://www.gnu.org/licenses/agpl-3.0.html">GNU Affero General Public
+	License</a>, sejam respeitadas.</p>
+	<p>Em suma, a licença permite que você baixe, use e modifique o <em>software</em>
+	como quiser, seja para estudo, comercialização, disponibilização como serviço,
+	adaptação ou como base para outros produtos e serviços. Tudo isso com a restrição
+	de que, se você redistribuí-lo, ou disponibilizá-lo como serviço pela Internet, você
+	deve fazê-lo sob estas mesmas condições em que você o obteve, inclusive	a
+	possibilidade de o usuário baixar o código-fonte, adicionado de qualquer modificação
+	que você possa ter feito.</p>
+	<p>Segue abaixo os termos da licença original (somente em inglês, infelizmente) com os
+	quais você deve concordar para ter acesso ao código fonte.</p>
+	<div style="margin-left:auto; margin-right:auto; height: 400px; overflow-y: scroll;" class="box">
+{% include "agpl3.html"%}
+	</div>
+	<p><input type="checkbox" id="agreed" onclick="accept_terms();" />"Concordo em obedecer aos termos da licença, me
+	mostre o código fonte."</p>
+	<p id="code" style="visibility: hidden"><a class="button plain" target="_blank" href="http://gitorious.org/diggems/">Código fonte!</a></p>
+</div>
+<script src="{% static "js/terms.js" %}" />
+{% endblock %}

@@ -1,0 +1,838 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:xlink="http://www.w3.org/1999/xlink"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   id="svg2"
+   version="1.1"
+   inkscape:version="0.48.2 r9819"
+   width="125"
+   height="117"
+   sodipodi:docname="t-gameplay-gem.png">
+  <metadata
+     id="metadata8">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title></dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <defs
+     id="defs6">
+    <linearGradient
+       id="linearGradient5234">
+      <stop
+         style="stop-color:#d69d00;stop-opacity:1;"
+         offset="0"
+         id="stop5236" />
+      <stop
+         style="stop-color:#ffff21;stop-opacity:0;"
+         offset="1"
+         id="stop5238" />
+    </linearGradient>
+    <marker
+       inkscape:stockid="Arrow1Lend"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lend"
+       style="overflow:visible;">
+      <path
+         id="path3763"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none;"
+         transform="scale(0.8) rotate(180) translate(12.5,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Torso"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Torso"
+       style="overflow:visible">
+      <g
+         id="g3973"
+         transform="scale(0.7)">
+        <path
+           id="path3975"
+           d="M -4.7792281,-3.2395420 C -2.4288541,-2.8736027 0.52103922,-1.3019943 0.25792722,0.38794346 C -0.0051877922,2.0778819 -2.2126741,2.6176539 -4.5630471,2.2517169 C -6.9134221,1.8857769 -8.5210350,0.75201414 -8.2579220,-0.93792336 C -7.9948090,-2.6278615 -7.1296041,-3.6054813 -4.7792281,-3.2395420 z "
+           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.2500000;marker-start:none;marker-mid:none;marker-end:none" />
+        <path
+           id="path3977"
+           d="M 4.4598789,0.088665736 C -2.5564571,-4.3783320 5.2248769,-3.9061806 -0.84829578,-8.7197331"
+           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-end:none" />
+        <path
+           id="path3979"
+           d="M 4.9298719,0.057520736 C -1.3872731,1.7494689 1.8027579,5.4782079 -4.9448731,7.5462725"
+           style="fill:none;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none" />
+        <rect
+           id="rect3981"
+           transform="matrix(0.527536,-0.849533,0.887668,0.460484,0,0)"
+           y="-1.7408575"
+           x="-10.391706"
+           height="2.7608147"
+           width="2.6366582"
+           style="fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none" />
+        <rect
+           id="rect3983"
+           transform="matrix(0.671205,-0.741272,0.790802,0.612072,0,0)"
+           y="-7.9629307"
+           x="4.9587269"
+           height="2.8614161"
+           width="2.7327356"
+           style="fill-rule:evenodd;stroke-width:1.0000000pt;marker-end:none" />
+        <path
+           id="path3985"
+           transform="matrix(0,-1.109517,1.109517,0,25.96648,19.71619)"
+           d="m 16.779951,-28.685045 c 0,0.335412 -0.271905,0.607317 -0.607317,0.607317 -0.335412,0 -0.607317,-0.271905 -0.607317,-0.607317 0,-0.335412 0.271905,-0.607318 0.607317,-0.607318 0.335412,0 0.607317,0.271906 0.607317,0.607318 z"
+           sodipodi:ry="0.60731727"
+           sodipodi:rx="0.60731727"
+           sodipodi:cy="-28.685045"
+           sodipodi:cx="16.172634"
+           style="fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none"
+           sodipodi:type="arc" />
+        <path
+           id="path3987"
+           transform="matrix(0,-1.109517,1.109517,0,26.82450,16.99126)"
+           d="m 16.779951,-28.685045 c 0,0.335412 -0.271905,0.607317 -0.607317,0.607317 -0.335412,0 -0.607317,-0.271905 -0.607317,-0.607317 0,-0.335412 0.271905,-0.607318 0.607317,-0.607318 0.335412,0 0.607317,0.271906 0.607317,0.607318 z"
+           sodipodi:ry="0.60731727"
+           sodipodi:rx="0.60731727"
+           sodipodi:cy="-28.685045"
+           sodipodi:cx="16.172634"
+           style="fill:#ff0000;fill-opacity:0.75000000;fill-rule:evenodd;stroke:#000000;stroke-width:1.0000000pt;marker-start:none;marker-end:none"
+           sodipodi:type="arc" />
+      </g>
+    </marker>
+    <marker
+       inkscape:stockid="EmptyTriangleOutL"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="EmptyTriangleOutL"
+       style="overflow:visible">
+      <path
+         id="path3921"
+         d="M 5.77,0.0 L -2.88,5.0 L -2.88,-5.0 L 5.77,0.0 z "
+         style="fill-rule:evenodd;fill:#FFFFFF;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8) translate(-6,0)" />
+    </marker>
+    <marker
+       inkscape:stockid="Arrow1Lstart"
+       orient="auto"
+       refY="0.0"
+       refX="0.0"
+       id="Arrow1Lstart"
+       style="overflow:visible">
+      <path
+         id="path3760"
+         d="M 0.0,0.0 L 5.0,-5.0 L -12.5,0.0 L 5.0,5.0 L 0.0,0.0 z "
+         style="fill-rule:evenodd;stroke:#000000;stroke-width:1.0pt;marker-start:none"
+         transform="scale(0.8) translate(12.5,0)" />
+    </marker>
+    <radialGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient4222"
+       id="radialGradient5242"
+       cx="28.279505"
+       cy="52.75758"
+       fx="28.279505"
+       fy="52.75758"
+       r="32.464813"
+       gradientTransform="matrix(1.0986639,1.4241409,-0.96333521,0.74317198,48.033065,-26.724377)"
+       gradientUnits="userSpaceOnUse" />
+    <linearGradient
+       y2="1163.6173"
+       x2="388.14322"
+       y1="1223.7607"
+       x1="259.24786"
+       gradientTransform="translate(-47.312576,-710.94876)"
+       gradientUnits="userSpaceOnUse"
+       id="linearGradient3747"
+       xlink:href="#linearGradient4222"
+       inkscape:collect="always" />
+    <linearGradient
+       id="linearGradient4222">
+      <stop
+         id="stop4224"
+         offset="0"
+         style="stop-color:#f1ee77;stop-opacity:1;" />
+      <stop
+         id="stop4226"
+         offset="1"
+         style="stop-color:#f17477;stop-opacity:0;" />
+    </linearGradient>
+    <linearGradient
+       gradientUnits="userSpaceOnUse"
+       y2="1163.6173"
+       x2="388.14322"
+       y1="1223.7607"
+       x1="259.24786"
+       id="linearGradient4228"
+       xlink:href="#linearGradient4222"
+       inkscape:collect="always"
+       gradientTransform="translate(-47.312576,-710.94876)" />
+    <inkscape:perspective
+       sodipodi:type="inkscape:persp3d"
+       inkscape:vp_x="0 : 0.5 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_z="1 : 0.5 : 1"
+       inkscape:persp3d-origin="0.5 : 0.33333333 : 1"
+       id="perspective3540" />
+    <inkscape:perspective
+       id="perspective3599"
+       inkscape:persp3d-origin="372.04724 : 350.78739 : 1"
+       inkscape:vp_z="744.09448 : 526.18109 : 1"
+       inkscape:vp_y="0 : 1000 : 0"
+       inkscape:vp_x="0 : 526.18109 : 1"
+       sodipodi:type="inkscape:persp3d" />
+  </defs>
+  <sodipodi:namedview
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1"
+     objecttolerance="10"
+     gridtolerance="10"
+     guidetolerance="10"
+     inkscape:pageopacity="0"
+     inkscape:pageshadow="2"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     id="namedview4"
+     showgrid="false"
+     showguides="true"
+     inkscape:guide-bbox="true"
+     inkscape:zoom="2.8526017"
+     inkscape:cx="109.82646"
+     inkscape:cy="38.714955"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg2" />
+  <image
+     width="125"
+     height="117"
+     xlink:href="data:image/png;base64,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
+RU5ErkJggg==
+"
+     id="image10"
+     x="0"
+     y="0" />
+  <rect
+     style="fill:none;stroke:#00f3ff;stroke-width:1.07536364;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:1;stroke-dasharray:none;stroke-dashoffset:0"
+     id="rect4201"
+     width="21.705811"
+     height="23.990635"
+     x="53.064732"
+     y="25.175678"
+     rx="38.903751"
+     ry="23.990635" />
+  <path
+     sodipodi:type="star"
+     style="fill:url(#radialGradient5242);fill-opacity:1.0;stroke:none"
+     id="path5232"
+     sodipodi:sides="10"
+     sodipodi:cx="29.25"
+     sodipodi:cy="52.055084"
+     sodipodi:r1="33.584038"
+     sodipodi:r2="16.792019"
+     sodipodi:arg1="0.54295114"
+     sodipodi:arg2="0.85711041"
+     inkscape:flatsided="false"
+     inkscape:rounded="0.01"
+     inkscape:randomized="0"
+     d="m 58.004239,69.40678 c -0.09487,0.157216 -17.62296,-4.777904 -17.76177,-4.6577 -0.138811,0.120204 2.24029,18.173712 2.071128,18.245138 C 42.144435,83.065645 30.864705,68.770297 30.68175,68.785954 30.498796,68.80161 21.811943,84.805605 21.633105,84.763959 21.454267,84.722313 20.731368,66.527075 20.574152,66.432204 20.416936,66.337332 3.9822124,74.178832 3.8620082,74.040021 3.741804,73.901211 13.851859,58.756045 13.780433,58.586883 13.709007,58.417721 -4.1960823,55.101539 -4.2117387,54.918585 -4.2273951,54.73563 12.853917,48.425475 12.895563,48.246637 12.937208,48.067799 0.40088958,34.860604 0.49576124,34.703388 c 0.0948716,-0.157215 17.62295976,4.777905 17.76176976,4.6577 0.138811,-0.120204 -2.24029,-18.173712 -2.071128,-18.245138 0.169162,-0.07143 11.448892,14.223921 11.631847,14.208265 0.182954,-0.01566 8.869807,-16.019652 9.048645,-15.978006 0.178838,0.04165 0.901737,18.236884 1.058953,18.331756 0.157216,0.09487 16.59194,-7.746629 16.712144,-7.607818 0.120204,0.138811 -9.989851,15.283977 -9.918425,15.453139 0.07143,0.169162 17.976515,3.485343 17.992172,3.668298 0.01566,0.182954 -17.065656,6.49311 -17.107302,6.671948 -0.04164,0.178838 12.494673,13.386032 12.399802,13.543248 z"
+     inkscape:transform-center-x="0.14204205"
+     inkscape:transform-center-y="-3.5214097"
+     transform="matrix(0.43741933,0,0,0.43741933,26.234709,37.247002)" />
+  <g
+     transform="matrix(0.35385679,0,0,0.35385679,-47.038143,-142.58123)"
+     id="ruby"
+     inkscape:label="Camada 1"
+     style="fill:#bf6800;fill-opacity:1">
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 249.6789,582.83962 3.19305,-4.6306 2.49213,-0.76451 2.04433,-1.03266 1.59652,-1.03265 -9.32603,7.46042 z"
+       id="path5569-8-3"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 249.09182,570.15189 4.05044,-5.50274 3.78179,1.45397 -7.83223,4.04877 z"
+       id="path5563-6-1"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 243.09319,566.98749 6.02108,3.18626"
+       id="path5561-0-0"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 253.08945,564.71194 -10.19892,2.14579 6.16477,3.32142 4.03415,-5.46721 z"
+       id="path5557-3-3"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 253.14656,564.64566 3.76535,1.41962 -2.95431,-4.30243 -0.81104,2.88281 z"
+       id="path5555-3-6"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 255.5477,562.28044 6.31803,5.27812 -4.96953,-1.49295 -1.3485,-3.78517 z"
+       id="path5551-6-7"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 262.30171,569.6644 -0.0823,-1.06731 -0.33017,-1.02286 -4.96339,-1.49719 5.41697,4.72952 -0.0411,-1.14216 z"
+       id="path5549-1-3"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 258.94487,574.43159 1.05165,-0.55753 1.56482,-1.79436 0.77446,-1.26565 -5.3273,-4.56996 1.93637,8.1875 z"
+       id="path5547-8-2"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 258.96966,574.47523 -2.02872,-8.32342 -7.78835,3.98727 9.81707,4.33615 z"
+       id="path5545-7-2"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 252.86261,577.17846 2.42316,-0.51055 2.15809,-1.07868 1.4916,-1.14436 -9.80999,-4.25227 3.73714,6.98586 z"
+       id="path5543-0-1"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="ccccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 252.7771,577.11096 -2.5569,1.12318 -4.44841,0.77702 -2.96807,0.0495 6.33775,-9.03769 3.63563,7.08797 0,4e-5 z"
+       id="path5541-5-5"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 252.86261,577.11096 -2.5793,1.10212 -4.54462,0.82152 -2.85686,-0.022 0,0.97851 2.94444,-0.24781 4.43786,-0.77621 2.56929,-0.80995 0.0292,-1.04621 z"
+       id="path5539-1-3"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 258.94755,575.4672 -0.0413,-0.98859 -1.56159,1.14406 -2.12218,1.06016 -2.35989,0.42813 -0.0195,1.07583 2.47198,-0.73833 2.11069,-1.08983 1.52175,-0.89143 z"
+       id="path5537-1-3"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 262.29285,571.89553 -0.55997,0.90437 -1.62645,1.72524 -1.11258,0.89842 0.0292,-0.94495 0.87464,-0.52239 1.70798,-1.85614 0.75077,-1.33375 -0.0636,1.1292 z"
+       id="path5535-0-8"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 246.40293,586.3315 12.63317,-11.0624 -9.19686,7.39493 -3.43631,3.66747 z"
+       id="path5533-3-2"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 246.17663,585.37926 6.71518,-7.26096 -3.2992,4.83109 -3.41598,2.42987 z"
+       id="path5531-0-8"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 244.94975,587.81051 4.88739,-5.11495 -3.7189,2.71744 -1.16849,2.39751 z"
+       id="path5529-0-5"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 242.92989,579.99441 2.95975,-0.26387 4.36958,-0.78055 2.54065,-0.75907 -6.68163,7.36367 -3.18835,-5.56018 z"
+       id="path5527-4-8"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 244.95027,587.71832 -2.1523,-7.93388 3.35817,5.70631 -1.20587,2.22757 z"
+       id="path5288-5-0"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="ccccccccc"
+       id="path4661-4-8"
+       d="m 242.88843,559.04208 9.22733,1.28318 1.84226,1.3872 -0.82101,2.96518 -10.2646,2.18485 -10.22054,-2.08282 -0.88197,-3.00622 1.90722,-1.48288 9.21131,-1.24849 z"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       id="path4663-2-6"
+       d="m 249.003,570.20063 -12.36976,-0.0797 6.23019,-3.25537 6.13957,3.33508 z"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       id="path4665-4-9"
+       d="m 249.02564,570.17611 -12.31878,-0.0368 6.17922,8.79139 6.13956,-8.7546 z"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       id="path4667-9-3"
+       d="m 244.94771,587.80789 -2.06163,-7.74915 -2.07296,7.78594 2.14092,1.58171 1.99367,-1.6185 z"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       id="path4669-9-3"
+       d="m 256.94364,566.14212 -1.55754,-3.99107 -1.3933,-0.41075 2.95084,4.40182 z"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 236.25597,583.07271 -3.39433,-4.90291 -2.52568,-0.76453 -2.04433,-1.03266 -1.54621,-0.97819 9.51055,7.67829 z"
+       id="path5569-1-9-7"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 236.65854,570.16712 -4.05044,-5.50274 -3.84888,1.50843 7.89932,3.99431 z"
+       id="path5563-3-4-4"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 232.66091,564.72716 10.19892,2.1458 -6.16477,3.32141 -4.03415,-5.46721 z"
+       id="path5557-4-9-3"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 232.6038,564.66089 -3.7989,1.49224 2.98786,-4.37504 0.81104,2.8828 z"
+       id="path5555-1-8-7"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 230.33683,562.2049 -6.4522,5.36889 4.96953,-1.49296 1.48267,-3.87593 z"
+       id="path5551-1-16-1"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 223.44864,569.67963 0.0823,-1.06731 0.33017,-1.02286 4.96339,-1.4972 -5.41697,4.72953 0.0411,-1.14216 z"
+       id="path5549-3-3-3"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 226.80549,574.44682 -1.05165,-0.55754 -1.54805,-1.72173 -0.79124,-1.33827 5.4615,-4.76968 -2.07056,8.38722 z"
+       id="path5547-0-9-9"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 226.78069,574.49046 2.02873,-8.32343 7.78834,3.98728 -9.81707,4.33615 z"
+       id="path5545-3-3-6"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 232.88775,577.19369 -2.42316,-0.51053 -2.15809,-1.0787 -1.4916,-1.14436 9.95231,-4.35498 -3.87946,7.08857 z"
+       id="path5543-2-3-4"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="ccccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 232.97326,577.1262 2.5569,1.12317 4.44841,0.77702 2.97621,0.0433 -6.2649,-8.92252 -3.71662,6.97903 0,5e-5 z"
+       id="path5541-1-4-2"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 232.88775,577.1262 2.5793,1.10212 4.54462,0.82151 2.85686,-0.022 0,0.9785 -2.94444,-0.24781 -4.43786,-0.7762 -2.56929,-0.80995 -0.0292,-1.04619 z"
+       id="path5539-7-6-0"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 226.8028,575.48242 0.0413,-0.98857 1.56158,1.14404 2.12217,1.06017 2.3599,0.42814 0.0195,1.07581 -2.47198,-0.73833 -2.1107,-1.08983 -1.52175,-0.89143 z"
+       id="path5537-5-1-2"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="ccccccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 223.45751,571.91076 0.55997,0.90436 1.62645,1.72526 1.14612,0.93473 0.0882,-0.98126 -1.0256,-0.5224 -1.69121,-1.85614 -0.76755,-1.33375 0.0636,1.1292 z"
+       id="path5535-6-5-9"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 238.87301,585.83321 -12.05811,-10.33102 9.19686,7.39493 2.86125,2.93609 z"
+       id="path5533-5-6-5"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 239.57373,585.39449 -6.71518,-7.18834 3.2992,4.75847 3.41598,2.42987 z"
+       id="path5531-4-1-7"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 240.81664,587.84742 -4.95086,-5.08528 3.76634,2.66609 1.18452,2.41919 z"
+       id="path5529-2-7-4"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 242.82047,580.00964 -2.95975,-0.26387 -4.36959,-0.78054 -2.64128,-0.7954 6.74872,7.29728 3.2219,-5.45747 z"
+       id="path5527-2-2-6"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="cccc"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       d="m 240.80009,587.8563 2.13553,-8.00218 -3.32462,5.54293 1.18909,2.45925 z"
+       id="path5288-1-2-4"
+       inkscape:connector-curvature="0" />
+    <path
+       inkscape:export-ydpi="123"
+       inkscape:export-xdpi="123"
+       inkscape:export-filename="/home/rodrigo/desenhos/objetos/gems/ruby.png"
+       sodipodi:nodetypes="ccccc"
+       id="path4669-6-9-9"
+       d="m 228.80671,566.15736 1.55755,-3.99107 1.46039,-0.39261 -3.01793,4.38368 -1e-5,0 z"
+       style="fill:#bf6800;fill-opacity:1;stroke:none"
+       inkscape:connector-curvature="0" />
+    <animateTransform
+       fill="freeze"
+       calcMode="spline"
+       keySplines="0.5 0  0.8 0.5 "
+       id="fall"
+       attributeName="transform"
+       attributeType="XML"
+       begin="0s"
+       dur="0.4s"
+       to="0, 136"
+       from="0, 0"
+       additive="sum"
+       type="translate" />
+    <animateTransform
+       type="translate"
+       additive="sum"
+       from="0,0"
+       to="0, -136"
+       dur="1s"
+       begin="fall.end"
+       attributeType="XML"
+       attributeName="transform"
+       id="bounce"
+       keySplines="0.2 0.5  0.5 1"
+       calcMode="spline" />
+    <animateTransform
+       additive="sum"
+       dur="0.2s"
+       attributeType="XML"
+       attributeName="transform"
+       begin="fall.end-0.1s"
+       to="1.1,0.9"
+       from="1,1"
+       type="scale"
+       id="squeeze" />
+    <animateTransform
+       accumulate="sum"
+       id="squeeze-offset"
+       type="translate"
+       from="0,0"
+       to="-13,0"
+       begin="fall.end-0.1s"
+       attributeName="transform"
+       attributeType="XML"
+       dur="0.2s"
+       additive="sum" />
+    <animateTransform
+       additive="sum"
+       dur="0.4s"
+       attributeType="XML"
+       attributeName="transform"
+       begin="squeeze.end"
+       to="0,0"
+       from="-13,0"
+       type="translate"
+       id="unsqueeze-offset" />
+    <animateTransform
+       id="unsqueeze"
+       type="scale"
+       from="1.1,0.9"
+       to="1,1"
+       begin="squeeze.end"
+       attributeName="transform"
+       attributeType="XML"
+       dur="0.4s"
+       additive="sum" />
+  </g>
+</svg>

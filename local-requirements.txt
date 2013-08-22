@@ -1,0 +1,5 @@
+Django==1.5.1
+psycopg2
+cython
+git+https://github.com/lvella/gevent.git
+South

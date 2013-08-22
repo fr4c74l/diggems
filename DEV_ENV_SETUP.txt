@@ -1,0 +1,79 @@
+For development:
+
+1) Install Postgres, libpq-dev and python2.7-dev
+$> su -c 'apt-get install postgresql libpq-dev'
+$> su -c 'zypper install postgresql libpqxx-devel'
+
+2) Create the database
+$> sudo su postgres
+$> createuser <user>
+$> createdb -O <user> diggems
+
+3) Install some OS dependencies
+DEBIAN: su -c 'apt-get install libev-dev'
+OPENSUSE: su -c 'zypper install libev-devel'
+
+
+4) Configure the virtual environment: {optional}
+4.1) Install pythonbrew
+REF: https://pypi.python.org/pypi/pythonbrew/
+
+$ curl -kL http://xrl.us/pythonbrewinstall | bash
+
+After that, pythonbrew installs itself to ~/.pythonbrew.
+
+4.2) Add the following line to the end of your ~/.bashrc::
+#------------------------------------------------------------------------
+[[ -s $HOME/.pythonbrew/etc/bashrc ]] && source $HOME/.pythonbrew/etc/bashrc
+#------------------------------------------------------------------------
+
+4.3) Install versioned python (2.7+) and virtualenvwrapper
+$ pythonbrew install --configure="--enable-threads" 2.7.3
+$ pythonbrew switch 2.7.3
+$ pip install virtualenvwrapper
+
+4.4) Install virtualenv
+DEBIAN: su -c 'apt-get install virtualenv'
+OPENSUSE: su -c 'zypper install virtualenv'
+
+4.5) Create a directory: ~/.virtualenvs
+$ mkdir ~/.virtualenvs
+
+4.6) Add the following lines in the ~/.bashrc
+------------------------------------------------------------------------
+export WORKON_HOME=$HOME/.virtualenvs
+export VIRTUALENVWRAPPER_PYTHON=$HOME/.pythonbrew/pythons/Python-2.7.3/bin/python
+source $HOME/.pythonbrew/pythons/Python-2.7.3/bin/virtualenvwrapper.sh
+------------------------------------------------------------------------
+
+5) Install virtual environment:
+$ sudo apt-get install virtualenv virtualenvwrapper
+
+6) Create the virtual environment:
+$ mkvirtualenv --no-site-packages diggemsenv
+
+7) Change to diggemsenv and install Diggems requirements
+$ workon diggemsenv
+$ pip install -r local-requirements.txt
+
+8) Create django database and run server
+
+8.1) Add the followin line in the ~/.bashrc
+------------------------------------------------------------------------
+export WORKON_HOME=$HOME/.virtualenvs
+
+8.2)
+$ workon diggemsenv
+
+8.3)
+$ python manage.py syncdb
+$ python manage.py createcachetable cache
+$ python manage.py runserver
+
+8.4) Aply translatinons
+LANGUAGE = pt_BR, en, es, etc...
+$ cd game
+$ ../manage.py makemessages -l <LANGUAGE>
+$ ../manage.py makemessages -d djangojs -l <LANGUAGE>
+$ ../manage.py compilemessages
+

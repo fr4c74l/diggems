@@ -1,0 +1,69 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-08-13 11:08-0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+
+#: static/js/game.js:302 static/js/game.js.c:344
+msgid "Your turn! Play!"
+msgstr "Sua vez! Jogue!"
+
+#: static/js/game.js:329
+msgid "DigGems: Game "
+msgstr "DigGems: Jogo "
+
+#: static/js/game.js:364
+msgid "Wait for your turn."
+msgstr "Espere sua vez."
+
+#: static/js/game.js:367
+msgid "Game over, "
+msgstr "O jogo acabou, "
+
+#: static/js/game.js:373
+msgid "you win!"
+msgstr "você venceu!"
+
+#: static/js/game.js:376
+msgid "you lose."
+msgstr "você perdeu."
+
+#: static/js/game.js:395
+msgid "Red's turn."
+msgstr "Vez do vermelho."
+
+#: static/js/game.js:396
+msgid "Blue's turn."
+msgstr "Vez do azul."
+
+#: static/js/game.js:397
+msgid "Game is over, red player won."
+msgstr "O jogo acabou, o vermelho venceu."
+
+#: static/js/game.js:398
+msgid "Game is over, blue player won."
+msgstr "O jogo acabou, o azul venceu."
+
+#: static/js/game.js:399
+msgid "Game is over, red player won by resignation."
+msgstr "O jogo acabou, o vermelho venceu por desistência."
+
+#: static/js/game.js:400
+msgid "Game is over, blue player won by resignation."
+msgstr "O jogo acabou, o azul venceu por desistência."
+
+#~ msgid "Guest"
+#~ msgstr "Visitante"

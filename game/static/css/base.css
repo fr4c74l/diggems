@@ -1,3 +1,6 @@
+/* Copyright 2013 Fractal Jogos e Tecnologia
+ * Software under Affero GPL license, see LICENSE.txt */
+
 @charset "utf-8";
 
 @font-face {
@@ -19,14 +22,48 @@
 	/* Free font by Steeve Gruson */
 }
 
-html {
-	background:url('/static/images/bg-diggems.jpg') repeat-x left top; 
+body {
+	background:url('/static/images/bg-diggems.jpg') repeat-x fixed;
 	background-color: #543116; 
 	background-size: auto 100%;
 	font-family: sans;
 	font-size: small;
-	z-index: -1;
-	min-height: 100%;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	width: 100%;
+	height:100%;
+	min-width:800px;
+}
+
+.container {
+	max-width: 1200px;
+	margin: 0 auto;
+}
+
+#money1, #money2 {
+	width: 120px;
+	height: 600px;
+}
+
+#money2 {
+	float:right;
+}
+
+.adsbygoogle {
+	position: relative;
+	top: 20px;
+}
+
+.plain {
+	cursor: default;
+	color: inherit;
+	text-decoration: inherit;
+}
+
+.undlin:hover {
+	cursor: pointer;
+	text-decoration: underline;
 }
 
 .box {
@@ -40,14 +77,34 @@ html {
 	-o-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fff;
 	-moz-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fff;
 	-webkit-box-shadow: 0px 0px 5px black, inset 0px 0px 3px #fff; 
-	text-shadow: 0.1em 0.1em 0.2em #535353;
 	font-family: Diavlo;
+}
+
+.box_border_top {
+	padding: 6px;
+	background: rgba(255,255,255,0.5);
+	-webkit-border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-moz-border-radius-topleft: 5px;
+	-moz-border-radius-topright: 5px;
+	border-top-left-radius: 5px;
+	border-top-right-radius: 5px;
+	box-shadow: 0px 0px 5px black;
+	-o-box-shadow: 0px 0px 5px black;
+	-moz-box-shadow: 0px 0px 5px black;
+	-webkit-box-shadow: 0px 0px 5px black; 
+	font-family: Diavlo;
+}
+
+.box h1, h2, h3, h4, h5 {
+	color: #333;
+	text-shadow: 0.05em 0.05em 0.05em #535353;
 }
 
 .button {
 	min-width: 15px;
 	padding: 4px;
-	margin: 0px 5px 0px 0px;
+	margin: 0px;
 	background-color: #a0dC48;
 	display: block;
 	-moz-border-radius: 3px;
@@ -73,41 +130,151 @@ html {
 	border: 1px inset #6aa040;
 }
 
+input[type=text] {
+	border: 0;
+	-webkit-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+	-moz-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+	-o-box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+	box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5), 0 1px 0 rgba(255, 255, 255, 0.5);
+	background-color: rgba(255, 255, 255, 0.85);
+	transition: background-color 0.2s linear;
+	-webkit-transition: background-color 0.2s linear;
+	-moz-transition: background-color 0.2s linear;
+	-o-transition: background-color 0.2s linear;
+}
+
+input[type=text]:hover,
+input[type=text]:focus {
+	background-color: rgba(255, 255, 255, 1); 
+}
+
 .clr {
-	clear:both;
-	padding:0;
-	margin:0;
-	width:100%;
-	font-size:0;
-	line-height:0;
-	display:none;
-}
-
-ul {
-	list-style:none;
+	clear: both;
 	padding: 0;
 	margin: 0;
+	width: 100%;
+	font-size: 0;
+	line-height: 0;
+	display: none;
 }
 
-li {
-	list-style:none;
-	padding: 0;
-	margin: 0;
+a {
+	cursor: pointer;
+	font-weight: bold;
+	color: #2a595b;
+	text-decoration: none;
+}
+
+a:hover {
+	color: #3f888b;
+}
+
+/* IMAGES */
+img.top {
+	vertical-align: top;
+}
+
+img.thumb {
+	height: auto;
+	width: 40px;
+	margin: 0 3px;
+	padding: 2px;
+}
+
+img.middle {
+	vertical-align: middle;
+	margin: 1px;
+}
+
+img.center {
+	display: block;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+img.rightclear { 
+	float: right;
+	clear: right;
+	margin: 4px;
+}
+
+div#image_container {
+	display: inline-block;
+	width: 100%;
+}
+
+#image_container img {
+    padding: 0 9px;
+}
+
+.tip_jar {
+	padding:3px;
+	display: block;
+	width: 100px;
+	height: 95px;
+	background: url('/static/images/empty_jug.png');
+	background-repeat: no-repeat;
+}
+.tip_jar:hover {
+	background: url('/static/images/full_jug.png');
+	background-repeat: no-repeat;
+}
+
+/* LANGUAGE MENU */
+.lang_button {
+  display: inline;
+  border: none;
+  color: #333;
+  font-weight: normal;
+}
+
+.lang_button:hover {
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  color: #000;
+  font-weight: bold;
+  border: 1px #666 solid;
+}
+
+.lang_button#selected {
+  -moz-border-radius: 3px;
+  -o-border-radius: 3px;
+  -webkit-border-radius: 3px;
+  border-radius: 3px;
+  font-weight: bold;
+  border: 1px #666 solid;
+  margin: 1px 3px;
+  padding: 1px;
+}
+
+#langbar {
+  font-family: Diavlo;
+  color: #000;
+  text-align:right;
+  padding-top:5px;
+}
+
+#langbar form {
+  margin:0px;
+  display:inline;
+  width:200px;
 }
 
 /* HEADER */
 #header {
-	padding:1em;
-	min-width:521px; 
+  clear:both;
 }
 
 .logo {
-	vertical-align: middle;
-	padding-left:10px;
+  vertical-align: middle;
+  padding-left:10px;
 }
 
 #title {
 	font-family: GrutchShaded;
+	font-weight: normal;
 	text-shadow: 0.1em 0.1em 0.2em #535353;
 	color: #551a8b;
 	font-size: 68px;
@@ -115,59 +282,224 @@ li {
 	letter-spacing: 4pt;
 }
 
+#beta {
+  position: absolute;
+  right: 0px;
+  bottom: 0px;
+  vertical-align: bottom;
+}
+
 #subtitle {
+	font-weight: normal;
 	color: #9a64c8;
 }
 
+/* USER SETTINGS MENU */
 #user_info {
-	float: right; 
-	top: 20px;
-	position: relative;
-}
-
-#user_info li {
-	float: left;
-}
-
-#user_info ul {
+  font-family: Diavlo;
+  font-weight: bold;
+  float: right;
+  position: relative; 
+  min-width: 205px; 
+  display: block;
+  margin: 5px;
 }
 
 #user_stats {
-	padding-left: 5px;
+  float: right;
+  display: inline-block;
+  vertical-align: top;
+  margin: 2px;
+}
+
+#logged_as {
+  display: inline-block;
+}
+
+#score {
+  display: block;
+}
+
+#auth_username {
+  font-weight: normal;
+  padding-left: 2px;
 }
 
 #auth_user_pic {
-	padding: 0 5px;
+  float: left;
+  width: 60px;
+  height: 60px;
+  margin: 0 5px;
+  padding: 3px;
 }
 
 #auth_fb_button {
-	float: right;
+  padding: 4px 0px;
 }
 
 #auth_logout {
+  padding: 4px 0px;
+}
+
+/* CONTENT */
+#content {
+	margin: 0 auto;
+	padding-top: 20px;
+}
+/*
+.content_wrapper {
+	padding: 50px 0px;
+}
+*/
+#content h1 {
+	text-decoration: underline;
+}
+
+#content p {
+	text-align: justify;
+}
+
+/* CONTENT COLUMNS */
+
+.threecol {
+	width: 30%;
+}
+
+.fourcol {
+	width: 22%;
+	padding:10px;
+}
+
+.colleft{
+	padding-top: 10px;
+	float: left;
+}
+
+.colright {
+	padding-top: 10px;
 	float: right;
-	position: relative;
-	bottom: -9px;
+}
+
+/* PAGE COLUMNS 
+This wonderful 3 column liquid Layout was made by Matthew James Taylor and is 
+available in: 
+http://matthewjamestaylor.com/blog/perfect-multi-column-liquid-layouts
+*/
+
+.page_columns {
+	position:relative;
+	clear:both;
+	float:left;
+	width:100%;			/* width of whole page */
+	overflow:hidden;
+	margin-bottom: 20px;
+}
+
+.page_colright,
+.page_colmid,
+.page_colleft {
+	float:left;
+	width:100%;			/* width of page */
+	position:relative;
+}
+
+.colm,
+.coll,
+.colr {
+	float:left;
+	position:relative;
+	padding:0 0 1em 0;
+}
+
+/* right column */
+.page_threecol {
+}
+
+/* center column */
+.page_threecol .page_colmid {
+	right:14%;			/* width of the right column */
+}
+
+/* left column */
+.page_threecol .page_colleft {
+	padding: 50px 0px;
+	right:72%;			/* width of the middle column */
+}
+.page_threecol .colm {
+	width:70%;			/* width of center column content (column width minus 
+						padding on either side) */
+	left:101%;			/* 100% plus left padding of center column */
+}
+.page_threecol .coll {
+	width:12%;			/* Width of left column content (column width minus 
+						padding on either side) */
+	left:17%;			/* width of (right column) plus (center column left and 
+						right padding) plus (left column left padding) */
+}
+.page_threecol .colr {
+	width:12%;			/* Width of right column content (column width minus 
+						padding on either side) */
+	left:91%;			/* Please make note of the brackets here:
+						(100% - left column width) plus (center column left and 
+						right padding) plus (left column left and right padding)
+						 plus (right column left padding) */
+}
+
+.wrap {
+	position:relative;
+}
+
+.inner_wrap {
+	padding-bottom: 250px;
+}
+
+.inner_wrap:after {
+	content:" ";
+	display:block;
+	clear:both;
+}
+
+/* FOOTER */
+#footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	height: 200px;
+	clear: both;
+	font-family: Diavlo;
+	font-weight: bold;
 }
 
 #footer_container {
-	display: block;
+	overflow: hidden;
 	margin: 0 auto;
+	padding-bottom: 10px;
+}
+
+#footer_container h3 {
+	color: #f4f0cb;
+	border-bottom: 1px solid #443b2b;
+}
+
+#footer_container ul {
+	list-style: none;
+	padding: 0;
+	margin: 0;
 }
 
 #footer_container li {
-	float: left;
-	padding-left: 20px;
-	list-style-type: none;
+	margin: 0;
+	padding: 3px 0px;
+	list-style: none;
 }
 
-#footer_container li a {
-	color: white;
-	clear: both;
+#footer_container a {
+	color: #100e0a;
 	white-space: normal;
 	text-decoration: none;
 }
 
-#footer_container li a:hover {
+#footer_container a:hover {
+	color: #f4f0cb;
 	text-decoration: underline;
 }
