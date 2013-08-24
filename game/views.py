@@ -179,7 +179,7 @@ def index(request):
                }
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'in_fb': request.in_fb}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -227,7 +227,7 @@ def join_game(request, game_id):
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile, status=404)
+        return render_with_extra('game404.html', profile,{'in_fb': request.in_fb}, status=404)
 
     # If already playing this game, redirect to game screen
     if game.what_player(profile):
@@ -237,7 +237,7 @@ def join_game(request, game_id):
     token = request.REQUEST.get('token')
     if game.state != 0 or (game.token and
                            token != game.token):
-        return render_with_extra('game403.html', profile, status=403)
+        return render_with_extra('game403.html', profile,{'in_fb': request.in_fb}, status=403)
 
     # If we got here via GET, return a page that will make the client/user
     # retry via POST. Done so that Facebook and other robots do not join
@@ -349,7 +349,7 @@ def game(request, game_id):
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile, status=404)
+        return render_with_extra('game404.html', profile,{'in_fb': request.in_fb}, status=404)
 
     if profile.facebook:
         user_id = profile.facebook.name
@@ -389,6 +389,8 @@ def game(request, game_id):
         masked = mine_mask(game.mine, game.state in (3, 4))
         if masked.count('?') != 256:
             data['mine'] = masked
+
+    data['in_fb'] = request.in_fb
 
     return render_with_extra('game.html', profile, data)
 
@@ -501,7 +503,7 @@ def move(request, game_id):
 
 def donate(request):
     profile = UserProfile.get(request)
-    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
+    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL, 'in_fb': request.in_fb})
 
 def info(request, page):
     actual_locale = get_language()
@@ -509,7 +511,7 @@ def info(request, page):
         raise Http404
     for locale in (actual_locale, 'en'):
         try:
-            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request))
+            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request),{'in_fb': request.in_fb})
         except TemplateDoesNotExist:
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
