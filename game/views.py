@@ -334,8 +334,10 @@ def rematch(request, game_id):
     me, player = pdata
     if me == 1:
         obj.p1_click = True
+        post_update(game.channel, 'r\n' + json.dumps({'p1_click':True,'p2_click':False}))
     elif me == 2:
         obj.p2_click = True
+        post_update(game.channel, 'r\n' + json.dumps({'p1_click':False,'p2_click':True}))
 
     obj.save()
 
@@ -349,7 +351,7 @@ def rematch(request, game_id):
         cg.p2 = p
         cg.state = 1
         cg.save()
-        post_update(game.channel, 'r\n' + game_id)
+        post_update(game.channel, 'r\n' + json.dumps({'p1_click':True,'p2_click':True,'game_id':cg.id}))
     
     return HttpResponse()
 

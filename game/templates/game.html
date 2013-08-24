@@ -84,11 +84,27 @@ Software under Affero GPL license, see LICENSE.txt
 		</script> 
 		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e" />{% endif %}
 	</div>
-  {% if state >= 3 %}
-  <div class="button" id="rematch_button" onclick="rematch({{game_id}});"> {% trans "Rematch" %} </div>
-  {% endif %}
   </div>
 </div>
+
+{% if state >= 3 %}
+<div class="box" id="rematch_box">
+  <div> 
+    <div class="rematch_column">
+    <a id="p1_link" class="plain{% if p1_info %} undlin{% endif %}" target="_blank"{% if p1_info %} href="//facebook.com/{{ p1_info.uid }}/"{% endif %}>
+			<img id="p1_pic" width="25" height="25" style="{% if not p1_info %}display: none;{% endif %}"{% if p1_info %} src="//graph.facebook.com/{{ p1_info.uid }}/picture"{% endif %} /></a>
+      <p id="rematch_status_p1"> Ready </p>
+    </div>
+
+    <div class="rematch_column">
+    <a id="p2_link" class="plain{% if p2_info %} undlin{% endif %}" target="_blank"{% if p2_info %} href="//facebook.com/{{ p2_info.uid }}/"{% endif %}>
+			<img id="p2_pic" width="25" height="25" style="{% if not p2_info %}display: none;{% endif %}"{% if p2_info %} src="//graph.facebook.com/{{ p2_info.uid }}/picture"{% endif %} /></a>
+      <p id="rematch_status_p2"> Ready </p>
+    </div>
+  </div>
+  <div class="button" id="rematch_button" onclick="rematch({{ game_id }});"> {% trans "Rematch" %} </div>
+</div>
+{% endif %}
 
 <!-- TODO: Have button to disable the audio. -->
 <audio id="ring" preload="auto">

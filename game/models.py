@@ -148,4 +148,3 @@ class Rematch(models.Model):
     game = models.OneToOneField(Game, primary_key=True)
     p1_click = models.BooleanField(default=False)
     p2_click = models.BooleanField(default=False)
-

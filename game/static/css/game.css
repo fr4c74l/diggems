@@ -18,7 +18,7 @@
     margin-bottom: 25px;
 }
 
-#snd_pts_box{
+#snd_pts_box {
     text-align: left;
     display: block;
     position: absolute;
@@ -27,8 +27,35 @@
     left: 153px;
 }
 
-#rematch_button{
+#rematch_button {
+    display: none;
 }
+
+#rematch_box {
+    width: 416px;
+    margin: 10px auto;
+}
+
+.rematch_column {
+    display: inline-block;
+    width: 49%;
+}
+
+.rematch_column p {
+    text-align: center !important;
+}
+
+.rematch_column img {
+    margin: 0 auto !important;
+}
+
+#rematch_status_p1,#rematch_status_p2 {
+    visibility: hidden;
+    color: #0c0;
+    font-weight: bold;
+    font-size: medium;
+}
+
 #timer_box {
     text-align: center;
     font-size: 150%;

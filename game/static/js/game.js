@@ -361,7 +361,27 @@ function blue_player_display(info) {
     }
 }
 
-function handle_event(msg) {
+function handle_event_rematch(msg)
+{
+  var m = JSON.parse(msg);
+  if (m.p1_click)
+  {
+    document.getElementById('rematch_status_p1').style.visibility='visible';
+  }
+
+  if (m.p2_click)
+  {
+    document.getElementById('rematch_status_p2').style.visibility='visible';
+  }
+
+  if (m.p1_click && m.p2_click && m.game_id)
+  {
+    var url = '/game/' + m.game_id;
+    window.location = url;
+  }
+}
+
+function handle_event_game(msg) {
     var lines = msg.split('\n');
     var seq_num = parseInt(lines[0]);
 
@@ -428,7 +448,7 @@ function register_event() {
 		register_event.etag = event_request.getResponseHeader('Etag')
 		params.last_change = event_request.getResponseHeader('Last-Modified')
 
-		handle_event(event_request.responseText);
+		handle_event_game(event_request.responseText);
 		register_event();
 	    }
 	    else {
@@ -633,8 +653,9 @@ function init() {
 
     // Receive updates from server
     event = new Event('/event/' + params.channel, params.last_change);
-    event.register_handler('g', handle_event);
-
+    event.register_handler('g', handle_event_game);
+    event.register_handler('r', handle_event_rematch);
+    
     if(params.player) { // Not a spectator
 	// Expect for user input
 	canvas.addEventListener('click', on_click, false);
@@ -718,6 +739,7 @@ function rematch(game_id)
   button_request.open('POST', url, true);
   button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	button_request.send(null);
+  document.getElementById("rematch_button").style.display = 'none';
 }
 
 // Load resources
