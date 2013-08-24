@@ -1,5 +1,5 @@
 from django.conf.urls import include, patterns
-from django.conf.urls.i18n import i18n_patterns
+#from django.conf.urls.i18n import i18n_patterns
 
 _in_game = patterns('game.views',
     (r'^move/$', 'move'),

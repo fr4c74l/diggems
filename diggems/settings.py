@@ -154,6 +154,7 @@ CACHES = {
 }
 
 ROOT_URLCONF = 'diggems.urls'
+WEBSOCKET_URLCONF = 'game.ws_urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'diggems.wsgi.application'

@@ -8,7 +8,6 @@ import models
 import http_cli
 from django.core.cache import cache
 from django.db.models import F
-from https_conn import https_opener
 from diggems.settings import EVENT_SERVER, FB_APP_ID, FB_APP_KEY
 
 ## Tile codes:

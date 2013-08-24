@@ -14,7 +14,7 @@ from gevent.socket import wait_read, wait_write
 from gevent_fastcgi.server import FastCGIServer
 from gevent_fastcgi.wsgi import WSGIRequestHandler
 
-from async_events import channel
+from async_events import channel, ws_dispatcher
 from diggems import wsgi
 
 # Patch to make psycopg2 green
@@ -56,7 +56,7 @@ def server(worker_id):
         except: pass
 
     # Serve wepsocket events application
-    ws_server = pywsgi.WSGIServer(ws_sockname, websocket_app, handler_class=WebSocketHandler)
+    ws_server = pywsgi.WSGIServer(ws_sockname, ws_dispatcher.dispatcher, handler_class=WebSocketHandler)
 
     # Serve the Django application
     http_server = FastCGIServer(http_sockname, WSGIRequestHandler(wsgi.application), max_conns=50000)

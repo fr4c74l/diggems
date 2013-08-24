@@ -1,3 +1,6 @@
+# Copyright 2013 Fractal Jogos e Tecnologia
+# Software under Affero GPL license, see LICENSE.txt
+
 import gevent
 import gipc
 import weakref
@@ -116,6 +119,15 @@ def _ws_serialize(websocket):
     return (websocket.handler.socket.fileno(), uid)
 
 def _ws_from_fd(fd):
+    class PassiveWebSocket(WebSocket):
+        def __init__(self, *args, **kwargs):
+            WebSocket.__init__(self, *args, **kwargs)
+
+        def __del__(self):
+            # Deleting the object must not close it, since it may
+            # still br in use by the other process...
+            pass
+
     class RecvStream(object):
         __slots__ = ('read', 'write')
 
@@ -130,7 +142,7 @@ def _ws_from_fd(fd):
         def __init__(self, fd):
             self.logger = create_logger('ws_'.format(fd), DEBUG)
 
-    return WebSocket(None, RecvStream(fd), PseudoHandler(fd))
+    return PassiveWebSocket(None, RecvStream(fd), PseudoHandler(fd))
 
 def _ws_deserialize(ws_fd, ws_uid):
     try:
