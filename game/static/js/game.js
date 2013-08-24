@@ -798,11 +798,14 @@ function turn_timeout()
 	{
 		clearInterval(reset_counter.int);
 		timeleft = 0;
-		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2))
-		{
-		  document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
-		  document.getElementById("timeout_buttons").style.display = 'block';
-		}	
+		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2)) {
+			document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
+//			document.getElementById("timeout_buttons").style.display = 'block';
+			$("#timeout_buttons").animate({
+			width: "toggle",
+			left: "126px",
+			opacity: "toggle"}, 200);
+		}
 	}
 	document.getElementById("clock").innerHTML = Math.round(timeleft);
 }
@@ -842,6 +845,10 @@ function claim_game(terminate)
     button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   }
 	button_request.send(data);
+	$("#timeout_buttons").animate({
+	width: "toggle",
+	left: "183px",
+	opacity: "toggle"}, 200);
 }
 
 // Load resources
