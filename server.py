@@ -65,7 +65,7 @@ def server(worker_id):
     ws_server = pywsgi.WSGIServer(ws_sock_listener, ws_dispatcher.dispatcher, handler_class=WebSocketHandler)
 
     # Serve the Django application
-    http_server = FastCGIServer(http_sockname, WSGIRequestHandler(wsgi.application), max_conns=50000)
+    http_server = FastCGIServer(http_sockname, WSGIRequestHandler(wsgi.application), max_conns=5000)
 
     print 'Worker {} serving...'.format(worker_id)
     gevent.spawn(watcher, ws_server.serve_forever)

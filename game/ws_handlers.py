@@ -11,8 +11,14 @@
 
 # TODO: Find out how to deal with database and auth cookies and stuff...
 
+from geventwebsocket import WebSocketError
+
 def game_events(request, ws, game_id):
     pass
 
 def main_chat(request, ws):
-    pass
+    try:
+        while 1:
+            print ws.receive()
+    except WebSocketError:
+        print "Done with this websocket..."

@@ -43,10 +43,8 @@ class Channel(object):
     def post_message(self, msg):
         seqnum = self.next_seqnum
         self.next_seqnum += 1
-        # Message must not be bigger than 64k...
-        # TODO: ensure it.
-        msg = struct.pack("<HI", len(msg), seqnum)
 
+        msg = '\n'.join((str(seqnum), msg))
         self.msg_history[seqnum] = msg
 
         undelivering = [sb for sb in self.subscribers.itervalues() if not sb.deliverer]
@@ -60,6 +58,7 @@ class Channel(object):
                 spawn_count = 0
                 gevent.sleep(0)
 
+        # Messages will be held in channel for 5 minutes.
         gevent.spawn_later(300, self._trash_old, seqnum)
 
     def _trash_old(self, seqnum):
@@ -82,7 +81,7 @@ class Channel(object):
                 if seqnum < self.first_seqnum:
                     seqnum = self.first_seqnum
                 msg = self.msg_history[seqnum]
-                ws.send(msg)
+                ws.send(msg, False)
                 seqnum += 1
         except socket.error, WebSocketError:
             # We want no part on websockts that can't deliver

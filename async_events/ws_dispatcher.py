@@ -11,6 +11,7 @@ _resolver = urlresolvers.RegexURLResolver(r'^/', settings.WEBSOCKET_URLCONF)
     
 # WSGI-like API to match needs of gevent-websocket
 def dispatcher(environ, start_response):
+    print 'WebSocket connection started.'
     try:
         websocket = environ["wsgi.websocket"]
     except KeyError:
