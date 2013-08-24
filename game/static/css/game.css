@@ -11,65 +11,24 @@
 #p1_pts_box {
     background: rgba(255,0,0,0.25);
     text-align: left;
-    
     display: block;
     position: relative;
     width: 70px;
     margin-bottom: 25px;
 }
 
-#snd_pts_box {
-    text-align: left;
-    display: block;
-    position: absolute;
-    top: 0px;
-    width: 50px;
-    left: 153px;
-}
-
-#rematch_button {
-    display: none;
-}
-
-#rematch_box {
-    width: 416px;
-    margin: 10px auto;
-}
-
-.rematch_column {
-    display: inline-block;
-    width: 49%;
-}
-
-.rematch_column p {
-    text-align: center !important;
-}
-
-.rematch_column img {
-    margin: 0 auto !important;
-}
-
-#rematch_status_p1,#rematch_status_p2 {
-    visibility: hidden;
-    color: #0c0;
-    font-weight: bold;
-    font-size: medium;
-}
-
-#timer_box {
+#middle_box {
     text-align: center;
     font-size: 150%;
     display: block;
     position: absolute;
-    top: 0px;
-    width: 50px;
+    top: -25px;
     left: 183px;
 }
 
 #p2_pts_box {
     background: rgba(0,0,255,0.25);
     text-align: right;
-    
     display: block;
     position: absolute;
     top: 0px;
@@ -144,31 +103,70 @@
 
 #message {
     text-align: center;
+    height: 35px;
 }
 
 #join_link {
     width: 390px;
 }
 
-#timeout_terminate {
-  text-align: center;
-  display: block;
-  /*position: absolute;*/
+#timer_box {
+	margin: 5px 0;
+	position: relative;
+	top: 0;
+	width: 50px;
 }
 
+#give_up{
+	display: block;
+	position: relative;
+	bottom: 0;
+}
+
+#timeout_terminate,
 #timeout_claim {
-  text-align: center;
-  display: block;
-  /*position: absolute;*/
+	text-align: center;
+	display: block;
 }
 
 #timeout_buttons {
-  top: 0px;
-  left: 125px;
-  display: none;
-	width: 180px;
+	display: none;
 	position: absolute;
+	top: -10px;
+	left: 36%;
 	padding: 3px;
+	width: 180px;
+	z-index: 101;
+}
+
+#rematch_button {
+    display: none;
+}
+
+#rematch_box {
+    width: 416px;
+    margin: 10px auto;
+}
+
+.rematch_column {
+    display: inline-block;
+    width: 49%;
+}
+
+.rematch_column p {
+    text-align: center !important;
+}
+
+.rematch_column img {
+    margin: 0 auto !important;
+}
+
+#rematch_status_p1,
+#rematch_status_p2 {
+    visibility: hidden;
+    color: #0c0;
+    font-weight: bold;
+    font-size: medium;
 }
 
 img.tntbtn {

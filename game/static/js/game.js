@@ -5,7 +5,6 @@
 var ctx;
 var mine;
 var event;
-var move_request = new XMLHttpRequest();
 var button_request = new XMLHttpRequest();
 
 var images = {};
@@ -119,46 +118,114 @@ function Tile(x0,y0) {
   this.hover = false;
   this.x = x0 * 26;
   this.y = y0 * 26;
+  
+  // Activity indication
+  this.blink_state = 0;
+  this.ai = null;
 }
 
 Tile.prototype.draw = function() {
-    var TEXT_COLOR = [
-	'rgb(0,0,255)',
-	'rgb(0,160,0)',
-	'rgb(255,0,0)',
-	'rgb(0,0,127)',
-	'rgb(160,0,0)',
-	'rgb(0,255,255)',
-	'rgb(160,,160)',
-	'rgb(0,0,0)'
-    ];
-
-    if(this.s >= 0 && this.s <= 8) {
-	ctx.fillStyle = 'rgb(255,216,161)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	if(this.s > 0) {
-	    ctx.fillStyle = TEXT_COLOR[this.s-1];
-	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
+    if (this.blink_state) {
+	var color = this.hover ? [251,170,56] : [227,133,0];
+	for (var i = 0; i < 3; ++i) {
+	    var delta = 200 - color[i];
+	    color[i] = Math.round(color[i] + delta * this.blink_state);
 	}
-    }
-    else if(this.s == 'r' || this.s == 'b') {
-	ctx.fillStyle = 'rgb(251,170,56)';
-	ctx.fillRect(this.x, this.y, 25, 25);
-	var icon = images[(this.s == 'b') ? 'saphire' : 'ruby'];
-	ctx.drawImage(icon, this.x + 2, this.y + 5);
-    }
-    else {
+	ctx.fillStyle = 'rgb(' + color[0] + ',' + color[1] + ',' + color[2] + ')';
+    } else {
 	ctx.fillStyle = this.hover ? 'rgb(251,170,56)' : 'rgb(227,133,0)';
-	ctx.fillRect(this.x, this.y, 25, 25);
+    }
+    ctx.fillRect(this.x, this.y, 25, 25);
+};
 
-	if(this.s == 'x') {
-	    var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
+Tile.TEXT_COLOR = [
+    'rgb(0,0,255)',
+    'rgb(0,160,0)',
+    'rgb(255,0,0)',
+    'rgb(0,0,127)',
+    'rgb(160,0,0)',
+    'rgb(0,255,255)',
+    'rgb(160,,160)',
+    'rgb(0,0,0)'
+];
+
+Tile.prototype.set_state = function(s) {
+    if (s == this.s)
+	return;
+    this.s = s;
+
+    if (s == 0) {
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(255,216,161)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	};
+    } else if(s > 0 && s <= 8) {
+	var text_color = Tile.TEXT_COLOR[s - 1];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(255,216,161)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	    ctx.fillStyle = text_color;
+	    ctx.fillText(this.s, this.x + 12.5, this.y + 12.5);
+	};
+    } else if(s == 'r' || s == 'b') {
+	var icon = images[(s == 'b') ? 'saphire' : 'ruby'];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(251,170,56)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+	    ctx.drawImage(icon, this.x + 2, this.y + 5);
+	};
+    } else if(s == 'x') {
+	var icon = images[(params.state == 3) ? 'ruby' : 'saphire'];
+	this.draw = function() {
+	    ctx.fillStyle = 'rgb(227,133,0)';
+	    ctx.fillRect(this.x, this.y, 25, 25);
+
 	    ctx.globalCompositeOperation = 'lighter';
 	    ctx.drawImage(icon, this.x + 2, this.y + 5);
 	    ctx.globalCompositeOperation = 'source-over';
-	}
+	};
+    } else {
+	this.draw = Tile.prototype.draw;
     }
-};
+}
+
+// Class ActivityIndicator
+function ActivityIndicator(tile) {
+    this.tile = tile;
+    if (tile.ai)
+	tile.ai.clear();
+    tile.ai = this;
+
+    this.start_time = (new Date()).getTime();
+    this.timer = setInterval(function() {
+	var t = ((new Date()).getTime() - this.start_time) * ActivityIndicator.SPEED;
+	this.tile.blink_state = (1 + Math.sin(t)) / 2;
+	this.tile.draw();
+    }.bind(this), 50);
+
+    ActivityIndicator.all[tile.x + ',' + tile.y] = this;
+}
+
+ActivityIndicator.SPEED = Math.PI / 500; // Two full blinks per second...
+ActivityIndicator.all = {};
+
+ActivityIndicator.prototype.clear = function() {
+    clearInterval(this.timer);
+
+    delete ActivityIndicator.all[this.tile.x + ',' + this.tile.y];
+    this.tile.blink_state = 0;
+    this.tile.ai = null;
+    this.tile.draw();
+
+    this.tile = null;
+}
+
+ActivityIndicator.clear_all = function() {
+    for (var ai in ActivityIndicator.all) {
+	ActivityIndicator.all[ai].clear();
+    }
+}
+// End of class ActivityIndicator
 
 function update_points() {
     var p1 = 0;
@@ -202,6 +269,7 @@ function update_points() {
     document.getElementById('game_box').style.background = bg_color;
 }
 
+// Class Title Blinker
 function TitleBlinker(msg) {
     this.original = document.title;
     this.changed = msg;
@@ -285,6 +353,9 @@ function set_state(state) {
 	    // Not my turn, set default cursor...
 	    cursor = 'default';
 	    
+	    // Stop any tile that could be blinking
+	    ActivityIndicator.clear_all();
+
 	    // and stop highlighting tiles:
 	    hover_indicator = null;
 	    highlight_tile.clear();
@@ -292,21 +363,21 @@ function set_state(state) {
 	    if(state == 1 || state == 2) {
 		    msg = gettext('Wait for your turn.');
 	    }
-	    else 
-      if(state >= 3 && state <= 6) {
-		    msg = gettext('Game over, ');
-		    if(((state + 1) % 2) + 1 == params.player) {
-		      if(auth.fb) {
+	    else if(state >= 3 && state <= 6) {
+		msg = gettext('Game over, ');
+		if(((state + 1) % 2) + 1 == params.player) {
+		    if(is_fb_auth()) {
 			/*document.getElementById('brag_button')
 			.style.setProperty('visibility', 'visible', null);*/
 		      }
 		      msg += gettext('you win!');
 		    }
 		    else
-		      msg += gettext('you lose.');
-        document.getElementById("rematch_button").style.display = 'block';
-        timer.id = window.setInterval(timer, 1000);
-        timer();
+				msg += gettext('you lose.');
+				document.getElementById("rematch_button").style.display = 'block';
+				timer.rematch_time = 45;
+				timer.id = window.setInterval(timer, 1000);
+				timer();
 	    }
 	    else
 		return; // What else can I do?
@@ -333,34 +404,45 @@ function set_state(state) {
 	     gettext('Game is over, blue player won by resignation.')];
 	msg = state_msgs[state];
     }
-    var msg_box = document.getElementById('message');
     if (!params.state && state) {
-	// Just started the game, prepare box for messages
-	msg_box.className += " big";
+		if(params.player)
+			document.getElementById("chat_interact").style.display="block";
     }
-    msg_box.innerHTML = msg;
+    document.getElementById('message').innerHTML = msg;
 
     params.state = state;
 }
 
-function blue_player_display(info) {
-    var name = document.getElementById('p2_name');
-    if (info && info.length == 2) {
-	var uid = info[0];
-	var pname = info.slice(1).join('<br \>');
+/* In case updated user information came from the async
+ * event channel with message type 'p', like when player
+ * two joins the game, chages the user info display. */
+function handle_player_data_event(data) {
+    var pnum = parseInt(data.charAt(0));
+    data = JSON.parse(data.slice(2));
 
-	var link = document.getElementById('p2_link');
-	link.href = "//facebook.com/" + uid + "/";
-	link.className += " undlin";
+    pnum = 'p' + pnum + '_';
 
-	var pic = document.getElementById('p2_pic');
-	pic.src = "//graph.facebook.com/" + uid + "/picture";
-	pic.style.display = "inline-block";
+    var name = document.getElementById(pnum + 'name');
+    name.innerHTML = '';
+    name.appendChild(document.createTextNode(data.name.capitalize()));
 
-	name.innerHTML = pname;
+    var link = document.getElementById(pnum + 'link');
+    if (data.profile_url) {
+	link.href = data.profile_url;
+	link.classList.add('undlin');
     } else {
-	name.innerHTML = gettext("Guest");
+	link.removeAttribute('href');
+	link.classList.remove('undlin');
     }
+    
+    var pic = document.getElementById(pnum + 'pic');
+    if (!pic) {
+	pic = document.createElement('img');
+	pic.id = pnum + 'pic';
+	pic.width = pic.height = 40;
+	link.insertBefore(pic, link.firstChild);
+    }
+    pic.src = data.pic_url;
 }
 
 function handle_event_rematch(msg)
@@ -381,7 +463,6 @@ function handle_event_rematch(msg)
     var url = '/game/' + m.game_id;
     window.location = url;
   }
-
 }
 
 function timer()
@@ -405,15 +486,8 @@ function handle_event_game(msg) {
     params.seq_num = seq_num;
 
     var new_state = parseInt(lines[1]);
-    var old_state = params.state;
     set_state(new_state);
-    if(old_state == 0) {
-	// The second (blue) player just connected.
-	// Display know info about the other player.
-	blue_player_display(lines.slice(2));
-	reset_counter();
-	return;
-    }
+
     if (lines.length > 2){
         var player = parseInt(lines[2]);
         var lclick = last_click_decode(player, lines[3]);
@@ -432,8 +506,12 @@ function handle_event_game(msg) {
 
 	        // Just assume correct valid values were delivered...
 
-	        mine[m][n].s = res[3];
-	        mine[m][n].draw();
+	        mine[m][n].set_state(res[3]);
+		if (mine[m][n].ai) {
+		    mine[m][n].ai.clear();
+		} else {
+		    mine[m][n].draw();
+		}
 	    }
         }
 
@@ -442,7 +520,7 @@ function handle_event_game(msg) {
         last_click[player-1] = lclick;
         lclick.draw();
     }
-    
+
     update_points();
     reset_counter();
 }
@@ -527,19 +605,26 @@ function on_click(ev) {
 
     close_last_nt();
 
-    // TODO: indicate activity
+    new ActivityIndicator(mine[pos.m][pos.n]);
 
     var url = '/game/'+ params.game_id + '/move/?m=' + pos.m + '&n=' + pos.n;
     if(tnt.active) {
 	url += '&tnt=y';
     }
+
+    var move_request = new XMLHttpRequest();
     move_request.open('POST', url, true);
     move_request.onreadystatechange = function(ev){
-	if (move_request.readyState == 4) {
-	    if(move_request.status == 200) {
-		// TODO: stop activity indication
+	if (ev.target.readyState == 4) {
+	    if(ev.target.status != 200) {
+		// Error: server didn't accept click, probably just a
+		// syncronization error due to network delay that will
+		// correct itself automatically.
+
+		if (mine[pos.m][pos.n].ai) {
+		    mine[pos.m][pos.n].ai.clear();
+		}
 	    }
-	    // TODO: else: treat error
 	}
     };
     move_request.send(null);
@@ -627,7 +712,7 @@ function init() {
 
     if(params.mine)
 	for(var i = 0; i < 256; ++i)
-	    mine[Math.floor(i/16)][i%16].s = params.mine.charAt(i);
+	    mine[Math.floor(i/16)][i%16].set_state(params.mine.charAt(i));
 
     // Text presets
     ctx = canvas.getContext('2d');
@@ -668,9 +753,19 @@ function init() {
 
     // Receive updates from server
     event = new Event('/event/' + params.channel, params.last_change);
+
     event.register_handler('g', handle_event_game);
     event.register_handler('r', handle_event_rematch);
-    
+    event.register_handler('p', handle_player_data_event);
+
+    // Init chat stuff
+    chat.init(
+	document.getElementById("chat_textfield"),
+	document.getElementById("input_field"),
+	document.getElementById("send_button"),
+	event, 'chat/'
+    );
+
     if(params.player) { // Not a spectator
 	// Expect for user input
 	canvas.addEventListener('click', on_click, false);
@@ -685,7 +780,6 @@ function init() {
     reset_counter.int = window.setInterval(turn_timeout, 1000);
     turn_timeout();
   }
-  timer.rematch_time = 45;
 }
 
 function load_img(name) {
@@ -703,11 +797,14 @@ function turn_timeout()
 	{
 		clearInterval(reset_counter.int);
 		timeleft = 0;
-		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2))
-		{
-		  document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
-		  document.getElementById("timeout_buttons").style.display = 'block';
-		}	
+		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2)) {
+			document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
+//			document.getElementById("timeout_buttons").style.display = 'block';
+			$("#timeout_buttons").animate({
+			height: "toggle",
+			width: "toggle",
+			opacity: "toggle"}, 200);
+		}
 	}
 	document.getElementById("clock").innerHTML = Math.round(timeleft);
 }

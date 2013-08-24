@@ -8,14 +8,11 @@ from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext as _
 
 class FacebookCache(models.Model):
     uid = models.CharField(max_length=30, unique=True)
     name = models.CharField(max_length=100)
-    
-    def pub_info(self):
-        return {'uid': self.uid,
-                'name': self.name}
 
 class UserProfile(models.Model):
     id = models.CharField(max_length=22, primary_key=True)
@@ -26,6 +23,9 @@ class UserProfile(models.Model):
     games_won = models.IntegerField(default=0)
     total_score = models.IntegerField(default=0)
     last_seen = models.DateTimeField(auto_now=True, db_index=True)
+
+    def guest_name(self):
+        return '~'.join((_('guest'), self.id[:4]))
 
     def merge(self, other):
         # Update players user to the unified one
