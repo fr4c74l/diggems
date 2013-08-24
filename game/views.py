@@ -356,21 +356,30 @@ def game(request, game_id):
     else:
         user_id = profile.guest_name()
 
+    p1_info = get_user_info(game.p1.user)
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
             'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
             'channel': game.channel,
             'p1_last_move': game.p1.last_move,
-            'player_info': {1: get_user_info(game.p1.user),
+            'player_info': {1: p1_info,
                             2: None},
            }
 
     if(game.p2):
+        p2_info = get_user_info(game.p2.user)
+        print p2_info
         data['p2_last_move'] = game.p2.last_move
-        data['player_info'][2] = get_user_info(game.p2.user)
+        data['player_info'][2] = p2_info
         if (game.state <= 2):
             data['time_left'] = max(0, game.timeout_diff())
+
+# Does not display chat if both users are logged on facebook
+    try:
+        display_chat = (p1_info.auth.fb and p2_info.auth.fb)
+    except AttributeError:
+        display_chat = False
 
     pdata = game.what_player(profile)
     if pdata:
