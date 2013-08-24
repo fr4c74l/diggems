@@ -295,8 +295,7 @@ def game(request, game_id):
         data['p2_last_move'] = game.p2.last_move
         if(game.p2.user.facebook):
             data['p2_info'] = game.p2.user.facebook.pub_info()
-        if (game.state <= 2):
-            data['time_left'] = max(0, game.timeout_diff())
+        data['time_left'] = max(0, game.timeout_diff())
 
     pdata = game.what_player(profile)
     if pdata:
@@ -326,6 +325,8 @@ def rematch(request, game_id):
     game = get_object_or_404(Game, pk=game_id)
     if game.state <= 2:
         return HttpResponseForbidden()
+    #if datetime.datetime.now() - game.last_move_time >= 45:
+        #return HttpResponseForbidden()
     pdata = game.what_player(UserProfile.get(request))
     if not pdata:
         return HttpResponseForbidden()

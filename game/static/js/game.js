@@ -305,6 +305,8 @@ function set_state(state) {
 		    else
 		      msg += gettext('you lose.');
         document.getElementById("rematch_button").style.display = 'block';
+        timer.id = window.setInterval(timer, 1000);
+        timer();
 	    }
 	    else
 		return; // What else can I do?
@@ -378,6 +380,19 @@ function handle_event_rematch(msg)
   {
     var url = '/game/' + m.game_id;
     window.location = url;
+  }
+
+}
+
+function timer()
+{
+  timer.rematch_time = timer.rematch_time - 1;
+  document.getElementById('rematch_button').innerHTML = gettext("Rematch in ") + timer.rematch_time + gettext(" seconds.");
+  if (timer.rematch_time <= 0)
+  {
+    document.getElementById("rematch_button").style.display = 'none';
+    clearInterval(timer.id);
+    return;
   }
 }
 
@@ -670,6 +685,7 @@ function init() {
     reset_counter.int = window.setInterval(turn_timeout, 1000);
     turn_timeout();
   }
+  timer.rematch_time = 45;
 }
 
 function load_img(name) {
@@ -740,6 +756,7 @@ function rematch(game_id)
   button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	button_request.send(null);
   document.getElementById("rematch_button").style.display = 'none';
+
 }
 
 // Load resources
