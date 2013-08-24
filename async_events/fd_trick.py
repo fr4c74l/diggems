@@ -6,12 +6,10 @@ import traceback
 import gevent
 import gevent.socket
 import gevent.os
-import socket
 import errno
 import gipc
 import os
 
-from gevent.select import select
 from gevent import socket
 from geventwebsocket.websocket import WebSocket
 from geventwebsocket.logging import create_logger
@@ -97,15 +95,16 @@ C = ffi.verify("""
 
 _recv_buf = ffi.new('char[]', 4096)
 
-def recv_with_fd(src_fd):
+def recv_with_fd(src_sock):
     global _recv_buf
+    src_fd = src_sock.fileno()
     while 1:
-        select([src_fd], [], [])
+        socket.wait_read(src_fd)
         subject_fd = ffi.new('int *')
         subject_fd[0] = 0
         flags = ffi.new('int *')
         flags[0] = 0
-        ret = C.recv_with_fd(src_fd.fileno(), buf, subject_fd, flags)
+        ret = C.recv_with_fd(src_fd, buf, subject_fd, flags)
         if ret >= 0:
             break
         if -ret not in (errno.EWOULDBLOCK, errno.EAGAIN):
@@ -121,14 +120,15 @@ def recv_with_fd(src_fd):
 
     return (buf, subject_fd)
 
-def send_with_fd(dest_fd, message, subject_fd):
+def send_with_fd(dest_sock, message, subject_fd):
     buf = ffi.new('char[]', message)
+    dest_fd = dest_sock.fileno()
     while 1:
-        ret = C.send_with_fd(dest_fd.fileno(), buf, len(message), subject_fd)
+        ret = C.send_with_fd(dest_fd, buf, len(message), subject_fd)
         if ret >= 0:
             break
         if -ret in (errno.EPERM, errno.EWOULDBLOCK, errno.EAGAIN):
-            select([], [dest_fd], [])
+            socket.wait_write(dest_fd)
         else:
             raise os.error(-ret, os.strerror(-ret))
     return ret

@@ -3,13 +3,16 @@ import os
 import sys
 import multiprocessing
 import traceback
+import signal
 
 import gevent
 import gipc
 
 from psycopg2 import extensions
 
-from gevent.socket import wait_read, wait_write
+from gevent import pywsgi
+from geventwebsocket.handler import WebSocketHandler
+from gevent import socket
 
 from gevent_fastcgi.server import FastCGIServer
 from gevent_fastcgi.wsgi import WSGIRequestHandler
@@ -27,10 +30,10 @@ def gevent_wait_callback(conn, timeout=None):
             break
         elif state == extensions.POLL_READ:
             #print 'Greenlet waiting on READ'
-            wait_read(conn.fileno(), timeout=timeout)
+            socket.wait_read(conn.fileno(), timeout=timeout)
         elif state == extensions.POLL_WRITE:
             #print 'Greenlet waiting on WRITE'
-            wait_write(conn.fileno(), timeout=timeout)
+            socket.wait_write(conn.fileno(), timeout=timeout)
         else:
             raise psycopg2.OperationalError(
                 "Bad result from poll: %r" % state)
@@ -56,7 +59,10 @@ def server(worker_id):
         except: pass
 
     # Serve wepsocket events application
-    ws_server = pywsgi.WSGIServer(ws_sockname, ws_dispatcher.dispatcher, handler_class=WebSocketHandler)
+    ws_sock_listener = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
+    ws_sock_listener.bind(ws_sockname)
+    ws_sock_listener.listen(128)
+    ws_server = pywsgi.WSGIServer(ws_sock_listener, ws_dispatcher.dispatcher, handler_class=WebSocketHandler)
 
     # Serve the Django application
     http_server = FastCGIServer(http_sockname, WSGIRequestHandler(wsgi.application), max_conns=50000)
@@ -65,7 +71,33 @@ def server(worker_id):
     gevent.spawn(watcher, ws_server.serve_forever)
     watcher(http_server.serve_forever)
 
+running = True
+
+workers = None
+channel_mngr = None
+
+# If a process dies for any reason, restart it unless it is time to quit
+def reloader(i):
+    global running, workers
+    while running:
+        print 'Starting worker {}.'.format(i)
+        workers[i] = gipc.start_process(server, (i,), daemon=True, name='worker{}'.format(i))
+        workers[i].join()
+        print 'Worker {} has just quit!'.format(i)
+    print 'Done with worker {}'.format(i)
+
+def sig_quit():
+    global running, workers, channel_mngr
+    running = False
+    for w in workers:
+        os.kill(w.pid, signal.SIGINT)
+    
+    if channel_mngr:
+        os.kill(channel_mngr.pid, signal.SIGINT)
+
 def main():
+    global running, channel_mngr, workers
+
     # Make green psycopg:
     extensions.set_wait_callback(gevent_wait_callback)
 
@@ -75,18 +107,12 @@ def main():
     except:
         proc_count = multiprocessing.cpu_count()
 
+    workers = [None] * proc_count
+
     channel.init(proc_count)
-
-    running = True
-
-    # If a process dies for any reason, restart it unless it is time to quit
-    def reloader(i):
-        while running:
-            print 'Starting worker {}.'.format(i)
-            proc = gipc.start_process(server, (i,), daemon=True, name='worker{}'.format(i))
-            proc.join()
-            print 'Worker {} has just quit!'.format(i)
-        print 'Done with worker {}'.format(i)
+    
+    gevent.signal(signal.SIGINT, sig_quit)
+    gevent.signal(signal.SIGKILL, sig_quit)
 
     # Spawn the reloaders for the workers
     reloaders = [gevent.spawn(reloader, i) for i in xrange(proc_count)]
@@ -99,7 +125,7 @@ def main():
         print 'Channel manager process has quit.'
     print 'Done with channel manager'
 
-    gevent.join_all(reloaders)
+    gevent.joinall(reloaders)
     print 'All done, quiting'
 
 if __name__ == "__main__":

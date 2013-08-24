@@ -4,9 +4,10 @@
 import gevent
 
 from django.core.handlers.wsgi import WSGIRequest
-from django.conf import settings
+from diggems import settings
+from django.core import urlresolvers
 
-_resolver = urlresolvers.RegexURLResolver(r'^/', ettings.WEBSOCKET_URLCONF)
+_resolver = urlresolvers.RegexURLResolver(r'^/', settings.WEBSOCKET_URLCONF)
     
 # WSGI-like API to match needs of gevent-websocket
 def dispatcher(environ, start_response):

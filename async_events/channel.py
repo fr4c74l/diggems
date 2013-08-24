@@ -270,7 +270,7 @@ def rpc_dispatcher():
 
     # Dispatch events
     while 1:
-        msg, fd = fd_trick.recv_with_fd(_call_endpoint)
+        msg, fd = fd_trick.recv_with_fd(_handle_endpoint)
         if fd is not None:
             func_id, args, kwar, ws_locator = pickle.loads(msg)
             if ws_locator is not None:

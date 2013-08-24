@@ -169,7 +169,6 @@ def adhack(request, ad_id):
         content_type='text/html; charset=utf-8')
 
 def index(request):
-    {}[0]
     profile = UserProfile.get(request)
 
     playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
