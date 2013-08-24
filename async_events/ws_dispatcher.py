@@ -15,7 +15,7 @@ def dispatcher(environ, start_response):
     except KeyError:
         # Not a WebSocket, someone tried to cheat on us!
         start_response('403 Forbidden', [('Content-Type', 'text/plain')])
-        return 'This path can only handle WebSockets.'
+        return ('This path can only handle WebSockets.',)
 
     request = WSGIRequest(environ)
     (handler_function, function_args, function_kwargs) = _resolver.resolve(request.path_info)
