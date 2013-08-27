@@ -7,6 +7,7 @@ distribute==0.6.34
 gevent==1.0dev
 gevent-fastcgi==0.1.24dev
 gevent-websocket==0.4.dev03579dab386d
+geventhttpclient==1.1
 gipc==0.3.2
 greenlet==0.4.1
 psycopg2==2.5.1
