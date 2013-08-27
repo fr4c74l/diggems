@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import sys
+import shutil
 import multiprocessing
 import traceback
 import signal
@@ -48,15 +49,12 @@ def watcher(func):
         print 'Quiting the faulty process...'
         sys.exit(1)
 
+sock_dir = 'sockets'
+
 def server(worker_id):
     # The name of the Unix sockets:
-    http_sockname = 'http{}.socket'.format(worker_id)
-    ws_sockname = 'ws{}.socket'.format(worker_id)
-
-    # Remove any old remaining socket entrypoint
-    for sockname in (http_sockname, ws_sockname):
-        try: os.unlink(sockname)
-        except: pass
+    http_sockname = '{}/http{}.socket'.format(sock_dir, worker_id)
+    ws_sockname = '{}/ws{}.socket'.format(sock_dir, worker_id)
 
     # Serve wepsocket events application
     ws_sock_listener = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
@@ -113,6 +111,10 @@ def main():
     
     gevent.signal(signal.SIGINT, sig_quit)
     gevent.signal(signal.SIGKILL, sig_quit)
+    
+    # Remove the sockets directory
+    shutil.rmtree(sock_dir, True)
+    os.mkdir(sock_dir)
 
     # Spawn the reloaders for the workers
     reloaders = [gevent.spawn(reloader, i) for i in xrange(proc_count)]
