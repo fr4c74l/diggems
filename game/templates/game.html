@@ -54,7 +54,7 @@ Software under Affero GPL license, see LICENSE.txt
 				</form>
 			{% endif %}
 		{% endif %}
-		<div class="button" id="give_up" onclick="claim_game(2);">{% trans "Give Up" %}</div>
+		<div class="button" id="give_up" {%if not player or player and state == 0 %}style="display:none;"{% endif %} onclick="claim_game(2);">{% trans "Give Up" %}</div>
 	</div>
 
 	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
@@ -69,9 +69,11 @@ Software under Affero GPL license, see LICENSE.txt
 			{% if pinfo %}<img id="p{{pid}}_pic" width="40" height="40" src="{{ pinfo.pic_url }}"/>
 			{% endif %}<div id="p{{pid}}_name" class="pname">{% if pinfo %}{{ pinfo.name|capfirst }}{% else %}
 				{% if not player and not token %}{% blocktrans %}Empty!{% endblocktrans %}{% else %}{% blocktrans %}Wait...{% endblocktrans %}{% endif %}
-				{% if not player and not token %}<form style="float: right;" action="join/" method="post">
+				{% if not player and not token %}
+				<form style="float: right;" action="join/" method="post">
 					<input class="button" type="submit" value="{% blocktrans %}Join!{% endblocktrans %}" />
-				</form>{% endif %}
+				</form>
+				{% endif %}
 			{% endif %}</div>
 		</a>
 		{% if player %}<div class="pinfo" style="text-align: {% if pid = 1 %}right{% else %}left{% endif %};">({% if player == pid %}{% blocktrans %}You{% endblocktrans %}{% else %}{% blocktrans %}Your opponent{% endblocktrans %}{% endif %})</div>{% endif %}

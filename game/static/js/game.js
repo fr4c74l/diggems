@@ -342,7 +342,6 @@ States:
  X + 2 -> Player X won
  X + 4 -> Game ended abnormally and player X won
 */
-var initial_state = 0;
 function set_state(state) {
 	var msg = '';
 	if(params.player) {
@@ -406,11 +405,6 @@ function set_state(state) {
 	}
 	var msg_box = document.getElementById('message');
 
-	if (!initial_state && params.player == 2) {
-		document.getElementById("give_up").style.display="block";
-		initial_state = 1;
-	}
-
 	if (!params.state && state) {
 		if(params.player)
 			document.getElementById("chat_interact").style.display="block";
@@ -458,51 +452,50 @@ function handle_player_data_event(data) {
 }
 
 function handle_event(msg) {
-    var lines = msg.split('\n');
-    var seq_num = parseInt(lines[0]);
+	var lines = msg.split('\n');
+	var seq_num = parseInt(lines[0]);
 
-    if(seq_num <= params.seq_num)
-	return;
-    params.seq_num = seq_num;
+	if(seq_num <= params.seq_num) {
+		return;
+	}
+	params.seq_num = seq_num;
 
-    var new_state = parseInt(lines[1]);
-    set_state(new_state);
+	var new_state = parseInt(lines[1]);
+	set_state(new_state);
 
-    if (lines.length > 2){
-        var player = parseInt(lines[2]);
-        var lclick = last_click_decode(player, lines[3]);
-        
-        if (player == params.player && lclick.bombed) {
-	    params.tnt_used = true;
-	    tnt.active = false;
-        }
-        
-        var parser = /(\d+),(\d+):(.)/;
-        for(var i = 4; i < lines.length; ++i) {
-	    var res = parser.exec(lines[i]);
-	    if(res) {
-	        var m = parseInt(res[1]);
-	        var n = parseInt(res[2]);
-
-	        // Just assume correct valid values were delivered...
-
-	        mine[m][n].set_state(res[3]);
-		if (mine[m][n].ai) {
-		    mine[m][n].ai.clear();
-		} else {
-		    mine[m][n].draw();
+	if (lines.length > 2){
+		var player = parseInt(lines[2]);
+		var lclick = last_click_decode(player, lines[3]);
+		
+		if (player == params.player && lclick.bombed) {
+			params.tnt_used = true;
+			tnt.active = false;
 		}
-	    }
-        }
+		
+		var parser = /(\d+),(\d+):(.)/;
+		for(var i = 4; i < lines.length; ++i) {
+		var res = parser.exec(lines[i]);
+		if(res) {
+			var m = parseInt(res[1]);
+			var n = parseInt(res[2]);
+			// Just assume correct valid values were delivered...
+			mine[m][n].set_state(res[3]);
+		if (mine[m][n].ai) {
+			mine[m][n].ai.clear();
+		} else {
+			mine[m][n].draw();
+		}
+		}
+		}
 
-        if(last_click[player-1])
-	    last_click[player-1].clear();
-        last_click[player-1] = lclick;
-        lclick.draw();
-    }
+		if(last_click[player-1])
+		last_click[player-1].clear();
+		last_click[player-1] = lclick;
+		lclick.draw();
+	}
 
-    update_points();
-    reset_counter();
+	update_points();
+	reset_counter();
 }
 
 function register_event() {
