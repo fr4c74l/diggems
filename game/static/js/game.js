@@ -808,6 +808,18 @@ function claim_game(terminate)
 	button_request.send(data);
 }
 
+function call_back(response)
+{
+	console.log(response);
+}
+
+function request_friends(game_id){
+	FB.ui({method: 'apprequests',
+	message: 'Send Requesti',
+	redirect_uri: 'fractalcorp.no-ip.biz/game/' + game_id + '/join/',
+	}, call_back);
+}
+
 // Load resources
 load_img("saphire");
 load_img("ruby");
