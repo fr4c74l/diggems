@@ -334,82 +334,95 @@ function notify_state(msg) {
     }
 }
 
-// TODO: localization
+/* TODO: localization
+States:
+ 0 -> Game has not started yet
+ 1 -> Player's 1 turn
+ 2 -> Player's 2 turn
+ X + 2 -> Player X won
+ X + 4 -> Game ended abnormally and player X won
+*/
+var initial_state = 0;
 function set_state(state) {
-    var msg = '';
-    if(params.player) {
-	var cursor;
-	var hover_indicator;
-	if(state == params.player) {
-	    msg = gettext('Your turn! Play!');
-	    
-	    // Set shovel cursor in game_canvas area
-	    cursor = 'url(' + images['shovel'].src + '),auto';
+	var msg = '';
+	if(params.player) {
+		var cursor;
+		var hover_indicator;
+		if(state == params.player) {
+			msg = gettext('Your turn! Play!');
+			
+			// Set shovel cursor in game_canvas area
+			cursor = 'url(' + images['shovel'].src + '),auto';
 
-	    // Mark the to be affected tiles
-	    hover_indicator = highlight_tile;
-	}
-	else {
-	    // Not my turn, set default cursor...
-	    cursor = 'default';
-	    
-	    // Stop any tile that could be blinking
-	    ActivityIndicator.clear_all();
+			// Mark the to be affected tiles
+			hover_indicator = highlight_tile;
+		} else {
+			// Not my turn, set default cursor...
+			cursor = 'default';
+			// Stop any tile that could be blinking
+			ActivityIndicator.clear_all();
 
-	    // and stop highlighting tiles:
-	    hover_indicator = null;
-	    highlight_tile.clear();
+			// and stop highlighting tiles:
+			hover_indicator = null;
+			highlight_tile.clear();
 
-	    if(state == 1 || state == 2) {
-		msg = gettext('Wait for your turn.');
-	    }
-	    else if(state >= 3 && state <= 6) {
-		msg = gettext('Game over, ');
-		if(((state + 1) % 2) + 1 == params.player) {
-		    if(is_fb_auth()) {
-			/*document.getElementById('brag_button')
-			.style.setProperty('visibility', 'visible', null);*/
-		    }
-		    msg += gettext('you win!');
+			if(state == 1 || state == 2) {
+				msg = gettext('Wait for your turn.');
+			}
+			else if(state >= 3 && state <= 6) {
+				msg = gettext('Game over, ');
+				if(((state + 1) % 2) + 1 == params.player) {
+					if(is_fb_auth()) {
+					/*document.getElementById('brag_button')
+					.style.setProperty('visibility', 'visible', null);*/
+					}
+					msg += gettext('you win!');
+				}
+				else
+					msg += gettext('you lose.');
+			}
+			else
+				return; // What else can I do?
 		}
-		else
-		    msg += gettext('you lose.');
-	    }
-	    else
-		return; // What else can I do?
+
+		var canvas = document.getElementById('game_canvas');
+		canvas.style.cursor = cursor;
+		canvas.onmousemove = hover_indicator;
+		// Blink title to alert user, if its turn.
+		your_turn_blinker.setBlinking(state == params.player);
+		if(params.state != state && (state == params.player || state > 2))
+			notify_state(msg);
+	} else {
+		// Spectator mode.
+		var state_msgs =
+			['',
+			 gettext("Red's turn."),
+			 gettext("Blue's turn."),
+			 gettext('Game is over, red player won.'),
+			 gettext('Game is over, blue player won.'),
+			 gettext('Game is over, red player won by resignation.'),
+			 gettext('Game is over, blue player won by resignation.')];
+		msg = state_msgs[state];
+	}
+	var msg_box = document.getElementById('message');
+
+	if (!initial_state && params.player == 2) {
+		document.getElementById("give_up").style.display="block";
+		initial_state = 1;
 	}
 
-	var canvas = document.getElementById('game_canvas');
-	canvas.style.cursor = cursor;
-	canvas.onmousemove = hover_indicator;
-
-        // Blink title to alert user, if its turn.
-        your_turn_blinker.setBlinking(state == params.player);
-
-	if(params.state != state && (state == params.player || state > 2))
-	    notify_state(msg);
-    } else {
-	// Spectator mode.
-	var state_msgs =
-	    ['',
-	     gettext("Red's turn."),
-	     gettext("Blue's turn."),
-	     gettext('Game is over, red player won.'),
-	     gettext('Game is over, blue player won.'),
-	     gettext('Game is over, red player won by resignation.'),
-	     gettext('Game is over, blue player won by resignation.')];
-	msg = state_msgs[state];
-    }
-    var msg_box = document.getElementById('message');
-    if (!params.state && state) {
+	if (!params.state && state) {
 		if(params.player)
 			document.getElementById("chat_interact").style.display="block";
-	// Just started the game, prepare box for messages
-	msg_box.className += " big";
-    }
-    msg_box.innerHTML = msg;
+		// Just started the game, prepare box for messages
+		msg_box.className += " big";
 
-    params.state = state;
+		document.getElementById("abort_button").style.display="none";
+		document.getElementById("give_up").style.display="block";
+	}
+	msg_box.innerHTML = msg;
+
+	params.state = state;
 }
 
 /* In case updated user information came from the async

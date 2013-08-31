@@ -49,13 +49,12 @@ Software under Affero GPL license, see LICENSE.txt
 	  <div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
 		{% if player %}
 			{% if state == 0 %}
-				<form action="abort/" method="post">
+				<form action="abort/" method="post" id="abort_button">
 					<input class="button" type="submit" value="{% blocktrans %}Abort{% endblocktrans %}" />
 				</form>
-			{% else %}
-				<div class="button" id="give_up" onclick="claim_game(2);">{% trans "Give Up" %}</div>
 			{% endif %}
 		{% endif %}
+		<div class="button" id="give_up" onclick="claim_game(2);">{% trans "Give Up" %}</div>
 	</div>
 
 	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
