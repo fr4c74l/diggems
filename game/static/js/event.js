@@ -5,8 +5,9 @@ function Event(channel_url, last_seqnum) {
     this.stopped = false;
     this.error_count = 0;
     this.send_queue = [];
+    this._is_sent_scheduled = false;
 
-    this._timer = null;
+    this._reconnect_timer = null;
 
     this._build_socket();
 }
@@ -41,7 +42,7 @@ Event.prototype._on_problem = function() {
 	if(this.error_count > 1) {
 	    var delay = (this.error_count - 1) * 500;
 	    this.socket = null;
-	    this._timer = setTimeout(this._build_socket.bind(this), delay);
+	    this._reconnect_timer = setTimeout(this._build_socket.bind(this), delay);
 	} else
 	    this._build_socket();
     }
@@ -60,25 +61,38 @@ Event.prototype.send = function(msg_type, msg) {
     this._do_send();
 };
 
+Event.prototype._scheduled_send = function() {
+    this._is_sent_scheduled = false;
+    this._do_send();
+}
+
+Event.prototype._schedule_send_later = function() {
+    if (!this._is_sent_scheduled) {
+	this._is_sent_scheduled = true;
+	setTimeout(this._scheduled_send.bind(this), 50);
+    }
+}
+
 Event.prototype._do_send = function() {
     while (this.send_queue.length) {
 	var msg = this.send_queue[0];
 
 	if (!this.socket || this.socket.readyState > 1) {
 	    // Reconnect...
-	    clearTimeout(this._timer);
+	    clearTimeout(this._reconnect_timer);
 	    this._build_socket();
 	} else if (this.socket.readyState == 0) {
 	    return;
-	} else if (this.bufferedAmount == 0 || (this.bufferedAmount + msg.length) < 4096) {
+	} else if (this.socket.bufferedAmount == 0 || (this.socket.bufferedAmount + msg.length) < 4096) {
 	    // Shitty WebSockt doesn't have a way to tell the maximum size of
 	    // the send buffer, so I will just assume it is of 4k size...
 	    // Also, I can never be sure it was actually sent, but whatever...
 	    this.socket.send(msg);
 	    this.send_queue.shift();
 	} else {
-	    // Buffer too full, schedule to retry later.
-	    setTimeout(this._do_send.bind(this), 50);
+	    // Buffer too full, scheduled to retry later.
+	    this._schedule_send_later();
+	    return;
 	}
     }
 }
@@ -100,7 +114,7 @@ Event.prototype.register_handler = function(id, func) {
 
 Event.prototype.stop = function() {
     this.stopped = true;
-    clearTimeout(this._timer);
+    clearTimeout(this._reconnect_timer);
     if (this.socket) {
 	this.socket.close();
     }

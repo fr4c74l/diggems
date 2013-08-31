@@ -19,6 +19,8 @@ def game_events(request, ws, game_id):
 def main_chat(request, ws):
     try:
         while 1:
-            print ws.receive()
-    except WebSocketError:
+            ret = ws.receive()
+            if ret:
+                break
+    finally:
         print "Done with this websocket..."
