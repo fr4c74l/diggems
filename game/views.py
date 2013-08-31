@@ -332,7 +332,7 @@ def claim_game(request, game_id):
     
     if term == 'y':
         publish_score(me.user)
-    elif term = 'z':
+    elif term == 'z':
         publish_score(game.p1.user)
         publish_score(game.p2.user)
 
