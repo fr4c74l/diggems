@@ -20,7 +20,10 @@ def main_chat(request, ws):
     try:
         while 1:
             ret = ws.receive()
-            if ret:
+            if ret == None:
                 break
+            print ret
+    except WebSocketError:
+        pass
     finally:
         print "Done with this websocket..."

@@ -29,12 +29,18 @@ Event.prototype._callback = function(ev) {
     this.last_seqnum = seqnum;
 };
 
+Event.prototype._do_reconnect = function() {
+    this._reconnect_timer = null;
+    this._build_socket();
+}
+
 Event.prototype._on_problem = function() {
     if (this.socket) {
 	this.socket.close();
+	this.socket = null;
     }
-
-    if (!this.stopped) {
+    
+    if (!this.stopped && this._reconnect_timer === null) {
 	/* We should not have stopped, so try to reconnect, but
 	 * do not enter into tight loop trying to do so. */
 	this.error_count = Math.min(this.error_count + 1, 10);
@@ -42,7 +48,7 @@ Event.prototype._on_problem = function() {
 	if(this.error_count > 1) {
 	    var delay = (this.error_count - 1) * 500;
 	    this.socket = null;
-	    this._reconnect_timer = setTimeout(this._build_socket.bind(this), delay);
+	    this._reconnect_timer = setTimeout(this._do_reconnect.bind(this), delay);
 	} else
 	    this._build_socket();
     }
@@ -51,7 +57,6 @@ Event.prototype._on_problem = function() {
 Event.prototype._on_connect = function() {
     // Upon successful connection, error count can be reset...
     this.error_count = 0;
-
     this._do_send();
 }
 
@@ -98,6 +103,12 @@ Event.prototype._do_send = function() {
 }
 
 Event.prototype._build_socket = function() {
+    if (this._reconnect_timer) {
+	clearTimeout(this._reconnect_timer);
+	this._reconnect_timer = null;
+	this.error_count = Math.max(this.error_count - 1, 0);
+    }
+
     this.socket = new WebSocket(this.url);
     this.socket.onmessage = this._callback.bind(this);
 

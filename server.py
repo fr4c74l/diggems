@@ -1,4 +1,9 @@
 #!/usr/bin/env python
+
+# Just in case I forgot something, but we should use
+# gevent explicity wherever we can
+from gevent import monkey; monkey.patch_all()
+
 import os
 import sys
 import shutil
@@ -52,14 +57,6 @@ def watcher(func):
 sock_dir = 'sockets'
 
 def server(worker_id):
-    
-    def lala(a, b):
-        print 'Start handling on {}'.format(worker_id), a
-        ret = wsgi.application(a, b)
-        print 'End handling on {}'.format(worker_id), a
-        print '=========================================='
-        return ret
-    
     # The name of the Unix sockets:
     http_sockname = '{}/http{}.socket'.format(sock_dir, worker_id)
     ws_sockname = '{}/ws{}.socket'.format(sock_dir, worker_id)
@@ -71,7 +68,7 @@ def server(worker_id):
     ws_server = pywsgi.WSGIServer(ws_sock_listener, ws_dispatcher.dispatcher, handler_class=WebSocketHandler)
 
     # Serve the Django application
-    http_server = FastCGIServer(http_sockname, WSGIRequestHandler(lala), max_conns=5000)
+    http_server = FastCGIServer(http_sockname, WSGIRequestHandler(wsgi.application), max_conns=5000)
 
     print 'Worker {} serving...'.format(worker_id)
     gevent.spawn(watcher, ws_server.serve_forever)
