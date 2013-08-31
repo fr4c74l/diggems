@@ -179,7 +179,7 @@ def index(request):
                }
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'in_fb': request.in_fb}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -227,7 +227,7 @@ def join_game(request, game_id):
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile, status=404)
+        return render_with_extra('game404.html', profile,{'in_fb': request.in_fb}, status=404)
 
     # If already playing this game, redirect to game screen
     if game.what_player(profile):
@@ -237,7 +237,7 @@ def join_game(request, game_id):
     token = request.REQUEST.get('token')
     if game.state != 0 or (game.token and
                            token != game.token):
-        return render_with_extra('game403.html', profile, status=403)
+        return render_with_extra('game403.html', profile,{'in_fb': request.in_fb}, status=403)
 
     # If we got here via GET, return a page that will make the client/user
     # retry via POST. Done so that Facebook and other robots do not join
@@ -348,28 +348,37 @@ def game(request, game_id):
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile, status=404)
+        return render_with_extra('game404.html', profile,{'in_fb': request.in_fb}, status=404)
 
     if profile.facebook:
         user_id = profile.facebook.name
     else:
         user_id = profile.guest_name()
 
+    p1_info = get_user_info(game.p1.user)
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
             'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
             'channel': game.channel,
             'p1_last_move': game.p1.last_move,
-            'player_info': {1: get_user_info(game.p1.user),
+            'player_info': {1: p1_info,
                             2: None},
            }
 
     if(game.p2):
+        p2_info = get_user_info(game.p2.user)
+        print p2_info
         data['p2_last_move'] = game.p2.last_move
-        data['player_info'][2] = get_user_info(game.p2.user)
+        data['player_info'][2] = p2_info
         if (game.state <= 2):
             data['time_left'] = max(0, game.timeout_diff())
+
+# Does not display chat if both users are logged on facebook
+    try:
+        display_chat = (p1_info.auth.fb and p2_info.auth.fb)
+    except AttributeError:
+        display_chat = False
 
     pdata = game.what_player(profile)
     if pdata:
@@ -388,6 +397,8 @@ def game(request, game_id):
         masked = mine_mask(game.mine, game.state in (3, 4))
         if masked.count('?') != 256:
             data['mine'] = masked
+
+    data['in_fb'] = request.in_fb
 
     return render_with_extra('game.html', profile, data)
 
@@ -500,7 +511,7 @@ def move(request, game_id):
 
 def donate(request):
     profile = UserProfile.get(request)
-    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
+    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL, 'in_fb': request.in_fb})
 
 def info(request, page):
     actual_locale = get_language()
@@ -508,7 +519,7 @@ def info(request, page):
         raise Http404
     for locale in (actual_locale, 'en'):
         try:
-            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request))
+            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request),{'in_fb': request.in_fb})
         except TemplateDoesNotExist:
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
