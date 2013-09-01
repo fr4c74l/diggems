@@ -104,7 +104,7 @@ def recv_with_fd(src_sock):
         subject_fd[0] = 0
         flags = ffi.new('int *')
         flags[0] = 0
-        ret = C.recv_with_fd(src_fd, buf, subject_fd, flags)
+        ret = C.recv_with_fd(src_fd, _recv_buf, subject_fd, flags)
         if ret >= 0:
             break
         if -ret not in (errno.EWOULDBLOCK, errno.EAGAIN):
@@ -116,7 +116,7 @@ def recv_with_fd(src_sock):
         pass
 
     subject_fd = subject_fd[0] if subject_fd[0] else None
-    buf = ffi.buffer(buf)[:ret]
+    buf = ffi.buffer(_recv_buf)[:ret]
 
     return (buf, subject_fd)
 

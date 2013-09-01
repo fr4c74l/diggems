@@ -11,19 +11,41 @@
 
 # TODO: Find out how to deal with database and auth cookies and stuff...
 
+import datetime
+import json
+
+from async_events import channel
 from geventwebsocket import WebSocketError
+from django.utils.html import escape
 
 def game_events(request, ws, game_id):
     pass
 
 def main_chat(request, ws):
+    ws_id = None
     try:
+        ws_id = channel.subscribe_websocket('main', ws)
         while 1:
-            ret = ws.receive()
-            if ret == None:
+            msg = ws.receive()
+            if msg == None:
                 break
-            print ret
+            msg = msg[2:]
+
+            utcnow = datetime.datetime.utcnow()
+            midnight_utc = datetime.datetime.combine(utcnow.date(), datetime.time(0))
+            delta = utcnow - midnight_utc
+
+            data = {
+                'time_in_sec': delta.seconds,
+                'username': 'Desnobro',
+                'msg': escape(msg)
+            }
+
+            channel.post_update('main', 'c\n' + json.dumps(data))
     except WebSocketError:
         pass
     finally:
+        if ws_id is not None:
+            channel.unsubscribe_websocket('main', ws_id)
+            pass
         print "Done with this websocket..."

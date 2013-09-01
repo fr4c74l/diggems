@@ -61,7 +61,9 @@ def server(worker_id):
     http_sockname = '{}/http{}.socket'.format(sock_dir, worker_id)
     ws_sockname = '{}/ws{}.socket'.format(sock_dir, worker_id)
 
-    # Serve wepsocket events application
+    channel.worker_init(worker_id)
+
+    # Serve websocket events application
     ws_sock_listener = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     ws_sock_listener.bind(ws_sockname)
     ws_sock_listener.listen(128)

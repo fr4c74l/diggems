@@ -14,13 +14,16 @@ import struct
 from gevent import socket
 from decorator import FunctionMaker
 from geventwebsocket.websocket import WebSocket, WebSocketError
+from geventwebsocket.logging import create_logger
 
 class _Subscriber(object):
+    __slots__ = ('ws', 'deliverer')
     def __init__(self, ws):
         self.ws = ws
         self.deliverer = None
 
 class Channel(object):
+    __slots__ = ('ch_id', 'next_seqnum', 'first_seqnum', 'msg_history', 'subscribers')
     def __init__(self, ch_id):
         self.ch_id = ch_id
         self.next_seqnum = 0
@@ -85,11 +88,11 @@ class Channel(object):
                 seqnum += 1
         except socket.error, WebSocketError:
             # We want no part on websockts that can't deliver
-            sb.deliver = None
+            sb.deliverer = None
             self.unsubscribe(sb)
             return
 
-        sb.deliver = None
+        sb.deliverer = None
 
     def force_stop(self):
         for sb in self.subscribers:
@@ -113,12 +116,12 @@ def _ws_serialize(websocket):
         uid = websocket.unique_id
     except AttributeError:
         uid = _ws_id_iterator.next()
-        websocket.unique_id = uid
 
     return (websocket.handler.socket.fileno(), uid)
 
 def _ws_from_fd(fd):
     class PassiveWebSocket(WebSocket):
+        __slots__ = ('__weakref__', 'unique_id')
         def __init__(self, *args, **kwargs):
             WebSocket.__init__(self, *args, **kwargs)
 
@@ -128,8 +131,7 @@ def _ws_from_fd(fd):
             pass
 
     class RecvStream(object):
-        __slots__ = ('read', 'write')
-
+        __slots__ = ('sock', 'write')
         def __init__(self, handler):
             self.sock = socket.fromfd(handler, socket.AF_INET, socket.SOCK_STREAM)
             self.write = self.sock.sendall
@@ -138,8 +140,9 @@ def _ws_from_fd(fd):
             raise NotImplementedError("I didn't expect reads to occur from this copy of the socket...")
 
     class PseudoHandler(object):
+        __slots__ = ('logger')
         def __init__(self, fd):
-            self.logger = create_logger('ws_'.format(fd), DEBUG)
+            self.logger = create_logger('ws_'.format(fd), True)
 
     return PassiveWebSocket(None, RecvStream(fd), PseudoHandler(fd))
 
@@ -189,15 +192,16 @@ def _rpc(func):
             ws_locator = None
         msg = pickle.dumps((func_id, args, kwar, ws_locator), pickle.HIGHEST_PROTOCOL)
         ret = fd_trick.send_with_fd(_call_endpoint, msg, ws_fd)
-        if ret != len(message):
+        if ret != len(msg):
             # TODO: Weird! Can this ever happen? Maybe if message is too big.
             # Do something about it...
             pass
+        return ws_uid
 
     def proxy_call(*args, **kwar):
         msg = pickle.dumps((func_id, args, kwar), pickle.HIGHEST_PROTOCOL)
         ret = _call_endpoint.send(msg)
-        if ret != len(message):
+        if ret != len(msg):
             # TODO: Weird! Can this ever happen? Maybe if message is too big.
             # Do something about it...
             pass
