@@ -23,18 +23,19 @@ class _Subscriber(object):
         self.deliverer = None
 
 class Channel(object):
-    __slots__ = ('ch_id', 'next_seqnum', 'first_seqnum', 'msg_history', 'subscribers')
-    def __init__(self, ch_id):
-        self.ch_id = ch_id
-        self.next_seqnum = 0
-        self.first_seqnum = 0
+    __slots__ = ('name', 'ch_type', 'next_seqnum', 'first_seqnum', 'msg_history', 'subscribers')
+    def __init__(self, channel_name, channel_type):
+        self.name = channel_name
+        self.ch_type = channel_type
+        self.next_seqnum = 1
+        self.first_seqnum = 1
         self.msg_history = {}
         self.subscribers = {}
 
     def subscribe(self, ws, from_seqnum=None):
         sb = _Subscriber(ws)
         self.subscribers[ws.unique_id] = sb
-        if from_seqnum and self.next_seqnum > from_seqnum:
+        if from_seqnum is not None and self.next_seqnum > from_seqnum:
             sb.deliverer = gevent.spawn(self._deliver, sb, from_seqnum)
 
     def unsubscribe(self, sb):
@@ -47,9 +48,14 @@ class Channel(object):
         seqnum = self.next_seqnum
         self.next_seqnum += 1
 
-        msg = '\n'.join((str(seqnum), msg))
+        msg = '\n'.join((self.ch_type, str(seqnum), msg))
         self.msg_history[seqnum] = msg
 
+        # Ideally, this send procedure should attempt to
+        # send the messages in non-blocking way, and only if
+        # it fails, spawn a sender greenlet, but WebSocket API
+        # doesn't expose such functionality (try_send() or such).
+        # TODO: implement try_send
         undelivering = [sb for sb in self.subscribers.itervalues() if not sb.deliverer]
         spawn_count = 0
         for sb in undelivering:
@@ -74,7 +80,7 @@ class Channel(object):
 
     def _try_self_destroy(self):
         if not self.subscribers and not self.msg_history:
-            del _channels[self.ch_id]
+            del _channels[(self.name, self.ch_type)]
 
     def _deliver(self, sb, seqnum):
         ws = sb.ws
@@ -213,30 +219,31 @@ def _rpc(func):
 
 class _ChannelDict(dict):
     def __missing__(self, key):
-        new_ch = Channel(key)
+        new_ch = Channel(*key)
         self[key] = new_ch
         return new_ch
 
 _channels = _ChannelDict()
 
 @_rpc
-def post_update(channel_name, message):
-    _channels[channel_name].post_message(message)
+def post_update(channel_name, channel_type, message):
+    gevent.spawn(_channels[(channel_name, channel_type)].post_message, message)
 
 @_rpc
-def subscribe_websocket(channel_name, ws, start_from=None):
-    _channels[channel_name].subscribe(ws, start_from)
+def subscribe_websocket(channel_name, channel_type, ws, start_from=None):
+    _channels[(channel_name, channel_type)].subscribe(ws, start_from)
 
 @_rpc
-def unsubscribe_websocket(channel_name, ws_id):
-    ch = _channels[channel_name]
+def unsubscribe_websocket(channel_name, channel_type, ws_id):
+    ch = _channels[(channel_name, channel_type)]
     ch.unsubscribe(ch.subscribers[ws_id])
 
 @_rpc
-def delete_channel(channel_name):
-    if channel_name in _channel:
-        _channels[channel_name].force_stop()
-        del _channels[channel_name]
+def delete_channel(channel_name, channel_type):
+    key = (channel_name, channel_type)
+    if key in _channel:
+        _channels[key].force_stop()
+        del _channels[key]
 
 def _id_cycler(start, end):
     val = start

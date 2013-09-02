@@ -22,9 +22,13 @@ def game_events(request, ws, game_id):
     pass
 
 def main_chat(request, ws):
-    ws_id = None
+    # First message is the channel register request
+    # contains the seqnums per channel type
+    msg = ws.receive()
+    seqnums = json.loads(msg)
+    ws_id = channel.subscribe_websocket('main', 'c', ws, seqnums['c'])
     try:
-        ws_id = channel.subscribe_websocket('main', ws)
+        del seqnums
         while 1:
             msg = ws.receive()
             if msg == None:
@@ -41,11 +45,10 @@ def main_chat(request, ws):
                 'msg': escape(msg)
             }
 
-            channel.post_update('main', 'c\n' + json.dumps(data))
+            channel.post_update('main', 'c', json.dumps(data))
     except WebSocketError:
         pass
     finally:
         if ws_id is not None:
-            channel.unsubscribe_websocket('main', ws_id)
-            pass
+            channel.unsubscribe_websocket('main', 'c', ws_id)
         print "Done with this websocket..."

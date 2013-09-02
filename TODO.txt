@@ -30,8 +30,9 @@ GreenHttp:
   File "/home/lucas/projetos/diggems/cpython_env/local/lib/python2.7/site-packages/geventwebsocket/handler.py", line 50, in run_websocket
     del self.server.clients[self.client_address]
   KeyError: ''
-- Pass channel type to channel calls.
-- See that chat history is loaded on connect.
+- WebSocket connection drops after some time, investigate... (possibly some nginx configuration?)
+- Monkey patch WebSocket class to allow for unique_id attribute.
+- Fix seqnum issues when Channel is deleted: seqnum resets, how is client supposed to deal with it?
 
 TODO Later:
 - Ask user to login on FB so his game stats will be recorded on his ID.

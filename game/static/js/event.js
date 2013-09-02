@@ -1,6 +1,5 @@
-function Event(channel_url, last_seqnum) {
+function Event(channel_url) {
     this.url = channel_url;
-    this.last_seqnum = last_seqnum;
     this.handlers = {};
     this.stopped = false;
     this.error_count = 0;
@@ -12,21 +11,21 @@ function Event(channel_url, last_seqnum) {
     this._build_socket();
 }
 
-Event.parser = /^(\d+)\n(.)\n([^]*)/;
+Event.parser = /^(.)\n(\d+)\n([^]*)/;
 
 Event.prototype._callback = function(ev) {
     var parsed = ev.data.match(Event.parser);
-    var seqnum = parseInt(parsed[1]);
-    
+    var handler_key = parsed[1];
+    var seqnum = parseInt(parsed[2]);
+    var handler = this.handlers[handler_key];
+
     // The conditional logic is inverted for the case where
     // this.last_seqnum is undefined: the message must be processed.
-    if(!(seqnum <= this.last_seqnum)) {
-	var handler_key = parsed[2];
+    if(handler && !(seqnum <= handler.last_seqnum)) {
 	var msg = parsed[3];
-    
-	this.handlers[handler_key](msg);
+	handler.call(msg);
+	handler.last_seqnum = seqnum;
     }
-    this.last_seqnum = seqnum;
 };
 
 Event.prototype._do_reconnect = function() {
@@ -57,6 +56,15 @@ Event.prototype._on_problem = function() {
 Event.prototype._on_connect = function() {
     // Upon successful connection, error count can be reset...
     this.error_count = 0;
+
+    // Send the last_seqnum for every message type:
+    var seqnums = {};
+    for (id in this.handlers) {
+	seqnums[id] = this.handlers[id].last_seqnum;
+    }
+    this.socket.send(JSON.stringify(seqnums));
+
+    // Send any pending message
     this._do_send();
 }
 
@@ -119,8 +127,8 @@ Event.prototype._build_socket = function() {
     this.socket.onclose = error_handler;
 };
 
-Event.prototype.register_handler = function(id, func) {
-    this.handlers[id] = func;
+Event.prototype.register_handler = function(id, func, last_seqnum) {
+    this.handlers[id] = {'call': func, 'last_seqnum': last_seqnum};
 };
 
 Event.prototype.stop = function() {

@@ -61,7 +61,7 @@ var chat = (function (){
 			input_field.addEventListener("keypress", handle_key_press, false);
 			//button.addEventListener("click", send_message, false);
 
-			ev.register_handler('c', handle_event);
+			ev.register_handler('c', handle_event, 0);
 		}
 	}
 })();
