@@ -31,7 +31,6 @@ GreenHttp:
     del self.server.clients[self.client_address]
   KeyError: ''
 - WebSocket connection drops after some time, investigate... (possibly some nginx configuration?)
-- Monkey patch WebSocket class to allow for unique_id attribute.
 - Fix seqnum issues when Channel is deleted: seqnum resets, how is client supposed to deal with it?
 
 TODO Later:

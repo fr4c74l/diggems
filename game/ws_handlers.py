@@ -26,7 +26,7 @@ def main_chat(request, ws):
     # contains the seqnums per channel type
     msg = ws.receive()
     seqnums = json.loads(msg)
-    ws_id = channel.subscribe_websocket('main', 'c', ws, seqnums['c'])
+    channel.subscribe_websocket('main', 'c', ws, seqnums['c'])
     try:
         del seqnums
         while 1:
@@ -49,6 +49,8 @@ def main_chat(request, ws):
     except WebSocketError:
         pass
     finally:
-        if ws_id is not None:
-            channel.unsubscribe_websocket('main', 'c', ws_id)
+        try:
+            channel.unsubscribe_websocket('main', 'c', ws.environ['unique_id'])
+        except KeyError:
+            pass
         print "Done with this websocket..."

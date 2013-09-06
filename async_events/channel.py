@@ -86,9 +86,9 @@ class Channel(object):
         ws = sb.ws
 
         try:
+            if seqnum < self.first_seqnum:
+                seqnum = self.first_seqnum
             while seqnum < self.next_seqnum:
-                if seqnum < self.first_seqnum:
-                    seqnum = self.first_seqnum
                 msg = self.msg_history[seqnum]
                 ws.send(msg, False)
                 seqnum += 1
@@ -119,9 +119,10 @@ _rpc_next_id = 0
 
 def _ws_serialize(websocket):
     try:
-        uid = websocket.unique_id
-    except AttributeError:
+        uid = websocket.environ['unique_id']
+    except KeyError:
         uid = _ws_id_iterator.next()
+        websocket.environ['unique_id'] = uid
 
     return (websocket.handler.socket.fileno(), uid)
 
@@ -202,7 +203,6 @@ def _rpc(func):
             # TODO: Weird! Can this ever happen? Maybe if message is too big.
             # Do something about it...
             pass
-        return ws_uid
 
     def proxy_call(*args, **kwar):
         msg = pickle.dumps((func_id, args, kwar), pickle.HIGHEST_PROTOCOL)
