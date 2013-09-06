@@ -32,8 +32,10 @@ GreenHttp:
   KeyError: ''
 - WebSocket connection drops after some time, investigate... (possibly some nginx configuration?)
 - Fix seqnum issues when Channel is deleted: seqnum resets, how is client supposed to deal with it?
+- Verify and fix seqnum starting value inconsistencies.
 
 TODO Later:
+- Rename game_helpers.py to just helpers.py.
 - Ask user to login on FB so his game stats will be recorded on his ID.
 - Internationalization (incomplete)
   - Spanish

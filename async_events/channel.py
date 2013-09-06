@@ -16,6 +16,9 @@ from decorator import FunctionMaker
 from geventwebsocket.websocket import WebSocket, WebSocketError
 from geventwebsocket.logging import create_logger
 
+#TODO: make this class non-dependant of game module
+from game.game_helpers import gen_token
+
 class _Subscriber(object):
     __slots__ = ('ws', 'deliverer')
     def __init__(self, ws):
@@ -23,7 +26,7 @@ class _Subscriber(object):
         self.deliverer = None
 
 class Channel(object):
-    __slots__ = ('name', 'ch_type', 'next_seqnum', 'first_seqnum', 'msg_history', 'subscribers')
+    __slots__ = ('name', 'ch_type', 'next_seqnum', 'first_seqnum', 'msg_history', 'subscribers', 'id')
     def __init__(self, channel_name, channel_type):
         self.name = channel_name
         self.ch_type = channel_type
@@ -31,12 +34,25 @@ class Channel(object):
         self.first_seqnum = 1
         self.msg_history = {}
         self.subscribers = {}
+        self.id = gen_token()
 
-    def subscribe(self, ws, from_seqnum=None):
+    def subscribe(self, ws, from_seqnum=None, last_channel=None):
+        # Advise what channel is this before sending the rest of the messages
+        try:
+            ws.send('@\n' + self.id)
+        except WebSocketError:
+            self._try_self_destroy()
+            return
+
         sb = _Subscriber(ws)
         self.subscribers[ws.unique_id] = sb
-        if from_seqnum is not None and self.next_seqnum > from_seqnum:
-            sb.deliverer = gevent.spawn(self._deliver, sb, from_seqnum)
+
+        if from_seqnum is not None:
+            if last_channel is not None and last_channel != self.id:
+                from_seqnum = 0
+
+            if self.next_seqnum > from_seqnum:
+                sb.deliverer = gevent.spawn(self._deliver, sb, from_seqnum)
 
     def unsubscribe(self, sb):
         if sb.deliverer:
@@ -85,9 +101,9 @@ class Channel(object):
     def _deliver(self, sb, seqnum):
         ws = sb.ws
 
+        if seqnum < self.first_seqnum:
+            seqnum = self.first_seqnum
         try:
-            if seqnum < self.first_seqnum:
-                seqnum = self.first_seqnum
             while seqnum < self.next_seqnum:
                 msg = self.msg_history[seqnum]
                 ws.send(msg, False)
@@ -230,8 +246,8 @@ def post_update(channel_name, channel_type, message):
     gevent.spawn(_channels[(channel_name, channel_type)].post_message, message)
 
 @_rpc
-def subscribe_websocket(channel_name, channel_type, ws, start_from=None):
-    _channels[(channel_name, channel_type)].subscribe(ws, start_from)
+def subscribe_websocket(channel_name, channel_type, ws, start_from=None, last_channel=None):
+    gevent.spawn(_channels[(channel_name, channel_type)].subscribe, ws, start_from)
 
 @_rpc
 def unsubscribe_websocket(channel_name, channel_type, ws_id):
