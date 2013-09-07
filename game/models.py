@@ -22,6 +22,7 @@ class UserProfile(models.Model):
     games_won = models.IntegerField(default=0)
     total_score = models.IntegerField(default=0)
     last_seen = models.DateTimeField(auto_now=True, db_index=True)
+    elo = models.IntegerField(default=1200)
 
     def guest_name(self):
         return '~'.join((_('guest'), self.id[:4]))
@@ -73,6 +74,43 @@ class UserProfile(models.Model):
         # Must always save, to update timestamp
         prof.save()
         return prof
+    
+    #params: user, user, 1 or 2, Bool
+    @staticmethod
+    def update_elo_rank(playerA, playerB, winner, penalize_loser):
+        # if playerA is the winner
+        if winner == 1:
+            winner_rank, loser_rank = playerA.elo, playerB.elo
+        else:
+            winner_rank, loser_rank = playerB.elo, playerA.elo
+      
+        rank_diff = winner_rank - loser_rank
+        expectation = (rank_diff * -1) / 400
+        odds = 1 / (1 + 10**expectation)
+        
+        if winner_rank.games_finished <= 30:
+            kfactor = 30
+        elif winner_rank.elo >= 2400:
+            kfactor = 10
+        else:
+            kfactor = 15
+
+        # Rnew = Roriginal + Kfactor(score - expectations)
+        # for each subject, their score is 1 for a win 0 for a loss
+
+        new_winner_rank = round(winner_rank + (kfactor * (1 - odds)))
+        if penalize_loser:
+            new_rank_diff = new_winner_rank - winner_rank
+            new_loser_rank = loser_rank - new_rank_diff
+        else:
+            new_loser_rank = loser_rank
+        if new_loser_rank < 1:
+            new_loser_rank = 1
+        if winner == 1:
+            playerA.elo = new_winner_rank
+            playerB.elo = new_loser_rank
+        playerA.elo = new_loser_rank
+        playerB.elo = new_winner_rank
 
 class Player(models.Model):
     has_tnt = models.BooleanField(default=True)

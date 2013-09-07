@@ -8,6 +8,7 @@ import json
 import ssl
 import hashlib
 import locale
+import math
 from diggems import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
@@ -47,6 +48,7 @@ def get_user_info(user, with_private=False):
         stats = {
             'score': user.total_score,
             'victories': user.games_won,
+            'elo': user.elo,
         }
 
         try:
@@ -460,6 +462,11 @@ def move(request, game_id):
     me.save()
 
     if game.state >= 3: # Game is over
+        if game.state == 3:
+            update_elo_rank(game.p1.user,game.p2.user,1,True)
+        elif game.state == 4:
+            update_elo_rank(game.p1.user,game.p2.user,2,True)
+            
         remaining = 51 - points[0] - points[1]
         points[0 if points[0] > points[1] else 1] += remaining
 
