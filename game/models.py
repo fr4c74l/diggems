@@ -8,6 +8,7 @@ from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
+from diggems.utils import gen_token
 
 class FacebookCache(models.Model):
     uid = models.CharField(max_length=30, unique=True)
@@ -60,7 +61,7 @@ class UserProfile(models.Model):
             if not user_id:
                 # New guest user, create a temporary guest profile
                 prof = UserProfile()
-                prof.id = game_helpers.gen_token()
+                prof.id = gen_token()
                 request.session['user_id'] = prof.id
         else:
             # Authenticated by us

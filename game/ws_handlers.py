@@ -25,10 +25,15 @@ def main_chat(request, ws):
     # First message is the channel register request
     # contains the seqnums per channel type
     msg = ws.receive()
-    seqnums = json.loads(msg)
-    channel.subscribe_websocket('main', 'c', ws, seqnums['c'])
     try:
-        del seqnums
+        seq_info = json.loads(msg)['c']
+        channel.subscribe_websocket('main', 'c', ws, seq_info['seqnum'], seq_info.get('channel_id'))
+        del seq_info
+    except KeyError:
+        ws.close()
+        return
+
+    try:
         while 1:
             msg = ws.receive()
             if msg == None:

@@ -26,6 +26,7 @@ from django.utils.translation import ugettext as _, pgettext
 from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
 from models import *
+from diggems.utils import gen_token, true_random
 from django.utils.translation import to_locale, get_language
 
 def get_user_info(user, with_private=False):

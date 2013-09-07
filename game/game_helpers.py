@@ -2,8 +2,6 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 import itertools
-import random
-import radix64
 import models
 import http_cli
 from django.core.cache import cache
@@ -67,11 +65,6 @@ def for_each_surrounding(m, n, func):
         y = n + dy
         if 0 <= x <= 15 and 0 <= y <= 15:
             func(x, y)
-
-true_random = random.SystemRandom()
-
-def gen_token():
-    return radix64.encode(true_random.getrandbits(132))
 
 def publish_score(user):
     def try_publish_score():

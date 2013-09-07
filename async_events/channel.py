@@ -16,8 +16,7 @@ from decorator import FunctionMaker
 from geventwebsocket.websocket import WebSocket, WebSocketError
 from geventwebsocket.logging import create_logger
 
-#TODO: make this class non-dependant of game module
-from game.game_helpers import gen_token
+from diggems.utils import gen_token
 
 class _Subscriber(object):
     __slots__ = ('ws', 'deliverer')
@@ -36,10 +35,10 @@ class Channel(object):
         self.subscribers = {}
         self.id = gen_token()
 
-    def subscribe(self, ws, from_seqnum=None, last_channel=None):
+    def subscribe(self, ws, from_seqnum, last_channel):
         # Advise what channel is this before sending the rest of the messages
         try:
-            ws.send('@\n' + self.id)
+            ws.send('\n'.join(('@\n', self.ch_type, self.id)))
         except WebSocketError:
             self._try_self_destroy()
             return
@@ -51,7 +50,7 @@ class Channel(object):
             if last_channel is not None and last_channel != self.id:
                 from_seqnum = 0
 
-            if self.next_seqnum > from_seqnum:
+            if self.next_seqnum > (from_seqnum + 1):
                 sb.deliverer = gevent.spawn(self._deliver, sb, from_seqnum)
 
     def unsubscribe(self, sb):
@@ -76,7 +75,7 @@ class Channel(object):
         spawn_count = 0
         for sb in undelivering:
             sb.deliverer = gevent.spawn(self._deliver, sb, seqnum)
-            # Yield at each 100 greenlets so that they may complete
+            # Yield at each 100 greenlets so that some may complete
             # and release memory...
             spawn_count += 1
             if spawn_count >= 100:
@@ -247,7 +246,7 @@ def post_update(channel_name, channel_type, message):
 
 @_rpc
 def subscribe_websocket(channel_name, channel_type, ws, start_from=None, last_channel=None):
-    gevent.spawn(_channels[(channel_name, channel_type)].subscribe, ws, start_from)
+    gevent.spawn(_channels[(channel_name, channel_type)].subscribe, ws, start_from, last_channel)
 
 @_rpc
 def unsubscribe_websocket(channel_name, channel_type, ws_id):
