@@ -348,10 +348,7 @@ def game(request, game_id):
     except ObjectDoesNotExist:
         return render_with_extra('game404.html', profile, status=404)
 
-    if profile.facebook:
-        user_id = profile.facebook.name
-    else:
-        user_id = profile.guest_name()
+    user_id = profile.display_name()
 
     data = {'state': game.state,
             'game_id': game_id,
@@ -525,10 +522,7 @@ def chat_post(request, game_id=None):
             return HttpResponseForbidden()
         event_channel = game.channel
 
-    if profile.facebook:
-        username = profile.facebook.name
-    else:
-        username = profile.guest_name()
+    username = profile.display_name()
 
     utcnow = datetime.datetime.utcnow()
     midnight_utc = datetime.datetime.combine(utcnow.date(), time(0))

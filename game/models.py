@@ -27,6 +27,11 @@ class UserProfile(models.Model):
     def guest_name(self):
         return '~'.join((_('guest'), self.id[:4]))
 
+    def display_name(self):
+        if self.facebook:
+            return self.facebook.name
+        return self.guest_name()
+
     def merge(self, other):
         # Update players user to the unified one
         Player.objects.filter(user=other).update(user=self)

@@ -7,7 +7,8 @@
 # release as many resources as possible (like database
 # transactions, connections and such) before calling a
 # a blocking function (like ws.receive()), so it will not
-# disrupt the handling of other requests.
+# disrupt the handling of other requests. Use DBReleaser
+# to wrap code that uses database.
 
 import datetime
 import json
@@ -15,6 +16,7 @@ import json
 from async_events import channel
 from geventwebsocket import WebSocketError
 from django.utils.html import escape
+from django.db import transaction, close_connection
 
 from importlib import import_module
 from django.conf import settings
@@ -22,17 +24,30 @@ SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 from models import UserProfile
 
+# To be used with "with" statement:
+# wraps the code in a transaction and releases the database connection afterwards
+class DBReleaser(object):
+    def __init__(self):
+        self._commiter = transaction.commit_on_success()
+    
+    def __enter__(self):
+        self._commiter.__enter__()
+
+    def __exit__(self, exc_type, exc_value, traceback):
+        try:
+            return self._commiter.__exit__(exc_type, exc_value, traceback)
+        finally:
+            close_connection()
+
 def game_events(request, ws, game_id):
     pass
 
 def main_chat(request, ws):
     try:
-        session = SessionStore(session_key=request.COOKIES['sessionid'])
-        profile = UserProfile.get(session)
-        if profile.facebook:
-            username = profile.facebook.name
-        else:
-            username = profile.guest_name()
+        with DBReleaser():
+            session = SessionStore(session_key=request.COOKIES['sessionid'])
+            profile = UserProfile.get(session)
+            username = profile.display_name()
 
         # First message is the channel register request
         # contains the seqnums per channel type
