@@ -23,8 +23,8 @@ from gevent import socket
 from gevent_fastcgi.server import FastCGIServer
 from gevent_fastcgi.wsgi import WSGIRequestHandler
 
-from async_events import channel, ws_dispatcher
 from diggems import wsgi
+from async_events import channel, ws_dispatcher
 
 # Patch to make psycopg2 green
 def gevent_wait_callback(conn, timeout=None):

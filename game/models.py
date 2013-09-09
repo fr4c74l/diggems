@@ -44,32 +44,22 @@ class UserProfile(models.Model):
         other.delete()
 
     @staticmethod
-    def get(request):
-        is_auth = request.user.is_authenticated()
-        user_id = request.session.get('user_id')
+    def get(session):
+        user_id = session.get('user_id')
 
-        if not is_auth:
-            # Not authenticated by us
-            if user_id:
-                # Recurring FB or guest user
-                try:
-                    prof = UserProfile.objects.get(id=user_id)
-                except UserProfile.DoesNotExist:
-                    # Old cookie, invalidate the id
-                    user_id = None
-                
-            if not user_id:
-                # New guest user, create a temporary guest profile
-                prof = UserProfile()
-                prof.id = gen_token()
-                request.session['user_id'] = prof.id
-        else:
-            # Authenticated by us
-            prof = request.user.get_profile()
+        if user_id:
+            # Recurring FB or guest user
+            try:
+                prof = UserProfile.objects.get(id=user_id)
+            except UserProfile.DoesNotExist:
+                # Old cookie, invalidate the id
+                user_id = None
 
-            # Authenticated user should not have user_id
-            if user_id:
-                del request.session['user_id']
+        if not user_id:
+            # New guest user, create a temporary guest profile
+            prof = UserProfile()
+            prof.id = gen_token()
+            session['user_id'] = prof.id
 
         # Must always save, to update timestamp
         prof.save()

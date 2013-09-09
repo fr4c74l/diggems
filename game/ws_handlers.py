@@ -1,15 +1,13 @@
 # So, you think you can handle a WebSocket, huh?
 # Write you handlers here, and remenber, this ain't no Django view.
 # There is no easy ride down here: middlewares doesn't work,
-# neither database connection are set and ready waiting for you.
+# neither database connection automatically freed for you.
 
 # Each handler is run on its own Greenlet, so make sure you
 # release as many resources as possible (like database
 # transactions, connections and such) before calling a
 # a blocking function (like ws.receive()), so it will not
 # disrupt the handling of other requests.
-
-# TODO: Find out how to deal with database and auth cookies and stuff...
 
 import datetime
 import json
@@ -18,19 +16,31 @@ from async_events import channel
 from geventwebsocket import WebSocketError
 from django.utils.html import escape
 
+from importlib import import_module
+from django.conf import settings
+SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
+
+from models import UserProfile
+
 def game_events(request, ws, game_id):
     pass
 
 def main_chat(request, ws):
-    # First message is the channel register request
-    # contains the seqnums per channel type
-    msg = ws.receive()
     try:
+        session = SessionStore(session_key=request.COOKIES['sessionid'])
+        profile = UserProfile.get(session)
+        if profile.facebook:
+            username = profile.facebook.name
+        else:
+            username = profile.guest_name()
+
+        # First message is the channel register request
+        # contains the seqnums per channel type
+        msg = ws.receive()
         seq_info = json.loads(msg)['c']
         channel.subscribe_websocket('main', 'c', ws, seq_info['seqnum'], seq_info.get('channel_id'))
         del seq_info
-    except KeyError:
-        ws.close()
+    except KeyError, WebSocketError:
         return
 
     try:
@@ -46,7 +56,7 @@ def main_chat(request, ws):
 
             data = {
                 'time_in_sec': delta.seconds,
-                'username': 'Desnobro',
+                'username': username,
                 'msg': escape(msg)
             }
 
@@ -55,6 +65,7 @@ def main_chat(request, ws):
         pass
     finally:
         try:
+            #TODO: inverstigate why sometimes ws.environ is None
             channel.unsubscribe_websocket('main', 'c', ws.environ['unique_id'])
         except KeyError:
             pass

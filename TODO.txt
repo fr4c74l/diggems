@@ -32,6 +32,7 @@ GreenHttp:
   KeyError: ''
 - WebSocket connection drops after some time, investigate... (possibly some nginx configuration?)
 - Allow for tightly controlled sequence numbers.
+- On user login/logout, restart websocket connection, so user identity is updated on server (or even better, use websocket to communicate login).
 
 TODO Later:
 - Rename game_helpers.py to just helpers.py.

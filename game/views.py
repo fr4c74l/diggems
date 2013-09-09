@@ -152,7 +152,7 @@ def fb_login(request):
 
 @transaction.commit_on_success
 def fb_logout(request):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     if profile.user or profile.facebook:
         profile = UserProfile(id=gen_token())
         profile.save()
@@ -170,7 +170,7 @@ def adhack(request, ad_id):
         content_type='text/html; charset=utf-8')
 
 def index(request):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
 
     playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
 
@@ -191,7 +191,7 @@ def new_game(request):
         c = Context({'url': '/new_game/'})
         return render_to_response('post_redirect.html', c)
 
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
 
     mine = [[0] * 16 for i in xrange(16)]
 
@@ -224,7 +224,7 @@ def new_game(request):
 
 @transaction.commit_on_success
 def join_game(request, game_id):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
 
     # If game is too old, render 404 game error screen
     try:
@@ -279,7 +279,7 @@ def abort_game(request, game_id):
 
     game = get_object_or_404(Game, pk=game_id)
     if game.state == 0:
-        profile = UserProfile.get(request)
+        profile = UserProfile.get(request.session)
         pdata = game.what_player(profile)
         if pdata:
             pdata[1].delete()
@@ -296,7 +296,7 @@ def claim_game(request, game_id):
     if game.state not in (1,2):
         return HttpResponseForbidden()
     
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     pdata = game.what_player(profile)
     if pdata:
         my_number, me = pdata
@@ -341,7 +341,7 @@ def claim_game(request, game_id):
 @transaction.commit_on_success
 def game(request, game_id):
     # TODO: maybe control who can watch a game
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     #game = get_object_or_404(Game, pk=game_id)
     try:
         game = Game.objects.get(pk=int(game_id))
@@ -396,7 +396,7 @@ def move(request, game_id):
 
     game = get_object_or_404(Game, pk=game_id)
 
-    pdata = game.what_player(UserProfile.get(request))
+    pdata = game.what_player(UserProfile.get(request.session))
     if not pdata or pdata[0] != game.state:
         return HttpResponseForbidden()
 
@@ -494,7 +494,7 @@ def move(request, game_id):
     return HttpResponse()
 
 def donate(request):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
 
 def info(request, page):
@@ -503,7 +503,7 @@ def info(request, page):
         raise Http404
     for locale in (actual_locale, 'en'):
         try:
-            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request))
+            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request.session))
         except TemplateDoesNotExist:
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
@@ -516,7 +516,7 @@ def chat_post(request, game_id=None):
     if not msg:
         return HttpResponseBadRequest()
 
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     if game_id is None:
         event_channel = "main_channel"
     else:
