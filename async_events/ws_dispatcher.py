@@ -6,7 +6,6 @@ import gevent
 from django.core.handlers.wsgi import WSGIRequest
 from diggems import settings
 from django.core import urlresolvers
-from django.db import close_connection
 from django.utils import translation
 
 _resolver = urlresolvers.RegexURLResolver(r'^/', settings.WEBSOCKET_URLCONF)
@@ -30,4 +29,3 @@ def dispatcher(environ, start_response):
         handler_function(request, websocket, *function_args, **function_kwargs)
     finally:
         websocket.close()
-        close_connection()

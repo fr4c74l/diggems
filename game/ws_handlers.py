@@ -17,16 +17,18 @@ from async_events import channel
 from geventwebsocket import WebSocketError
 from django.utils.html import escape
 from django.db import transaction, close_connection
+from django.utils.translation import ugettext as _
 
 from importlib import import_module
 from django.conf import settings
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
-from models import UserProfile
+import models
 
 # To be used with "with" statement:
 # wraps the code in a transaction and releases the database connection afterwards
 class DBReleaser(object):
+    __slots__ = ('_commiter',)
     def __init__(self):
         self._commiter = transaction.commit_on_success()
     
@@ -39,49 +41,93 @@ class DBReleaser(object):
         finally:
             close_connection()
 
-def game_events(request, ws, game_id):
-    pass
+class ChannelRegisterer(object):
+    __slots__ = ('chname', 'types', 'ws')
+    def __init__(self, ws, name, types):
+        self.chname = name
+        self.types = types
+        self.ws = ws
 
-def main_chat(request, ws):
-    try:
-        with DBReleaser():
-            session = SessionStore(session_key=request.COOKIES['sessionid'])
-            profile = UserProfile.get(session)
-            username = profile.display_name()
+    def __enter__(self):
+        try:
+            # First message is the channel register request
+            # contains the seqnums per channel type
+            msg = self.ws.receive()
+            seq_infos = json.loads(msg)
+            for t in self.types:
+                seq_info = seq_infos[t]
+                seqnum = seq_info['seqnum']
+                channid = seq_info.get('channel_id')
+                channel.subscribe_websocket(self.chname, t, self.ws, seqnum, channid)
+        except:
+            self.__exit__(None, None, None)
+            raise
 
-        # First message is the channel register request
-        # contains the seqnums per channel type
-        msg = ws.receive()
-        seq_info = json.loads(msg)['c']
-        channel.subscribe_websocket('main', 'c', ws, seq_info['seqnum'], seq_info.get('channel_id'))
-        del seq_info
-    except KeyError, WebSocketError:
-        return
-
-    try:
-        while 1:
-            msg = ws.receive()
-            if msg == None:
-                break
-            msg = msg[2:]
-
-            utcnow = datetime.datetime.utcnow()
-            midnight_utc = datetime.datetime.combine(utcnow.date(), datetime.time(0))
-            delta = utcnow - midnight_utc
-
-            data = {
-                'time_in_sec': delta.seconds,
-                'username': username,
-                'msg': escape(msg)
-            }
-
-            channel.post_update('main', 'c', json.dumps(data))
-    except WebSocketError:
-        pass
-    finally:
+    def __exit__(self, exc_type, exc_value, traceback):
         try:
             #TODO: inverstigate why sometimes ws.environ is None
-            channel.unsubscribe_websocket('main', 'c', ws.environ['unique_id'])
+            ws_id = self.ws.environ['unique_id']
+            for t in self.types:
+                channel.unsubscribe_websocket(self.chname, t, ws_id)
         except KeyError:
             pass
+
+        return exc_type == WebSocketError
+
+def day_seconds():
+    utcnow = datetime.datetime.utcnow()
+    midnight_utc = datetime.datetime.combine(utcnow.date(), datetime.time(0))
+    delta = utcnow - midnight_utc
+    return delta.seconds
+
+def report_chat_event(chname, username, connection):
+    if connection:
+        status = _('{} joined the chat')
+    else:
+        status = _('{} has left the chat')
+
+    data = {
+        'time_in_sec': day_seconds(),
+        'status': status.format(username)
+    }
+    channel.post_update(chname, 'c', json.dumps(data))
+
+def chat_post(chname, username, msg):
+    data = {
+        'time_in_sec': day_seconds(),
+        'username': username,
+        'msg': escape(msg)
+    }
+
+    channel.post_update(chname, 'c', json.dumps(data))
+
+def game_events(request, ws, game_id):
+    with DBReleaser():
+        session = SessionStore(session_key=request.COOKIES['sessionid'])
+        profile = models.UserProfile.get(session)
+        game = models.Game.objects.get(pk=game_id)
+        pdata = game.what_player(profile)
+
+    chname = 'g{}'.format(game_id)
+    with ChannelRegisterer(ws, chname, 'cg'):
+        pass
+
+def main_chat(request, ws):
+    with DBReleaser():
+        session = SessionStore(session_key=request.COOKIES['sessionid'])
+        profile = models.UserProfile.get(session)
+        username = profile.display_name()
+
+    chname = 'main'
+    try:
+        with ChannelRegisterer(ws, chname, 'c'):
+            report_chat_event(chname, username, True)
+            while 1:
+                msg = ws.receive()
+                if msg == None:
+                    break
+                msg = msg[2:]
+                chat_post(chname, username, msg)
+    finally:
+        report_chat_event(chname, username, False)
         print "Done with this websocket..."

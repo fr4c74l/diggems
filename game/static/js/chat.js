@@ -44,8 +44,16 @@ var chat = (function (){
 
 		var li = document.createElement('li');
 		li.className = "message";
-		var li_text = "<span style='color:#999;font-size:small;'>" + time_fmt + "</span><span style='color:#000;font-size:small;font-weight: bold;'>" + data['username'] + ' : ' + "</span>" +
-						"<span style='color:#000'>" + data['msg'] + "</span>";
+		var li_text;
+		if(data['msg']) {
+			li_text = "<span style='color:#999;font-size:small;'>" + time_fmt
+			+ "</span><span style='color:#000;font-size:small;font-weight: bold;'>"
+			+ data['username'] + ' : ' + "</span>"
+			+ "<span style='color:#000'>" + data['msg'] + "</span>";
+		} else {
+			li_text = "<span style='color:#999;font-size:small;'>" + time_fmt
+			+ " " + data['status'] + "</span>";
+		}
 		li.innerHTML = li_text;
 
 		chat_ul.appendChild(li);

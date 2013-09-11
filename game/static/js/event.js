@@ -152,6 +152,13 @@ Event.prototype.register_handler = function(id, func, last_seqnum) {
     this.handlers[id] = {'call': func, 'last_seqnum': last_seqnum};
 };
 
+Event.prototype.reconnect = function() {
+    if (this.socket) {
+	this.socket.close();
+    }
+    this._build_socket();
+}
+
 Event.prototype.stop = function() {
     this.stopped = true;
     clearTimeout(this._reconnect_timer);

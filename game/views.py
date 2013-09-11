@@ -22,7 +22,7 @@ from django.db.models import Q
 from django.template import Context, RequestContext, loader, TemplateDoesNotExist
 from django.template.defaultfilters import floatformat
 from django.utils.html import escape, mark_safe
-from django.utils.translation import ugettext as _, pgettext
+from django.utils.translation import pgettext
 from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
 from models import *
