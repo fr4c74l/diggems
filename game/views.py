@@ -498,10 +498,9 @@ def donate(request):
     return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
 
 def info(request, page):
-    actual_locale = get_language()
     if page not in info.existing_pages:
         raise Http404
-    for locale in (actual_locale, 'en'):
+    for locale in (request.LANGUAGE_CODE, 'en'):
         try:
             return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request.session))
         except TemplateDoesNotExist:
