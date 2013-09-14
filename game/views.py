@@ -10,6 +10,7 @@ import gevent
 import http_cli
 import hashlib
 import locale
+import gevent
 from diggems import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
@@ -28,6 +29,7 @@ from game_helpers import *
 from models import *
 from diggems.utils import gen_token, true_random
 from django.utils.translation import to_locale, get_language
+from async_events import channel
 
 def get_user_info(user, with_private=False):
     if user.facebook:
@@ -139,12 +141,12 @@ def fb_login(request):
         query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile}).values('channel')
 
         # Build the message to send to the game channels regarding player p
-        msg = 'p\n{}\n{}'.format(p, user_info)
+        msg = '\n'.join(p, user_info)
 
         # TODO: find a way to make this a single query, because I could not.
         # TODO: make this asyncronous.
         for game in query:
-            post_update(game['channel'], msg)
+            channel.post_update(game.channel(), 'p', msg)
 
     # Full user info
     user_info = json.dumps(get_user_info(profile, True))
@@ -215,10 +217,8 @@ def new_game(request):
     game.mine = mine_encode(mine)
     if request.REQUEST.get('private', default=False):
         game.token = gen_token()
-    game.channel = gen_token()
     game.p1 = p1
     game.save()
-    create_channel(game.channel)
 
     return HttpResponseRedirect('/game/' + str(game.id))
 
@@ -260,15 +260,14 @@ def join_game(request, game_id):
     game.save()
     transaction.commit()
 
-    # TODO: make these asynchronous:
+    ch_id = game.channel()
     
     # Game state change
-    outdata = map(unicode, [u'g', game.seq_num, game.state])
-    post_update(game.channel, u'\n'.join(outdata))
+    channel.post_update(ch_id, 'g', str(game.state), game.seq_num)
 
     # Player info display
-    outdata = 'p\n2\n' + json.dumps(get_user_info(profile))
-    post_update(game.channel, outdata)
+    outdata = '2\n' + json.dumps(get_user_info(profile))
+    channel.post_update(ch_id, 'p', outdata)
 
     return HttpResponseRedirect('/game/' + game_id)
 
@@ -330,14 +329,13 @@ def claim_game(request, game_id):
     game.save()
     transaction.commit()
 
-    result = '\n'.join(map(str, (u'g', game.seq_num, game.state)))
-    post_update(game.channel, result)
+    channel.post_update(game.channel(), 'g', str(game.state), game.seq_num)
     
     if term == 'y':
-        publish_score(me.user)
+        gevent.spawn(publish_score, me.user)
     elif term == 'z':
-        publish_score(game.p1.user)
-        publish_score(game.p2.user)
+        gevent.spawn(publish_score, game.p1.user)
+        gevent.spawn(publish_score, game.p2.user)
 
     return HttpResponse()
 
@@ -356,7 +354,6 @@ def game(request, game_id):
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
-            'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
             'channel': game.channel,
             'p1_last_move': game.p1.last_move,
             'player_info': {1: get_user_info(game.p1.user),
@@ -475,21 +472,19 @@ def move(request, game_id):
              if mine[m][n] == 9:
                  revealed.append((m, n, 'x'))
 
-    result = itertools.chain(('g', str(game.seq_num), str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
+    result = itertools.chain((str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
     result = '\n'.join(result)
 
     # Everything is OK until now, so commit DB transaction
     transaction.commit()
 
-    # Since updating Facebook with score may be slow, we post
-    # the update to the user first...
-    post_update(game.channel, result)
+    # Post the update to the users...
+    channel.post_update(game.channel(), 'g', result, game.seq_num)
 
     # ... and then publish the scores on FB, if game is over.
-    # (TODO: If only this could be done asyncronously...)
     if game.state >= 3: 
-        publish_score(game.p1.user)
-        publish_score(game.p2.user)
+        gevent.spawn(publish_score, game.p1.user)
+        gevent.spawn(publish_score, game.p2.user)
 
     return HttpResponse()
 
@@ -506,36 +501,3 @@ def info(request, page):
         except TemplateDoesNotExist:
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
-
-def chat_post(request, game_id=None):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-
-    msg = request.body
-    if not msg:
-        return HttpResponseBadRequest()
-
-    profile = UserProfile.get(request.session)
-    if game_id is None:
-        event_channel = "main_channel"
-    else:
-        game = get_object_or_404(Game, pk=game_id)
-        if not game.what_player(profile):
-            return HttpResponseForbidden()
-        event_channel = game.channel
-
-    username = profile.display_name()
-
-    utcnow = datetime.datetime.utcnow()
-    midnight_utc = datetime.datetime.combine(utcnow.date(), time(0))
-    delta = utcnow - midnight_utc
-
-    data = {
-        'time_in_sec': delta.seconds,
-        'username': username,
-        'msg': escape(msg)
-    }
-
-    post_update(event_channel, 'c\n' + json.dumps(data))
-
-    return HttpResponse()

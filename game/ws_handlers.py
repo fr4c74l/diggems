@@ -18,6 +18,7 @@ from geventwebsocket import WebSocketError
 from django.utils.html import escape
 from django.db import transaction, close_connection
 from django.utils.translation import ugettext as _
+from django.core.exceptions import ObjectDoesNotExist
 
 from importlib import import_module
 from django.conf import settings
@@ -54,6 +55,7 @@ class ChannelRegisterer(object):
             # contains the seqnums per channel type
             msg = self.ws.receive()
             seq_infos = json.loads(msg)
+            print seq_infos
             for t in self.types:
                 seq_info = seq_infos[t]
                 seqnum = seq_info['seqnum']
@@ -101,26 +103,9 @@ def chat_post(chname, username, msg):
 
     channel.post_update(chname, 'c', json.dumps(data))
 
-def game_events(request, ws, game_id):
-    with DBReleaser():
-        session = SessionStore(session_key=request.COOKIES['sessionid'])
-        profile = models.UserProfile.get(session)
-        game = models.Game.objects.get(pk=game_id)
-        pdata = game.what_player(profile)
-
-    chname = 'g{}'.format(game_id)
-    with ChannelRegisterer(ws, chname, 'cg'):
-        pass
-
-def main_chat(request, ws):
-    with DBReleaser():
-        session = SessionStore(session_key=request.COOKIES['sessionid'])
-        profile = models.UserProfile.get(session)
-        username = profile.display_name()
-
-    chname = 'main'
+def chat_loop(ws, chname, types, username):
     try:
-        with ChannelRegisterer(ws, chname, 'c'):
+        with ChannelRegisterer(ws, chname, types):
             report_chat_event(chname, username, True)
             while 1:
                 msg = ws.receive()
@@ -130,4 +115,29 @@ def main_chat(request, ws):
                 chat_post(chname, username, msg)
     finally:
         report_chat_event(chname, username, False)
-        print "Done with this websocket..."
+
+def game_events(request, ws, game_id):
+    with DBReleaser():
+        try:
+            game = models.Game.objects.get(pk=game_id)
+            session = SessionStore(session_key=request.COOKIES['sessionid'])
+            profile = models.UserProfile.get(session)
+            #pdata = game.what_player(profile)
+            username = profile.display_name()
+        except ObjectDoesNotExist:
+            return
+
+    # TODO: implement user connect/disconnect state tracker...
+    chname = 'g' + str(game_id)
+    chat_loop(ws, chname, 'cgp', username)
+
+def main_chat(request, ws):
+    with DBReleaser():
+        try:
+            session = SessionStore(session_key=request.COOKIES['sessionid'])
+            profile = models.UserProfile.get(session)
+            username = profile.display_name()
+        except ObjectDoesNotExist:
+            return
+
+    chat_loop(ws, 'main', 'c', username)

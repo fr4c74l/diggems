@@ -88,11 +88,13 @@ class Game(models.Model):
     state = models.SmallIntegerField(default=0, db_index=True)
     seq_num = models.IntegerField(default=0)
     token = models.CharField(max_length=22, blank=True, null=True)
-    channel = models.CharField(max_length=22, unique=True)
     p1 = models.OneToOneField(Player, related_name='game_as_p1')
     p2 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p2')
     last_move_time = models.DateTimeField(auto_now=True)
-    
+
+    def channel(self):
+        return 'g' + str(self.id)
+
     def save(self, *args, **kwargs):
         self.seq_num = self.seq_num + 1
         super(Game, self).save(*args, **kwargs)

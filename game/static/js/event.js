@@ -34,11 +34,9 @@ Event.prototype._callback = function(ev) {
     var seqnum = parseInt(parsed[2]);
     var handler = this.handlers[handler_key];
 
-    // The conditional logic is inverted for the case where
-    // this.last_seqnum is undefined: the message must be processed.
     if(handler && (handler.last_seqnum === undefined || seqnum === NaN || seqnum > handler.last_seqnum)) {
 	var msg = parsed[3];
-	handler.call(msg);
+	handler.call(msg, seqnum);
 	if (seqnum) {
 	    handler.last_seqnum = seqnum;
 	}
@@ -78,7 +76,7 @@ Event.prototype._on_connect = function() {
     var seqnums = {};
     for (id in this.handlers) {
 	var info = this.handlers[id];
-	seqnums[id] = {"seqnum": info.last_seqnum};
+	seqnums[id] = {"seqnum": info.last_seqnum === undefined ? 0 : info.last_seqnum};
 	if (this.channel_id) {
 	    seqnums[id].channel_id = this.channel_id;
 	}

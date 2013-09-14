@@ -451,21 +451,20 @@ function handle_player_data_event(data) {
     pic.src = data.pic_url;
 }
 
-function handle_event(msg) {
+function handle_event(msg, seq_num) {
 	var lines = msg.split('\n');
-	var seq_num = parseInt(lines[0]);
 
 	if(seq_num <= params.seq_num) {
 		return;
 	}
 	params.seq_num = seq_num;
 
-	var new_state = parseInt(lines[1]);
+	var new_state = parseInt(lines[0]);
 	set_state(new_state);
 
 	if (lines.length > 2){
-		var player = parseInt(lines[2]);
-		var lclick = last_click_decode(player, lines[3]);
+		var player = parseInt(lines[1]);
+		var lclick = last_click_decode(player, lines[2]);
 		
 		if (player == params.player && lclick.bombed) {
 			params.tnt_used = true;
@@ -473,7 +472,7 @@ function handle_event(msg) {
 		}
 		
 		var parser = /(\d+),(\d+):(.)/;
-		for(var i = 4; i < lines.length; ++i) {
+		for(var i = 3; i < lines.length; ++i) {
 		var res = parser.exec(lines[i]);
 		if(res) {
 			var m = parseInt(res[1]);
@@ -725,8 +724,11 @@ function init() {
     your_turn_blinker.setBlinking(params.state == params.player);
 
     // Receive updates from server
-    event = new Event('/event/' + params.channel, params.last_change);
-    event.register_handler('g', handle_event);
+    event = new Event(
+	(/^https/.test(location.protocol) ? "wss://" : "ws://")
+	+ location.hostname + (location.port ? (":" + location.port) : "")
+	+ location.pathname + "event/");
+    event.register_handler('g', handle_event, params.seq_num);
     event.register_handler('p', handle_player_data_event);
 
     // Init chat stuff
@@ -734,7 +736,7 @@ function init() {
 	document.getElementById("chat_textfield"),
 	document.getElementById("input_field"),
 	document.getElementById("send_button"),
-	event, 'chat/'
+	event
     );
 
     if(params.player) { // Not a spectator

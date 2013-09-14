@@ -59,9 +59,16 @@ class Channel(object):
         del self.subscribers[sb.ws.unique_id]
         self._try_self_destroy()
 
-    def post_message(self, msg):
-        seqnum = self.next_seqnum
-        self.next_seqnum += 1
+    def post_message(self, msg, seqnum):
+        if seqnum is None:
+            seqnum = self.next_seqnum
+            self.next_seqnum += 1
+        else:
+            # TODO: treat the case of sparse sequence numbers
+            if self.first_seqnum == self.next_seqnum:
+                self.first_seqnum = seqnum
+            if seqnum >= self.next_seqnum:
+                self.next_seqnum = seqnum + 1
 
         msg = '\n'.join((self.ch_type, str(seqnum), msg))
         self.msg_history[seqnum] = msg
@@ -241,8 +248,8 @@ class _ChannelDict(dict):
 _channels = _ChannelDict()
 
 @_rpc
-def post_update(channel_name, channel_type, message):
-    gevent.spawn(_channels[(channel_name, channel_type)].post_message, message)
+def post_update(channel_name, channel_type, message, seqnum=None):
+    gevent.spawn(_channels[(channel_name, channel_type)].post_message, message, seqnum)
 
 @_rpc
 def subscribe_websocket(channel_name, channel_type, ws, start_from=None, last_channel=None):

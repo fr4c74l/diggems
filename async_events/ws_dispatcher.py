@@ -1,6 +1,7 @@
 # Copyright 2013 Fractal Jogos e Tecnologia
 # Software under Affero GPL license, see LICENSE.txt
 
+import traceback
 import gevent
 
 from django.core.handlers.wsgi import WSGIRequest
@@ -12,7 +13,6 @@ _resolver = urlresolvers.RegexURLResolver(r'^/', settings.WEBSOCKET_URLCONF)
     
 # WSGI-like API to match needs of gevent-websocket
 def dispatcher(environ, start_response):
-    print 'WebSocket connection started.'
     try:
         websocket = environ["wsgi.websocket"]
     except KeyError:
@@ -27,5 +27,7 @@ def dispatcher(environ, start_response):
     translation.activate(language)
     try:
         handler_function(request, websocket, *function_args, **function_kwargs)
+    except:
+        traceback.print_exc()
     finally:
         websocket.close()

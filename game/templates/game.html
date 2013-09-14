@@ -22,7 +22,6 @@ Software under Affero GPL license, see LICENSE.txt
 	"state": {{ state }},
 	"seq_num": {{ seq_num }},
 	"time_left": {% if time_left %}{{ time_left | escapejs }}{% else %}0{% endif %},
-	"last_change": "{{ last_change }}",
 	"channel": "{{ channel }}"{% if fb_other %},
 	"fb_other": "{{ fb_other }}"{% endif %}{% if p1_last_move %},
 	"p1_last_move": "{{ p1_last_move }}"{% endif %}{% if p2_last_move %},
