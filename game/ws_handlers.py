@@ -55,7 +55,6 @@ class ChannelRegisterer(object):
             # contains the seqnums per channel type
             msg = self.ws.receive()
             seq_infos = json.loads(msg)
-            print seq_infos
             for t in self.types:
                 seq_info = seq_infos[t]
                 seqnum = seq_info['seqnum']
