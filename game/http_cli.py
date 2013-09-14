@@ -2,6 +2,7 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 from geventhttpclient import HTTPClient
+import ssl
 
 _pool = {}
 
