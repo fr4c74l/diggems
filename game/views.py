@@ -97,14 +97,8 @@ def fb_login(request):
         # connection has been compromised?
         return HttpResponseServerError()
 
-    try:
-        fb = FacebookCache.objects.get(uid=fb_user['id'])
-    except FacebookCache.DoesNotExist:
-        fb = FacebookCache(uid=fb_user['id'])
-
+    fb, created = FacebookCache.objects.get_or_create(uid=fb_user['id'])
     fb.name = fb_user['name']
-    fb.access_token = token
-    fb.expires = expires
     fb.save()
 
     old_user_id = request.session.get('user_id')

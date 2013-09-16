@@ -1,7 +1,6 @@
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
-import game_helpers
 import datetime
 from django.db import models
 from django.db.models import F
@@ -109,8 +108,4 @@ class Game(models.Model):
             
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
-
-def delete_game_channel(sender, **kwargs):
-    game_helpers.delete_channel(kwargs['instance'].channel)
-
-pre_delete.connect(delete_game_channel, sender=Game)
+    
