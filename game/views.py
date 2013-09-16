@@ -132,7 +132,7 @@ def fb_login(request):
     # Send this new user info to every channel where user is a player:
     for p in (1, 2):
         # Games where player p is this user
-        query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile}).values('channel')
+        query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile}).values('id')
 
         # Build the message to send to the game channels regarding player p
         msg = '\n'.join(p, user_info)
