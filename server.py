@@ -117,7 +117,7 @@ def main():
     channel.init(proc_count)
     
     gevent.signal(signal.SIGINT, sig_quit)
-    gevent.signal(signal.SIGKILL, sig_quit)
+    gevent.signal(signal.SIGTERM, sig_quit)
     
     # Remove the sockets directory
     shutil.rmtree(sock_dir, True)
