@@ -178,11 +178,13 @@ def _ws_from_fd(fd):
 def _ws_deserialize(ws_fd, ws_uid):
     try:
         ws = _ws_refs[ws_uid]
-        os.close(ws_fd)
     except KeyError:
         ws = _ws_from_fd(ws_fd)
         ws.unique_id = ws_uid
         _ws_refs[ws_uid] = ws
+    finally:
+        # Either this was unneeded, or was dup'ed by socket object creation
+        os.close(ws_fd)
     return ws
 
 def _rpc(func):
