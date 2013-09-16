@@ -135,7 +135,7 @@ def fb_login(request):
         query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile}).values('id')
 
         # Build the message to send to the game channels regarding player p
-        msg = '\n'.join(p, user_info)
+        msg = '\n'.join((p, user_info))
 
         # TODO: find a way to make this a single query, because I could not.
         # TODO: make this asyncronous.
