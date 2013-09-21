@@ -310,9 +310,12 @@ def claim_game(request, game_id):
     result = '\n'.join(map(str, (u'g', game.seq_num, game.state)))
     post_update(game.channel, result)
     
-    if term:
-        publish_score(me)
-    
+    if term == 'y':
+        publish_score(me.user)
+    elif term == 'z':
+        publish_score(game.p1.user)
+        publish_score(game.p2.user)
+
     return HttpResponse()
 
 @transaction.commit_on_success
