@@ -93,10 +93,8 @@ function process_incoming_request()
 	{
 		var requestID = urlParams["request_ids"];  
 		FB.api(requestID, function(response) {
-          alert(response);
-          alert(response.data);
-          alert(response.to);
-          console.log("Response = " + response.data);
+          alert(response.message);
+          console.log("Response = " + response.message);
           // If possible, redirect to /game/game_id/join
           //if (response.data)
           //  window.location = response.data;

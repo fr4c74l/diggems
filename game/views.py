@@ -132,7 +132,7 @@ def fb_login(request):
     # Send this new user info to every channel where user is a player:
     for p in (1, 2):
         # Games where player p is this user
-        query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile}).values('id')
+        query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile})
 
         # Build the message to send to the game channels regarding player p
         msg = '\n'.join((str(p), user_info))
@@ -169,7 +169,6 @@ def fb_request_accept(request):
     profile = UserProfile.get(request)
     user_id = profile.facebook.uid
     request_ids = request.POST["request_ids"].split(',')
-    
     for request_id in request_ids:
         def get_fb_request(app_token):
             with http_cli.get_conn('https://graph.facebook.com/').get(request_id + '?access_token=' + app_token) as res:
