@@ -66,33 +66,27 @@ def for_each_surrounding(m, n, func):
         if 0 <= x <= 15 and 0 <= y <= 15:
             func(x, y)
 
-def publish_score(user):
-    def try_publish_score():
-        # Publish score...
-        # TODO: log Facebook connection error, but do not raise exception
+def fb_ograph_call(func):
+    try:
         app_token = cache.get('app_token')
-        if not app_token:
-            try:
-                with conn.get('/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'
-                                     .format(FB_APP_ID, FB_APP_KEY)) as req:
-                    app_token = req.read()
+        func(app_token)
+    except urllib2.HTTPError, KeyError:
+        try:
+            with conn.get('/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'.format(FB_APP_ID, FB_APP_KEY)) as req:
+                app_token = req.read()
                 cache.set('app_token', app_token, 3600)
-            except urllib2.HTTPError:
-                # TODO: Log error before returning...
-                return
+        except urllib2.HTTPError:
+            # TODO: Log error before returning...
+            return
+        func(app_token)
+
+
+def publish_score(user):
+    def try_publish_score(app_token):
         # There is a small chance that a race condition will make the score
         # stored at Facebook to be inconsistent. But since it is temporary
         # until the next game play, the risk seems acceptable.
         with conn.post('/{}/scores'.format(user.facebook.uid), 'score={}&access_token={}'.format(user.total_score, app_token)) as req:
             req.read() # Ignore return value, because there is not much we can do with it...
     
-    if user.facebook:
-        # Reload to ensure most accurate score
-        user = models.UserProfile.objects.get(pk=user.pk)
-        conn = http_cli.get_conn('https://graph.facebook.com/')
-        try:
-            try_publish_score(user)
-        except urllib2.HTTPError:
-            # App access token must have expired, reset it and try just once more
-            cache.delete('app_token')
-            try_publish_score()
+    fb_ograph_call(try_publish_score)

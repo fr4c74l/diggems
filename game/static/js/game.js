@@ -830,7 +830,7 @@ function request_friends(game_id){
 	title: gettext('Challenge a friend!'),
 	message: gettext('Choose your challenger.'),
 	max_recipients: 1,
-	data: "ola123"
+	data: url,
 	}, call_back);
 }
 

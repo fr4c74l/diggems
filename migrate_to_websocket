@@ -1,0 +1,40 @@
+$ pip uninstall uwsgi
+
+REINSTALL gevent:
+$ pip install git+https://github.com/surfly/gevent.git
+
+$ pip install hg+https://bitbucket.org/Jeffrey/gevent-websocket
+
+Enter in your venv and edit handle.py file:
+example: vim ~/.virtualenvs/diggemsenv/lib/python2.7/site-packages/geventwebsocket/handler.py
+
+Delete line 43:
+        # Since we're now a websocket connection, we don't care what the
+        # application actually responds with for the http response
+        try:
+            self.server.clients[self.client_address] = Client(self.client_address, self.websocket)
+
+and paste this:
+        # Since we're now a websocket connection, we don't care what the
+        # application actually responds with for the http response
+        try:
+            c = Client(self.client_address, self.websocket)
+            try:
+                self.server.clients[self.client_address] = c
+            except AttributeError:
+                self.server.clients = {self.client_address: c}
+            self.application(self.environ, lambda s, h: [])
+
+$ pip install git+https://github.com/momyc/gevent-fastcgi.git
+
+$ pip install cffi decorator gipc
+
+$ pip install git+https://github.com/gwik/geventhttpclient.git
+
+Run NGINX:
+$ cd APP_PATH
+$ mkdir nginx/logs
+$ nginx -p ./nginx
+
+RUN!
+$ ./server.py 4

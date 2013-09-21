@@ -93,13 +93,15 @@ function process_incoming_request()
 	{
 		var requestID = urlParams["request_ids"];  
 		FB.api(requestID, function(response) {
-          alert(response.id);
+          alert(response);
+          alert(response.data);
+          alert(response.to);
           console.log("Response = " + response.data);
           // If possible, redirect to /game/game_id/join
           //if (response.data)
           //  window.location = response.data;
 	    });
-        delete_request(requestID);
+        //delete_request(requestID);
 	}
 }
 

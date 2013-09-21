@@ -165,8 +165,22 @@ def adhack(request, ad_id):
                  'GOOGLE_AD_SLOT': settings.GOOGLE_AD_SLOTS[ad_id]}),
         content_type='text/html; charset=utf-8')
 
+def fb_request_accept(request):
+    profile = UserProfile.get(request)
+    user_id = profile.facebook.uid
+    request_ids = request.POST["request_ids"].split(',')
+    
+    for request_id in request_ids:
+        def get_fb_request(app_token):
+            with http_cli.get_conn('https://graph.facebook.com/').get(request_id + '?access_token=' + app_token) as res:
+                response = json.load(res)
+                print(response.data)
+        fb_ograph_call(get_fb_request)
+
 def index(request):
     profile = UserProfile.get(request.session)
+    if request.in_fb and "request_ids" in request.POST:
+        return fb_request_accept(request)
 
     playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
 
