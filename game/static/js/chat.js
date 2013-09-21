@@ -81,12 +81,13 @@ var chat = (function (){
 	function in_game_init()
 	{
 		// click or press <ESC> to show/hide chat
-		$("#toggle").click(toggle_chat);
+/*		$("#toggle").click(toggle_chat);
 		$(document).keydown(function(e) { 
 			if (e.which == 27 ) {
 				$("#toggle").trigger("click");
 			}
 		});
+*/
 	}
 
 	window.addEventListener('load', in_game_init, false);

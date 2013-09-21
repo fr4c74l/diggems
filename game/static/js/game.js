@@ -814,9 +814,12 @@ function call_back(response)
 }
 
 function request_friends(game_id){
+	var url = JSON.stringify('/game/'+ game_id + '/join/');
 	FB.ui({method: 'apprequests',
-	message: 'Send Requesti',
-	redirect_uri: 'fractalcorp.no-ip.biz/game/' + game_id + '/join/',
+	title: gettext('Challenge a friend!'),
+	message: gettext('Choose your challenger.'),
+	max_recipients: 1,
+	data: "ola123"
 	}, call_back);
 }
 

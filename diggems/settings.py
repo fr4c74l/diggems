@@ -9,14 +9,14 @@ INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
 DB_POOL_MAX_CONN = 40
 
 ## Facebook app settings
-FB_APP_ID = '211736102317650'
-FB_APP_KEY = 'a8c1386bba7d675bb8a264df36610c0b'
+FB_APP_ID = '286833114791320'
+FB_APP_KEY = '241ca4194b53486d5ac0e7589a61e574'
 
 ## URL that will be reffered when someone clicks FB "Like":
 FB_LIKE_URL = 'http://my.main.url/'
 
 ## Long pool server
-EVENT_SERVER = '127.0.0.1:80'
+EVENT_SERVER = '127.0.0.1:8000'
 
 ## Google ads settings
 GOOGLE_AD_ID = 'place_google_ads_id_here'
@@ -148,8 +148,8 @@ MIDDLEWARE_CLASSES = (
 
 CACHES = {
     'default': {
-        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
-        'LOCATION': '127.0.0.1:11211',
+        'BACKEND': 'django.core.cache.backends.db.DatabaseCache',
+        'LOCATION': 'cache',
     }
 }
 

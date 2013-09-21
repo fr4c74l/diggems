@@ -74,9 +74,8 @@ function server_fb_logout()
     request.send();
 }
 
-function processIncomingRequest()
+function process_incoming_request()
 {
-	var startedGame = false;
 	var urlParams = {};
 	(function () 
 	{
@@ -85,26 +84,30 @@ function processIncomingRequest()
 		search = /([^&=]+)=?([^&]*)/g,
 		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
 		query  = window.location.search.substring(1);
-
+	
 		while (match = search.exec(query))
-		urlParams[decode(match[1])] = decode(match[2]);
+			urlParams[decode(match[1])] = decode(match[2]);
 	})();
-
 	var requestType = urlParams["app_request_type"];
-
 	if (requestType == "user_to_user") 
 	{
 		var requestID = urlParams["request_ids"];  
-
 		FB.api(requestID, function(response) {
-		var gChallengerID = response.from.id;
-		var gChallengerName = response.from.name.split(" ")[0];
-		startedGame = true;
-		});
+          alert(response.id);
+          console.log("Response = " + response.data);
+          // If possible, redirect to /game/game_id/join
+          //if (response.data)
+          //  window.location = response.data;
+	    });
+        delete_request(requestID);
 	}
-	return startedGame;
 }
 
+function delete_request(requestID) {
+  FB.api(requestID, 'delete', function(response) {
+    console.log(response);
+  });
+}
 /* Handle response from Facebook login events. */
 function on_fb_login(res) 
 {
