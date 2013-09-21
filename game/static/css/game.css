@@ -145,6 +145,7 @@
 #rematch_box {
     width: 416px;
     margin: 10px auto;
+    display: none;
 }
 
 .rematch_column {

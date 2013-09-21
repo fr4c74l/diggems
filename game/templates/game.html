@@ -106,8 +106,7 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 </div>
 
-{% if state >= 3 %}
-<div class="box" id="rematch_box">
+<div class="box" id="rematch_box" {% if state >= 3 %} style="display: none;"{% endif %} >
 	<div> 
 		{% for pid, pinfo in player_info.items %}
 		<div class="rematch_column">
@@ -118,7 +117,6 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 	<div class="button" id="rematch_button" onclick="rematch({{ game_id }});"> {% trans "Rematch" %}</div>
 </div>
-{% endif %}
 
 <div class="chat box_border_top" id="chat_window">
 	<!-- TODO Uncomment the line below after create a function to add chat-->

@@ -381,10 +381,11 @@ function set_state(state) {
 		    }
 		    else
 				msg += gettext('you lose.');
-				document.getElementById("rematch_button").style.display = 'block';
-				timer.rematch_time = 45;
-				timer.id = window.setInterval(timer, 1000);
-				timer();
+			document.getElementById("rematch_box").style.display = 'block';
+			document.getElementById("rematch_button").style.display = 'block';
+			timer.rematch_time = 45;
+			timer.id = window.setInterval(timer, 1000);
+			timer();
 	    }
 	    else
 		return; // What else can I do?
@@ -393,6 +394,7 @@ function set_state(state) {
     var canvas = document.getElementById('game_canvas');
 	canvas.style.cursor = cursor;
 	canvas.onmousemove = hover_indicator;
+
 	// Blink title to alert user, if its turn.
 	your_turn_blinker.setBlinking(state == params.player);
 	if(params.state != state && (state == params.player || state > 2))
@@ -683,8 +685,8 @@ highlight_tile.set_hover = function(tnt, bpos, hover, to_redraw) {
 	    }
 	}
     } else {
-	mine[bpos.m][bpos.n].hover = hover;
-	to_redraw[bpos.m + ',' + bpos.n] = bpos;
+	    mine[bpos.m][bpos.n].hover = hover;
+	    to_redraw[bpos.m + ',' + bpos.n] = bpos;
     }
 }
 
