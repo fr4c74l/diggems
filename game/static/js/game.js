@@ -334,7 +334,14 @@ function notify_state(msg) {
     }
 }
 
-// TODO: localization
+/* TODO: localization
+States:
+ 0 -> Game has not started yet
+ 1 -> Player's 1 turn
+ 2 -> Player's 2 turn
+ X + 2 -> Player X won
+ X + 4 -> Game ended abnormally and player X won
+*/
 function set_state(state) {
     var msg = '';
     if(params.player) {
@@ -777,10 +784,10 @@ function init() {
   }
 
 	// loading game menu
-	$('#overlay').fadeIn('fast',function(){
-		$('#load_menu').animate({'top':'160px'},500);
-	});
-	load_text_animation("#loading");
+  $('#overlay').fadeIn('fast',function(){
+    $('#load_menu').animate({'top':'160px'},500);
+  });
+  load_text_animation("#loading");
 }
 
 function load_img(name) {
@@ -845,10 +852,6 @@ function claim_game(terminate)
     button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   }
 	button_request.send(data);
-	$("#timeout_buttons").animate({
-	width: "toggle",
-	left: "183px",
-	opacity: "toggle"}, 200);
 }
 
 // Load resources

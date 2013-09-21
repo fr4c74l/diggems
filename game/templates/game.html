@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% comment %}
 
 Copyright 2011 Lucas Clemente Vella
@@ -141,6 +142,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<ul id="chat_textfield"/>
 		<div id="chat_interact"{% if not player %} style="display:none;"{% endif %}>
 			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
+			{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 		</div>
 	</div>
 </div>
