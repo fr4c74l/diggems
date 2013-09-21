@@ -1,24 +1,20 @@
 var chat = (function (){
 	var chat_ul;
 	var input_field;
-	var url;
+	var event;
 
-	var chat_request = new XMLHttpRequest();
 	var sec_in_day = (24 * 60 * 60);
 
 	function send_message()
 	{
-		chat_request.open('POST',url,true);
-
 		var msg = input_field.value;
 		if (msg != "")
 		{
-			chat_request.setRequestHeader("Content-type", "text/plain");
-			chat_request.send(msg);
+			event.send('c', msg);
 		}
 
 		// Clean input field
-		input_field.value="";
+		input_field.value = "";
 	}
 
 	function handle_key_press(e)
@@ -48,8 +44,16 @@ var chat = (function (){
 
 		var li = document.createElement('li');
 		li.className = "message";
-		var li_text = "<span style='color:#999;font-size:small;'>" + time_fmt + "</span><span style='color:#000;font-size:small;font-weight: bold;'>" + data['username'] + ' : ' + "</span>" +
-						"<span style='color:#000'>" + data['msg'] + "</span>";
+		var li_text;
+		if(data['msg']) {
+			li_text = "<span style='color:#999;font-size:small;'>" + time_fmt
+			+ "</span><span style='color:#000;font-size:small;font-weight: bold;'>"
+			+ data['username'] + ' : ' + "</span>"
+			+ "<span style='color:#000'>" + data['msg'] + "</span>";
+		} else {
+			li_text = "<span style='color:#999;font-size:small;'>" + time_fmt
+			+ " " + data['status'] + "</span>";
+		}
 		li.innerHTML = li_text;
 
 		chat_ul.appendChild(li);
@@ -57,15 +61,15 @@ var chat = (function (){
 	}
 
 	return {
-		init: function(chat_listing, input, button, event, post_url) {
+		init: function(chat_listing, input, button, ev) {
 			chat_ul = chat_listing;
 			input_field = input;
-			url = post_url;
+			event = ev;
 
 			input_field.addEventListener("keypress", handle_key_press, false);
 			//button.addEventListener("click", send_message, false);
 
-			event.register_handler('c', handle_event);
+			ev.register_handler('c', handle_event, 0);
 		}
 	}
 })();
@@ -81,13 +85,14 @@ var chat = (function (){
 	function in_game_init()
 	{
 		// click or press <ESC> to show/hide chat
-/*		$("#toggle").click(toggle_chat);
-		$(document).keydown(function(e) { 
-			if (e.which == 27 ) {
-				$("#toggle").trigger("click");
-			}
-		});
-*/
+		if ($("#toggle").length>0) {
+			$("#toggle").click(toggle_chat);
+			$(document).keydown(function(e) { 
+				if (e.which == 27 ) {
+					$("#toggle").trigger("click");
+				}
+			});
+		}
 	}
 
 	window.addEventListener('load', in_game_init, false);

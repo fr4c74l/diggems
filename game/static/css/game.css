@@ -11,29 +11,18 @@
 #p1_pts_box {
     background: rgba(255,0,0,0.25);
     text-align: left;
-    
     display: block;
     position: relative;
     width: 70px;
     margin-bottom: 25px;
 }
 
-#snd_pts_box{
-    text-align: left;
-    display: block;
-    position: absolute;
-    top: 0px;
-    width: 50px;
-    left: 153px;
-}
-
-#timer_box {
+#middle_box {
     text-align: center;
     font-size: 150%;
     display: block;
     position: absolute;
-    top: 0px;
-    width: 50px;
+    top: -25px;
     left: 183px;
 }
 
@@ -122,25 +111,32 @@
     width: 390px;
 }
 
-#timeout_terminate {
-  text-align: center;
-  display: block;
-  /*position: absolute;*/
+#timer_box {
+	margin: 5px 0;
+	position: relative;
+	top: 0;
+	width: 50px;
 }
 
+#give_up{
+	position: relative;
+	bottom: 0;
+}
+
+#timeout_terminate,
 #timeout_claim {
-  text-align: center;
-  display: block;
-  /*position: absolute;*/
+	text-align: center;
+	display: block;
 }
 
 #timeout_buttons {
-  top: 0px;
-  left: 125px;
-  display: none;
-	width: 180px;
+	display: none;
 	position: absolute;
+	top: -10px;
+	left: 36%;
 	padding: 3px;
+	width: 180px;
+	z-index: 101;
 }
 
 img.tntbtn {

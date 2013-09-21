@@ -14,6 +14,7 @@ Software under Affero GPL license, see LICENSE.txt
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
 	<script src="/static/js/event.js" />
+	<script src="/static/js/jquery-2.0.3.min.js"/>
 	<script src="/static/js/chat.js" />
 {% endblock %}
 {% block content %}
@@ -21,7 +22,7 @@ Software under Affero GPL license, see LICENSE.txt
 	<tbody>
 		<tr>
 			<td class="box" id="new_game">
-			  <h1>{% trans "New game" %}</h1>
+				<h1>{% trans "New game" %}</h1>
 				<form action="new_game/" method="post">
 				    {% trans "Private game" %} <input type="checkbox" name="private" value="1" />
 					<input class="button" type="submit" value="{% trans "Create!" %}"  style="float: right;"/>
@@ -73,13 +74,13 @@ Software under Affero GPL license, see LICENSE.txt
 		</tr>
 		<script>
 			<![CDATA[
-			var event = new Event('/event/main_channel', (new Date()).toUTCString());
+			var event = new Event((/^https/.test(location.protocol) ? "wss://" : "ws://") + location.hostname + (location.port ? (":" + location.port) : "") + '/main_chat/');
 
 			chat.init(
 				document.getElementById("chat_textfield"),
 				document.getElementById("input_field"),
 				document.getElementById("send_button"),
-				event, 'main_chat/'
+				event
 			);
 			]]>
 		</script>

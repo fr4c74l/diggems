@@ -334,82 +334,89 @@ function notify_state(msg) {
     }
 }
 
-// TODO: localization
+/* TODO: localization
+States:
+ 0 -> Game has not started yet
+ 1 -> Player's 1 turn
+ 2 -> Player's 2 turn
+ X + 2 -> Player X won
+ X + 4 -> Game ended abnormally and player X won
+*/
 function set_state(state) {
-    var msg = '';
-    if(params.player) {
-	var cursor;
-	var hover_indicator;
-	if(state == params.player) {
-	    msg = gettext('Your turn! Play!');
-	    
-	    // Set shovel cursor in game_canvas area
-	    cursor = 'url(' + images['shovel'].src + '),auto';
+	var msg = '';
+	if(params.player) {
+		var cursor;
+		var hover_indicator;
+		if(state == params.player) {
+			msg = gettext('Your turn! Play!');
+			
+			// Set shovel cursor in game_canvas area
+			cursor = 'url(' + images['shovel'].src + '),auto';
 
-	    // Mark the to be affected tiles
-	    hover_indicator = highlight_tile;
-	}
-	else {
-	    // Not my turn, set default cursor...
-	    cursor = 'default';
-	    
-	    // Stop any tile that could be blinking
-	    ActivityIndicator.clear_all();
+			// Mark the to be affected tiles
+			hover_indicator = highlight_tile;
+		} else {
+			// Not my turn, set default cursor...
+			cursor = 'default';
+			// Stop any tile that could be blinking
+			ActivityIndicator.clear_all();
 
-	    // and stop highlighting tiles:
-	    hover_indicator = null;
-	    highlight_tile.clear();
+			// and stop highlighting tiles:
+			hover_indicator = null;
+			highlight_tile.clear();
 
-	    if(state == 1 || state == 2) {
-		msg = gettext('Wait for your turn.');
-	    }
-	    else if(state >= 3 && state <= 6) {
-		msg = gettext('Game over, ');
-		if(((state + 1) % 2) + 1 == params.player) {
-		    if(is_fb_auth()) {
-			/*document.getElementById('brag_button')
-			.style.setProperty('visibility', 'visible', null);*/
-		    }
-		    msg += gettext('you win!');
+			if(state == 1 || state == 2) {
+				msg = gettext('Wait for your turn.');
+			}
+			else if(state >= 3 && state <= 6) {
+				msg = gettext('Game over, ');
+				if(((state + 1) % 2) + 1 == params.player) {
+					if(is_fb_auth()) {
+					/*document.getElementById('brag_button')
+					.style.setProperty('visibility', 'visible', null);*/
+					}
+					msg += gettext('you win!');
+				}
+				else
+					msg += gettext('you lose.');
+			}
+			else
+				return; // What else can I do?
 		}
-		else
-		    msg += gettext('you lose.');
-	    }
-	    else
-		return; // What else can I do?
+
+		var canvas = document.getElementById('game_canvas');
+		canvas.style.cursor = cursor;
+		canvas.onmousemove = hover_indicator;
+		// Blink title to alert user, if its turn.
+		your_turn_blinker.setBlinking(state == params.player);
+		if(params.state != state && (state == params.player || state > 2))
+			notify_state(msg);
+	} else {
+		// Spectator mode.
+		var state_msgs =
+			['',
+			 gettext("Red's turn."),
+			 gettext("Blue's turn."),
+			 gettext('Game is over, red player won.'),
+			 gettext('Game is over, blue player won.'),
+			 gettext('Game is over, red player won by resignation.'),
+			 gettext('Game is over, blue player won by resignation.')];
+		msg = state_msgs[state];
 	}
+	var msg_box = document.getElementById('message');
 
-	var canvas = document.getElementById('game_canvas');
-	canvas.style.cursor = cursor;
-	canvas.onmousemove = hover_indicator;
-
-        // Blink title to alert user, if its turn.
-        your_turn_blinker.setBlinking(state == params.player);
-
-	if(params.state != state && (state == params.player || state > 2))
-	    notify_state(msg);
-    } else {
-	// Spectator mode.
-	var state_msgs =
-	    ['',
-	     gettext("Red's turn."),
-	     gettext("Blue's turn."),
-	     gettext('Game is over, red player won.'),
-	     gettext('Game is over, blue player won.'),
-	     gettext('Game is over, red player won by resignation.'),
-	     gettext('Game is over, blue player won by resignation.')];
-	msg = state_msgs[state];
-    }
-    var msg_box = document.getElementById('message');
-    if (!params.state && state) {
+	if (!params.state && state) {
 		if(params.player)
 			document.getElementById("chat_interact").style.display="block";
-	// Just started the game, prepare box for messages
-	msg_box.className += " big";
-    }
-    msg_box.innerHTML = msg;
+		// Just started the game, prepare box for messages
+		msg_box.className += " big";
 
-    params.state = state;
+		document.getElementById("abort_button").style.display="none";
+		document.getElementById("give_up").style.display="block";
+	}
+	msg_box.innerHTML = msg;
+
+	params.state = state;
 }
 
 /* In case updated user information came from the async
@@ -444,52 +451,50 @@ function handle_player_data_event(data) {
     pic.src = data.pic_url;
 }
 
-function handle_event(msg) {
-    var lines = msg.split('\n');
-    var seq_num = parseInt(lines[0]);
+function handle_event(msg, seq_num) {
+	var lines = msg.split('\n');
 
-    if(seq_num <= params.seq_num)
-	return;
-    params.seq_num = seq_num;
+	if(seq_num <= params.seq_num) {
+		return;
+	}
+	params.seq_num = seq_num;
 
-    var new_state = parseInt(lines[1]);
-    set_state(new_state);
+	var new_state = parseInt(lines[0]);
+	set_state(new_state);
 
-    if (lines.length > 2){
-        var player = parseInt(lines[2]);
-        var lclick = last_click_decode(player, lines[3]);
-        
-        if (player == params.player && lclick.bombed) {
-	    params.tnt_used = true;
-	    tnt.active = false;
-        }
-        
-        var parser = /(\d+),(\d+):(.)/;
-        for(var i = 4; i < lines.length; ++i) {
-	    var res = parser.exec(lines[i]);
-	    if(res) {
-	        var m = parseInt(res[1]);
-	        var n = parseInt(res[2]);
-
-	        // Just assume correct valid values were delivered...
-
-	        mine[m][n].set_state(res[3]);
-		if (mine[m][n].ai) {
-		    mine[m][n].ai.clear();
-		} else {
-		    mine[m][n].draw();
+	if (lines.length > 2){
+		var player = parseInt(lines[1]);
+		var lclick = last_click_decode(player, lines[2]);
+		
+		if (player == params.player && lclick.bombed) {
+			params.tnt_used = true;
+			tnt.active = false;
 		}
-	    }
-        }
+		
+		var parser = /(\d+),(\d+):(.)/;
+		for(var i = 3; i < lines.length; ++i) {
+		var res = parser.exec(lines[i]);
+		if(res) {
+			var m = parseInt(res[1]);
+			var n = parseInt(res[2]);
+			// Just assume correct valid values were delivered...
+			mine[m][n].set_state(res[3]);
+		if (mine[m][n].ai) {
+			mine[m][n].ai.clear();
+		} else {
+			mine[m][n].draw();
+		}
+		}
+		}
 
-        if(last_click[player-1])
-	    last_click[player-1].clear();
-        last_click[player-1] = lclick;
-        lclick.draw();
-    }
+		if(last_click[player-1])
+		last_click[player-1].clear();
+		last_click[player-1] = lclick;
+		lclick.draw();
+	}
 
-    update_points();
-    reset_counter();
+	update_points();
+	reset_counter();
 }
 
 function register_event() {
@@ -719,8 +724,11 @@ function init() {
     your_turn_blinker.setBlinking(params.state == params.player);
 
     // Receive updates from server
-    event = new Event('/event/' + params.channel, params.last_change);
-    event.register_handler('g', handle_event);
+    event = new Event(
+	(/^https/.test(location.protocol) ? "wss://" : "ws://")
+	+ location.hostname + (location.port ? (":" + location.port) : "")
+	+ location.pathname + "event/");
+    event.register_handler('g', handle_event, params.seq_num);
     event.register_handler('p', handle_player_data_event);
 
     // Init chat stuff
@@ -728,7 +736,7 @@ function init() {
 	document.getElementById("chat_textfield"),
 	document.getElementById("input_field"),
 	document.getElementById("send_button"),
-	event, 'chat/'
+	event
     );
 
     if(params.player) { // Not a spectator
@@ -762,11 +770,14 @@ function turn_timeout()
 	{
 		clearInterval(reset_counter.int);
 		timeleft = 0;
-		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2))
-		{
-		  document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
-		  document.getElementById("timeout_buttons").style.display = 'block';
-		}	
+		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2)) {
+			document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
+//			document.getElementById("timeout_buttons").style.display = 'block';
+			$("#timeout_buttons").animate({
+			height: "toggle",
+			width: "toggle",
+			opacity: "toggle"}, 200);
+		}
 	}
 	document.getElementById("clock").innerHTML = Math.round(timeleft);
 }
