@@ -16,7 +16,7 @@ import json
 from async_events import channel
 from geventwebsocket import WebSocketError
 from django.utils.html import escape
-from django.db import transaction, close_connection
+from django import db
 from django.utils.translation import ugettext as _
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -31,7 +31,7 @@ import models
 class DBReleaser(object):
     __slots__ = ('_commiter',)
     def __init__(self):
-        self._commiter = transaction.commit_on_success()
+        self._commiter = db.transaction.commit_on_success()
     
     def __enter__(self):
         self._commiter.__enter__()
@@ -40,7 +40,7 @@ class DBReleaser(object):
         try:
             return self._commiter.__exit__(exc_type, exc_value, traceback)
         finally:
-            close_connection()
+            db.close_connection()
 
 class ChannelRegisterer(object):
     __slots__ = ('chname', 'types', 'ws')
@@ -60,16 +60,17 @@ class ChannelRegisterer(object):
                 seqnum = seq_info['seqnum']
                 channid = seq_info.get('channel_id')
                 channel.subscribe_websocket(self.chname, t, self.ws, seqnum, channid)
+            # Very dangerous thing, change the meaning of the variable...
+            # well, fuck it
+            self.ws = self.ws.environ['unique_id']
         except:
             self.__exit__(None, None, None)
             raise
 
     def __exit__(self, exc_type, exc_value, traceback):
         try:
-            #TODO: inverstigate why sometimes ws.environ is None
-            ws_id = self.ws.environ['unique_id']
             for t in self.types:
-                channel.unsubscribe_websocket(self.chname, t, ws_id)
+                channel.unsubscribe_websocket(self.chname, t, self.ws)
         except KeyError:
             pass
 
