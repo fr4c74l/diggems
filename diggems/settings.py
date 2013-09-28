@@ -9,8 +9,8 @@ INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
 DB_POOL_MAX_CONN = 40
 
 ## Facebook app settings
-FB_APP_ID = '286833114791320'
-FB_APP_KEY = '241ca4194b53486d5ac0e7589a61e574'
+FB_APP_ID = '676057105742978'
+FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
 
 ## URL that will be reffered when someone clicks FB "Like":
 FB_LIKE_URL = 'http://my.main.url/'
