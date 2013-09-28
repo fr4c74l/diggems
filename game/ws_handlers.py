@@ -12,11 +12,11 @@
 
 import datetime
 import json
+import django.db
 
 from async_events import channel
 from geventwebsocket import WebSocketError
 from django.utils.html import escape
-from django import db
 from django.utils.translation import ugettext as _
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -31,7 +31,7 @@ import models
 class DBReleaser(object):
     __slots__ = ('_commiter',)
     def __init__(self):
-        self._commiter = db.transaction.commit_on_success()
+        self._commiter = django.db.transaction.commit_on_success()
     
     def __enter__(self):
         self._commiter.__enter__()
@@ -40,7 +40,7 @@ class DBReleaser(object):
         try:
             return self._commiter.__exit__(exc_type, exc_value, traceback)
         finally:
-            db.close_connection()
+            django.db.close_connection()
 
 class ChannelRegisterer(object):
     __slots__ = ('chname', 'types', 'ws')
