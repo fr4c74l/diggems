@@ -166,21 +166,23 @@ def adhack(request, ad_id):
         content_type='text/html; charset=utf-8')
 
 def fb_request_accept(request):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     user_id = profile.facebook.uid
-    request_ids = request.POST["request_ids"].split(',')
+    request_ids = request.GET["request_ids"].split(',')
+    
     for request_id in request_ids:
-        def get_fb_request(app_token):
-            with http_cli.get_conn('https://graph.facebook.com/').get(request_id + '?access_token=' + app_token) as res:
+        def get_fb_request(conn, app_token):
+            print request_id, app_token
+            with conn.get('?'.join((request_id, app_token))) as res:
                 response = json.load(res)
-                print(response.data)
+                print(response)
         fb_ograph_call(get_fb_request)
 
 def index(request):
-    profile = UserProfile.get(request.session)
-    if request.in_fb and "request_ids" in request.POST:
+    if request.method == 'POST' and request.in_fb and "request_ids" in request.GET:
         return fb_request_accept(request)
 
+    profile = UserProfile.get(request.session)
     playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
 
     chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:5]
@@ -372,7 +374,6 @@ def game(request, game_id):
 
     if(game.p2):
         p2_info = get_user_info(game.p2.user)
-        print p2_info
         data['p2_last_move'] = game.p2.last_move
         data['player_info'][2] = p2_info
         if (game.state <= 2):
