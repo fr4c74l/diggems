@@ -5,6 +5,7 @@ import itertools
 import models
 import http_cli
 import urllib2
+import json
 from http_cli import get_conn
 from django.core.cache import cache
 from django.db.models import F
@@ -76,7 +77,7 @@ def fb_ograph_call(func):
         app_token = cache.get('app_token')
         if app_token is None:
             raise CacheMiss()
-        func(conn, app_token)
+        ret = func(conn, app_token)
     except urllib2.HTTPError, CacheMiss:
         try:
             with conn.get('/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'.format(FB_APP_ID, FB_APP_KEY)) as req:
@@ -85,8 +86,8 @@ def fb_ograph_call(func):
         except urllib2.HTTPError:
             # TODO: Log error before returning...
             return
-        func(conn, app_token)
-
+        ret = func(conn, app_token)
+    return json.loads(ret)
 
 def publish_score(user):
     def try_publish_score(conn, app_token):

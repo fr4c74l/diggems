@@ -826,10 +826,18 @@ function call_back(response)
 
 function request_friends() {
     FB.ui({method: 'apprequests',
-	title: gettext('Challenge friends!'),
-	message: gettext('Choose your possible oponents.'),
-	data: params.game_id,
-    }, call_back);
+		title: gettext('Challenge friends!'),
+		message: gettext('Choose your possible oponents.'),
+		data: params.game_id,
+    },
+	function (response){
+		if (response && response.request) {
+			var notifier = new XMLHttpRequest();
+			notifier.open("POST", "fb_notify_request/", true);
+			notifier.setRequestHeader("Content-type", "text/plain");
+			notifier.send(response.request);
+		}
+	});
 }
 
 // Load resources

@@ -11,6 +11,7 @@ import http_cli
 import hashlib
 import locale
 import gevent
+from functools import partial
 from diggems import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
@@ -22,7 +23,7 @@ from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader, TemplateDoesNotExist
 from django.template.defaultfilters import floatformat
-from django.utils.html import escape, mark_safe
+from django.utils.html import escape, mark_safe, urlquote
 from django.utils.translation import pgettext
 from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
@@ -165,18 +166,41 @@ def adhack(request, ad_id):
                  'GOOGLE_AD_SLOT': settings.GOOGLE_AD_SLOTS[ad_id]}),
         content_type='text/html; charset=utf-8')
 
+def get_fb_request(request_id, conn, app_token):
+    with conn.get('?'.join((urlquote(request_id, ''), app_token))) as res:
+        response = json.load(res)
+
 def fb_request_accept(request):
     profile = UserProfile.get(request.session)
     user_id = profile.facebook.uid
     request_ids = request.GET["request_ids"].split(',')
     
     for request_id in request_ids:
-        def get_fb_request(conn, app_token):
-            print request_id, app_token
-            with conn.get('?'.join((request_id, app_token))) as res:
-                response = json.load(res)
-                print(response)
-        fb_ograph_call(get_fb_request)
+        fb_ograph_call(partial(get_fb_request, request_id))
+    # TODO
+    return HttpResponse()
+
+def fb_notify_request(request, game_id):
+    def real_work(req_id, user_id, game_id):
+        try:
+            user = UserProfile.get(pk=user_id)
+            fb_prof = user.facebook
+            if not fb_prof:
+                return
+
+            game = Game.obeject.get(pk=game_id, p1=user)
+
+            fb_req = fb_ograph_call(partial(get_fb_request, req_id))
+            if fb_prof.uid != fb_req['from']['id'] or fb_req['data'] != game_id:
+                return
+
+            cached = FacebookRequest(id=req_id, game=game)
+            cached.save()
+        except ObjectDoesNotExist:
+            pass
+
+    gevent.spawn(real_work, request.body, request.session.get('user_id'), game_id)
+    return HttpResponse()
 
 def index(request):
     if request.method == 'POST' and request.in_fb and "request_ids" in request.GET:

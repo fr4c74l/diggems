@@ -108,4 +108,7 @@ class Game(models.Model):
             
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
-    
+
+class FacebookRequest(models.Model):
+    id = models.CharField(max_length=30, primary_key=True)
+    game = models.ForeignKey(Game)
