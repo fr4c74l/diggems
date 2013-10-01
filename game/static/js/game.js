@@ -819,11 +819,6 @@ function claim_game(terminate)
 	button_request.send(data);
 }
 
-function call_back(response)
-{
-	console.log(response);
-}
-
 function request_friends() {
     FB.ui({method: 'apprequests',
 		title: gettext('Challenge friends!'),
@@ -834,8 +829,8 @@ function request_friends() {
 		if (response && response.request) {
 			var notifier = new XMLHttpRequest();
 			notifier.open("POST", "fb_notify_request/", true);
-			notifier.setRequestHeader("Content-type", "text/plain");
-			notifier.send(response.request);
+			notifier.setRequestHeader("Content-type", "application/json");
+			notifier.send(JSON.stringify(response));
 		}
 	});
 }

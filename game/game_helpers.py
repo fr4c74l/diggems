@@ -77,8 +77,8 @@ def fb_ograph_call(func):
         app_token = cache.get('app_token')
         if app_token is None:
             raise CacheMiss()
-        ret = func(conn, app_token)
-    except urllib2.HTTPError, CacheMiss:
+        return func(conn, app_token)
+    except (urllib2.HTTPError, CacheMiss):
         try:
             with conn.get('/oauth/access_token?client_id={}&client_secret={}&grant_type=client_credentials'.format(FB_APP_ID, FB_APP_KEY)) as req:
                 app_token = req.read()
@@ -86,8 +86,7 @@ def fb_ograph_call(func):
         except urllib2.HTTPError:
             # TODO: Log error before returning...
             return
-        ret = func(conn, app_token)
-    return json.loads(ret)
+        return func(conn, app_token)
 
 def publish_score(user):
     def try_publish_score(conn, app_token):
@@ -98,3 +97,6 @@ def publish_score(user):
             req.read() # Ignore return value, because there is not much we can do with it...
     
     fb_ograph_call(try_publish_score)
+
+def start_cancel_requests(game):
+    pass # TODO: TO BE CONTINUED

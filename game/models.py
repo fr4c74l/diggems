@@ -109,6 +109,14 @@ class Game(models.Model):
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
 
+def clear_game_requests(sender, **kwargs):
+    game = kwargs['instance']
+    if game.facebookrequest_set:
+        game_helpers.start_cancel_requests(game)
+
+pre_delete.connect(clear_game_requests, sender=Game)
+
 class FacebookRequest(models.Model):
     id = models.CharField(max_length=30, primary_key=True)
-    game = models.ForeignKey(Game)
+    game = models.ForeignKey(Game, db_index=True)
+    targets = models.TextField()

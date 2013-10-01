@@ -23,7 +23,8 @@ from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader, TemplateDoesNotExist
 from django.template.defaultfilters import floatformat
-from django.utils.html import escape, mark_safe, urlquote
+from django.utils.html import escape, mark_safe
+from django.utils.http import urlquote
 from django.utils.translation import pgettext
 from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
@@ -177,24 +178,29 @@ def fb_request_accept(request):
     
     for request_id in request_ids:
         fb_ograph_call(partial(get_fb_request, request_id))
-    # TODO
+    # TODO: to be continued...
     return HttpResponse()
 
 def fb_notify_request(request, game_id):
-    def real_work(req_id, user_id, game_id):
+    @transaction.commit_on_success
+    def real_work(request_info, user_id, game_id):
         try:
             user = UserProfile.get(pk=user_id)
-            fb_prof = user.facebook
-            if not fb_prof:
+            fb_profile = user.facebook
+            if not fb_profile:
                 return
 
             game = Game.obeject.get(pk=game_id, p1=user)
-
-            fb_req = fb_ograph_call(partial(get_fb_request, req_id))
-            if fb_prof.uid != fb_req['from']['id'] or fb_req['data'] != game_id:
+            if game.state != 1:
                 return
 
-            cached = FacebookRequest(id=req_id, game=game)
+            request_id = request_info['request']
+            fb_request = fb_ograph_call(partial(get_fb_request, request_id))
+            if fb_profile.uid != fb_request['from']['id'] or fb_request['data'] != game_id:
+                return
+
+            targets = ';'.join(itertools.imap(urlquote, request_info['to']))
+            cached = FacebookRequest(id=request_id, game=game, targets=targets)
             cached.save()
         except ObjectDoesNotExist:
             pass
@@ -292,6 +298,9 @@ def join_game(request, game_id):
     game.state = 1
     game.save()
     transaction.commit()
+    
+    if game.acebookrequest_set:
+        start_cancel_requests(game)
 
     ch_id = game.channel()
     

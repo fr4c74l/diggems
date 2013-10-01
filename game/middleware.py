@@ -6,4 +6,4 @@ class SubdomainMiddleware:
     def process_request(self, request):
         if request.is_secure():
             return HttpResponseForbidden()
-        request.in_fb = True#bool(self.fbre.match(request.get_host()))
+        request.in_fb = bool(self.fbre.match(request.get_host()))
