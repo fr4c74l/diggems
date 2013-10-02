@@ -6,7 +6,9 @@ import models
 import http_cli
 import urllib2
 import json
+from functools import partial
 from http_cli import get_conn
+from django.utils.http import urlencode
 from django.core.cache import cache
 from django.db.models import F
 from diggems.settings import EVENT_SERVER, FB_APP_ID, FB_APP_KEY
@@ -98,5 +100,25 @@ def publish_score(user):
     
     fb_ograph_call(try_publish_score)
 
-def start_cancel_requests(game):
-    pass # TODO: TO BE CONTINUED
+def start_cancel_request(fb_request):
+    calls = ({'method': 'DELETE', 'relative_url': '_'.join((fb_request.id, uid))} for uid in fb_request.targets)
+
+    def del_request_batch(batch, conn, app_token):
+        with conn.post('/', '&'.join((urlencode({'batch': batch}), app_token))):
+            req.read() # Just ignore return value
+
+    # Facebook rules that there must be no more than 50 requests per batch,
+    # so we split it in multiple requests if doesn't fit in a single
+    while True:
+        batch = list(itertools.islice(calls, 50))
+        if not batch:
+            break
+        if len(batch) == 1:
+            def del_single_request(conn, app_token):
+                with conn.delete('/{}?{}'.format(batch[0]['relative_url'], app_token)):
+                    req.read()
+            gevent.spawn(fb_ograph_call, del_single_request)
+            break
+        batch = json.dumps(batch)
+        call = partial(del_request, batch)
+        gevent.spawn(fb_ograph_call, call)
