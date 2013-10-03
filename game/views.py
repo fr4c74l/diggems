@@ -201,6 +201,11 @@ def fb_notify_request(request, game_id):
     gevent.spawn(real_work, request.body, request.session.get('user_id'), game_id)
     return HttpResponse()
 
+def fb_cancel_request(request):
+    request_id = request.POST["request_id"]
+    # TODO: to be continued
+    return HttpResponseRedirect('/')
+
 @transaction.commit_on_success
 def fb_request_redirect(request):
     profile = UserProfile.get(request.session)
@@ -216,16 +221,17 @@ def fb_request_redirect(request):
         try:
             # First we check about this request on database
             fb_request = FacebookRequest.objects.get(pk=request_id)
-            
+            game = fb_request.game
+
             # If this request has already started, the request is invalid
             # (this should never happen, but just to be safe...)
-            if fb_request.game.state != 1:
+            if game.state != 1:
                 fb_request.delete()
                 continue
 
             # If this is a private game, we must ensure the user has
             # indeed received that request...
-            if fb_request.game.token and user_id not in fb_request:
+            if game.token and user_id not in fb_request:
                 raise ObjectDoesNotExist()
 
         except ObjectDoesNotExist:
