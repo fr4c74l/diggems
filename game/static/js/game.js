@@ -478,15 +478,14 @@ function hidden_invite_menu() {
 	return false;
 }
 
-function handle_event(msg) {
+function handle_event(msg, seq_num) {
     var lines = msg.split('\n');
-    var seq_num = parseInt(lines[0]);
 
     if(seq_num <= params.seq_num)
 	    return;
     params.seq_num = seq_num;
 
-    var new_state = parseInt(lines[1]);
+    var new_state = parseInt(lines[0]);
     set_state(new_state);
 
 	if (new_state != 0 && params.seq_num == 2 ){
@@ -495,16 +494,16 @@ function handle_event(msg) {
 		document.getElementById('message').style.setProperty('display', 'block', null);
 	}
     if (lines.length > 2){
-        var player = parseInt(lines[2]);
-        var lclick = last_click_decode(player, lines[3]);
+        var player = parseInt(lines[1]);
+        var lclick = last_click_decode(player, lines[2]);
         
         if (player == params.player && lclick.bombed) {
-	    params.tnt_used = true;
-	    tnt.active = false;
+	        params.tnt_used = true;
+	        tnt.active = false;
         }
         
         var parser = /(\d+),(\d+):(.)/;
-        for(var i = 4; i < lines.length; ++i) {
+        for(var i = 3; i < lines.length; ++i) {
     	    var res = parser.exec(lines[i]);
 	        if(res) {
 	            var m = parseInt(res[1]);
