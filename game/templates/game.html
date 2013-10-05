@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load i18n %}
 {% comment %}
 
 Copyright 2011 Lucas Clemente Vella
@@ -82,16 +83,10 @@ Software under Affero GPL license, see LICENSE.txt
 
 <div id="main">
 	<div class="box" id="p1_pts_box"><img src="/static/images/ruby.png"/> <span id="p1_pts">0</span><span> / 26</span></div>
+
 	<div id="middle_box">
-	  <div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
-		{% if player %}
-			{% if state == 0 %}
-				<form action="abort/" method="post" id="abort_button">
-					<input class="button" type="submit" value="{% blocktrans %}Abort{% endblocktrans %}" />
-				</form>
-			{% endif %}
-		{% endif %}
-		<div class="button" id="give_up" {%if not player or player and state == 0 %}style="display:none;"{% endif %} onclick="claim_game(2);">{% trans "Give Up" %}</div>
+		<div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
+		<div class="button" id="give_up" onclick="claim_game(2);">{% trans "Give Up" %}</div>
 	</div>
 
 	<div class = "box" id="timeout_buttons">
@@ -146,6 +141,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<div id="length_notify"> {% blocktrans %} Enter at most 80 characters! {% endblocktrans %}</div>
 		<div id="chat_interact"{% if not player %} style="display:none;"{% endif %}>
 			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
+			{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 		</div>
 	</div>
 </div>

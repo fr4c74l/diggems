@@ -386,7 +386,8 @@ function set_state(state) {
 		else
 			return; // What else can I do?
 	}
-	var canvas = document.getElementById('game_canvas');
+
+    var canvas = document.getElementById('game_canvas');
 	canvas.style.cursor = cursor;
 	canvas.onmousemove = hover_indicator;
 	// Blink title to alert user, if its turn.
@@ -407,7 +408,7 @@ function set_state(state) {
 	}
 	var msg_box = document.getElementById('message');
 
-	if (!params.state && state) {
+    if (!params.state && state) {
 		if(params.player)
 			document.getElementById("chat_interact").style.display="block";
 		// Just started the game, prepare box for messages
@@ -417,7 +418,7 @@ function set_state(state) {
 	}
 	msg_box.innerHTML = msg;
 
-	params.state = state;
+    params.state = state;
 }
 
 /* In case updated user information came from the async
@@ -518,16 +519,14 @@ function handle_event(msg, seq_num) {
 			        mine[m][n].draw();
 		        }
 		    }
-		}
-
+        }
 		if(last_click[player-1])
 		    last_click[player-1].clear();
 		last_click[player-1] = lclick;
 		lclick.draw();
-	}
-
-	update_points();
-	reset_counter();
+	}    
+    update_points();
+    reset_counter();
 }
 
 function register_event() {
@@ -788,10 +787,10 @@ function init() {
   }
 
 	// loading game menu
-	$('#overlay').fadeIn('fast',function(){
-		$('#load_menu').animate({'top':'160px'},500);
-	});
-	load_text_animation("#loading");
+  $('#overlay').fadeIn('fast',function(){
+    $('#load_menu').animate({'top':'160px'},500);
+  });
+  load_text_animation("#loading");
 }
 
 function load_img(name) {
@@ -856,10 +855,6 @@ function claim_game(terminate)
     button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   }
 	button_request.send(data);
-	$("#timeout_buttons").animate({
-	width: "toggle",
-	left: "183px",
-	opacity: "toggle"}, 200);
 }
 
 // Load resources
