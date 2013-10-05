@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-12 18:20-0300\n"
+"POT-Creation-Date: 2013-09-21 11:26-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -22,14 +22,18 @@ msgid "guest"
 msgstr "visitante"
 
 #. Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
-#: views.py:73 templates/base.html:37
+#: views.py:77 templates/base.html:37
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "pt_BR"
 
-#: views.py:351
-msgid "Guest"
-msgstr "Visitante"
+#: ws_handlers.py:86
+msgid "{} joined the chat"
+msgstr "{} entrou no chat"
+
+#: ws_handlers.py:88
+msgid "{} has left the chat"
+msgstr "{} saiu do chat"
 
 #: templates/404.html:10 templates/game404.html:10
 msgid "Broken Link"
@@ -99,8 +103,8 @@ msgstr "Contate-nos"
 
 #: templates/base.html:118 templates/donate.html:11
 #: templates/donate.html.py:17
-msgid "Donations"
-msgstr "Doações"
+msgid "Patronage"
+msgstr "Mecenato"
 
 #: templates/donate.html:18
 msgid ""
@@ -128,7 +132,7 @@ msgid "Thanks!"
 msgstr "Muito obrigado!"
 
 #: templates/donate.html:30
-msgid "DigGems Donations"
+msgid "DigGems Patronage"
 msgstr "Suporte ao DigGems"
 
 #. Translators: Please see locale codes supported by PayPal: https://developer.paypal.com/webapps/developer/docs/classic/paypal-payments-standard/integration-guide/Appx_websitestandard_htmlvariables/
@@ -155,48 +159,52 @@ msgstr "Doar Bitcoin"
 msgid "Game %(game_id)s"
 msgstr "Jogo %(game_id)s"
 
-#: templates/game.html:45
+#: templates/game.html:41
 msgid "Terminate Game"
 msgstr "Terminar Jogo"
 
-#: templates/game.html:46
+#: templates/game.html:42
 msgid "Take Player's Turn"
 msgstr "Tomar a Vez"
 
-#: templates/game.html:57
-msgid "Empty!"
-msgstr "Vazio!"
-
-#: templates/game.html:57
-msgid "Wait..."
-msgstr "Aguarde..."
-
-#: templates/game.html:59
+#: templates/game.html:52
 msgid "Abort"
 msgstr "Abortar"
 
-#: templates/game.html:59 templates/index.html:54
+#: templates/game.html:56
+msgid "Give Up"
+msgstr "Desistir"
+
+#: templates/game.html:70
+msgid "Empty!"
+msgstr "Vazio!"
+
+#: templates/game.html:70
+msgid "Wait..."
+msgstr "Aguarde..."
+
+#: templates/game.html:73 templates/index.html:55
 msgid "Join!"
 msgstr "Juntar-se"
 
-#: templates/game.html:63
+#: templates/game.html:78
 msgid "You"
 msgstr "Você"
 
-#: templates/game.html:63
+#: templates/game.html:78
 msgid "Your opponent"
 msgstr "Seu adversário"
 
-#: templates/game.html:69
+#: templates/game.html:84
 msgid "Copy the link to your adversary"
 msgstr "Copie o link para seu oponente"
 
-#: templates/game.html:82
+#: templates/game.html:97
 msgid "Accept the challenge and play immediately!"
 msgstr "Aceite o desafio e jogue imediatamente!"
 
 # python-format
-#: templates/game.html:92
+#: templates/game.html:107
 #, python-format
 msgid "Game %(game_id)s chat room"
 msgstr "Chat do Jogo %(game_id)s"
@@ -244,63 +252,54 @@ msgid ""
 msgstr ""
 "...ou nunca existiu. Crie um novo na <a href =\"/\">página principal</a>."
 
-#: templates/index.html:24
+#: templates/index.html:25
 msgid "New game"
 msgstr "Novo jogo"
 
-#: templates/index.html:26
+#: templates/index.html:27
 msgid "Private game"
 msgstr "Jogo privado"
 
-#: templates/index.html:27
+#: templates/index.html:28
 msgid "Create!"
 msgstr "Criar!"
 
-#: templates/index.html:31
+#: templates/index.html:32
 msgid "Your games"
 msgstr "Seus jogos"
 
-#: templates/index.html:36 templates/index.html.py:57
+#: templates/index.html:37 templates/index.html.py:58
 msgid "Game"
 msgstr "Jogo"
 
-#: templates/index.html:37
+#: templates/index.html:38
 msgid "Private"
 msgstr "Privado"
 
-#: templates/index.html:37
+#: templates/index.html:38
 msgid "Public"
 msgstr "Público"
 
-#: templates/index.html:38
+#: templates/index.html:39
 msgid "Waiting the other player"
 msgstr "Esperando o outro jogador"
 
-#: templates/index.html:39
+#: templates/index.html:40
 msgid "In progress"
 msgstr "Em progresso"
 
-#: templates/index.html:43 templates/index.html.py:61
+#: templates/index.html:44 templates/index.html.py:62
 msgid "No game found!"
 msgstr "Nenhum jogo encontrado!"
 
-#: templates/index.html:49
+#: templates/index.html:50
 msgid "Games to start"
 msgstr "Jogos por começar"
 
-#: templates/index.html:58
+#: templates/index.html:59
 msgid "Versus"
 msgstr "Contra"
 
-#: templates/index.html:66
+#: templates/index.html:67
 msgid "Global chat room"
 msgstr "Sala de chat global"
-
-#~ msgid "Donation"
-#~ msgstr "Doar Bitcoin"
-
-#~ msgid "Patronage"
-#~ msgstr "Doações"
-
-#~ msgid "Give Up"
-#~ msgstr "Desistir"

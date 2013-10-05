@@ -22,7 +22,7 @@ from django.utils import six
 from django.utils.timezone import utc
 
 from diggems.settings import DB_POOL_MAX_CONN
-from threading import Semaphore
+from gevent.lock import Semaphore
 
 try:
     import psycopg2 as Database
