@@ -413,7 +413,6 @@ function set_state(state) {
 			document.getElementById("chat_interact").style.display="block";
 		// Just started the game, prepare box for messages
 		msg_box.className += " big";
-		document.getElementById("abort_button").style.display="none";
 		document.getElementById("give_up").style.display="block";
 	}
 	msg_box.innerHTML = msg;
