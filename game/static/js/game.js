@@ -819,19 +819,20 @@ function claim_game(terminate)
 	button_request.send(data);
 }
 
-function call_back(response)
-{
-	console.log(response);
-}
-
-function request_friends(game_id){
-	var url = JSON.stringify('/game/'+ game_id + '/join/');
-	FB.ui({method: 'apprequests',
-	title: gettext('Challenge a friend!'),
-	message: gettext('Choose your challenger.'),
-	max_recipients: 1,
-	data: url,
-	}, call_back);
+function request_friends() {
+    FB.ui({method: 'apprequests',
+		title: gettext('Challenge friends!'),
+		message: gettext('Choose your possible oponents.'),
+		data: params.game_id,
+    },
+	function (response){
+		if (response && response.request) {
+			var notifier = new XMLHttpRequest();
+			notifier.open("POST", "fb_notify_request/", true);
+			notifier.setRequestHeader("Content-type", "application/json");
+			notifier.send(JSON.stringify(response));
+		}
+	});
 }
 
 // Load resources

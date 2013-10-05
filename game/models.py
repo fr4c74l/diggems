@@ -7,6 +7,7 @@ from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
+from djorm_pgarray.fields import ArrayField
 from diggems.utils import gen_token
 
 class FacebookCache(models.Model):
@@ -108,4 +109,14 @@ class Game(models.Model):
             
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
-    
+
+class FacebookRequest(models.Model):
+    id = models.CharField(max_length=30, primary_key=True)
+    game = models.ForeignKey(Game, db_index=True)
+    targets = ArrayField(dbtype='text')
+
+def clear_game_requests(sender, **kwargs):
+    fb_request = kwargs['instance']
+    game_helpers.start_cancel_request(fb_request)
+
+pre_delete.connect(clear_game_requests, sender=FacebookRequest)
