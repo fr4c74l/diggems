@@ -415,6 +415,7 @@ function set_state(state) {
 		msg_box.className += " big";
 		document.getElementById("give_up").style.display="block";
 	}
+
 	msg_box.innerHTML = msg;
 
     params.state = state;
