@@ -346,8 +346,8 @@ def game(request, game_id):
     if(game.p2):
         data['p2_last_move'] = game.p2.last_move
         data['player_info'][2] = get_user_info(game.p2.user)
-        if (game.state <= 2):
-            data['time_left'] = max(0, game.timeout_diff())
+        #if (game.state <= 2):
+        data['time_left'] = max(0, game.timeout_diff())
 
     pdata = game.what_player(profile)
     if pdata:

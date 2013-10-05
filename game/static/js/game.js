@@ -342,89 +342,103 @@ States:
  X + 2 -> Player X won
  X + 4 -> Game ended abnormally and player X won
 */
-function set_state(state) {
+function set_state(state) 
+{
     var msg = '';
-    if(params.player) {
-	var cursor;
-	var hover_indicator;
-	if(state == params.player) {
-	    msg = gettext('Your turn! Play!');
-	    
-	    // Set shovel cursor in game_canvas area
-	    cursor = 'url(' + images['shovel'].src + '),auto';
+    if(params.player)
+    {
+	      var cursor;
+	      var hover_indicator;
+	      if(state == params.player) 
+        {
+	          msg = gettext('Your turn! Play!');
+	      
+	          // Set shovel cursor in game_canvas area
+	          cursor = 'url(' + images['shovel'].src + '),auto';
 
-	    // Mark the to be affected tiles
-	    hover_indicator = highlight_tile;
-	}
-	else {
-	    // Not my turn, set default cursor...
-	    cursor = 'default';
-	    
-	    // Stop any tile that could be blinking
-	    ActivityIndicator.clear_all();
+	          // Mark the to be affected tiles
+	          hover_indicator = highlight_tile;
+	      }
+	      else 
+        {
+	          // Not my turn, set default cursor...
+	          cursor = 'default';
+	      
+	          // Stop any tile that could be blinking
+	          ActivityIndicator.clear_all();
 
-	    // and stop highlighting tiles:
-	    hover_indicator = null;
-	    highlight_tile.clear();
+	          // and stop highlighting tiles:
+	          hover_indicator = null;
+	          highlight_tile.clear();
 
-	    if(state == 1 || state == 2) {
-		    msg = gettext('Wait for your turn.');
-	    }
-	    else if(state >= 3 && state <= 6) {
-		msg = gettext('Game over, ');
-		if(((state + 1) % 2) + 1 == params.player) {
-		    if(is_fb_auth()) {
-			/*document.getElementById('brag_button')
-			.style.setProperty('visibility', 'visible', null);*/
-		      }
-		      msg += gettext('you win!');
-		    }
-		    else
-				msg += gettext('you lose.');
-			document.getElementById("rematch_box").style.display = 'block';
-			document.getElementById("rematch_button").style.display = 'block';
-			timer.rematch_time = 45;
-			timer.id = window.setInterval(timer, 1000);
-			timer();
-	    }
-	    else
-		return; // What else can I do?
-	}
+	          if(state == 1 || state == 2)
+            {
+		            msg = gettext('Wait for your turn.');
+	          }
+	          else 
+                if(state >= 3 && state <= 6) 
+                {
+		                msg = gettext('Game over, ');
+		                if(((state + 1) % 2) + 1 == params.player) 
+                    {
+		                    if(is_fb_auth()) 
+                        {
+		  	                    /*document.getElementById('brag_button')
+		  	                    .style.setProperty('visibility', 'visible', null);*/
+		                    }
+		                    msg += gettext('you win!');
+		                }
+		                else
+		                    msg += gettext('you lose.');
+
+	                  document.getElementById("rematch_box").style.display = 'block';
+		                document.getElementById("rematch_button").style.display = 'block';
+		                timer.rematch_time = Math.round(params.time_left);
+		                timer.id = window.setInterval(timer, 1000);
+		                timer();
+	              }
+	              else
+		                return; // What else can I do?
+	      }
 
     var canvas = document.getElementById('game_canvas');
-	canvas.style.cursor = cursor;
-	canvas.onmousemove = hover_indicator;
+	  canvas.style.cursor = cursor;
+	  canvas.onmousemove = hover_indicator;
 
-	// Blink title to alert user, if its turn.
-	your_turn_blinker.setBlinking(state == params.player);
-	if(params.state != state && (state == params.player || state > 2))
-		notify_state(msg);
-	} else {
-		// Spectator mode.
-		var state_msgs =
-			['',
-			 gettext("Red's turn."),
-			 gettext("Blue's turn."),
-			 gettext('Game is over, red player won.'),
-			 gettext('Game is over, blue player won.'),
-			 gettext('Game is over, red player won by resignation.'),
-			 gettext('Game is over, blue player won by resignation.')];
-		msg = state_msgs[state];
-	}
-	var msg_box = document.getElementById('message');
+	  // Blink title to alert user, if its turn.
+	  your_turn_blinker.setBlinking(state == params.player);
 
-    if (!params.state && state) {
-		if(params.player)
-			document.getElementById("chat_interact").style.display="block";
-		// Just started the game, prepare box for messages
-		msg_box.className += " big";
+	  if(params.state != state && (state == params.player || state > 2))
+		    notify_state(msg);
+	  } 
+    else 
+    {
+		    // Spectator mode.
+		    var state_msgs =
+			  ['',
+			    gettext("Red's turn."),
+			    gettext("Blue's turn."),
+			    gettext('Game is over, red player won.'),
+			    gettext('Game is over, blue player won.'),
+			    gettext('Game is over, red player won by resignation.'),
+			    gettext('Game is over, blue player won by resignation.')];
+		    msg = state_msgs[state];
+	  }
+	  var msg_box = document.getElementById('message');
 
-		document.getElementById("abort_button").style.display="none";
-		document.getElementById("give_up").style.display="block";
-	}
-	msg_box.innerHTML = msg;
+    if (!params.state && state) 
+    {
+		    if(params.player)
+			      document.getElementById("chat_interact").style.display="block";
+		    // Just started the game, prepare box for messages
+		    msg_box.className += " big";
 
-	params.state = state;
+		    document.getElementById("abort_button").style.display="none";
+		    document.getElementById("give_up").style.display="block";
+	  }
+	  msg_box.innerHTML = msg;
+
+	  params.state = state;
 }
 
 /* In case updated user information came from the async
@@ -700,7 +714,8 @@ highlight_tile.clear = function() {
     highlight_tile.redraw_hidden(to_redraw);
 }
 
-function init() {
+function init() 
+{
     // TODO: find a better way to deal with sound
     // Bogus browsers won't allow me to play the sound repeatedely
     // without reloading it.
@@ -709,22 +724,24 @@ function init() {
 
     var canvas = document.getElementById('game_canvas');
     
-    if (!canvas || !canvas.getContext) {
-	// Panic return
-	// TODO: add friendly message explaining why IE sucks
-	return;
+    if (!canvas || !canvas.getContext) 
+    {
+	    // Panic return
+	    // TODO: add friendly message explaining why IE sucks
+	    return;
     }
 
     mine = new Array(16);
-    for (var i=0; i < 16; ++i) {
-	mine[i] = new Array(16);
-	for (var j=0; j < 16; ++j)
-	    mine[i][j] = new Tile(i,j);
+    for (var i=0; i < 16; ++i) 
+    {
+	    mine[i] = new Array(16);
+	    for (var j=0; j < 16; ++j)
+	        mine[i][j] = new Tile(i,j);
     }
 
     if(params.mine)
-	for(var i = 0; i < 256; ++i)
-	    mine[Math.floor(i/16)][i%16].set_state(params.mine.charAt(i));
+	    for(var i = 0; i < 256; ++i)
+	        mine[Math.floor(i/16)][i%16].set_state(params.mine.charAt(i));
 
     // Text presets
     ctx = canvas.getContext('2d');
@@ -743,17 +760,19 @@ function init() {
 
     // Draw map
     for(var i = 0; i < 16; ++i)
-	for(var j = 0; j < 16; ++j)
-	    mine[i][j].draw();
+	      for(var j = 0; j < 16; ++j)
+	        mine[i][j].draw();
 
     // Draw movement marks
-    if(params.p1_last_move) {
-	last_click[0] = last_click_decode(1, params.p1_last_move);
-	last_click[0].draw();
+    if(params.p1_last_move) 
+    {
+	    last_click[0] = last_click_decode(1, params.p1_last_move);
+	    last_click[0].draw();
     }
-    if(params.p2_last_move) {
-	last_click[1] = last_click_decode(2, params.p2_last_move);
-	last_click[1].draw();
+    if(params.p2_last_move) 
+    {
+	    last_click[1] = last_click_decode(2, params.p2_last_move);
+	    last_click[1].draw();
     }
 
     // Put display in current state
@@ -772,29 +791,32 @@ function init() {
 
     // Init chat stuff
     chat.init(
-	document.getElementById("chat_textfield"),
-	document.getElementById("input_field"),
-	document.getElementById("send_button"),
-	event, 'chat/'
+	    document.getElementById("chat_textfield"),
+	    document.getElementById("input_field"),
+	    document.getElementById("send_button"),
+	    event, 'chat/'
     );
 
-    if(params.player) { // Not a spectator
-	// Expect for user input
-	canvas.addEventListener('click', on_click, false);
-	document.getElementById('tnt').addEventListener('click', toggle_tnt, false);
+    if(params.player) 
+    { 
+      // Not a spectator
+	    // Expect for user input
+	    canvas.addEventListener('click', on_click, false);
+	    document.getElementById('tnt').addEventListener('click', toggle_tnt, false);
     }
     
     // Everything is setup, show the canvas
     canvas.style.setProperty('visibility', 'visible', null);
-  if ((params.state == 1) || (params.state == 2))
-  {
-    turn_timeout.start_time = (new Date()).getTime();
-    reset_counter.int = window.setInterval(turn_timeout, 1000);
-    turn_timeout();
-  }
+    if ((params.state == 1) || (params.state == 2))
+    {
+      turn_timeout.start_time = (new Date()).getTime();
+      reset_counter.int = window.setInterval(turn_timeout, 1000);
+      turn_timeout();
+    }
 }
 
-function load_img(name) {
+function load_img(name)
+{
     var img = new Image();
     img.src = "/static/images/" + name + ".png";
     images[name] = img;
@@ -865,7 +887,6 @@ function rematch(game_id)
   button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	button_request.send(null);
   document.getElementById("rematch_button").style.display = 'none';
-
 }
 
 // Load resources
