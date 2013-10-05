@@ -22,7 +22,6 @@ Software under Affero GPL license, see LICENSE.txt
 	"state": {{ state }},
 	"seq_num": {{ seq_num }},
 	"time_left": {% if time_left %}{{ time_left | escapejs }}{% else %}0{% endif %},
-	"last_change": "{{ last_change }}",
 	"channel": "{{ channel }}"{% if fb_other %},
 	"fb_other": "{{ fb_other }}"{% endif %}{% if p1_last_move %},
 	"p1_last_move": "{{ p1_last_move }}"{% endif %}{% if p2_last_move %},
@@ -35,7 +34,6 @@ Software under Affero GPL license, see LICENSE.txt
 </script>
 <script src="/static/js/event.js" />
 <script src="/static/js/game.js" />
-<script src="/static/js/jquery-2.0.3.min.js"/>
 <script src="/static/js/chat.js" />
 
 <div class = "box" id="timeout_buttons">
@@ -120,11 +118,12 @@ Software under Affero GPL license, see LICENSE.txt
 
 <div class="chat box_border_top" id="chat_window">
 	<!-- TODO Uncomment the line below after create a function to add chat-->
-	<div class="chat_menu" id="toggle">{% blocktrans %}Game {{ game_id }} chat room{% endblocktrans %}</div>
+	<div class="chat_menu" id="toggle_game_chat">{% blocktrans %}Game {{ game_id }} chat room{% endblocktrans %}</div>
 	<div id="chat_area">
 		<ul id="chat_textfield"/>
+		<div id="length_notify"> {% blocktrans %} Enter at most 80 characters! {% endblocktrans %}</div>
 		<div id="chat_interact"{% if not player %} style="display:none;"{% endif %}>
-			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
+			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" />
 			{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 		</div>
 	</div>

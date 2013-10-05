@@ -1,5 +1,5 @@
 from django.conf.urls import include, patterns
-from django.conf.urls.i18n import i18n_patterns
+#from django.conf.urls.i18n import i18n_patterns
 
 _in_game = patterns('game.views',
     (r'^move/$', 'move'),
@@ -7,7 +7,6 @@ _in_game = patterns('game.views',
     (r'^abort/$', 'abort_game'),
     (r'^claim/$', 'claim_game'),
     (r'^rematch/$', 'rematch'),
-    (r'^chat/$', 'chat_post'),
     (r'^$', 'game'),
 )
 
@@ -31,7 +30,6 @@ urlpatterns = patterns('',
     (r'^donate/$','game.views.donate'),
     (r'^i18n/', include('django.conf.urls.i18n')),
     (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
-    (r'^main_chat/$', 'game.views.chat_post'),
 
     # Error views:
     (r'^error/404$', 'django.views.defaults.page_not_found'),
