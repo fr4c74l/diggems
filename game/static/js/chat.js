@@ -120,7 +120,7 @@ var chat = (function (){
 
 (function() {
   function in_game_init() {
-		if ($("#toggle_game_chat").length>0) {
+		if ($("#toggle_game_chat").length > 0) {
 			$(document).keydown(function(e) { 
 				if (e.which == 27 ) {
 					$("#toggle_game_chat").trigger("click");
