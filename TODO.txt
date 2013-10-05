@@ -18,9 +18,27 @@ Priority:
 - Add general and in-game chat
   - Random color names in chat for guest users based on their internal ID
   - Javascript inform user connect/disconnect.
+  - limit how many messages can be send in a time period
 - TNT activity indicator must blink all affected tiles...
+- Bug: real time user info display doesn't really works, login button still displays if user has no previous diggems cookie, but is logged in Facebook (and authorized diggems). User is auto-logged, but "login" button is still displayed.
+
+GreenHttp:
+- pywsgi.py:470 - Trying to get IP address from Unix Socket address, raises IndexError...
+- See this error:
+  File "/home/lucas/projetos/diggems/cpython_env/local/lib/python2.7/site-packages/gevent/pywsgi.py", line 502, in handle_one_response
+    self.run_application()
+  File "/home/lucas/projetos/diggems/cpython_env/local/lib/python2.7/site-packages/geventwebsocket/handler.py", line 67, in run_application
+    self.run_websocket()
+  File "/home/lucas/projetos/diggems/cpython_env/local/lib/python2.7/site-packages/geventwebsocket/handler.py", line 50, in run_websocket
+    del self.server.clients[self.client_address]
+  KeyError: ''
+- WebSocket connection drops after some time, investigate... (possibly some nginx configuration?)
+- Handle possible problems on tightly controled sequence numbers (non-sequential posting of seqnums).
+- On user login/logout, restart websocket connection, so user identity is updated on server (or even better, use websocket to communicate login).
+- Use Websockek to send game events, instead of ordinary HTTP post (not sure about this, it is uglyer, but much more stable and well tested).
 
 TODO Later:
+- Rename game_helpers.py to just helpers.py.
 - Ask user to login on FB so his game stats will be recorded on his ID.
 - Internationalization (incomplete)
   - Spanish

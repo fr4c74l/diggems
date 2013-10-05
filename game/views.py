@@ -3,11 +3,14 @@
 # Software under Affero GPL license, see LICENSE.txt
 
 import itertools
-import urllib2
+import datetime
 import json
 import ssl
+import gevent
+import http_cli
 import hashlib
 import locale
+import gevent
 from diggems import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
@@ -20,12 +23,13 @@ from django.db.models import Q
 from django.template import Context, RequestContext, loader, TemplateDoesNotExist
 from django.template.defaultfilters import floatformat
 from django.utils.html import escape, mark_safe
-from django.utils.translation import ugettext as _, pgettext
+from django.utils.translation import pgettext
 from django.core.exceptions import ObjectDoesNotExist
 from game_helpers import *
 from models import *
-from https_conn import https_opener
+from diggems.utils import gen_token, true_random
 from django.utils.translation import to_locale, get_language
+from async_events import channel
 
 def get_user_info(user, with_private=False):
     if user.facebook:
@@ -86,20 +90,14 @@ def fb_login(request):
         return HttpResponseBadRequest()
 
     try:
-        # TODO: this ideally must be done asyncronuosly...
-        res = https_opener.open('https://graph.facebook.com/me?access_token=' + token)
-        fb_user = json.load(res)
-        res.close()
+        with http_cli.get_conn('https://graph.facebook.com/').get('me?access_token=' + token) as res:
+            fb_user = json.load(res)
     except ssl.SSLError:
         # TODO: Log this error? What to do when Facebook
         # connection has been compromised?
         return HttpResponseServerError()
 
-    try:
-        fb = FacebookCache.objects.get(uid=fb_user['id'])
-    except FacebookCache.DoesNotExist:
-        fb = FacebookCache(uid=fb_user['id'])
-
+    fb, created = FacebookCache.objects.get_or_create(uid=fb_user['id'])
     fb.name = fb_user['name']
     fb.save()
 
@@ -113,6 +111,7 @@ def fb_login(request):
                     profile.merge(old_profile)
             except UserProfile.DoesNotExist:
                 pass
+
     except UserProfile.DoesNotExist:
         # First time login with Facebook
         try:
@@ -133,15 +132,15 @@ def fb_login(request):
     # Send this new user info to every channel where user is a player:
     for p in (1, 2):
         # Games where player p is this user
-        query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile}).values('channel')
+        query = Game.objects.filter(**{'p{}__user__exact'.format(p): profile}).values('id')
 
         # Build the message to send to the game channels regarding player p
-        msg = 'p\n{}\n{}'.format(p, user_info)
+        msg = '\n'.join((str(p), user_info))
 
         # TODO: find a way to make this a single query, because I could not.
         # TODO: make this asyncronous.
         for game in query:
-            post_update(game['channel'], msg)
+            channel.post_update(game.channel(), 'p', msg)
 
     # Full user info
     user_info = json.dumps(get_user_info(profile, True))
@@ -149,7 +148,7 @@ def fb_login(request):
 
 @transaction.commit_on_success
 def fb_logout(request):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     if profile.user or profile.facebook:
         profile = UserProfile(id=gen_token())
         profile.save()
@@ -167,7 +166,7 @@ def adhack(request, ad_id):
         content_type='text/html; charset=utf-8')
 
 def index(request):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
 
     playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
 
@@ -188,7 +187,7 @@ def new_game(request):
         c = Context({'url': '/new_game/'})
         return render_to_response('post_redirect.html', c)
 
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
 
     mine = [[0] * 16 for i in xrange(16)]
 
@@ -213,16 +212,14 @@ def new_game(request):
 
     if request.REQUEST.get('private', default=False):
         game.token = gen_token()
-    game.channel = gen_token()
     game.p1 = p1
     game.save()
-    create_channel(game.channel)
 
     return HttpResponseRedirect('/game/' + str(game.id))
 
 @transaction.commit_on_success
 def join_game(request, game_id):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
 
     # If game is too old, render 404 game error screen
     try:
@@ -258,15 +255,14 @@ def join_game(request, game_id):
     game.save()
     transaction.commit()
 
-    # TODO: make these asynchronous:
+    ch_id = game.channel()
     
     # Game state change
-    outdata = map(unicode, [u'g', game.seq_num, game.state])
-    post_update(game.channel, u'\n'.join(outdata))
+    channel.post_update(ch_id, 'g', str(game.state), game.seq_num)
 
     # Player info display
-    outdata = 'p\n2\n' + json.dumps(get_user_info(profile))
-    post_update(game.channel, outdata)
+    outdata = '2\n' + json.dumps(get_user_info(profile))
+    channel.post_update(ch_id, 'p', outdata)
 
     return HttpResponseRedirect('/game/' + game_id)
 
@@ -277,7 +273,7 @@ def abort_game(request, game_id):
 
     game = get_object_or_404(Game, pk=game_id)
     if game.state == 0:
-        profile = UserProfile.get(request)
+        profile = UserProfile.get(request.session)
         pdata = game.what_player(profile)
         if pdata:
             pdata[1].delete()
@@ -294,7 +290,7 @@ def claim_game(request, game_id):
     if game.state not in (1,2):
         return HttpResponseForbidden()
     
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     pdata = game.what_player(profile)
     if pdata:
         my_number, me = pdata
@@ -328,33 +324,31 @@ def claim_game(request, game_id):
     game.save()
     transaction.commit()
 
-    result = '\n'.join(map(str, (u'g', game.seq_num, game.state)))
-    post_update(game.channel, result)
+    channel.post_update(game.channel(), 'g', str(game.state), game.seq_num)
     
-    if term:
-        publish_score(me)
-    
+    if term == 'y':
+        gevent.spawn(publish_score, me.user)
+    elif term == 'z':
+        gevent.spawn(publish_score, game.p1.user)
+        gevent.spawn(publish_score, game.p2.user)
+
     return HttpResponse()
 
 @transaction.commit_on_success
 def game(request, game_id):
     # TODO: maybe control who can watch a game
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     #game = get_object_or_404(Game, pk=game_id)
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
         return render_with_extra('game404.html', profile, status=404)
 
-    if profile.facebook:
-        user_id = profile.facebook.name
-    else:
-        user_id = profile.guest_name()
+    user_id = profile.display_name()
 
     data = {'state': game.state,
             'game_id': game_id,
             'seq_num': game.seq_num,
-            'last_change': format_date_time(mktime(datetime.datetime.now().timetuple())),
             'channel': game.channel,
             'p1_last_move': game.p1.last_move,
             'player_info': {1: get_user_info(game.p1.user),
@@ -394,7 +388,7 @@ def move(request, game_id):
 
     game = get_object_or_404(Game, pk=game_id)
 
-    pdata = game.what_player(UserProfile.get(request))
+    pdata = game.what_player(UserProfile.get(request.session))
     if not pdata or pdata[0] != game.state:
         return HttpResponseForbidden()
 
@@ -473,71 +467,33 @@ def move(request, game_id):
              if mine[m][n] == 9:
                  revealed.append((m, n, 'x'))
 
-    result = itertools.chain(('g', str(game.seq_num), str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
+    result = itertools.chain((str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
     result = '\n'.join(result)
 
     # Everything is OK until now, so commit DB transaction
     transaction.commit()
 
-    # Since updating Facebook with score may be slow, we post
-    # the update to the user first...
-    post_update(game.channel, result)
+    # Post the update to the users...
+    channel.post_update(game.channel(), 'g', result, game.seq_num)
 
     # ... and then publish the scores on FB, if game is over.
-    # (TODO: If only this could be done asyncronously...)
     if game.state >= 3: 
-        publish_score(game.p1.user)
-        publish_score(game.p2.user)
+        gevent.spawn(publish_score, game.p1.user)
+        gevent.spawn(publish_score, game.p2.user)
 
     return HttpResponse()
 
 def donate(request):
-    profile = UserProfile.get(request)
+    profile = UserProfile.get(request.session)
     return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
 
 def info(request, page):
-    actual_locale = get_language()
     if page not in info.existing_pages:
         raise Http404
-    for locale in (actual_locale, 'en'):
+    for locale in (request.LANGUAGE_CODE, 'en'):
         try:
-            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request))
+            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request.session))
         except TemplateDoesNotExist:
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
 
-def chat_post(request, game_id=None):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-
-    msg = request.body
-    if not msg:
-        return HttpResponseBadRequest()
-
-    profile = UserProfile.get(request)
-    if game_id is None:
-        event_channel = "main_channel"
-    else:
-        game = get_object_or_404(Game, pk=game_id)
-        if not game.what_player(profile):
-            return HttpResponseForbidden()
-        event_channel = game.channel
-
-    if profile.facebook:
-        username = profile.facebook.name
-    else:
-        username = profile.guest_name()
-
-    utcnow = datetime.datetime.utcnow()
-    midnight_utc = datetime.datetime.combine(utcnow.date(), time(0))
-    delta = utcnow - midnight_utc
-
-    data = {
-        'time_in_sec': delta.seconds,
-        'username': username,
-        'msg': escape(msg)
-    }
-
-    post_update(event_channel, 'c\n' + json.dumps(data))
-
-    return HttpResponse()

@@ -1,13 +1,13 @@
 # Copyright 2011 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
-import game_helpers
 import datetime
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
+from diggems.utils import gen_token
 
 class FacebookCache(models.Model):
     uid = models.CharField(max_length=30, unique=True)
@@ -26,6 +26,11 @@ class UserProfile(models.Model):
     def guest_name(self):
         return '~'.join((_('guest'), self.id[:4]))
 
+    def display_name(self):
+        if self.facebook:
+            return self.facebook.name
+        return self.guest_name()
+
     def merge(self, other):
         # Update players user to the unified one
         Player.objects.filter(user=other).update(user=self)
@@ -43,32 +48,22 @@ class UserProfile(models.Model):
         other.delete()
 
     @staticmethod
-    def get(request):
-        is_auth = request.user.is_authenticated()
-        user_id = request.session.get('user_id')
+    def get(session):
+        user_id = session.get('user_id')
 
-        if not is_auth:
-            # Not authenticated by us
-            if user_id:
-                # Recurring FB or guest user
-                try:
-                    prof = UserProfile.objects.get(id=user_id)
-                except UserProfile.DoesNotExist:
-                    # Old cookie, invalidate the id
-                    user_id = None
-                
-            if not user_id:
-                # New guest user, create a temporary guest profile
-                prof = UserProfile()
-                prof.id = game_helpers.gen_token()
-                request.session['user_id'] = prof.id
-        else:
-            # Authenticated by us
-            prof = request.user.get_profile()
+        if user_id:
+            # Recurring FB or guest user
+            try:
+                prof = UserProfile.objects.get(id=user_id)
+            except UserProfile.DoesNotExist:
+                # Old cookie, invalidate the id
+                user_id = None
 
-            # Authenticated user should not have user_id
-            if user_id:
-                del request.session['user_id']
+        if not user_id:
+            # New guest user, create a temporary guest profile
+            prof = UserProfile()
+            prof.id = gen_token()
+            session['user_id'] = prof.id
 
         # Must always save, to update timestamp
         prof.save()
@@ -92,11 +87,13 @@ class Game(models.Model):
     state = models.SmallIntegerField(default=0, db_index=True)
     seq_num = models.IntegerField(default=0)
     token = models.CharField(max_length=22, blank=True, null=True)
-    channel = models.CharField(max_length=22, unique=True)
     p1 = models.OneToOneField(Player, related_name='game_as_p1')
     p2 = models.OneToOneField(Player, blank=True, null=True, related_name='game_as_p2')
     last_move_time = models.DateTimeField(auto_now=True)
-    
+
+    def channel(self):
+        return 'g' + str(self.id)
+
     def save(self, *args, **kwargs):
         self.seq_num = self.seq_num + 1
         super(Game, self).save(*args, **kwargs)
@@ -111,8 +108,4 @@ class Game(models.Model):
             
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
-
-def delete_game_channel(sender, **kwargs):
-    game_helpers.delete_channel(kwargs['instance'].channel)
-
-pre_delete.connect(delete_game_channel, sender=Game)
+    

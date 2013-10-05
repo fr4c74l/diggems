@@ -334,7 +334,14 @@ function notify_state(msg) {
     }
 }
 
-// TODO: localization
+/* TODO: localization
+States:
+ 0 -> Game has not started yet
+ 1 -> Player's 1 turn
+ 2 -> Player's 2 turn
+ X + 2 -> Player X won
+ X + 4 -> Game ended abnormally and player X won
+*/
 function set_state(state) {
     var msg = '';
     if(params.player) {
@@ -379,36 +386,38 @@ function set_state(state) {
 		else
 			return; // What else can I do?
 	}
-
 	var canvas = document.getElementById('game_canvas');
 	canvas.style.cursor = cursor;
 	canvas.onmousemove = hover_indicator;
-
-        // Blink title to alert user, if its turn.
-        your_turn_blinker.setBlinking(state == params.player);
-
+	// Blink title to alert user, if its turn.
+	your_turn_blinker.setBlinking(state == params.player);
 	if(params.state != state && (state == params.player || state > 2))
-	    notify_state(msg);
-    } else {
-	// Spectator mode.
-	var state_msgs =
-	    ['',
-	     gettext("Red's turn."),
-	     gettext("Blue's turn."),
-	     gettext('Game is over, red player won.'),
-	     gettext('Game is over, blue player won.'),
-	     gettext('Game is over, red player won by resignation.'),
-	     gettext('Game is over, blue player won by resignation.')];
-	msg = state_msgs[state];
-    }
-    var msg_box = document.getElementById('message');
-    if (!params.state && state) {
+		notify_state(msg);
+	} else {
+		// Spectator mode.
+		var state_msgs =
+			['',
+			 gettext("Red's turn."),
+			 gettext("Blue's turn."),
+			 gettext('Game is over, red player won.'),
+			 gettext('Game is over, blue player won.'),
+			 gettext('Game is over, red player won by resignation.'),
+			 gettext('Game is over, blue player won by resignation.')];
+		msg = state_msgs[state];
+	}
+	var msg_box = document.getElementById('message');
+
+	if (!params.state && state) {
 		if(params.player)
 			document.getElementById("chat_interact").style.display="block";
-    }
+		// Just started the game, prepare box for messages
+		msg_box.className += " big";
+		document.getElementById("abort_button").style.display="none";
+		document.getElementById("give_up").style.display="block";
+	}
 	msg_box.innerHTML = msg;
 
-    params.state = state;
+	params.state = state;
 }
 
 /* In case updated user information came from the async
@@ -474,7 +483,7 @@ function handle_event(msg) {
     var seq_num = parseInt(lines[0]);
 
     if(seq_num <= params.seq_num)
-	return;
+	    return;
     params.seq_num = seq_num;
 
     var new_state = parseInt(lines[1]);
@@ -496,30 +505,30 @@ function handle_event(msg) {
         
         var parser = /(\d+),(\d+):(.)/;
         for(var i = 4; i < lines.length; ++i) {
-	    var res = parser.exec(lines[i]);
-	    if(res) {
-	        var m = parseInt(res[1]);
-	        var n = parseInt(res[2]);
+    	    var res = parser.exec(lines[i]);
+	        if(res) {
+	            var m = parseInt(res[1]);
+	            var n = parseInt(res[2]);
 
-	        // Just assume correct valid values were delivered...
+	            // Just assume correct valid values were delivered...
 
-	        mine[m][n].set_state(res[3]);
-		if (mine[m][n].ai) {
-		    mine[m][n].ai.clear();
-		} else {
-		    mine[m][n].draw();
+	            mine[m][n].set_state(res[3]);
+		        if (mine[m][n].ai) {
+			        mine[m][n].ai.clear();
+		        } else {
+			        mine[m][n].draw();
+		        }
+		    }
 		}
-	    }
-        }
 
-        if(last_click[player-1])
-	    last_click[player-1].clear();
-        last_click[player-1] = lclick;
-        lclick.draw();
-    }
+		if(last_click[player-1])
+		    last_click[player-1].clear();
+		last_click[player-1] = lclick;
+		lclick.draw();
+	}
 
-    update_points();
-    reset_counter();
+	update_points();
+	reset_counter();
 }
 
 function register_event() {
@@ -749,8 +758,11 @@ function init() {
     your_turn_blinker.setBlinking(params.state == params.player);
 
     // Receive updates from server
-    event = new Event('/event/' + params.channel, params.last_change);
-    event.register_handler('g', handle_event);
+    event = new Event(
+	(/^https/.test(location.protocol) ? "wss://" : "ws://")
+	+ location.hostname + (location.port ? (":" + location.port) : "")
+	+ location.pathname + "event/");
+    event.register_handler('g', handle_event, params.seq_num);
     event.register_handler('p', handle_player_data_event);
 
     // Init chat stuff
@@ -758,7 +770,7 @@ function init() {
 	document.getElementById("chat_textfield"),
 	document.getElementById("input_field"),
 	document.getElementById("send_button"),
-	event, 'chat/'
+	event
     );
 
     if(params.player) { // Not a spectator

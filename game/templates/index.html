@@ -75,23 +75,23 @@ Software under Affero GPL license, see LICENSE.txt
 </div>
 
 <div class="chat box" style="margin-bottom:10px;">
-		<h3>{% trans "Global Chat Room " %}</h3>
-		<ul id="chat_textfield"/>
-		<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
-		{#<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />#}
+    <h3>{% trans "Global Chat Room " %}</h3>
+    <ul id="chat_textfield" />
+	<div id="length_notify"> {% blocktrans %} Enter at most 80 characters! {% endblocktrans %}</div>
+	<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" />
+	{#<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />#}
 </div>
 
 <script>
-	<![CDATA[
-	var event = new Event('/event/main_channel', (new Date()).toUTCString());
-
+<![CDATA[
+    var event = new Event((/^https/.test(location.protocol) ? "wss://" : "ws://") + location.hostname + (location.port ? (":" + location.port) : "") + '/main_chat/');
 	chat.init(
 		document.getElementById("chat_textfield"),
 		document.getElementById("input_field"),
 		document.getElementById("send_button"),
-		event, 'main_chat/'
+		event
 	);
-	]]>
+]]>
 </script>
 
 <div class="likebox box" >
