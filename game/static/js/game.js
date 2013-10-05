@@ -391,7 +391,7 @@ function set_state(state)
 		                else
 		                    msg += gettext('you lose.');
 
-	                  document.getElementById("rematch_box").style.display = 'block';
+	                    document.getElementById("rematch_box").style.display = 'block';
 		                document.getElementById("rematch_button").style.display = 'block';
 		                timer.rematch_time = Math.round(params.time_left);
 		                timer.id = window.setInterval(timer, 1000);
@@ -789,6 +789,7 @@ function init()
 	+ location.pathname + "event/");
     event.register_handler('g', handle_event, params.seq_num);
     event.register_handler('p', handle_player_data_event);
+    event.register_handler('r', handle_event_rematch);
 
     // Init chat stuff
     chat.init(
@@ -883,11 +884,11 @@ function claim_game(terminate)
 
 function rematch(game_id)
 {
-  var url = '/game/' + game_id + '/rematch/';
-  button_request.open('POST', url, true);
-  button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-	button_request.send(null);
-  document.getElementById("rematch_button").style.display = 'none';
+    var url = '/game/' + game_id + '/rematch/';
+    button_request.open('POST', url, true);
+    button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    button_request.send(null);
+    document.getElementById("rematch_button").style.display = 'none';
 }
 
 // Load resources

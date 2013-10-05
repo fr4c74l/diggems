@@ -3,13 +3,13 @@
 
 import itertools
 import datetime
-from game_helpers import *
+from diggems.utils import true_random, gen_token
+from game_helpers import for_each_surrounding, mine_encode
 from django.db import models
 from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
-from diggems.utils import gen_token
 
 class FacebookCache(models.Model):
     uid = models.CharField(max_length=30, unique=True)
@@ -110,6 +110,27 @@ class Game(models.Model):
             
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
+
+    @staticmethod
+    def create(is_private=False):
+        g = Game()
+        mine = [[0] * 16 for i in xrange(16)]
+        indexes = list(itertools.product(xrange(16), repeat=2))
+        gems = true_random.sample(indexes, 51)
+        
+        for (m, n) in gems:
+            mine[m][n] = 9
+
+        for m, n in indexes:
+            if mine[m][n] == 0:
+                def inc_count(x, y):
+                    if mine[x][y] == 9:
+                        mine[m][n] += 1
+                for_each_surrounding(m, n, inc_count)
+        g.mine = mine_encode(mine)
+        if is_private:
+            g.token = gen_token()
+        return g
 
 class Rematch(models.Model):
     game = models.OneToOneField(Game, primary_key=True)

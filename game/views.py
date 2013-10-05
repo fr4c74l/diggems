@@ -189,6 +189,21 @@ def new_game(request):
 
     profile = UserProfile.get(request.session)
 
+    mine = [[0] * 16 for i in xrange(16)]
+
+    indexes = list(itertools.product(xrange(16), repeat=2))
+    gems = true_random.sample(indexes, 51)
+    
+    for (m, n) in gems:
+        mine[m][n] = 9
+    
+    for m, n in indexes:
+        if mine[m][n] == 0:
+            def inc_count(x, y):
+                if mine[x][y] == 9:
+                    mine[m][n] += 1
+            for_each_surrounding(m, n, inc_count)
+
     p1 = Player(user=profile)
     p1.save()
 
@@ -196,10 +211,9 @@ def new_game(request):
     game.mine = mine_encode(mine)
     if request.REQUEST.get('private', default=False):
         game.token = gen_token()
-
     game.p1 = p1
     game.save()
-
+    
     return HttpResponseRedirect('/game/' + str(game.id))
 
 @transaction.commit_on_success
@@ -376,7 +390,7 @@ def rematch(request, game_id):
         return HttpResponseForbidden()
     #if datetime.datetime.now() - game.last_move_time >= 45:
         #return HttpResponseForbidden()
-    pdata = game.what_player(UserProfile.get(request))
+    pdata = game.what_player(UserProfile.get(request.session))
     if not pdata:
         return HttpResponseForbidden()
     
@@ -384,10 +398,10 @@ def rematch(request, game_id):
     me, player = pdata
     if me == 1:
         obj.p1_click = True
-        post_update(game.channel, 'r\n' + json.dumps({'p1_click':True,'p2_click':False}))
+        channel.post_update(game.channel(), 'r\n', json.dumps({'p1_click':True,'p2_click':False}), game.seq_num)
     elif me == 2:
         obj.p2_click = True
-        post_update(game.channel, 'r\n' + json.dumps({'p1_click':False,'p2_click':True}))
+        channel.post_update(game.channel(), 'r\n', json.dumps({'p1_click':False,'p2_click':True}), game.seq_num)
 
     obj.save()
 
@@ -401,7 +415,7 @@ def rematch(request, game_id):
         cg.p2 = p
         cg.state = 1
         cg.save()
-        post_update(game.channel, 'r\n' + json.dumps({'p1_click':True,'p2_click':True,'game_id':cg.id}))
+        channel.post_update(game.channel(), 'r\n', json.dumps({'p1_click':True,'p2_click':True,'game_id':cg.id}), game.seq_num)
     
     return HttpResponse()
 
