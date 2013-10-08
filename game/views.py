@@ -140,9 +140,8 @@ def fb_login(request):
         msg = '\n'.join((str(p), user_info))
 
         # TODO: find a way to make this a single query, because I could not.
-        # TODO: make this asyncronous.
         for game in query:
-            channel.post_update(game.channel(), 'p', msg)
+            gevent.spawn(channel.post_update, game.channel(), 'p', msg)
 
     # Full user info
     user_info = json.dumps(get_user_info(profile, True))
