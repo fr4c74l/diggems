@@ -169,7 +169,7 @@ def fb_notify_request(request, game_id):
     @transaction.commit_on_success
     def real_work(request_info, user_id, game_id):
         try:
-            user = UserProfile.get(pk=user_id)
+            user = UserProfile.objects.get(pk=user_id)
             fb_profile = user.facebook
             if not fb_profile:
                 return
@@ -198,9 +198,26 @@ def fb_notify_request(request, game_id):
     gevent.spawn(real_work, request.body, request.session.get('user_id'), game_id)
     return HttpResponse()
 
+# This function works on best effort, and returns no errors in case of invalid input.
 def fb_cancel_request(request):
-    request_id = request.POST["request_id"]
-    # TODO: to be continued
+    class GiveUp(Exception):
+        pass
+
+    try:
+        request_id = request.POST["request_id"]
+        profile = UserProfile.get(request.session)
+        if profile.facebook is None:
+            raise GiveUp()
+        fb_request = FacebookRequest.objects.get(pk=request_id)
+        # TODO: To be continued...
+        # TODO: filter out user id from request's targets, deleting request from db if targets is empty
+        # TODO: send single delete request to facebook, relative to that user id
+
+    except (ObjectDoesNotExist, KeyError, GiveUp):
+        pass
+    except:
+        raise
+    
     return HttpResponseRedirect('/')
 
 @transaction.commit_on_success
