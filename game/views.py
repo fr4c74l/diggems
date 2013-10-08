@@ -186,14 +186,17 @@ def fb_notify_request(request, game_id):
             # The data received is untrusted, so we must quote it to avoid
             # allowng an attaker to forge Facebook requests from us.
             request_id = urlquote(request_info['request'], '')
-            fb_request = fb_ograph_call(partial(get_fb_request, request_id))
-            if fb_profile.uid != fb_request['from']['id'] or fb_request['data'] != game_id:
-                return
-
-            # urlquote to prevent message forgery to Facebook
             targets = [urlquote(t, '') for t in request_info['to']]
             cached = FacebookRequest(id=request_id, game=game, targets=targets)
-            cached.save()
+
+            # Validate received information
+            fb_request = fb_ograph_call(partial(get_fb_request, request_id))
+            if fb_profile.uid != fb_request['from']['id'] or fb_request['data'] != game_id or game.p1.user != user:
+                # Request is invalid, delete it from Facebook.
+                start_cancel_request(cached)
+            else:
+                # Request passes validation test, save it.
+                cached.save()
         except (ObjectDoesNotExist, KeyError):
             pass
 
@@ -208,8 +211,11 @@ def fb_cancel_request(request):
 @transaction.commit_on_success
 def fb_request_redirect(request):
     profile = UserProfile.get(request.session)
-    user_id = profile.facebook.uid
+    user_id = getattr(profile.facebook, 'uid', None)
     request_ids = request.GET["request_ids"].split(',')
+
+    must_authenticate = False
+    found = False
 
     # This will try to validate each request id received, stopping at the first
     # valid one, and using it to build the user response.
@@ -222,32 +228,55 @@ def fb_request_redirect(request):
             fb_request = FacebookRequest.objects.get(pk=request_id)
             game = fb_request.game
 
-            # If this request has already started, the request is invalid
+            # If the game has already started, the request is invalid
             # (this should never happen, but just to be safe...)
             if game.state != 1:
                 fb_request.delete()
                 continue
 
+            is_targeted = user_id in fb_request.targets
+
             # If this is a private game, we must ensure the user has
             # indeed received that request...
-            if game.token and user_id not in fb_request:
-                raise ObjectDoesNotExist()
+            if game.token:
+                if user_id is None:
+                    must_authenticate = True
+                    continue
+                if not is_targeted:
+                    raise ObjectDoesNotExist()
+
+            # Just for consistency, we ensure the stored request targets this user
+            if user_id is not None and not is_targeted:
+                fb_request.targets.append(user_id)
+                fb_request.save()
 
         except ObjectDoesNotExist:
             # If don't know about this request on our database,
             # we query Facebook for updated intel.
-            full_reqid = '_'.join((request_id, user_id))
+            if user_id is None:
+                full_reqid = request_id
+            else:
+                full_reqid = '_'.join((request_id, user_id))
             response = fb_ograph_call(partial(get_fb_request, full_reqid))
             try:
                 game_id = response['data']
                 game = Game.objects.get(pk=game_id)
+                fb_user = game.p1.user.facebook
                 if game.state != 1:
                     raise ObjectDoesNotExist()
+                
+                if game.token:
+                    if fb_user is None or fb_user.uid != response['from']['id']:
+                        raise ObjectDoesNotExist()
+                    if user_id is None:
+                        must_authenticate = True
+                        continue
+
             except KeyError:
                 # The request was completely invalid, just ignore it.
                 continue
             except ObjectDoesNotExist:
-                # The request is about a invalid game, delete it from Facebook.
+                # The request is invalid, delete it from Facebook.
                 start_cancel_request(FacebookRequest(id=request_id, targets=(user_id,)))
                 continue
 
@@ -258,10 +287,14 @@ def fb_request_redirect(request):
             fb_request.save()
 
         # The request is valid, break out to proceed to handle it:
+        found = True
         break
 
-    # TODO: to be continued...
-    return HttpResponse()
+    if found:
+        return render_with_extra('accept_invite.html', profile, {'g': game, 'request_id': fb_request.id})
+    if must_authenticate:
+        pass # TODO: return a page asking user to authorize us with Facebook
+    return render_with_extra('game404.html', profile, status=404) 
 
 def index(request):
     if request.method == 'POST' and request.in_fb and "request_ids" in request.GET:
@@ -353,6 +386,7 @@ def join_game(request, game_id):
     game.state = 1
     game.save()
 
+    # Ivalidate all facebook requests on this game...
     game.facebookrequest_set.delete()
 
     transaction.commit()
