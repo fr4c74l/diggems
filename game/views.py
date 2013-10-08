@@ -12,12 +12,13 @@ import hashlib
 import locale
 import gevent
 from functools import partial
-from diggems import settings
+from django.conf import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
 from datetime import datetime, time
 
 from django.shortcuts import get_object_or_404, render_to_response
+from django.template.response import SimpleTemplateResponse
 from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
@@ -65,14 +66,8 @@ def get_user_info(user, with_private=False):
     return info
 
 def render_with_extra(template_name, user, data={}, status=200):
-    t = loader.get_template(template_name)
-    c = Context(data)
-
-    extra = {'FB_APP_ID': settings.FB_APP_ID,
-             'user': get_user_info(user, True)
-            }
-    c.update(extra)
-    return HttpResponse(t.render(c), status=status)
+    data['user'] = get_user_info(user, True)
+    return SimpleTemplateResponse(template_name, data, status=status)
 
 def fb_channel(request):
     resp = HttpResponse(
@@ -311,7 +306,7 @@ def index(request):
                }
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'in_fb': request.in_fb}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -357,7 +352,7 @@ def join_game(request, game_id):
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile,{'in_fb': request.in_fb}, status=404)
+        return render_with_extra('game404.html', profile, status=404)
 
     # If already playing this game, redirect to game screen
     if game.what_player(profile):
@@ -367,7 +362,7 @@ def join_game(request, game_id):
     token = request.REQUEST.get('token')
     if game.state != 0 or (game.token and
                            token != game.token):
-        return render_with_extra('game403.html', profile,{'in_fb': request.in_fb}, status=403)
+        return render_with_extra('game403.html', profile, status=403)
 
     # If we got here via GET, return a page that will make the client/user
     # retry via POST. Done so that Facebook and other robots do not join
@@ -480,7 +475,7 @@ def game(request, game_id):
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile,{'in_fb': request.in_fb}, status=404)
+        return render_with_extra('game404.html', profile, status=404)
 
     user_id = profile.display_name()
 
@@ -501,7 +496,7 @@ def game(request, game_id):
         if (game.state <= 2):
             data['time_left'] = max(0, game.timeout_diff())
 
-# Does not display chat if both users are logged on facebook
+    # Does not display chat if both users are logged on facebook
     try:
         display_chat = (p1_info.auth.fb and p2_info.auth.fb)
     except AttributeError:
@@ -524,8 +519,6 @@ def game(request, game_id):
         masked = mine_mask(game.mine, game.state in (3, 4))
         if masked.count('?') != 256:
             data['mine'] = masked
-
-    data['in_fb'] = request.in_fb
 
     return render_with_extra('game.html', profile, data)
 
@@ -632,14 +625,14 @@ def move(request, game_id):
 
 def donate(request):
     profile = UserProfile.get(request.session)
-    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL, 'in_fb': request.in_fb})
+    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
 
 def info(request, page):
     if page not in info.existing_pages:
         raise Http404
     for locale in (request.LANGUAGE_CODE, 'en'):
         try:
-            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request.session),{'in_fb': request.in_fb})
+            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request.session))
         except TemplateDoesNotExist:
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
