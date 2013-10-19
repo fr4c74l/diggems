@@ -390,7 +390,8 @@ function set_state(state)
 		                }
 		                else
 		                    msg += gettext('you lose.');
-
+                            
+			                document.getElementById("give_up").style.setProperty('visibility', 'hidden', null);
 	                    document.getElementById("rematch_box").style.display = 'block';
 		                document.getElementById("rematch_button").style.display = 'block';
 		                timer.rematch_time = Math.round(params.time_left);

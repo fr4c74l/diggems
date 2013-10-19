@@ -52,7 +52,7 @@ Software under Affero GPL license, see LICENSE.txt
 				</form>
 			{% endif %}
 		{% endif %}
-		<div class="button" id="give_up" {%if not player or player and state == 0 %}style="display:none;"{% endif %} onclick="claim_game(2);">{% trans "Give Up" %}</div>
+		<div class="button" id="give_up" {% if state > 2 or not player or player and state == 0 %}style="display:none;"{% endif %} onclick="claim_game(2);">{% trans "Give Up" %}</div>
 	</div>
 
 	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
