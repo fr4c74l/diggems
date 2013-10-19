@@ -106,9 +106,8 @@ Software under Affero GPL license, see LICENSE.txt
 	<div class="chat_menu" id="toggle_game_chat">{% blocktrans %}Game {{ game_id }} chat room{% endblocktrans %}</div>
 	<div id="chat_area">
 		<ul id="chat_textfield"/>
-		<div id="length_notify"> {% blocktrans %} Enter at most 80 characters! {% endblocktrans %}</div>
 		<div id="chat_interact"{% if not player %} style="display:none;"{% endif %}>
-			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" />
+			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" maxlength="255" />
 			{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 		</div>
 	</div>

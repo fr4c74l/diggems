@@ -111,10 +111,10 @@ def chat_loop(ws, chname, types, username):
                 msg = ws.receive()
                 if msg == None:
                     break
-                msg = msg[2:]
-                # Limiting the maximum number of characters can be posted
-                if len(msg) <= 80:
-                    chat_post(chname, username, msg)
+
+                # Limiting the maximum number of characters can be posted to 255
+                msg = msg[2:257]
+                chat_post(chname, username, msg)
     finally:
         report_chat_event(chname, username, False)
 
