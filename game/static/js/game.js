@@ -876,7 +876,7 @@ function reset_counter()
 
 function claim_game(terminate)
 {
-	var url = '/game/'+ params.game_id + '/claim/';
+	var url = '/game/' + params.game_id + '/claim/';
 	button_request.open('POST', url, true);
 	var data = null;
 	if (terminate == 1)

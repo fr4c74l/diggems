@@ -66,8 +66,7 @@ Software under Affero GPL license, see LICENSE.txt
 			<td class="box" colspan="2">
 				<h3>{% trans "Global chat room" %}</h3>
 				<ul id="chat_textfield" />
-				<div id="length_notify"> {% blocktrans %} Enter at most 80 characters! {% endblocktrans %}</div>
-				<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" />
+				<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" maxlength="255" />
 				{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 			</td>
 		</tr>
