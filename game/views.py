@@ -208,16 +208,24 @@ def fb_cancel_request(request):
         profile = UserProfile.get(request.session)
         if profile.facebook is None:
             raise GiveUp()
+        uid = profile.facebook.uid
+
         fb_request = FacebookRequest.objects.get(pk=request_id)
-        # TODO: To be continued...
-        # TODO: filter out user id from request's targets, deleting request from db if targets is empty
-        # TODO: send single delete request to facebook, relative to that user id
+        new_targets = [x for x in fb_request.targets if x != uid]
+        if not new_targets:
+            # Request cancellation on Facebook will be initiated automatically upon delete
+            fb_request.delete()
+        elif len(fb_request.targets) != len(new_targets):
+            fb_request.targets = new_targets
+            fb_request.save()
+
+            start_cancel_request(FacebookRequest(id=request_id, targets=(uid,)))
 
     except (ObjectDoesNotExist, KeyError, GiveUp):
         pass
     except:
         raise
-    
+
     return HttpResponseRedirect('/')
 
 @transaction.commit_on_success
