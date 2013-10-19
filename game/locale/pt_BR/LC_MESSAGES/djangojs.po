@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-19 14:25-0300\n"
+"POT-Creation-Date: 2013-10-19 17:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,12 +66,11 @@ msgid "Game is over, blue player won by resignation."
 msgstr "O jogo acabou, o azul venceu por desistência."
 
 #: static/js/game.js:509
-msgid "Rematch in "
-msgstr "Revanche em "
+msgid "Rematch "
+msgstr "Revanche "
 
-#: static/js/game.js:509
-msgid " seconds."
-msgstr " segundos."
+#~ msgid " seconds."
+#~ msgstr " segundos."
 
 #~ msgid "Guest"
 #~ msgstr "Visitante"

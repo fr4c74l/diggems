@@ -506,7 +506,7 @@ function handle_event_rematch(msg)
 function timer()
 {
   timer.rematch_time = timer.rematch_time - 1;
-  document.getElementById('rematch_button').innerHTML = gettext("Rematch in ") + timer.rematch_time + gettext(" seconds.");
+  document.getElementById('rematch_button').innerHTML = gettext("Rematch ") + "(" + timer.rematch_time+ ")";
   if (timer.rematch_time <= 0)
   {
     document.getElementById("rematch_button").style.display = 'none';
