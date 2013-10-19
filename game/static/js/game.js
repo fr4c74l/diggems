@@ -451,27 +451,36 @@ function handle_player_data_event(data) {
 
     pnum = 'p' + pnum + '_';
 
-    var name = document.getElementById(pnum + 'name');
-    name.innerHTML = '';
-    name.appendChild(document.createTextNode(data.name.capitalize()));
+    var name = data.name.capitalize();
+    function update_set(name_id, link_id, pic_id, pic_size, pic_class) {
+	var obj_name = document.getElementById(name_id);
+	obj_name.innerHTML = '';
+	obj_name.appendChild(document.createTextNode(name));
 
-    var link = document.getElementById(pnum + 'link');
-    if (data.profile_url) {
-	link.href = data.profile_url;
-	link.classList.add('undlin');
-    } else {
-	link.removeAttribute('href');
-	link.classList.remove('undlin');
+	var obj_link = document.getElementById(link_id);
+	if (data.profile_url) {
+	    obj_link.href = data.profile_url;
+	    obj_link.classList.add('undlin');
+	} else {
+	    obj_link.removeAttribute('href');
+	    obj_link.classList.remove('undlin');
+	}
+
+	var obj_pic = document.getElementById(pic_id);
+	if (!obj_pic) {
+	    obj_pic = document.createElement('img');
+	    obj_pic.id = pic_id;
+	    obj_pic.width = obj_pic.height = pic_size;
+	    obj_link.insertBefore(obj_pic, obj_link.firstChild);
+	    if (pic_class) {
+		obj_pic.classList.add(pic_class);
+	    }
+	}
+	obj_pic.src = data.pic_url;
     }
-    
-    var pic = document.getElementById(pnum + 'pic');
-    if (!pic) {
-	pic = document.createElement('img');
-	pic.id = pnum + 'pic';
-	pic.width = pic.height = 40;
-	link.insertBefore(pic, link.firstChild);
-    }
-    pic.src = data.pic_url;
+
+    update_set(pnum + 'name', pnum + 'link', pnum + 'pic', 40);
+    update_set(pnum + 'rname', pnum + 'rlink', pnum + 'rpic', 60, 'rematch_player_pic');
 }
 
 function handle_event_rematch(msg)

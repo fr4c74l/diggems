@@ -108,7 +108,10 @@ Software under Affero GPL license, see LICENSE.txt
 	<div> 
 		{% for pid, pinfo in player_info.items %}
 		<div class="rematch_column">
-			<a id="p{{pid}}_link" class="plain{% if pinfo and pinfo.profile_url %} undlin" href="{{ pinfo.profile_url }}{% endif %}" target="_blank"> {% if pinfo %} <img class="rematch_player_pic" width="60" height="60" src="{{ pinfo.pic_url }}"/>{% endif %}<div class="pname rematch_player_name">{% if pinfo %}{{ pinfo.name|capfirst }}{% endif %}</div></a>
+			<a id="p{{pid}}_rlink" class="plain{% if pinfo and pinfo.profile_url %} undlin" href="{{ pinfo.profile_url }}{% endif %}" target="_blank">
+				{% if pinfo %}<img id="p{{pid}}_rpic" class="rematch_player_pic" width="60" height="60" src="{{ pinfo.pic_url }}"/>{% endif %}
+				<div id="p{{pid}}_rname" class="pname rematch_player_name">{% if pinfo %}{{ pinfo.name|capfirst }}{% endif %}</div>
+			</a>
 			<p id="rematch_status_p{{pid}}"> {% trans "Ready" %}</p>
 		</div>
 		{% endfor %}
