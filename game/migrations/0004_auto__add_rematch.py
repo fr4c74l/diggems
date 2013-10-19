@@ -67,7 +67,6 @@ class Migration(SchemaMigration):
         },
         u'game.game': {
             'Meta': {'object_name': 'Game'},
-            'channel': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '22'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_move_time': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'mine': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
