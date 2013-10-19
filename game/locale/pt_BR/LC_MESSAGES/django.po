@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-09-21 11:26-0300\n"
+"POT-Creation-Date: 2013-10-19 14:25-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,21 +17,21 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: models.py:27
+#: models.py:29
 msgid "guest"
 msgstr "visitante"
 
 #. Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
-#: views.py:77 templates/base.html:37
+#: views.py:77 templates/base.html:38
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "pt_BR"
 
-#: ws_handlers.py:86
+#: ws_handlers.py:91
 msgid "{} joined the chat"
 msgstr "{} entrou no chat"
 
-#: ws_handlers.py:88
+#: ws_handlers.py:93
 msgid "{} has left the chat"
 msgstr "{} saiu do chat"
 
@@ -57,51 +57,51 @@ msgctxt "XHTML"
 msgid "en"
 msgstr "pt"
 
-#: templates/base.html:62
+#: templates/base.html:63
 msgid "Score"
 msgstr "Placar"
 
-#: templates/base.html:66
+#: templates/base.html:67
 msgid "Logout"
 msgstr "Sair"
 
-#: templates/base.html:98
+#: templates/base.html:99
 msgid "Play it now!"
 msgstr "Jogue agora!"
 
-#: templates/base.html:99
+#: templates/base.html:100
 msgid "About the game"
 msgstr "Sobre o jogo"
 
-#: templates/base.html:100
+#: templates/base.html:101
 msgid "How to play"
 msgstr "Como jogar"
 
-#: templates/base.html:101
+#: templates/base.html:102
 msgid "Source code"
 msgstr "Código fonte"
 
-#: templates/base.html:105
+#: templates/base.html:106
 msgid "Policy"
 msgstr "Políticas"
 
-#: templates/base.html:107
+#: templates/base.html:108
 msgid "Terms of service"
 msgstr "Termos do serviço"
 
-#: templates/base.html:108
+#: templates/base.html:109
 msgid "Privacy policy"
 msgstr "Política de privacidade"
 
-#: templates/base.html:112
+#: templates/base.html:113
 msgid "About Us"
 msgstr "Sobre Nós"
 
-#: templates/base.html:114
+#: templates/base.html:115
 msgid "Contact us"
 msgstr "Contate-nos"
 
-#: templates/base.html:118 templates/donate.html:11
+#: templates/base.html:119 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
 msgstr "Mecenato"
@@ -159,52 +159,60 @@ msgstr "Doar Bitcoin"
 msgid "Game %(game_id)s"
 msgstr "Jogo %(game_id)s"
 
-#: templates/game.html:41
+#: templates/game.html:40
 msgid "Terminate Game"
 msgstr "Terminar Jogo"
 
-#: templates/game.html:42
+#: templates/game.html:41
 msgid "Take Player's Turn"
 msgstr "Tomar a Vez"
 
-#: templates/game.html:52
+#: templates/game.html:51
 msgid "Abort"
 msgstr "Abortar"
 
-#: templates/game.html:56
+#: templates/game.html:55
 msgid "Give Up"
 msgstr "Desistir"
 
-#: templates/game.html:70
+#: templates/game.html:69
 msgid "Empty!"
 msgstr "Vazio!"
 
-#: templates/game.html:70
+#: templates/game.html:69
 msgid "Wait..."
 msgstr "Aguarde..."
 
-#: templates/game.html:73 templates/index.html:55
+#: templates/game.html:72 templates/index.html:55
 msgid "Join!"
 msgstr "Juntar-se"
 
-#: templates/game.html:78
+#: templates/game.html:77
 msgid "You"
 msgstr "Você"
 
-#: templates/game.html:78
+#: templates/game.html:77
 msgid "Your opponent"
 msgstr "Seu adversário"
 
-#: templates/game.html:84
+#: templates/game.html:85
 msgid "Copy the link to your adversary"
 msgstr "Copie o link para seu oponente"
 
-#: templates/game.html:97
+#: templates/game.html:98
 msgid "Accept the challenge and play immediately!"
 msgstr "Aceite o desafio e jogue imediatamente!"
 
+#: templates/game.html:115
+msgid "Ready"
+msgstr "Preparado"
+
+#: templates/game.html:119
+msgid "Rematch"
+msgstr "Revanche"
+
 # python-format
-#: templates/game.html:107
+#: templates/game.html:124
 #, python-format
 msgid "Game %(game_id)s chat room"
 msgstr "Chat do Jogo %(game_id)s"
