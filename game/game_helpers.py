@@ -6,6 +6,7 @@ import models
 import http_cli
 import urllib2
 import json
+import gevent
 from functools import partial
 from http_cli import get_conn
 from django.utils.http import urlencode
@@ -104,7 +105,7 @@ def start_cancel_request(fb_request):
     calls = ({'method': 'DELETE', 'relative_url': '_'.join((fb_request.id, uid))} for uid in fb_request.targets)
 
     def del_request_batch(batch, conn, app_token):
-        with conn.post('/', '&'.join((urlencode({'batch': batch}), app_token))):
+        with conn.post('/', '&'.join((urlencode({'batch': batch}), app_token))) as req:
             req.read() # Just ignore return value
 
     # Facebook rules that there must be no more than 50 requests per batch,
@@ -115,7 +116,7 @@ def start_cancel_request(fb_request):
             break
         if len(batch) == 1:
             def del_single_request(conn, app_token):
-                with conn.delete('/{}?{}'.format(batch[0]['relative_url'], app_token)):
+                with conn.delete('/{}?{}'.format(batch[0]['relative_url'], app_token)) as req:
                     req.read()
             gevent.spawn(fb_ograph_call, del_single_request)
             break

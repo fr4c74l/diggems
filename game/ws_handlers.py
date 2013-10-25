@@ -25,6 +25,9 @@ from django.conf import settings
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 import models
+import logging
+
+_logger = logging.getLogger(__name__)
 
 # To be used with "with" statement:
 # wraps the code in a transaction and releases the database connection afterwards
@@ -72,11 +75,13 @@ class ChannelRegisterer(object):
             raise
 
     def __exit__(self, exc_type, exc_value, traceback):
-        try:
-            for t in self.types:
-                channel.unsubscribe_websocket(self.chname, t, self.ws)
-        except KeyError:
-            pass
+        for t in self.types:
+            params = (self.chname, t, self.ws)
+            try:
+                channel.unsubscribe_websocket(*params)
+            except:
+                _logger.warning("Could not unsubscribe websocket from channel. Parameters: %r",
+                                params, exc_info=True)
 
         return exc_type == WebSocketError
 

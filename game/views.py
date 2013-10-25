@@ -163,7 +163,7 @@ def adhack(request, ad_id):
 
 def get_fb_request(request_id, conn, app_token):
     with conn.get('?'.join((request_id, app_token))) as res:
-        response = json.load(res)
+        return json.load(res)
 
 def fb_notify_request(request, game_id):
     @transaction.commit_on_success
@@ -174,8 +174,8 @@ def fb_notify_request(request, game_id):
             if not fb_profile:
                 return
 
-            game = Game.obeject.get(pk=game_id, p1=user)
-            if game.state != 1:
+            game = Game.objects.get(pk=game_id, p1__user__exact=user)
+            if game.state != 0:
                 return
 
             # The data received is untrusted, so we must quote it to avoid
@@ -195,7 +195,7 @@ def fb_notify_request(request, game_id):
         except (ObjectDoesNotExist, KeyError):
             pass
 
-    gevent.spawn(real_work, request.body, request.session.get('user_id'), game_id)
+    gevent.spawn(real_work, json.loads(request.body), request.session.get('user_id'), game_id)
     return HttpResponse()
 
 # This function works on best effort, and returns no errors in case of invalid input.
@@ -241,7 +241,7 @@ def fb_request_redirect(request):
     # valid one, and using it to build the user response.
     # TODO: handle multiple requests instead of just picking the first of them...
     for request_id in request_ids:
-        request_id = urlquote(t, '')
+        request_id = urlquote(request_id, '')
 
         try:
             # First we check about this request on database
@@ -250,7 +250,7 @@ def fb_request_redirect(request):
 
             # If the game has already started, the request is invalid
             # (this should never happen, but just to be safe...)
-            if game.state != 1:
+            if game.state != 0:
                 fb_request.delete()
                 continue
 
@@ -407,7 +407,7 @@ def join_game(request, game_id):
     game.save()
 
     # Ivalidate all facebook requests on this game...
-    game.facebookrequest_set.delete()
+    game.facebookrequest_set.all().delete()
 
     transaction.commit()
 

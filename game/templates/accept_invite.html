@@ -13,10 +13,10 @@ Software under Affero GPL license, see LICENSE.txt
 {% block content %}
 <div class="box">
 	<h1>{% blocktrans %}Oponent is waiting for you!{% endblocktrans %}</h1>
-	<p>{% blocktrans %}<b>{{ g.p1.user.name }}</b> is waiting right now for an oponent on a DigGems match.
+	<p><b>{{ g.p1.user.display_name }}</b> {% blocktrans %}is waiting right now for an oponent on a DigGems match.
 	Are you the one to accept the challenge? Please be considerate and only join in if you
 	intent to play through the game. A match hardly lasts more than 15 minutes.{% endblocktrans %}</p>
-	<form action="{% url 'game.views.join' g.id %}" method="post">{% if g.token %}
+	<form action="{% url 'game.views.join_game' g.id %}" method="post">{% if g.token %}
 		<input type="hidden" name="token" value="{{ g.token }}" />{% endif %}
 		<input class="button" type="submit" value="{% trans "I will not chicken out! Let me in!" %}" />
 	</form>
