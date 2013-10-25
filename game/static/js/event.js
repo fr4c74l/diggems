@@ -75,11 +75,11 @@ Event.prototype._on_connect = function() {
     // Send the last_seqnum for every message type:
     var seqnums = {};
     for (id in this.handlers) {
-	var info = this.handlers[id];
-	seqnums[id] = {"seqnum": info.last_seqnum === undefined ? 0 : info.last_seqnum};
-	if (this.channel_id) {
-	    seqnums[id].channel_id = this.channel_id;
-	}
+	    var info = this.handlers[id];
+	    seqnums[id] = {"seqnum": info.last_seqnum === undefined ? 0 : info.last_seqnum};
+	    if (this.channel_id) {
+	        seqnums[id].channel_id = this.channel_id;
+	    }
     }
     this.socket.send(JSON.stringify(seqnums));
 

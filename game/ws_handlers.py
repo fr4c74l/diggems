@@ -44,6 +44,10 @@ class DBReleaser(object):
 
 class ChannelRegisterer(object):
     __slots__ = ('chname', 'types', 'ws')
+    """
+    ws stands for websocket, name is the unique channel's name and 
+    types is a sequence of channel types to register
+    """
     def __init__(self, ws, name, types):
         self.chname = name
         self.types = types
@@ -111,7 +115,9 @@ def chat_loop(ws, chname, types, username):
                 msg = ws.receive()
                 if msg == None:
                     break
-                msg = msg[2:]
+
+                # Limiting the maximum number of characters can be posted to 255
+                msg = msg[2:257]
                 chat_post(chname, username, msg)
     finally:
         report_chat_event(chname, username, False)
@@ -129,7 +135,8 @@ def game_events(request, ws, game_id):
 
     # TODO: implement user connect/disconnect state tracker...
     chname = 'g' + str(game_id)
-    chat_loop(ws, chname, 'cgp', username)
+    # TODO: the rematch channel 'r' should only be registered when the game is over
+    chat_loop(ws, chname, 'cgpr', username)
 
 def main_chat(request, ws):
     with DBReleaser():

@@ -342,81 +342,104 @@ States:
  X + 2 -> Player X won
  X + 4 -> Game ended abnormally and player X won
 */
-function set_state(state) {
-	var msg = '';
-	if(params.player) {
-		var cursor;
-		var hover_indicator;
-		if(state == params.player) {
-			msg = gettext('Your turn! Play!');
-			
-			// Set shovel cursor in game_canvas area
-			cursor = 'url(' + images['shovel'].src + '),auto';
+function set_state(state) 
+{
+    var msg = '';
+    if(params.player)
+    {
+	      var cursor;
+	      var hover_indicator;
+	      if(state == params.player) 
+        {
+	          msg = gettext('Your turn! Play!');
+	      
+	          // Set shovel cursor in game_canvas area
+	          cursor = 'url(' + images['shovel'].src + '),auto';
 
-			// Mark the to be affected tiles
-			hover_indicator = highlight_tile;
-		} else {
-			// Not my turn, set default cursor...
-			cursor = 'default';
-			// Stop any tile that could be blinking
-			ActivityIndicator.clear_all();
+	          // Mark the to be affected tiles
+	          hover_indicator = highlight_tile;
+	      }
+	      else 
+        {
+	          // Not my turn, set default cursor...
+	          cursor = 'default';
+	      
+	          // Stop any tile that could be blinking
+	          ActivityIndicator.clear_all();
 
-			// and stop highlighting tiles:
-			hover_indicator = null;
-			highlight_tile.clear();
+	          // and stop highlighting tiles:
+	          hover_indicator = null;
+	          highlight_tile.clear();
 
-			if(state == 1 || state == 2) {
-				msg = gettext('Wait for your turn.');
-			}
-			else if(state >= 3 && state <= 6) {
-				msg = gettext('Game over, ');
-				if(((state + 1) % 2) + 1 == params.player) {
-					if(is_fb_auth()) {
-					/*document.getElementById('brag_button')
-					.style.setProperty('visibility', 'visible', null);*/
-					}
-					msg += gettext('you win!');
-				}
-				else
-					msg += gettext('you lose.');
-			}
-			else
-				return; // What else can I do?
-		}
+	          if(state == 1 || state == 2)
+            {
+		            msg = gettext('Wait for your turn.');
+	          }
+	          else 
+                if(state >= 3 && state <= 6) 
+                {
+		                msg = gettext('Game over, ');
+		                if(((state + 1) % 2) + 1 == params.player) 
+                    {
+		                    if(is_fb_auth()) 
+                        {
+		  	                    /*document.getElementById('brag_button')
+		  	                    .style.setProperty('visibility', 'visible', null);*/
+		                    }
+		                    msg += gettext('you win!');
+		                }
+		                else
+		                    msg += gettext('you lose.');
+                            
+			                document.getElementById("give_up").style.setProperty('visibility', 'hidden', null);
+	                    document.getElementById("rematch_box").style.display = 'block';
+		                document.getElementById("rematch_button").style.display = 'block';
+		                timer.rematch_time = Math.round(params.time_left);
+		                timer.id = window.setInterval(timer, 1000);
+		                timer();
+	              }
+	              else
+		                return; // What else can I do?
+	      }
 
-		var canvas = document.getElementById('game_canvas');
-		canvas.style.cursor = cursor;
-		canvas.onmousemove = hover_indicator;
-		// Blink title to alert user, if its turn.
-		your_turn_blinker.setBlinking(state == params.player);
-		if(params.state != state && (state == params.player || state > 2))
-			notify_state(msg);
-	} else {
-		// Spectator mode.
-		var state_msgs =
-			['',
-			 gettext("Red's turn."),
-			 gettext("Blue's turn."),
-			 gettext('Game is over, red player won.'),
-			 gettext('Game is over, blue player won.'),
-			 gettext('Game is over, red player won by resignation.'),
-			 gettext('Game is over, blue player won by resignation.')];
-		msg = state_msgs[state];
-	}
-	var msg_box = document.getElementById('message');
+    var canvas = document.getElementById('game_canvas');
+	  canvas.style.cursor = cursor;
+	  canvas.onmousemove = hover_indicator;
 
-	if (!params.state && state) {
-		if(params.player)
-			document.getElementById("chat_interact").style.display="block";
-		// Just started the game, prepare box for messages
-		msg_box.className += " big";
+	  // Blink title to alert user, if its turn.
+	  your_turn_blinker.setBlinking(state == params.player);
 
-		document.getElementById("abort_button").style.display="none";
-		document.getElementById("give_up").style.display="block";
-	}
-	msg_box.innerHTML = msg;
+	  if(params.state != state && (state == params.player || state > 2))
+		    notify_state(msg);
+	  } 
+    else 
+    {
+		    // Spectator mode.
+		    var state_msgs =
+			  ['',
+			    gettext("Red's turn."),
+			    gettext("Blue's turn."),
+			    gettext('Game is over, red player won.'),
+			    gettext('Game is over, blue player won.'),
+			    gettext('Game is over, red player won by resignation.'),
+			    gettext('Game is over, blue player won by resignation.')];
+		    msg = state_msgs[state];
+	  }
+	  var msg_box = document.getElementById('message');
 
-	params.state = state;
+    if (!params.state && state) 
+    {
+		    if(params.player)
+			      document.getElementById("chat_interact").style.display="block";
+		    // Just started the game, prepare box for messages
+		    msg_box.className += " big";
+
+		    document.getElementById("abort_button").style.display="none";
+		    document.getElementById("give_up").style.display="block";
+	  }
+	  msg_box.innerHTML = msg;
+
+	  params.state = state;
 }
 
 /* In case updated user information came from the async
@@ -428,27 +451,68 @@ function handle_player_data_event(data) {
 
     pnum = 'p' + pnum + '_';
 
-    var name = document.getElementById(pnum + 'name');
-    name.innerHTML = '';
-    name.appendChild(document.createTextNode(data.name.capitalize()));
+    var name = data.name.capitalize();
+    function update_set(name_id, link_id, pic_id, pic_size, pic_class) {
+	var obj_name = document.getElementById(name_id);
+	obj_name.innerHTML = '';
+	obj_name.appendChild(document.createTextNode(name));
 
-    var link = document.getElementById(pnum + 'link');
-    if (data.profile_url) {
-	link.href = data.profile_url;
-	link.classList.add('undlin');
-    } else {
-	link.removeAttribute('href');
-	link.classList.remove('undlin');
+	var obj_link = document.getElementById(link_id);
+	if (data.profile_url) {
+	    obj_link.href = data.profile_url;
+	    obj_link.classList.add('undlin');
+	} else {
+	    obj_link.removeAttribute('href');
+	    obj_link.classList.remove('undlin');
+	}
+
+	var obj_pic = document.getElementById(pic_id);
+	if (!obj_pic) {
+	    obj_pic = document.createElement('img');
+	    obj_pic.id = pic_id;
+	    obj_pic.width = obj_pic.height = pic_size;
+	    obj_link.insertBefore(obj_pic, obj_link.firstChild);
+	    if (pic_class) {
+		obj_pic.classList.add(pic_class);
+	    }
+	}
+	obj_pic.src = data.pic_url;
     }
-    
-    var pic = document.getElementById(pnum + 'pic');
-    if (!pic) {
-	pic = document.createElement('img');
-	pic.id = pnum + 'pic';
-	pic.width = pic.height = 40;
-	link.insertBefore(pic, link.firstChild);
-    }
-    pic.src = data.pic_url;
+
+    update_set(pnum + 'name', pnum + 'link', pnum + 'pic', 40);
+    update_set(pnum + 'rname', pnum + 'rlink', pnum + 'rpic', 60, 'rematch_player_pic');
+}
+
+function handle_event_rematch(msg)
+{
+  var m = JSON.parse(msg);
+  if (m.p1_click)
+  {
+    document.getElementById('rematch_status_p1').style.visibility='visible';
+  }
+
+  if (m.p2_click)
+  {
+    document.getElementById('rematch_status_p2').style.visibility='visible';
+  }
+
+  if (m.p1_click && m.p2_click && m.game_id)
+  {
+    var url = '/game/' + m.game_id;
+    window.location = url;
+  }
+}
+
+function timer()
+{
+  timer.rematch_time = timer.rematch_time - 1;
+  document.getElementById('rematch_button').innerHTML = gettext("Rematch ") + "(" + timer.rematch_time+ ")";
+  if (timer.rematch_time <= 0)
+  {
+    document.getElementById("rematch_button").style.display = 'none';
+    clearInterval(timer.id);
+    return;
+  }
 }
 
 function handle_event(msg, seq_num) {
@@ -513,7 +577,7 @@ function register_event() {
 		register_event.etag = event_request.getResponseHeader('Etag')
 		params.last_change = event_request.getResponseHeader('Last-Modified')
 
-		handle_event(event_request.responseText);
+		handle_event_game(event_request.responseText);
 		register_event();
 	    }
 	    else {
@@ -645,8 +709,8 @@ highlight_tile.set_hover = function(tnt, bpos, hover, to_redraw) {
 	    }
 	}
     } else {
-	mine[bpos.m][bpos.n].hover = hover;
-	to_redraw[bpos.m + ',' + bpos.n] = bpos;
+	    mine[bpos.m][bpos.n].hover = hover;
+	    to_redraw[bpos.m + ',' + bpos.n] = bpos;
     }
 }
 
@@ -660,7 +724,8 @@ highlight_tile.clear = function() {
     highlight_tile.redraw_hidden(to_redraw);
 }
 
-function init() {
+function init() 
+{
     // TODO: find a better way to deal with sound
     // Bogus browsers won't allow me to play the sound repeatedely
     // without reloading it.
@@ -669,22 +734,24 @@ function init() {
 
     var canvas = document.getElementById('game_canvas');
     
-    if (!canvas || !canvas.getContext) {
-	// Panic return
-	// TODO: add friendly message explaining why IE sucks
-	return;
+    if (!canvas || !canvas.getContext) 
+    {
+	    // Panic return
+	    // TODO: add friendly message explaining why IE sucks
+	    return;
     }
 
     mine = new Array(16);
-    for (var i=0; i < 16; ++i) {
-	mine[i] = new Array(16);
-	for (var j=0; j < 16; ++j)
-	    mine[i][j] = new Tile(i,j);
+    for (var i=0; i < 16; ++i) 
+    {
+	    mine[i] = new Array(16);
+	    for (var j=0; j < 16; ++j)
+	        mine[i][j] = new Tile(i,j);
     }
 
     if(params.mine)
-	for(var i = 0; i < 256; ++i)
-	    mine[Math.floor(i/16)][i%16].set_state(params.mine.charAt(i));
+	    for(var i = 0; i < 256; ++i)
+	        mine[Math.floor(i/16)][i%16].set_state(params.mine.charAt(i));
 
     // Text presets
     ctx = canvas.getContext('2d');
@@ -703,17 +770,19 @@ function init() {
 
     // Draw map
     for(var i = 0; i < 16; ++i)
-	for(var j = 0; j < 16; ++j)
-	    mine[i][j].draw();
+	      for(var j = 0; j < 16; ++j)
+	        mine[i][j].draw();
 
     // Draw movement marks
-    if(params.p1_last_move) {
-	last_click[0] = last_click_decode(1, params.p1_last_move);
-	last_click[0].draw();
+    if(params.p1_last_move) 
+    {
+	    last_click[0] = last_click_decode(1, params.p1_last_move);
+	    last_click[0].draw();
     }
-    if(params.p2_last_move) {
-	last_click[1] = last_click_decode(2, params.p2_last_move);
-	last_click[1].draw();
+    if(params.p2_last_move) 
+    {
+	    last_click[1] = last_click_decode(2, params.p2_last_move);
+	    last_click[1].draw();
     }
 
     // Put display in current state
@@ -730,6 +799,7 @@ function init() {
 	+ location.pathname + "event/");
     event.register_handler('g', handle_event, params.seq_num);
     event.register_handler('p', handle_player_data_event);
+    event.register_handler('r', handle_event_rematch);
 
     // Init chat stuff
     chat.init(
@@ -739,23 +809,26 @@ function init() {
 	event
     );
 
-    if(params.player) { // Not a spectator
-	// Expect for user input
-	canvas.addEventListener('click', on_click, false);
-	document.getElementById('tnt').addEventListener('click', toggle_tnt, false);
+    if(params.player) 
+    { 
+      // Not a spectator
+	    // Expect for user input
+	    canvas.addEventListener('click', on_click, false);
+	    document.getElementById('tnt').addEventListener('click', toggle_tnt, false);
     }
     
     // Everything is setup, show the canvas
     canvas.style.setProperty('visibility', 'visible', null);
-  if ((params.state == 1) || (params.state == 2))
-  {
-    turn_timeout.start_time = (new Date()).getTime();
-    reset_counter.int = window.setInterval(turn_timeout, 1000);
-    turn_timeout();
-  }
+    if ((params.state == 1) || (params.state == 2))
+    {
+      turn_timeout.start_time = (new Date()).getTime();
+      reset_counter.int = window.setInterval(turn_timeout, 1000);
+      turn_timeout();
+    }
 }
 
-function load_img(name) {
+function load_img(name)
+{
     var img = new Image();
     img.src = "/static/images/" + name + ".png";
     images[name] = img;
@@ -803,7 +876,7 @@ function reset_counter()
 
 function claim_game(terminate)
 {
-	var url = '/game/'+ params.game_id + '/claim/';
+	var url = '/game/' + params.game_id + '/claim/';
 	button_request.open('POST', url, true);
 	var data = null;
 	if (terminate == 1)
@@ -833,6 +906,15 @@ function request_friends() {
 			notifier.send(JSON.stringify(response));
 		}
 	});
+}
+
+function rematch(game_id)
+{
+    var url = '/game/' + game_id + '/rematch/';
+    button_request.open('POST', url, true);
+    button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+    button_request.send(null);
+    document.getElementById("rematch_button").style.display = 'none';
 }
 
 // Load resources
