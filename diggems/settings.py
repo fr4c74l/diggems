@@ -16,7 +16,7 @@ FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
 FB_LIKE_URL = 'http://my.main.url/'
 
 ## Long pool server
-EVENT_SERVER = '127.0.0.1:8080'
+EVENT_SERVER = '127.0.0.1:8000'
 
 ## Google ads settings
 GOOGLE_AD_ID = 'place_google_ads_id_here'
@@ -50,6 +50,7 @@ DATABASES = {
 # Hosts/domain names that are valid for this site; required if DEBUG is False
 # See https://docs.djangoproject.com/en/1.5/ref/settings/#allowed-hosts
 ALLOWED_HOSTS = []
+
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
 # although not all choices may be available on all operating systems.
@@ -97,7 +98,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/var/www/example.com/static/"
-STATIC_ROOT = INSTALATION_DIR + 'static/'
+STATIC_ROOT = INSTALATION_DIR + 'root/static/'
 
 # URL prefix for static files.
 # Example: "http://example.com/static/", "http://static.example.com/"
@@ -143,6 +144,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'game.middleware.FacebookMiddleware',
 )
 
 CACHES = {
@@ -153,6 +155,7 @@ CACHES = {
 }
 
 ROOT_URLCONF = 'diggems.urls'
+WEBSOCKET_URLCONF = 'game.ws_urls'
 
 # Python dotted path to the WSGI application used by Django's runserver.
 WSGI_APPLICATION = 'diggems.wsgi.application'

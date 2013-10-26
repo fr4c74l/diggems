@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-08-13 11:08-0300\n"
+"POT-Creation-Date: 2013-10-19 17:15-0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: static/js/game.js:302 static/js/game.js.c:344
+#: static/js/game.js:302 static/js/game.js.c:354
 msgid "Your turn! Play!"
 msgstr "Sua vez! Jogue!"
 
@@ -25,45 +25,52 @@ msgstr "Sua vez! Jogue!"
 msgid "DigGems: Game "
 msgstr "DigGems: Jogo "
 
-#: static/js/game.js:364
+#: static/js/game.js:376
 msgid "Wait for your turn."
 msgstr "Espere sua vez."
 
-#: static/js/game.js:367
+#: static/js/game.js:381
 msgid "Game over, "
 msgstr "O jogo acabou, "
 
-#: static/js/game.js:373
+#: static/js/game.js:389
 msgid "you win!"
 msgstr "você venceu!"
 
-#: static/js/game.js:376
+#: static/js/game.js:392
 msgid "you lose."
 msgstr "você perdeu."
 
-#: static/js/game.js:395
+#: static/js/game.js:420
 msgid "Red's turn."
 msgstr "Vez do vermelho."
 
-#: static/js/game.js:396
+#: static/js/game.js:421
 msgid "Blue's turn."
 msgstr "Vez do azul."
 
-#: static/js/game.js:397
+#: static/js/game.js:422
 msgid "Game is over, red player won."
 msgstr "O jogo acabou, o vermelho venceu."
 
-#: static/js/game.js:398
+#: static/js/game.js:423
 msgid "Game is over, blue player won."
 msgstr "O jogo acabou, o azul venceu."
 
-#: static/js/game.js:399
+#: static/js/game.js:424
 msgid "Game is over, red player won by resignation."
 msgstr "O jogo acabou, o vermelho venceu por desistência."
 
-#: static/js/game.js:400
+#: static/js/game.js:425
 msgid "Game is over, blue player won by resignation."
 msgstr "O jogo acabou, o azul venceu por desistência."
+
+#: static/js/game.js:509
+msgid "Rematch "
+msgstr "Revanche "
+
+#~ msgid " seconds."
+#~ msgstr " segundos."
 
 #~ msgid "Guest"
 #~ msgstr "Visitante"

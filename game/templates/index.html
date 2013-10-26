@@ -22,7 +22,7 @@ Software under Affero GPL license, see LICENSE.txt
 	<tbody>
 		<tr>
 			<td class="box" id="new_game">
-			  <h1>{% trans "New game" %}</h1>
+				<h1>{% trans "New game" %}</h1>
 				<form action="new_game/" method="post">
 				    {% trans "Private game" %} <input type="checkbox" name="private" value="1" />
 					<input class="button" type="submit" value="{% trans "Create!" %}"  style="float: right;"/>
@@ -65,22 +65,20 @@ Software under Affero GPL license, see LICENSE.txt
 		<tr class="chat">
 			<td class="box" colspan="2">
 				<h3>{% trans "Global chat room" %}</h3>
-				<ul id="chat_textfield">
-					<!--TODO: <li class="notice">Put chat login/logout messages here!</li> -->
-				</ul>
-					<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
-					{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
+				<ul id="chat_textfield" />
+				<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" maxlength="255" />
+				{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 			</td>
 		</tr>
 		<script>
 			<![CDATA[
-			var event = new Event('/event/main_channel', (new Date()).toUTCString());
+			var event = new Event((/^https/.test(location.protocol) ? "wss://" : "ws://") + location.hostname + (location.port ? (":" + location.port) : "") + '/main_chat/');
 
 			chat.init(
 				document.getElementById("chat_textfield"),
 				document.getElementById("input_field"),
 				document.getElementById("send_button"),
-				event, 'main_chat/'
+				event
 			);
 			]]>
 		</script>
