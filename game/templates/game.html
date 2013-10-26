@@ -133,19 +133,32 @@ Software under Affero GPL license, see LICENSE.txt
 	<div class="box big" id="message" {% if state != 0 %} style="display:block;" {% endif %}></div>
 </div>
 
+<div class="box" id="rematch_box" {% if state >= 3 %} style="display: none;"{% endif %} >
+	<div> 
+		{% for pid, pinfo in player_info.items %}
+		<div class="rematch_column">
+			<a id="p{{pid}}_rlink" class="plain{% if pinfo and pinfo.profile_url %} undlin" href="{{ pinfo.profile_url }}{% endif %}" target="_blank">
+				{% if pinfo %}<img id="p{{pid}}_rpic" class="rematch_player_pic" width="60" height="60" src="{{ pinfo.pic_url }}"/>{% endif %}
+				<div id="p{{pid}}_rname" class="pname rematch_player_name">{% if pinfo %}{{ pinfo.name|capfirst }}{% endif %}</div>
+			</a>
+			<p id="rematch_status_p{{pid}}"> {% trans "Ready" %}</p>
+		</div>
+		{% endfor %}
+	</div>
+	<div class="button" id="rematch_button" onclick="rematch({{ game_id }});"> {% trans "Rematch" %}</div>
+</div>
+
 <div class="chat box_border_top" id="chat_window">
 	<!-- TODO Uncomment the line below after create a function to add chat-->
 	<div class="chat_menu" id="toggle_game_chat">{% blocktrans %}Game {{ game_id }} chat room{% endblocktrans %}</div>
 	<div id="chat_area">
 		<ul id="chat_textfield"/>
-		<div id="length_notify"> {% blocktrans %} Enter at most 80 characters! {% endblocktrans %}</div>
 		<div id="chat_interact"{% if not player %} style="display:none;"{% endif %}>
-			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
+			<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" maxlength="255" />
 			{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 		</div>
 	</div>
 </div>
-
 
 <!-- TODO: Have button to disable the audio. -->
 <audio id="ring" preload="auto">

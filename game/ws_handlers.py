@@ -25,6 +25,9 @@ from django.conf import settings
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
 import models
+import logging
+
+_logger = logging.getLogger(__name__)
 
 # To be used with "with" statement:
 # wraps the code in a transaction and releases the database connection afterwards
@@ -44,6 +47,10 @@ class DBReleaser(object):
 
 class ChannelRegisterer(object):
     __slots__ = ('chname', 'types', 'ws')
+    """
+    ws stands for websocket, name is the unique channel's name and 
+    types is a sequence of channel types to register
+    """
     def __init__(self, ws, name, types):
         self.chname = name
         self.types = types
@@ -68,11 +75,13 @@ class ChannelRegisterer(object):
             raise
 
     def __exit__(self, exc_type, exc_value, traceback):
-        try:
-            for t in self.types:
-                channel.unsubscribe_websocket(self.chname, t, self.ws)
-        except KeyError:
-            pass
+        for t in self.types:
+            params = (self.chname, t, self.ws)
+            try:
+                channel.unsubscribe_websocket(*params)
+            except:
+                _logger.warning("Could not unsubscribe websocket from channel. Parameters: %r",
+                                params, exc_info=True)
 
         return exc_type == WebSocketError
 
@@ -111,10 +120,10 @@ def chat_loop(ws, chname, types, username):
                 msg = ws.receive()
                 if msg == None:
                     break
-                msg = msg[2:]
-                # Limiting the maximum number of characters can be posted
-                if len(msg) <= 80:
-                    chat_post(chname, username, msg)
+
+                # Limiting the maximum number of characters can be posted to 255
+                msg = msg[2:257]
+                chat_post(chname, username, msg)
     finally:
         report_chat_event(chname, username, False)
 
@@ -131,7 +140,8 @@ def game_events(request, ws, game_id):
 
     # TODO: implement user connect/disconnect state tracker...
     chname = 'g' + str(game_id)
-    chat_loop(ws, chname, 'cgp', username)
+    # TODO: the rematch channel 'r' should only be registered when the game is over
+    chat_loop(ws, chname, 'cgpr', username)
 
 def main_chat(request, ws):
     with DBReleaser():

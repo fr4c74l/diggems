@@ -56,15 +56,17 @@ Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for 
 				<span id="title" class="logo">DigGems</span><img id="beta" src="/static/images/beta.png"/>
 			</a>
 			<div id="user_info">
-				<img id="auth_user_pic" class="box" src="{{ user.pic_url }}" />
+				{% if not in_fb %}<img id="auth_user_pic" class="box" src="{{ user.pic_url }}" />{% endif %}
 				<div id="user_stats">
-					<div id="logged_as"><span id="auth_username">{{ user.name|capfirst }}</span></div>
+					{% if not in_fb %}<div id="logged_as"><span id="auth_username">{{ user.name|capfirst }}</span></div>{% endif %}
 					<div id="score">
 					  {% trans "Score" %}: <img src="/static/images/rb.png"/>: <span id="_points">{{ user.stats.score }}</span>
 					  <img src="/static/images/trophy.png" />: <span id="_victories">{{ user.stats.victories }}{% if user.stats.win_ratio %} ({{ user.stats.win_ratio }}%){% endif %}</span>
 					</div>
+					{% if not in_fb %}
 					<div id="auth_fb_button"{% if user.auth.fb %} style="display: none;"{% endif %} class="fb-login-button" data-show-faces="false" data-width="200" data-max-rows="1"></div>
 					<div id="auth_logout"{% if not user.auth.fb %} style="visibility: hidden;"{% endif %} class="button" onclick="fb_logout();"> {% trans "Logout" %}</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>

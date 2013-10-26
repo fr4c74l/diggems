@@ -15,3 +15,5 @@ pycparser==2.10
 uWSGI==1.9.13
 wsgiref==0.1.2
 zope.interface==4.0.5
+djorm-ext-pgarray==0.8
+setproctitle==1.1.7

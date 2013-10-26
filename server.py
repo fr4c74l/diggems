@@ -10,6 +10,7 @@ import shutil
 import multiprocessing
 import traceback
 import signal
+import setproctitle
 
 import gevent
 import gipc
@@ -57,6 +58,8 @@ def watcher(func):
 sock_dir = 'sockets'
 
 def server(worker_id):
+    setproctitle.setproctitle('diggems worker {}'.format(worker_id))
+
     # The name of the Unix sockets:
     http_sockname = '{}/http{}.socket'.format(sock_dir, worker_id)
     ws_sockname = '{}/ws{}.socket'.format(sock_dir, worker_id)
@@ -125,6 +128,8 @@ def main():
 
     # Spawn the reloaders for the workers
     reloaders = [gevent.spawn(reloader, i) for i in xrange(proc_count)]
+
+    setproctitle.setproctitle('diggems master')
 
     # Channel manager process reloader:
     while running:

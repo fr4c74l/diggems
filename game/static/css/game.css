@@ -233,6 +233,46 @@
 	z-index: 101;
 }
 
+#rematch_button {
+    display: none;
+}
+
+#rematch_box {
+    width: 416px;
+    margin: 10px auto;
+    display: none;
+}
+
+.rematch_column {
+    display: inline-block;
+    width: 49%;
+	clear: both;
+}
+
+.rematch_column p {
+    text-align: center !important;
+}
+
+#rematch_status_p1,
+#rematch_status_p2 {
+	margin-top: 10px;
+    visibility: hidden;
+    color: #2f2;
+    font-weight: bold;
+    font-size: medium;
+}
+
+.rematch_player_pic {
+	display: block;
+	margin: 5px auto;
+}
+
+.rematch_player_name {
+	display: block;
+	margin: 5px auto;
+	text-align: center !important;
+}
+
 img.tntbtn {
     position: relative;
     bottom: 4px;

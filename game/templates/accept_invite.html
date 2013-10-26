@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% comment %}
+
+Copyright 2013 Fractal Jogos e Tecnologia
+Software under Affero GPL license, see LICENSE.txt
+
+{% endcomment %}
+
+{% block title %}{% trans "Challenge Acceptance" %}{% endblock %}
+
+{% block content %}
+<div class="box">
+	<h1>{% blocktrans %}Oponent is waiting for you!{% endblocktrans %}</h1>
+	<p><b>{{ g.p1.user.display_name }}</b> {% blocktrans %}is waiting right now for an oponent on a DigGems match.
+	Are you the one to accept the challenge? Please be considerate and only join in if you
+	intent to play through the game. A match hardly lasts more than 15 minutes.{% endblocktrans %}</p>
+	<form action="{% url 'game.views.join_game' g.id %}" method="post">{% if g.token %}
+		<input type="hidden" name="token" value="{{ g.token }}" />{% endif %}
+		<input class="button" type="submit" value="{% trans "I will not chicken out! Let me in!" %}" />
+	</form>
+	<form id="cancel_form" action="{% url 'game.views.fb_cancel_request' %}" method="post">
+		<input type="hidden" name="request_id" value="{{ request_id }}" />
+		<p>{% blocktrans %}Or you may <a id="cancel_btn">cancel</a> this request if you do not want to play.{% endblocktrans %}</p>
+	</form>
+	<script>
+	<![CDATA[
+		document.getElementById("cancel_btn").addEventListener("click", function () {
+			document.getElementById("cancel_form").submit();
+		});
+	]]>
+	</script>
+</div>
+{# TODO: implement this page for multiple pending requests #}
+{# TODO: make the page real time updatable, to remove requests when no longer available #}
+{% endblock %}

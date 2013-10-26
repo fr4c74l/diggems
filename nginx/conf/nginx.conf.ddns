@@ -21,24 +21,25 @@ http {
 
 
 	upstream fcgi_django {
-	  server unix:sockets/http0.socket;
-	  server unix:sockets/http1.socket;
-	  server unix:sockets/http2.socket;
-	  server unix:sockets/http3.socket;
+	  server unix:/home/rodrigo/src/fractal/diggems/sockets/http0.socket;
+	  #server unix:../../sockets/http1.socket;
+	  #server unix:../../sockets/http2.socket;
+	  #server unix:../../sockets/http3.socket;
 	}
 
 	upstream websockets {
-	  server unix:sockets/ws0.socket;
-	  server unix:sockets/ws1.socket;
-	  server unix:sockets/ws2.socket;
-	  server unix:sockets/ws3.socket;
+	  server unix:/home/rodrigo/src/fractal/diggems/sockets/ws0.socket;
+	  #server unix:../../sockets/ws1.socket;
+	  #server unix:../../sockets/ws2.socket;
+	  #server unix:../../sockets/ws3.socket;
 	}
 
     server {
         listen 8080;
-	    #listen 4443 ssl;
-      #  ssl_certificate cert.pem;
-	    #ssl_certificate_key cert.pem;
+	    listen 4443 ssl;
+        server_name fractalcorp.no-ip.biz;
+	    ssl_certificate /opt/nginx/conf/fractalcorp.no-ip.biz.crt;
+	    ssl_certificate_key /opt/nginx/conf/fractalcorp.no-ip.biz.nopass;
 	    root ../root;
 
         #error_page  404              /error/404;

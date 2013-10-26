@@ -16,7 +16,7 @@ FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
 FB_LIKE_URL = 'http://my.main.url/'
 
 ## Long pool server
-EVENT_SERVER = '127.0.0.1:8080'
+EVENT_SERVER = '127.0.0.1:8000'
 
 ## Google ads settings
 GOOGLE_AD_ID = 'place_google_ads_id_here'
@@ -144,6 +144,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     # Uncomment the next line for simple clickjacking protection:
     # 'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'game.middleware.FacebookMiddleware',
 )
 
 CACHES = {
