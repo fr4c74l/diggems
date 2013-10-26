@@ -11,6 +11,12 @@
 	float: left;
 }
 
+#length_notify {
+	display: none;
+	color: #cc3838;
+	font-weight: bold;
+}
+
 .chat {
 	overflow:hidden;
 	text-align: left;
@@ -31,7 +37,7 @@
 }
 
 .chat li {
-	margin-bottom: 0.2em;
+	padding: 0.2em 0 0.2em 0.2em;
 }
 
 .chat li.notice {
@@ -60,13 +66,13 @@
 	font-weight: bold;
 }
 
-#toggle {
+#toggle_game_chat {
 	text-align: center;
 	cursor: pointer;
 	font-size: large;
 	color: #333;
 }
 
-#toggle:hover {
+#toggle_game_chat:hover {
 	font-weight: bold;
 }

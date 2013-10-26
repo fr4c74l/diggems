@@ -11,24 +11,27 @@ import http_cli
 import hashlib
 import locale
 import gevent
-from diggems import settings
+from functools import partial
+from django.conf import settings
 from wsgiref.handlers import format_date_time
 from time import mktime
 from datetime import datetime, time
 
 from django.shortcuts import get_object_or_404, render_to_response
+from django.template.response import SimpleTemplateResponse
 from django.http import *
 from django.db import IntegrityError, transaction
 from django.db.models import Q
 from django.template import Context, RequestContext, loader, TemplateDoesNotExist
 from django.template.defaultfilters import floatformat
 from django.utils.html import escape, mark_safe
+from django.utils.http import urlquote, urlencode
 from django.utils.translation import pgettext
 from django.core.exceptions import ObjectDoesNotExist
-from game_helpers import *
 from models import *
 from diggems.utils import gen_token, true_random
 from django.utils.translation import to_locale, get_language
+from game_helpers import *
 from async_events import channel
 
 def get_user_info(user, with_private=False):
@@ -63,14 +66,8 @@ def get_user_info(user, with_private=False):
     return info
 
 def render_with_extra(template_name, user, data={}, status=200):
-    t = loader.get_template(template_name)
-    c = Context(data)
-
-    extra = {'FB_APP_ID': settings.FB_APP_ID,
-             'user': get_user_info(user, True)
-            }
-    c.update(extra)
-    return HttpResponse(t.render(c), status=status)
+    data['user'] = get_user_info(user, True)
+    return SimpleTemplateResponse(template_name, data, status=status)
 
 def fb_channel(request):
     resp = HttpResponse(
@@ -90,7 +87,7 @@ def fb_login(request):
         return HttpResponseBadRequest()
 
     try:
-        with http_cli.get_conn('https://graph.facebook.com/').get('me?access_token=' + token) as res:
+        with http_cli.get_conn('https://graph.facebook.com/').get('me?' + urlencode({'access_token': token})) as res:
             fb_user = json.load(res)
     except ssl.SSLError:
         # TODO: Log this error? What to do when Facebook
@@ -138,9 +135,8 @@ def fb_login(request):
         msg = '\n'.join((str(p), user_info))
 
         # TODO: find a way to make this a single query, because I could not.
-        # TODO: make this asyncronous.
         for game in query:
-            channel.post_update(game.channel(), 'p', msg)
+            gevent.spawn(channel.post_update, game.channel(), 'p', msg)
 
     # Full user info
     user_info = json.dumps(get_user_info(profile, True))
@@ -165,22 +161,166 @@ def adhack(request, ad_id):
                  'GOOGLE_AD_SLOT': settings.GOOGLE_AD_SLOTS[ad_id]}),
         content_type='text/html; charset=utf-8')
 
-def fb_request_accept(request):
-    profile = UserProfile.get(request)
-    user_id = profile.facebook.uid
-    request_ids = request.POST["request_ids"].split(',')
+def get_fb_request(request_id, conn, app_token):
+    with conn.get('?'.join((request_id, app_token))) as res:
+        return json.load(res)
+
+def fb_notify_request(request, game_id):
+    @transaction.commit_on_success
+    def real_work(request_info, user_id, game_id):
+        try:
+            user = UserProfile.objects.get(pk=user_id)
+            fb_profile = user.facebook
+            if not fb_profile:
+                return
+
+            game = Game.objects.get(pk=game_id, p1__user__exact=user)
+            if game.state != 0:
+                return
+
+            # The data received is untrusted, so we must quote it to avoid
+            # allowng an attaker to forge Facebook requests from us.
+            request_id = urlquote(request_info['request'], '')
+            targets = [urlquote(t, '') for t in request_info['to']]
+            cached = FacebookRequest(id=request_id, game=game, targets=targets)
+
+            # Validate received information
+            fb_request = fb_ograph_call(partial(get_fb_request, request_id))
+            if fb_profile.uid != fb_request['from']['id'] or fb_request['data'] != game_id or game.p1.user != user:
+                # Request is invalid, delete it from Facebook.
+                start_cancel_request(cached)
+            else:
+                # Request passes validation test, save it.
+                cached.save()
+        except (ObjectDoesNotExist, KeyError):
+            pass
+
+    gevent.spawn(real_work, json.loads(request.body), request.session.get('user_id'), game_id)
+    return HttpResponse()
+
+# This function works on best effort, and returns no errors in case of invalid input.
+def fb_cancel_request(request):
+    class GiveUp(Exception):
+        pass
+
+    try:
+        request_id = request.POST["request_id"]
+        profile = UserProfile.get(request.session)
+        if profile.facebook is None:
+            raise GiveUp()
+        uid = profile.facebook.uid
+
+        fb_request = FacebookRequest.objects.get(pk=request_id)
+        new_targets = [x for x in fb_request.targets if x != uid]
+        if not new_targets:
+            # Request cancellation on Facebook will be initiated automatically upon delete
+            fb_request.delete()
+        elif len(fb_request.targets) != len(new_targets):
+            fb_request.targets = new_targets
+            fb_request.save()
+
+            start_cancel_request(FacebookRequest(id=request_id, targets=(uid,)))
+
+    except (ObjectDoesNotExist, KeyError, GiveUp):
+        pass
+    except:
+        raise
+
+    return HttpResponseRedirect('/')
+
+@transaction.commit_on_success
+def fb_request_redirect(request):
+    profile = UserProfile.get(request.session)
+    user_id = getattr(profile.facebook, 'uid', None)
+    request_ids = request.GET["request_ids"].split(',')
+
+    must_authenticate = False
+    found = False
+
+    # This will try to validate each request id received, stopping at the first
+    # valid one, and using it to build the user response.
+    # TODO: handle multiple requests instead of just picking the first of them...
     for request_id in request_ids:
-        def get_fb_request(app_token):
-            with http_cli.get_conn('https://graph.facebook.com/').get(request_id + '?access_token=' + app_token) as res:
-                response = json.load(res)
-                print(response.data)
-        fb_ograph_call(get_fb_request)
+        request_id = urlquote(request_id, '')
+
+        try:
+            # First we check about this request on database
+            fb_request = FacebookRequest.objects.get(pk=request_id)
+            game = fb_request.game
+
+            # If the game has already started, the request is invalid
+            # (this should never happen, but just to be safe...)
+            if game.state != 0:
+                fb_request.delete()
+                continue
+
+            is_targeted = user_id in fb_request.targets
+
+            # If this is a private game, we must ensure the user has
+            # indeed received that request...
+            if game.token:
+                if user_id is None:
+                    must_authenticate = True
+                    continue
+                if not is_targeted:
+                    raise ObjectDoesNotExist()
+
+            # Just for consistency, we ensure the stored request targets this user
+            if user_id is not None and not is_targeted:
+                fb_request.targets.append(user_id)
+                fb_request.save()
+
+        except ObjectDoesNotExist:
+            # If don't know about this request on our database,
+            # we query Facebook for updated intel.
+            if user_id is None:
+                full_reqid = request_id
+            else:
+                full_reqid = '_'.join((request_id, user_id))
+            response = fb_ograph_call(partial(get_fb_request, full_reqid))
+            try:
+                game_id = response['data']
+                game = Game.objects.get(pk=game_id)
+                fb_user = game.p1.user.facebook
+                if game.state != 1:
+                    raise ObjectDoesNotExist()
+                
+                if game.token:
+                    if fb_user is None or fb_user.uid != response['from']['id']:
+                        raise ObjectDoesNotExist()
+                    if user_id is None:
+                        must_authenticate = True
+                        continue
+
+            except KeyError:
+                # The request was completely invalid, just ignore it.
+                continue
+            except ObjectDoesNotExist:
+                # The request is invalid, delete it from Facebook.
+                start_cancel_request(FacebookRequest(id=request_id, targets=(user_id,)))
+                continue
+
+            fb_request, created = FacebookRequest.objects.get_or_create(id=request_id, defaults={'targets': [user_id]})
+            if not created:
+                fb_request.targets.append(user_id)
+
+            fb_request.save()
+
+        # The request is valid, break out to proceed to handle it:
+        found = True
+        break
+
+    if found:
+        return render_with_extra('accept_invite.html', profile, {'g': game, 'request_id': fb_request.id})
+    if must_authenticate:
+        pass # TODO: return a page asking user to authorize us with Facebook
+    return render_with_extra('game404.html', profile, status=404) 
 
 def index(request):
-    profile = UserProfile.get(request.session)
-    if request.in_fb and "request_ids" in request.POST:
-        return fb_request_accept(request)
+    if request.method == 'POST' and request.in_fb and "request_ids" in request.GET:
+        return fb_request_redirect(request)
 
+    profile = UserProfile.get(request.session)
     playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
 
     chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:5]
@@ -191,7 +331,7 @@ def index(request):
                }
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'in_fb': request.in_fb}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -206,10 +346,10 @@ def new_game(request):
 
     indexes = list(itertools.product(xrange(16), repeat=2))
     gems = true_random.sample(indexes, 51)
-
+    
     for (m, n) in gems:
         mine[m][n] = 9
-
+    
     for m, n in indexes:
         if mine[m][n] == 0:
             def inc_count(x, y):
@@ -226,7 +366,7 @@ def new_game(request):
         game.token = gen_token()
     game.p1 = p1
     game.save()
-
+    
     return HttpResponseRedirect('/game/' + str(game.id))
 
 @transaction.commit_on_success
@@ -237,7 +377,7 @@ def join_game(request, game_id):
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile,{'in_fb': request.in_fb}, status=404)
+        return render_with_extra('game404.html', profile, status=404)
 
     # If already playing this game, redirect to game screen
     if game.what_player(profile):
@@ -247,7 +387,7 @@ def join_game(request, game_id):
     token = request.REQUEST.get('token')
     if game.state != 0 or (game.token and
                            token != game.token):
-        return render_with_extra('game403.html', profile,{'in_fb': request.in_fb}, status=403)
+        return render_with_extra('game403.html', profile, status=403)
 
     # If we got here via GET, return a page that will make the client/user
     # retry via POST. Done so that Facebook and other robots do not join
@@ -265,6 +405,10 @@ def join_game(request, game_id):
     game.p2 = p2
     game.state = 1
     game.save()
+
+    # Ivalidate all facebook requests on this game...
+    game.facebookrequest_set.all().delete()
+
     transaction.commit()
 
     ch_id = game.channel()
@@ -356,7 +500,7 @@ def game(request, game_id):
     try:
         game = Game.objects.get(pk=int(game_id))
     except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile,{'in_fb': request.in_fb}, status=404)
+        return render_with_extra('game404.html', profile, status=404)
 
     user_id = profile.display_name()
 
@@ -372,13 +516,12 @@ def game(request, game_id):
 
     if(game.p2):
         p2_info = get_user_info(game.p2.user)
-        print p2_info
         data['p2_last_move'] = game.p2.last_move
         data['player_info'][2] = p2_info
-        if (game.state <= 2):
-            data['time_left'] = max(0, game.timeout_diff())
+        #if (game.state <= 2):
+        data['time_left'] = max(0, game.timeout_diff())
 
-# Does not display chat if both users are logged on facebook
+    # Does not display chat if both users are logged on facebook
     try:
         display_chat = (p1_info.auth.fb and p2_info.auth.fb)
     except AttributeError:
@@ -402,9 +545,47 @@ def game(request, game_id):
         if masked.count('?') != 256:
             data['mine'] = masked
 
-    data['in_fb'] = request.in_fb
-
     return render_with_extra('game.html', profile, data)
+
+
+@transaction.commit_on_success
+def rematch(request, game_id):
+    if request.method != 'POST':
+        return HttpResponseNotAllowed(['POST'])
+    game = get_object_or_404(Game, pk=game_id)
+    if game.state <= 2:
+        return HttpResponseForbidden()
+    #if datetime.datetime.now() - game.last_move_time >= 45:
+        #return HttpResponseForbidden()
+    pdata = game.what_player(UserProfile.get(request.session))
+    if not pdata:
+        return HttpResponseForbidden()
+    
+    obj, created = Rematch.objects.get_or_create(game=game)
+    me, player = pdata
+    if me == 1:
+        obj.p1_click = True
+    elif me == 2:
+        obj.p2_click = True
+
+    obj.save()
+
+    ready_state = {'p1_click':obj.p1_click, 'p2_click':obj.p2_click}
+    if obj.p1_click and obj.p2_click:
+        cg = Game.create()
+        p = Player(user=game.p2.user)
+        p.save()
+        cg.p1 = p
+        p = Player(user=game.p1.user)
+        p.save()
+        cg.p2 = p
+        cg.state = 1
+        cg.save()
+        ready_state['game_id'] = cg.id
+
+    channel.post_update(game.channel(), 'r', json.dumps(ready_state))
+    
+    return HttpResponse()
 
 @transaction.commit_on_success
 def move(request, game_id):
@@ -509,14 +690,15 @@ def move(request, game_id):
 
 def donate(request):
     profile = UserProfile.get(request.session)
-    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL, 'in_fb': request.in_fb})
+    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
 
 def info(request, page):
     if page not in info.existing_pages:
         raise Http404
     for locale in (request.LANGUAGE_CODE, 'en'):
         try:
-            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request.session),{'in_fb': request.in_fb})
+            return render_with_extra('{}/{}.html'.format(locale, page), UserProfile.get(request.session))
         except TemplateDoesNotExist:
             continue
 info.existing_pages = frozenset(('about', 'howtoplay', 'sourcecode', 'contact', 'privacy', 'terms'))
+

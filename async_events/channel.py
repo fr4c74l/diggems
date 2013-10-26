@@ -10,6 +10,7 @@ import os
 import cPickle as pickle
 import fd_trick
 import struct
+import setproctitle
 
 from gevent import socket
 from decorator import FunctionMaker
@@ -297,6 +298,8 @@ def worker_init(worker_id):
 # Must be run on the channels manager process
 def rpc_dispatcher():
     global _rpc_map, _call_endpoint, _handle_endpoint
+
+    setproctitle.setproctitle('diggems channel dispatcher')
 
     # Not needed anymore from this process
     _call_endpoint.close()

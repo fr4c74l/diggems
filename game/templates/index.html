@@ -65,11 +65,9 @@ Software under Affero GPL license, see LICENSE.txt
 		<tr class="chat">
 			<td class="box" colspan="2">
 				<h3>{% trans "Global chat room" %}</h3>
-				<ul id="chat_textfield">
-					<!--TODO: <li class="notice">Put chat login/logout messages here!</li> -->
-				</ul>
-					<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field"/>
-					{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
+				<ul id="chat_textfield" />
+				<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" maxlength="255" />
+				{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
 			</td>
 		</tr>
 		<script>

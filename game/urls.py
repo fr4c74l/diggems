@@ -6,6 +6,8 @@ _in_game = patterns('game.views',
     (r'^join/$', 'join_game'),
     (r'^abort/$', 'abort_game'),
     (r'^claim/$', 'claim_game'),
+    (r'^rematch/$', 'rematch'),
+    (r'^fb_notify_request/$', 'fb_notify_request'),
     (r'^$', 'game'),
 )
 
@@ -13,9 +15,10 @@ _in_fb = patterns('game.views',
     (r'^channel/$', 'fb_channel'),
     (r'^login/$', 'fb_login'),
     (r'^logout/$', 'fb_logout'),
+    (r'^cancel_request/$', 'fb_cancel_request')
 )
 
-js_info_dict = {
+_js_info_dict = {
     'packages': ('game',),
 }
 
@@ -28,7 +31,7 @@ urlpatterns = patterns('',
     (r'^info/(?P<page>.*)/$', 'game.views.info'),
     (r'^donate/$','game.views.donate'),
     (r'^i18n/', include('django.conf.urls.i18n')),
-    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', js_info_dict),
+    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', _js_info_dict),
 
     # Error views:
     (r'^error/404$', 'django.views.defaults.page_not_found'),
