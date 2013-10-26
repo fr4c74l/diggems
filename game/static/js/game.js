@@ -342,7 +342,6 @@ States:
  X + 2 -> Player X won
  X + 4 -> Game ended abnormally and player X won
 */
-<<<<<<< HEAD
 function set_state(state) {
     var msg = '';
     if(params.player) {
@@ -423,7 +422,6 @@ function set_state(state) {
 			document.getElementById("chat_interact").style.display="block";
 		// Just started the game, prepare box for messages
 		msg_box.className += " big";
-        document.getElementById("abort_button").style.display="none";
 	    document.getElementById("give_up").style.display="block";
 	}
 
