@@ -321,9 +321,11 @@ def index(request):
         return fb_request_redirect(request)
 
     profile = UserProfile.get(request.session)
-    playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
+    playing_now = Game.objects.filter(Q(p1__user=profile) |
+                                      Q(p2__user=profile)).exclude(state__gte=3)
 
-    chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')
+    chosen = Game.objects.filter(state__exact=0,
+                                 token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:1]
     new_games = []
     for game in chosen:
         info = {'id': game.id,
@@ -333,6 +335,14 @@ def index(request):
 
     context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
     return render_with_extra('index.html', profile, context)
+
+@transaction.commit_on_success
+def play_now(request):
+    profile = UserProfile.get(request.session)
+    game_found = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:1]
+    if len(game_found) > 0:
+       return join_game(request, game_found[0].id)
+    return new_game(request)
 
 @transaction.commit_on_success
 def new_game(request):
@@ -421,7 +431,7 @@ def join_game(request, game_id):
     outdata = '2\n' + json.dumps(get_user_info(profile))
     channel.post_update(ch_id, 'p', outdata)
 
-    return HttpResponseRedirect('/game/' + game_id)
+    return HttpResponseRedirect('/game/' + str(game_id))
 
 @transaction.commit_on_success
 def abort_game(request, game_id):
