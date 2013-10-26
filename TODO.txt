@@ -16,9 +16,10 @@ Priority:
   - Button to enable/disable sound.
   - Button to enable desktop notification.
 - Rudimentary traking of user state (online/offline)
-- Add general and in-game chat
+- Chat
   - Random color names in chat for guest users based on their internal ID
   - limit how many messages can be send in a time period
+  - change user name when login changes
 - TNT activity indicator must blink all affected tiles...
 - Bug: real time user info display doesn't really works, login button still displays if user has no previous diggems cookie, but is logged in Facebook (and authorized diggems). User is auto-logged, but "login" button is still displayed.
 
