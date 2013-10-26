@@ -27,7 +27,7 @@ Software under Affero GPL license, see LICENSE.txt
 		{% if your_games|length == 1 %}
 		<h1>{% trans "Return to game" %}</h1>
 		{% else %}
-		<h1>{% trans "Your games" %}</h1>
+		<h1>{% trans "Your running games" %}</h1>
 		{% endif %}
 		<ul>
 			{% for g in your_games %}
@@ -38,7 +38,7 @@ Software under Affero GPL license, see LICENSE.txt
 			<div>{% trans "Waiting the other player" %}</div>{% else %}
 			<div>{% trans "In progress" %}</div>{% endif %}
 			</div>
-			<div style="float:right;padding: 0px 5px 5px 0px;" ><a class="button" href="game/{{ g.id }}/">{% trans "Play now!" %}</a></div>
+			<div style="float:right;padding: 0px 5px 5px 0px;" ><a class="button" href="game/{{ g.id }}/">{% trans "Return to game!" %}</a></div>
 			</li>
 			{% endfor %}
 		</ul>

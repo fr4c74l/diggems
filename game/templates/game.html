@@ -41,16 +41,31 @@ Software under Affero GPL license, see LICENSE.txt
 <div class="box" id="load_menu">
 	<div style="margin-bottom:10px;">
 		{% if not token %}
-			<div id="loading">{% trans "Seeking oponent" %}</div>
+			<div id="loading">{% trans "Waiting for oponent" %}</div>
 		{% else %}
 			<div class="notice">{% trans "This game mode is private. You need to invite someone!" %}</div>
 		{% endif %}
-		{# TODO: Add functionality to invite friend by facebook #}
 		<input class="button fb_button" type="submit" value="{% trans 'Invite a friend' %}" onclick="request_friends()" />
 		<p> {% trans "Or" %} </p>
 		<div id="invite_link">
 			<div class="big">{% blocktrans %}Copy the link to your adversary{% endblocktrans %}:</div>
-			<input type="text" style="cursor:text;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly="readonly" />
+            <input type="text" style="cursor:text;" id="join_link" value="{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}" readonly="readonly" />
+            <div class="addthis addthis_toolbox addthis_default_style addthis_16x16_style">
+			  <a class="addthis_button_facebook" />
+			  <a class="addthis_button_twitter" />
+			  <a class="addthis_button_google_plusone_share" />
+            </div>
+            <script>
+	        <![CDATA[
+	          var addthis_config = { data_track_clickback: false };
+	          var addthis_share = {
+	            title: "DigGems: Game {{ game_id }}",
+		        url: "{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}",
+		        description: "{% trans "Accept the challenge and play immediately!" %}",
+	          };
+	        ]]>
+	        </script> 
+	        <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e" />
 		</div>
 		{% if not token %}
 			<p> {% trans "Or" %} </p>
@@ -58,26 +73,10 @@ Software under Affero GPL license, see LICENSE.txt
 		{% endif %}
 	</div>
 	<div>
-		<div class="addthis addthis_toolbox addthis_default_style addthis_16x16_style">
-			<a class="addthis_button_facebook" />
-			<a class="addthis_button_twitter" />
-			<a class="addthis_button_google_plusone_share" />
-		</div>
-		<script>
-			<![CDATA[
-			var addthis_config = { data_track_clickback: false };
-			var addthis_share = {
-				title: "DigGems: Game {{ game_id }}",
-				url: "{{ base_url }}{% url 'game.views.join_game' game_id %}{% if token %}?token={{ token }}{% endif %}",
-				description: "{% trans "Accept the challenge and play immediately!" %}",
-			};
-			]]>
-		</script> 
-		<script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e" />
 		<form action="abort/" method="post">
 			<input class="button" type="submit" value="{% trans 'Cancel' %}" />
 		</form>
-	</div>
+    </div>
 </div>
 {% endif %}
 

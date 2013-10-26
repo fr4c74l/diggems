@@ -51,36 +51,44 @@
 
 .fb_button {
 	width: 100%;
-	font-size: 30px;
 	height: 100px;
+    background: #6079ab url(/static/images/fb.png) no-repeat bottom left;
 	-moz-border-radius: 8px;
 	-o-border-radius: 8px;
 	-webkit-border-radius: 8px;
 	border-radius: 8px;
-	background-color: #6079ab;
-	border: 1px outset #3b5998;
-	text-shadow: #3b5998 -1px 0;
+    border: 1px outset #3b5998;
+    text-shadow: #3b5998 -1px 0;
+	font-size: 30px;
+    text-align: center;
+    text-indent: 2.5em;
 }
 
 .fb_button:hover {
-	background-color: #3b5998;
-	text-shadow: #6079ab 0 -1px 0;
+    background-color: #3b5998;
+    text-shadow: #6079ab 0 -1px 0;
 }
-
 .fb_button:active {
-	background-color: #6079ab;
-	border: 1px inset #6079ab;
+    background-color: #6079ab;
+    border: 1px inset #6079ab;
 }
 
 #invite_link {
 	margin:10px 0;
 }
 
+#join_link {
+    width: 390px;
+}
+
 .addthis {
-	margin:10px;
-	position:absolute;
-	right:0;
-	bottom:0;
+    width: 70px;
+    height: 35px;
+	margin: 5px auto; 
+/*    position: relative;
+	right: 0;
+	bottom: 0;
+    float: right; */
 }
 
 /* GAME */
@@ -201,9 +209,6 @@
 	text-align: center;
 }
 
-#join_link {
-    width: 390px;
-}
 
 #timer_box {
 	margin: 5px 0;
