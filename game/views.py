@@ -10,7 +10,6 @@ import gevent
 import http_cli
 import hashlib
 import locale
-from math import round
 import gevent
 from functools import partial
 from django.conf import settings
@@ -660,10 +659,10 @@ def move(request, game_id):
     me.save()
 
     if game.state >= 3: # Game is over
-        if game.state == 3:
-            update_elo_rank(game.p1.user,game.p2.user,1,True)
-        elif game.state == 4:
-            update_elo_rank(game.p1.user,game.p2.user,2,True)
+        if game.state == 3 or game.state == 5:
+            update_elo_rank(game.p1.user, game.p2.user, 1)
+        elif game.state == 4 or game.state == 6:
+            update_elo_rank(game.p1.user, game.p2.user, 2)
             
         remaining = 51 - points[0] - points[1]
         points[0 if points[0] > points[1] else 1] += remaining

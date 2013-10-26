@@ -62,9 +62,14 @@ class Migration(SchemaMigration):
             'name': ('django.db.models.fields.CharField', [], {'max_length': '100'}),
             'uid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '30'})
         },
+        u'game.facebookrequest': {
+            'Meta': {'object_name': 'FacebookRequest'},
+            'game': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['game.Game']"}),
+            'id': ('django.db.models.fields.CharField', [], {'max_length': '30', 'primary_key': 'True'}),
+            'targets': ('djorm_pgarray.fields.ArrayField', [], {'default': 'None', 'dbtype': "'text'", 'null': 'True', 'blank': 'True'})
+        },
         u'game.game': {
             'Meta': {'object_name': 'Game'},
-            'channel': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '22'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'last_move_time': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'mine': ('django.db.models.fields.CharField', [], {'max_length': '256'}),
@@ -81,6 +86,12 @@ class Migration(SchemaMigration):
             'last_move': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
             'last_seen': ('django.db.models.fields.DateTimeField', [], {'auto_now': 'True', 'blank': 'True'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['game.UserProfile']"})
+        },
+        u'game.rematch': {
+            'Meta': {'object_name': 'Rematch'},
+            'game': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['game.Game']", 'unique': 'True', 'primary_key': 'True'}),
+            'p1_click': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
+            'p2_click': ('django.db.models.fields.BooleanField', [], {'default': 'False'})
         },
         u'game.userprofile': {
             'Meta': {'object_name': 'UserProfile'},
