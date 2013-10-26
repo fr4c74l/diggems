@@ -77,7 +77,7 @@ class UserProfile(models.Model):
     #params: user, user, 1 or 2, Bool
     @staticmethod
     def update_elo_rank(playerA, playerB, winner):
-        # number 1 indicantes that playerA is the winner, number 2 indicates that playerB is the winner
+        # number 1 indicates that playerA is the winner, number 2 indicates that playerB is the winner
         if winner == 1:
             winner_rank, loser_rank = playerA.elo, playerB.elo
         elif winner == 2:
