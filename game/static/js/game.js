@@ -383,7 +383,6 @@ function set_state(state) {
 				msg += gettext('you lose.');
             
             document.getElementById("give_up").style.setProperty('visibility', 'hidden', null);
-            document.getElementById("rematch_box").style.display = 'block';
             document.getElementById("rematch_button").style.display = 'block';
             
             timer.rematch_time = Math.round(params.time_left);
@@ -494,19 +493,25 @@ function handle_event_rematch(msg)
 function timer()
 {
   timer.rematch_time = timer.rematch_time - 1;
-  document.getElementById('rematch_button').innerHTML = gettext("Rematch ") + "(" + timer.rematch_time+ ")";
+  document.getElementById('rematch_timer').innerHTML = timer.rematch_time;
   if (timer.rematch_time <= 0)
   {
+    document.getElementById('rematch_timer').style.display = 'none';
     document.getElementById("rematch_button").style.display = 'none';
+    document.getElementById("rematch_close_button").innerHTML = 'Close';
     clearInterval(timer.id);
     return;
   }
 }
 
 //TODO: Implement a library for all game animations
+function hide_rematch_window(){
+  $("#game_over").css('display', 'none');
+}
+
 function game_over_notification(msg) {
 	var go_msg = document.getElementById('game_over_msg');
-	$("#game_over").css('display', 'block').animate({'left':'2%', 'bottom':'50%'},500);
+	$("#game_over").css('display', 'block').animate({'left':'-2%', 'bottom':'86%'},500);
 	go_msg.innerHTML = msg;
 }
 
@@ -524,7 +529,9 @@ function load_text_animation(text_id) {
 
 function hidden_invite_menu() {
 	$('#load_menu').animate({'top':'-50%'},500,function(){
-		$('#overlay').fadeOut('fast');
+		$('#overlay').fadeOut('fast', function(){ 
+          $("#load_menu").css('display', 'none')
+        });
 	});
 	return false;
 }

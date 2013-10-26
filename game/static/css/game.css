@@ -18,7 +18,7 @@
 	margin: 0 auto;
 	width: 400px;
 	position:fixed;
-	top:-100%;
+	top:-150%;
 	left:30%;
 	right:30%;
 	z-index:101;
@@ -37,16 +37,18 @@
 #game_over {
 	background: rgba(255,255,255,0.95);
 	margin: 0 auto;
-	width: 200px;
 	position:relative;
-	left: -100%;
-	bottom: 50%;
+	left: -150%;
+	bottom: 86%;
 	display: none;
 	z-index:101;
+    width: 416px;
 }
 
-#game_over_msg {
-	margin-bottom: 10px;
+h1#game_over_msg {
+    text-decoration: none;
+    text-align: center;
+	margin-bottom: 30px;
 }
 
 .fb_button {
@@ -238,16 +240,25 @@
 	z-index: 101;
 }
 
+#rematch_timer {
+  text-align: center;
+  font-size: 30px;
+}
+
+.confirmation_rematch_button {
+    width: 180px;
+    display: inline-block;
+}
+
 #rematch_button {
     display: none;
+    float: right;
 }
 
-#rematch_box {
-    width: 416px;
-    margin: 10px auto;
-    display: none;
+#rematch_ready_msg {
+    text-align: center;
+	margin-bottom: 20px;
 }
-
 .rematch_column {
     display: inline-block;
     width: 49%;

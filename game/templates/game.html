@@ -95,12 +95,28 @@ Software under Affero GPL license, see LICENSE.txt
 
 	<div class="box" id="p2_pts_box"><span id="p2_pts">0</span><span> / 26 </span><img src="/static/images/saphire.png"/></div>
 
-	<div id="game_box" class="box">
-		<canvas id="game_canvas" style="visibility: hidden" width="416" height="416" />
-		<div class="box" id="game_over">
-			<h3 id="game_over_msg" />
-			<a class="button small_inline_button" href="/">{% trans "Cancel" %}</a>
-		</div>
+    <div id="game_box" class="box">
+	  <canvas id="game_canvas" style="visibility: hidden" width="416" height="416" />
+      <div class="box" id="game_over" {% if state >= 3 %} style="display: none;"{% endif %} >
+        <h1 id="game_over_msg" />
+        <h2 id="rematch_ready" >{% trans "Ready for a rematch?" %}</h2> 
+        <div> 
+		      {% for pid, pinfo in player_info.items %}
+		      <div class="rematch_column">
+			    <a id="p{{pid}}_rlink" class="plain{% if pinfo and pinfo.profile_url %} undlin" href="{{ pinfo.profile_url }}{% endif %}" target="_blank">
+				{% if pinfo %}<img id="p{{pid}}_rpic" class="rematch_player_pic" width="60" height="60" src="{{ pinfo.pic_url }}"/>{% endif %}
+				<div id="p{{pid}}_rname" class="pname rematch_player_name">{% if pinfo %}{{ pinfo.name|capfirst }}{% endif %}</div>
+			    </a>
+			    <p id="rematch_status_p{{pid}}"> {% trans "Ready" %}</p>
+		      </div>
+		      {% endfor %}
+            </div>
+            <div id="rematch_timer" />
+            <div>
+              <div class="button confirmation_rematch_button" id="rematch_close_button" onclick="hide_rematch_window()" >{% trans "No" %}</div>
+              <div class="button confirmation_rematch_button" id="rematch_button" onclick="rematch({{ game_id }});"> {% trans "Yes" %}</div>
+            </div>
+      </div>
 	</div>
 
 	<div class="box_container">
@@ -130,21 +146,6 @@ Software under Affero GPL license, see LICENSE.txt
 	</div>
 
 	<div class="box big" id="message" {% if state != 0 %} style="display:block;" {% endif %}></div>
-</div>
-
-<div class="box" id="rematch_box" {% if state >= 3 %} style="display: none;"{% endif %} >
-	<div> 
-		{% for pid, pinfo in player_info.items %}
-		<div class="rematch_column">
-			<a id="p{{pid}}_rlink" class="plain{% if pinfo and pinfo.profile_url %} undlin" href="{{ pinfo.profile_url }}{% endif %}" target="_blank">
-				{% if pinfo %}<img id="p{{pid}}_rpic" class="rematch_player_pic" width="60" height="60" src="{{ pinfo.pic_url }}"/>{% endif %}
-				<div id="p{{pid}}_rname" class="pname rematch_player_name">{% if pinfo %}{{ pinfo.name|capfirst }}{% endif %}</div>
-			</a>
-			<p id="rematch_status_p{{pid}}"> {% trans "Ready" %}</p>
-		</div>
-		{% endfor %}
-	</div>
-	<div class="button" id="rematch_button" onclick="rematch({{ game_id }});"> {% trans "Rematch" %}</div>
 </div>
 
 <div class="chat box_border_top" id="chat_window">
