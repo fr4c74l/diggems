@@ -98,8 +98,9 @@ def publish_score(user):
         # until the next game play, the risk seems acceptable.
         with conn.post('/{}/scores'.format(user.facebook.uid), 'score={}&{}'.format(user.total_score, app_token)) as req:
             req.read() # Ignore return value, because there is not much we can do with it...
-    
-    fb_ograph_call(try_publish_score)
+
+    if user.facebook:
+        gevent.spawn(fb_ograph_call, try_publish_score)
 
 def start_cancel_request(fb_request):
     calls = ({'method': 'DELETE', 'relative_url': '_'.join((fb_request.id, uid))} for uid in fb_request.targets)

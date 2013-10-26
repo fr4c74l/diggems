@@ -296,8 +296,9 @@ def fb_request_redirect(request):
                 # The request was completely invalid, just ignore it.
                 continue
             except ObjectDoesNotExist:
-                # The request is invalid, delete it from Facebook.
-                start_cancel_request(FacebookRequest(id=request_id, targets=(user_id,)))
+                # The request is invalid, delete it from Facebook if user exists.
+                if user_id:
+                    start_cancel_request(FacebookRequest(id=request_id, targets=(user_id,)))
                 continue
 
             fb_request, created = FacebookRequest.objects.get_or_create(id=request_id, defaults={'targets': [user_id], 'game': game})
@@ -485,10 +486,10 @@ def claim_game(request, game_id):
     channel.post_update(game.channel(), 'g', str(game.state), game.seq_num)
     
     if term == 'y':
-        gevent.spawn(publish_score, me.user)
+        publish_score(me.user)
     elif term == 'z':
-        gevent.spawn(publish_score, game.p1.user)
-        gevent.spawn(publish_score, game.p2.user)
+        publish_score(game.p1.user)
+        publish_score(game.p2.user)
 
     return HttpResponse()
 
@@ -684,8 +685,8 @@ def move(request, game_id):
 
     # ... and then publish the scores on FB, if game is over.
     if game.state >= 3: 
-        gevent.spawn(publish_score, game.p1.user)
-        gevent.spawn(publish_score, game.p2.user)
+        publish_score(game.p1.user)
+        publish_score(game.p2.user)
     return HttpResponse()
 
 def donate(request):
