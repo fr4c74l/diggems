@@ -46,7 +46,7 @@ Software under Affero GPL license, see LICENSE.txt
 			<div class="notice">{% trans "This game mode is private. You need to invite someone!" %}</div>
 		{% endif %}
 		{# TODO: Add functionality to invite friend by facebook #}
-		<input class="button fb_button" type="submit" value="{% trans 'Invite a friend' %}" />
+		<input class="button fb_button" type="submit" value="{% trans 'Invite a friend' %}" onclick="request_friends()" />
 		<p> {% trans "Or" %} </p>
 		<div id="invite_link">
 			<div class="big">{% blocktrans %}Copy the link to your adversary{% endblocktrans %}:</div>
