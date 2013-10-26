@@ -121,5 +121,5 @@ def start_cancel_request(fb_request):
             gevent.spawn(fb_ograph_call, del_single_request)
             break
         batch = json.dumps(batch)
-        call = partial(del_request, batch)
+        call = partial(del_request_batch, batch)
         gevent.spawn(fb_ograph_call, call)

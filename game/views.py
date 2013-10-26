@@ -317,7 +317,7 @@ def fb_request_redirect(request):
     return render_with_extra('game404.html', profile, status=404) 
 
 def index(request):
-    if request.method == 'POST' and request.in_fb and "request_ids" in request.GET:
+    if "request_ids" in request.GET:
         return fb_request_redirect(request)
 
     profile = UserProfile.get(request.session)
