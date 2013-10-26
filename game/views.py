@@ -282,7 +282,7 @@ def fb_request_redirect(request):
                 game_id = response['data']
                 game = Game.objects.get(pk=game_id)
                 fb_user = game.p1.user.facebook
-                if game.state != 1:
+                if game.state != 0:
                     raise ObjectDoesNotExist()
                 
                 if game.token:
@@ -300,7 +300,7 @@ def fb_request_redirect(request):
                 start_cancel_request(FacebookRequest(id=request_id, targets=(user_id,)))
                 continue
 
-            fb_request, created = FacebookRequest.objects.get_or_create(id=request_id, defaults={'targets': [user_id]})
+            fb_request, created = FacebookRequest.objects.get_or_create(id=request_id, defaults={'targets': [user_id], 'game': game})
             if not created:
                 fb_request.targets.append(user_id)
 
