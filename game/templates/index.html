@@ -90,7 +90,7 @@ Software under Affero GPL license, see LICENSE.txt
 
 	function index_event_handler(data) {
 		data = JSON.parse(data);
-		var challenge_btn = $["#accept_challenge"];
+		var challenge_btn = $("#accept_challenge");
 		if (data["game_ready"]) {
 			challenge_btn.css("visibility", "visible");
 		} else {
