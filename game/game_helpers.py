@@ -72,6 +72,41 @@ def for_each_surrounding(m, n, func):
         if 0 <= x <= 15 and 0 <= y <= 15:
             func(x, y)
 
+def update_elo_rank(winner, loser):
+    winner_rank, loser_rank = winner.elo, loser.elo
+    rank_diff = winner_rank - loser_rank
+    expectation = (rank_diff * -1) / 400
+    winner_odds = 1 / (1 + 10**expectation)
+    loser_odds = 1 - winner_odds
+    
+    # FIDE uses the following kfactor ranges
+
+    # For a player new to the rating list until s/he has completed events with a total of at least 30 games
+    if winner.games_finished <= 30:
+        kfactor = 30
+    elif winner.elo >= 2400:
+        kfactor = 10
+    else:
+        kfactor = 15
+
+    # Rnew = Roriginal + Kfactor(score - expectations)
+    # for each subject, their score is 1 for a win 0 for a loss, there is no draw
+
+    new_winner_rank = int(round(winner_rank + (kfactor * (1 - winner_odds))))
+    new_loser_rank  = int(round(loser_rank + (kfactor * (0 - loser_odds))))
+
+    if new_loser_rank < 1:
+        new_loser_rank = 1
+
+    winner.elo = new_winner_rank
+    loser.elo = new_loser_rank
+
+def endgame(winner, loser, game_state):
+    if game_state == 3 or game_state == 5:
+        update_elo_rank(winner, loser)
+    elif game_state == 4 or game_state == 6:
+        update_elo_rank(loser, winner)
+
 def fb_ograph_call(func):
     conn = get_conn('https://graph.facebook.com')
     class CacheMiss(Exception):

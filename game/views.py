@@ -463,6 +463,9 @@ def claim_game(request, game_id):
         profile.total_score += points
         profile.save()
         game.state = my_number + 4 
+        endgame(game.p1.user, game.p2.user, game.state)
+        game.p1.user.save()
+        game.p2.user.save()
 
     # If one of the players give up...
     #TODO: You better fix this, lowlife fucking piece of , z? before was 
@@ -477,7 +480,11 @@ def claim_game(request, game_id):
                 prof.games_won += 1
                 game.state = pnum + 4
             prof.save()
+        endgame(game.p1.user, game.p2.user, game.state)
+        game.p1.user.save()
+        game.p2.user.save()
     else:
+        # take players turn
         game.state = my_number;
 
     game.save()
@@ -659,11 +666,7 @@ def move(request, game_id):
     me.save()
 
     if game.state >= 3: # Game is over
-        if game.state == 3 or game.state == 5:
-            update_elo_rank(game.p1.user, game.p2.user, 1)
-        elif game.state == 4 or game.state == 6:
-            update_elo_rank(game.p1.user, game.p2.user, 2)
-            
+        endgame(game.p1.user, game.p2.user, game.state)
         remaining = 51 - points[0] - points[1]
         points[0 if points[0] > points[1] else 1] += remaining
 

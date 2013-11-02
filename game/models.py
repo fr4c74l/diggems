@@ -74,49 +74,6 @@ class UserProfile(models.Model):
         prof.save()
         return prof
     
-    #params: user, user, 1 or 2, Bool
-    @staticmethod
-    def update_elo_rank(playerA, playerB, winner):
-        # number 1 indicates that playerA is the winner, number 2 indicates that playerB is the winner
-        if winner == 1:
-            winner_rank, loser_rank = playerA.elo, playerB.elo
-        elif winner == 2:
-            winner_rank, loser_rank = playerB.elo, playerA.elo
-      
-        rank_diff = winner_rank - loser_rank
-        expectation = (rank_diff * -1) / 400
-        winner_odds = 1 / (1 + 10**expectation)
-        loser_odds = 1 - winner_odds
-        
-        # FIDE uses the following kfactor ranges
-
-        # For a player new to the rating list until s/he has completed events with a total of at least 30 games
-        if winner_rank.games_finished <= 30:
-            kfactor = 30
-        elif winner_rank.elo >= 2400:
-            kfactor = 10
-        else:
-            kfactor = 15
-
-        # Rnew = Roriginal + Kfactor(score - expectations)
-        # for each subject, their score is 1 for a win 0 for a loss, there is no draw
-
-        new_winner_rank = int(round(winner_rank + (kfactor * (1 - winner_odds))))
-        new_loser_rank  = int(round(loser_rank + (kfactor * (0 - loser_odds))))
-
-        if new_loser_rank < 1:
-            new_loser_rank = 1
-
-        if winner == 1:
-            playerA.elo = new_winner_rank
-            playerB.elo = new_loser_rank
-        elif winner == 2:
-            playerA.elo = new_loser_rank
-            playerB.elo = new_winner_rank
-        print "Debug:"
-        print playerA.elo
-        print playerB.elo
-
 class Player(models.Model):
     has_tnt = models.BooleanField(default=True)
     last_seen = models.DateTimeField(auto_now=True)
