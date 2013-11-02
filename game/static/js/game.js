@@ -490,15 +490,18 @@ function handle_event_rematch(msg)
   }
 }
 
+// FIXME Rename this functions, it works only for rematch.
+// Use only one timer function for all timers in game (rematch and players turn).
 function timer()
 {
   timer.rematch_time = timer.rematch_time - 1;
-  document.getElementById('rematch_timer').innerHTML = timer.rematch_time;
+  $("#rematch_timer").text(timer.rematch_time);
+  $("#display_rematch").text(gettext("Rematch ") + "(" + timer.rematch_time + ")");
   if (timer.rematch_time <= 0)
   {
     document.getElementById('rematch_timer').style.display = 'none';
     document.getElementById("rematch_button").style.display = 'none';
-    document.getElementById("rematch_close_button").innerHTML = 'Close';
+    document.getElementById("display_rematch").style.display = 'none';
     clearInterval(timer.id);
     return;
   }
@@ -506,13 +509,32 @@ function timer()
 
 //TODO: Implement a library for all game animations
 function hide_rematch_window(){
-  $("#game_over").css('display', 'none');
+  $("#game_over").animate({
+    width: '64px',
+    height: '15px',
+    bottom: '109%'
+    }, 300, function() {
+      $("#game_over").hide();
+      if (timer.rematch_time > 0)
+        $("#display_rematch").css("display", "block");
+  });
+  return false;
+}
+
+function show_rematch_window() {
+  $("#game_over").show().animate({
+    width: '416px',
+    height: '270px',
+    bottom: '83%'
+  }, 300);
+  $("#display_rematch").css("display", "none");
+  return false;
 }
 
 function game_over_notification(msg) {
-	var go_msg = document.getElementById('game_over_msg');
-	$("#game_over").css('display', 'block').animate({'left':'-2%', 'bottom':'86%'},500);
-	go_msg.innerHTML = msg;
+  var go_msg = document.getElementById('game_over_msg');
+  show_rematch_window();
+  go_msg.innerHTML = msg;
 }
 
 function load_text_animation(text_id) {
@@ -527,7 +549,7 @@ function load_text_animation(text_id) {
 	}, 2000);
 }
 
-function hidden_invite_menu() {
+function hide_invite_menu() {
 	$('#load_menu').animate({'top':'-50%'},500,function(){
 		$('#overlay').fadeOut('fast', function(){ 
           $("#load_menu").css('display', 'none')
@@ -547,7 +569,7 @@ function handle_event(msg, seq_num) {
     set_state(new_state);
 
 	if (new_state != 0 && params.seq_num == 2 ){
-		hidden_invite_menu();
+		hide_invite_menu();
 		// show message box
 		document.getElementById('message').style.setProperty('display', 'block', null);
 	}
@@ -875,11 +897,11 @@ function turn_timeout()
 		timeleft = 0;
 		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2)) {
 			document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
-//			document.getElementById("timeout_buttons").style.display = 'block';
-			$("#timeout_buttons").animate({
-			width: "toggle",
-			left: "126px",
-			opacity: "toggle"}, 200);
+		    $("#timeout_buttons").animate({
+			  width: "toggle",
+			  left: "126px",
+			  opacity: "toggle"
+            }, 200);
 		}
 	}
 	document.getElementById("clock").innerHTML = Math.round(timeleft);
