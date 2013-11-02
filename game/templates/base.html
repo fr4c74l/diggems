@@ -25,7 +25,7 @@ Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for 
 			FB.init({
 			  "appId": "{{ FB_APP_ID }}",
 			  "status": true, "cookie": true, "oauth": true, "xfbml": true,
-			  "channelURL": "http://" + window.location.host + "/fb/channel/",
+			  "channelURL": location.protocol + "://" + window.location.host + "/fb/channel/",
 			});
 			/* Initial check of login status. */
 			FB.Event.subscribe('auth.authResponseChange', on_fb_login);

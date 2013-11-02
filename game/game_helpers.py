@@ -7,6 +7,7 @@ import http_cli
 import urllib2
 import json
 import gevent
+from async_events import channel
 from functools import partial
 from http_cli import get_conn
 from django.utils.http import urlencode
@@ -71,6 +72,16 @@ def for_each_surrounding(m, n, func):
         y = n + dy
         if 0 <= x <= 15 and 0 <= y <= 15:
             func(x, y)
+
+def notify_open_game(game_ready=False):
+    if not game_ready:
+        game_ready = models.Game.objects.filter(state__exact=0).exists()
+
+    cached = cache.get('game_ready')
+    if game_ready != cached:
+        data = json.dumps({'game_ready': game_ready})
+        channel.post_update('main', 'i', data)
+        cache.set('game_ready', game_ready, 3600)
 
 def fb_ograph_call(func):
     conn = get_conn('https://graph.facebook.com')

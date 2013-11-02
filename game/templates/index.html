@@ -58,14 +58,11 @@ Software under Affero GPL license, see LICENSE.txt
 				<input id="play_with_friends" class="button game_button" type="submit" value="{% trans "Play with a friend!" %}" />
 			</form>
 		</div>
-
-		{% if new_games|length > 0 %}
 		<div style="margin: 2px 0px;">
-			<form action="game/{% with new_games|first as g %}{{ g.id }}{% endwith %}/join/" method="post">
-				<input id="accept_challenge" class="button game_button" type="submit" value="{% trans 'Accept challenge!' %}" />
+			<form action="join_any/" method="post">
+				<input id="accept_challenge" {% if not game_ready %}style="visibility: hidden;" {% endif %}class="button game_button" type="submit" value="{% trans 'Accept challenge!' %}" />
 			</form>
 		</div>
-		{% endif %}
 		<div class="box" id="game_statistics">
 			<h4> {% trans "Game statistics" %}</h4>
 		</div>
@@ -83,13 +80,24 @@ Software under Affero GPL license, see LICENSE.txt
 
 <script>
 <![CDATA[
-    var event = new Event((/^https/.test(location.protocol) ? "wss://" : "ws://") + location.hostname + (location.port ? (":" + location.port) : "") + '/main_chat/');
+	var event = new Event((/^https/.test(location.protocol) ? "wss://" : "ws://") + location.hostname + (location.port ? (":" + location.port) : "") + '/index_event/');
 	chat.init(
 		document.getElementById("chat_textfield"),
 		document.getElementById("input_field"),
 		document.getElementById("send_button"),
 		event
 	);
+
+	function index_event_handler(data) {
+		data = JSON.parse(data);
+		var challenge_btn = $["#accept_challenge"];
+		if (data["game_ready"]) {
+			challenge_btn.css("visibility", "visible");
+		} else {
+			challenge_btn.css("visibility", "hidden");
+		}
+	}
+	event.register_handler('i', index_event_handler);
 ]]>
 </script>
 

@@ -127,7 +127,7 @@ def chat_loop(ws, chname, types, username):
     finally:
         report_chat_event(chname, username, False)
 
-def game_events(request, ws, game_id):
+def game_event(request, ws, game_id):
     with DBReleaser():
         try:
             game = models.Game.objects.get(pk=game_id)
@@ -143,7 +143,7 @@ def game_events(request, ws, game_id):
     # TODO: the rematch channel 'r' should only be registered when the game is over
     chat_loop(ws, chname, 'cgpr', username)
 
-def main_chat(request, ws):
+def index_event(request, ws):
     with DBReleaser():
         try:
             session = SessionStore(session_key=request.COOKIES['sessionid'])
@@ -152,4 +152,4 @@ def main_chat(request, ws):
         except ObjectDoesNotExist:
             return
 
-    chat_loop(ws, 'main', 'c', username)
+    chat_loop(ws, 'main', 'ci', username)

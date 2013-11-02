@@ -336,15 +336,19 @@ def index(request):
                }
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
+    game_ready = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user=profile).exists()
+
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'game_ready': game_ready}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
-def play_now(request):
+def play_now(request, join_only=False):
     profile = UserProfile.get(request.session)
-    game_found = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:1]
+    game_found = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile)[:1]
     if len(game_found) > 0:
-       return join_game(request, game_found[0].id)
+        return join_game(request, game_found[0].id)
+    if join_only:
+        return HttpResponseRedirect('/')
     return new_game(request)
 
 @transaction.commit_on_success
@@ -378,6 +382,8 @@ def new_game(request):
 
     if request.REQUEST.get('private', default=False):
         game.token = gen_token()
+    else:
+        notify_open_game(True)
     game.p1 = p1
     game.save()
     
@@ -422,6 +428,8 @@ def join_game(request, game_id):
 
     # Ivalidate all facebook requests on this game...
     game.facebookrequest_set.all().delete()
+    if not game.token:
+        notify_open_game()
 
     transaction.commit()
 

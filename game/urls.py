@@ -1,4 +1,4 @@
-from django.conf.urls import include, patterns
+from django.conf.urls import include, patterns, url
 #from django.conf.urls.i18n import i18n_patterns
 
 _in_game = patterns('game.views',
@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     (r'^game/(?P<game_id>\d+)/', include(_in_game)),
     (r'^new_game/$', 'game.views.new_game'),
     (r'^play_now/$', 'game.views.play_now'),
+    (r'^join_any/$', 'game.views.play_now', {'join_only': True}),
     (r'^$', 'game.views.index'),
     (r'^adhack/(?P<ad_id>\d)/', 'game.views.adhack'),
     (r'^fb/', include(_in_fb)),

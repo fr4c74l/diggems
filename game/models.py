@@ -134,6 +134,13 @@ class Game(models.Model):
             g.token = gen_token()
         return g
 
+def update_open_games(sender, **kwargs):
+    game = kwargs['instance']
+    if game.state == 0 and not game.token:
+        game_helpers.notify_open_game()
+
+pre_delete.connect(update_open_games, sender=Game)
+
 class Rematch(models.Model):
     game = models.OneToOneField(Game, primary_key=True)
     p1_click = models.BooleanField(default=False)
