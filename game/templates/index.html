@@ -60,7 +60,7 @@ Software under Affero GPL license, see LICENSE.txt
 		</div>
 		<div style="margin: 2px 0px;">
 			<form action="join_any/" method="post">
-				<input id="accept_challenge" {% if not game_ready %}style="visibility: hidden;" {% endif %}class="button game_button" type="submit" value="{% trans 'Accept challenge!' %}" />
+              <input name="accept_challenge" id="accept_challenge" class="button game_button" {% if not game_ready %} disabled="disabled" {% endif %} type="submit" value="{% trans "Accept challenge!" %}"/>
 			</form>
 		</div>
 		<div class="box" id="game_statistics">
@@ -73,9 +73,7 @@ Software under Affero GPL license, see LICENSE.txt
 <div class="chat box" style="margin-bottom:10px;">
     <h3>{% trans "Global Chat Room " %}</h3>
     <ul id="chat_textfield" />
-	<div id="length_notify"> {% blocktrans %} Enter at most 80 characters! {% endblocktrans %}</div>
 	<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" />
-	{#<input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" />#}
 </div>
 
 <script>
@@ -90,11 +88,11 @@ Software under Affero GPL license, see LICENSE.txt
 
 	function index_event_handler(data) {
 		data = JSON.parse(data);
-		var challenge_btn = $["#accept_challenge"];
+		var challenge_btn = $("#accept_challenge");
 		if (data["game_ready"]) {
-			challenge_btn.css("visibility", "visible");
-		} else {
-			challenge_btn.css("visibility", "hidden");
+            challenge_btn.removeAttr('disabled');
+          } else {
+			challenge_btn.attr('disabled', 'disabled');
 		}
 	}
 	event.register_handler('i', index_event_handler);
