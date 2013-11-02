@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% comment %}
+
+Copyright 2013 Fractal Jogos e Tecnologia
+Software under Affero GPL license, see LICENSE.txt
+
+{% endcomment %}
+
+{% block title %}{% trans "Private Challenge Acceptance" %}{% endblock %}
+
+{% block pre_facebook_load %}
+<script>
+<![CDATA[
+    on_login_callback = function() {
+        location.reload(true);
+    }
+]]>
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="box">
+	<h1>{% blocktrans %}You were invited to a private game.{% endblocktrans %}</h1>
+	<p>{% blocktrans %}The game you were invited for is private. Please,
+        <a onclick="FB.login();">authorize</a> this application in order for us to confirm
+        your identity.{% endblocktrans %}</p>
+</div>
+{% endblock %}
