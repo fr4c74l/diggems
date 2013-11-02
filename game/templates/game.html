@@ -85,7 +85,8 @@ Software under Affero GPL license, see LICENSE.txt
 
 	<div id="middle_box">
 		<div class="box" id="timer_box"><img src="/static/images/hourglass.png"/> <span id="clock"{% if time_left and time_left <= 10 or time_left == 0 %} style="color: #ff0000;"{% endif %}>{{ time_left|floatformat:"0" }}</span></div>
-		<div class="button" id="give_up" onclick="claim_game(2);">{% trans "Give Up" %}</div>
+        <div class="button" id="give_up" onclick="claim_game(2);">{% trans "Give Up" %}</div>
+        <div class="button" id="display_rematch" onclick="show_rematch_window()" >{% trans "Rematch" %}</div>
 	</div>
 
 	<div class = "box" id="timeout_buttons">
@@ -99,7 +100,7 @@ Software under Affero GPL license, see LICENSE.txt
 	  <canvas id="game_canvas" style="visibility: hidden" width="416" height="416" />
       <div class="box" id="game_over" {% if state >= 3 %} style="display: none;"{% endif %} >
         <h1 id="game_over_msg" />
-        <h2 id="rematch_ready" >{% trans "Ready for a rematch?" %}</h2> 
+        <h2 id="rematch_ready_msg" >{% trans "Ready for a rematch?" %}</h2> 
         <div> 
 		      {% for pid, pinfo in player_info.items %}
 		      <div class="rematch_column">
@@ -113,8 +114,8 @@ Software under Affero GPL license, see LICENSE.txt
             </div>
             <div id="rematch_timer" />
             <div>
-              <div class="button confirmation_rematch_button" id="rematch_close_button" onclick="hide_rematch_window()" >{% trans "No" %}</div>
-              <div class="button confirmation_rematch_button" id="rematch_button" onclick="rematch({{ game_id }});"> {% trans "Yes" %}</div>
+              <div class="button confirmation_rematch_button" id="rematch_close_button" onclick="hide_rematch_window()" >{% trans "Close" %}</div>
+              <div class="button confirmation_rematch_button" id="rematch_button" onclick="rematch({{ game_id }});"> {% trans "Accept" %}</div>
             </div>
       </div>
 	</div>
