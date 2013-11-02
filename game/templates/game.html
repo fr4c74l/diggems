@@ -99,7 +99,7 @@ Software under Affero GPL license, see LICENSE.txt
 	  <canvas id="game_canvas" style="visibility: hidden" width="416" height="416" />
       <div class="box" id="game_over" {% if state >= 3 %} style="display: none;"{% endif %} >
         <h1 id="game_over_msg" />
-        <h2 id="rematch_ready" >{% trans "Ready for a rematch?" %}</h2> 
+        <h2 id="rematch_ready_msg" >{% trans "Ready for a rematch?" %}</h2> 
         <div> 
 		      {% for pid, pinfo in player_info.items %}
 		      <div class="rematch_column">
