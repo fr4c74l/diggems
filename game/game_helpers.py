@@ -78,9 +78,7 @@ def notify_open_game(game_ready=False):
         game_ready = models.Game.objects.filter(state__exact=0, token__isnull=True).exists()
 
     cached = cache.get('game_ready')
-    print 1, game_ready
     if game_ready != cached:
-        print 2
         data = json.dumps({'game_ready': game_ready})
         channel.post_update('main', 'i', data)
         cache.set('game_ready', game_ready, 3600)
