@@ -193,7 +193,7 @@ Tile.prototype.set_state = function(s) {
 function ActivityIndicator(tile) {
     this.tile = tile;
     if (tile.ai)
-	tile.ai.clear();
+		tile.ai.clear();
     tile.ai = this;
 
     this.start_time = (new Date()).getTime();
@@ -232,17 +232,18 @@ function update_points() {
     var p2 = 0;
 
     for(var i = 0; i < 16; ++i) 
-	for(var j = 0; j < 16; ++j){
-	    if(mine[i][j].s == 'r')
-		++p1;
-	    else if(mine[i][j].s == 'b')
-		++p2;
+	for(var j = 0; j < 16; ++j)
+	{
+		if(mine[i][j].s == 'r')
+			++p1;
+		else if(mine[i][j].s == 'b')
+			++p2;
 	}
 
-    if(params.player == 1)
-	tnt.allowed = p2 > p1;
-    else
-	tnt.allowed = p1 > p2;
+	if(params.player == 1)
+		tnt.allowed = p2 > p1;
+	else
+		tnt.allowed = p1 > p2;
 
     display_tnt();
 
@@ -267,6 +268,7 @@ function update_points() {
     var b = g + Math.round(prop2 * rem_total);
     var bg_color = 'rgba(' + r + ',' + g + ',' + b + ',0.25)'
     document.getElementById('game_box').style.background = bg_color;
+	return new Array(p1, p2);
 }
 
 // Class Title Blinker
@@ -309,14 +311,6 @@ function close_last_nt() {
 }
 
 function notify_state(msg) {
-    // Sound stuff
-    var ring = document.getElementById('ring');
-    try{
-        ring.play();
-    }
-    catch(e){
-    }
-
     // Notification stuff
     if(!nt
        || nt.checkPermission() != /* nt.PERMISSION_ALLOWED */ 0
@@ -583,29 +577,67 @@ function handle_event(msg, seq_num) {
         }
         
         var parser = /(\d+),(\d+):(.)/;
-        for(var i = 3; i < lines.length; ++i) {
-    	    var res = parser.exec(lines[i]);
-	        if(res) {
-	            var m = parseInt(res[1]);
-	            var n = parseInt(res[2]);
-
-	            // Just assume correct valid values were delivered...
-
-	            mine[m][n].set_state(res[3]);
-		        if (mine[m][n].ai) {
-			        mine[m][n].ai.clear();
-		        } else {
-			        mine[m][n].draw();
-		        }
-		    }
-        }
+		var mined = 0;
+		for(var i = 3; i < lines.length; ++i) 
+		{
+			var res = parser.exec(lines[i]);
+			if (!lclick.bombed)
+			{
+				try
+				{
+					if ((res[3] == 'b') || (res[3] == 'r'))
+						AllAudio.hitAudio.play();
+					else if ((res[3] > '0') || (res[3] < '9'))
+						AllAudio.digAudio.play();
+				}
+				catch (e)
+				{
+	
+				}
+			}
+			if(res) 
+			{
+				if ((res[3] == 'b') || (res[3] == 'r'))
+					++mined;
+				var m = parseInt(res[1]);
+				var n = parseInt(res[2]);
+				// Just assume correct valid values were delivered...
+				mine[m][n].set_state(res[3]);
+				if (mine[m][n].ai)
+					mine[m][n].ai.clear();
+				else
+					mine[m][n].draw();
+			}
+		}
 		if(last_click[player-1])
-		    last_click[player-1].clear();
+			last_click[player-1].clear();
 		last_click[player-1] = lclick;
 		lclick.draw();
-	}    
-    update_points();
-    reset_counter();
+	}
+	else if (new_state <= 2)
+	{
+		var ring = document.getElementById('ring');
+		try{
+			ring.play();
+		}
+		catch(e){
+		}
+	}
+	var pts = update_points();
+	reset_counter();
+	try{
+	if (lclick.bombed)
+	{
+		if (!mined)
+			AllAudio.explosionFail.play();
+		else if (pts[0] > 26 || pts[1] > 26)
+		{
+			AllAudio.explosionWin.play();
+		}
+		else
+			AllAudio.explosion.play();
+	}}
+	catch(e){}
 }
 
 function register_event() {
@@ -771,21 +803,68 @@ highlight_tile.clear = function() {
     highlight_tile.redraw_hidden(to_redraw);
 }
 
-function init() 
+function Audio(n, name)
 {
-    // TODO: find a better way to deal with sound
-    // Bogus browsers won't allow me to play the sound repeatedely
-    // without reloading it.
-    var ring = document.getElementById('ring');
-    ring.addEventListener('ended', function() { ring.load(); }, false);
+	this.formatN = 0;
+	this.files = new Array(n);
+	var audio = document.createElement('audio');
+	var support = audio.canPlayType('audio/' + Audio.formats[this.formatN]);
+	while(1)
+	{
+		if (support != "")
+		{
+			for (var i = 0; i < this.files.length; ++i)
+			{
+				this.files[i] = document.createElement('audio');
+				this.files[i].setAttribute('src', '/static/sound/' + name + '/' + name + i + '.' + ((Audio.formats[this.formatN] == 'mpeg') ? 'mp3' : Audio.formats[this.formatN]));
+				this.files[i].addEventListener('ended', function() { this.load(); }, false);
+			}
+			break;
+		}
+		if (this.formatN > this.formatN.length)
+			break;
+		support = audio.canPlayType('audio/' + Audio.formats[this.formatN]);
+		this.formatN++;
+	}
+}
+Audio.formats = ['mpeg', 'ogg', 'wav'];
 
+Audio.prototype.load = function()
+{
+	for (var i = 0; i < this.files.length; ++i)
+		this.files[i].load;
+}
+
+Audio.prototype.play = function()
+{
+	this.files[Math.floor(Math.random()*this.files.length)].play();
+}
+
+function AllAudio()
+{
+}
+
+AllAudio.digAudio = new Audio(4, 'dig');
+AllAudio.hitAudio = new Audio(17, 'stone');
+AllAudio.explosion = new Audio(3, 'explosion');
+AllAudio.explosionWin = new Audio(1, 'explosionWin');
+AllAudio.explosionFail = new Audio(1, 'explosionFail');
+
+function init() {
+	//Load Audios
+	AllAudio.digAudio.load();
+	AllAudio.hitAudio.load();
+	AllAudio.explosion.load();
+	AllAudio.explosionWin.load();
+	AllAudio.explosionFail.load();
+	var ring = document.getElementById('ring');
+	ring.addEventListener('ended', function() { ring.load(); }, false);
     var canvas = document.getElementById('game_canvas');
-    
     if (!canvas || !canvas.getContext) 
-    {
-	    // Panic return
-	    // TODO: add friendly message explaining why IE sucks
-	    return;
+	{
+		// Panic return
+		// TODO: add friendly message explaining why IE sucks
+		return;
     }
 
     mine = new Array(16);
