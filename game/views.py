@@ -338,7 +338,7 @@ def index(request):
 
     game_ready = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user=profile).exists()
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL, 'game_ready': game_ready}
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.MAIN_URL, 'game_ready': game_ready}
     return render_with_extra('index.html', profile, context)
 
 @transaction.commit_on_success
@@ -557,8 +557,7 @@ def game(request, game_id):
         me.save()
 
         if game.state == 0:
-            protocol = 'https' if request.is_secure() else 'http'
-            data['base_url'] = '{}://{}'.format(protocol, request.get_host())
+            data['base_url'] = settings.MAIN_URL[:-1] if settings.MAIN_URL[-1] == '/' else settings.MAIN_URL
 
     if game.state == 0 and game.token: # Uninitialized private game
         data['token'] = game.token
@@ -712,7 +711,7 @@ def move(request, game_id):
 
 def donate(request):
     profile = UserProfile.get(request.session)
-    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
+    return render_with_extra('donate.html', profile, {'like_url': settings.MAIN_URL})
 
 def info(request, page):
     if page not in info.existing_pages:
