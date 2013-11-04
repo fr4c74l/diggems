@@ -13,7 +13,7 @@ from http_cli import get_conn
 from django.utils.http import urlencode
 from django.core.cache import cache
 from django.db.models import F
-from diggems.settings import EVENT_SERVER, FB_APP_ID, FB_APP_KEY
+from diggems.settings import FB_APP_ID, FB_APP_KEY
 
 ## Tile codes:
 # 0     -> empty hidden tile

@@ -15,9 +15,6 @@ FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
 ## URL that will be reffered when someone clicks FB "Like":
 FB_LIKE_URL = 'http://my.main.url/'
 
-## Long pool server
-EVENT_SERVER = '127.0.0.1:8000'
-
 ## Google ads settings
 GOOGLE_AD_ID = 'place_google_ads_id_here'
 
