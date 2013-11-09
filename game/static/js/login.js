@@ -32,7 +32,7 @@ function user_info_render(user) {
 
     var victories_text = user.stats.victories;
     if (user.stats.win_ratio) {
-	victories_text += " (" + win_ratio + "%)";
+	victories_text += " (" + user.stats.win_ratio + "%)";
     }
     victories.innerHTML = victories_text;
     points.innerHTML = user.stats.score;
@@ -46,6 +46,8 @@ function user_info_render(user) {
     }
 }
 
+var on_login_callback = null;
+
 /* Handle event from server login/out response. */
 function server_handle_response(ev) {
     if (ev.target.readyState == 4) {
@@ -53,6 +55,9 @@ function server_handle_response(ev) {
 	    var user = JSON.parse(ev.target.responseText);
 	    auth = user.auth ? user.auth : null;
 	    user_info_render(user);
+	    if (on_login_callback) {
+		on_login_callback();
+	    }
 	}
     }
 }
@@ -74,40 +79,6 @@ function server_fb_logout()
     request.send();
 }
 
-function process_incoming_request()
-{
-	var urlParams = {};
-	(function () 
-	{
-		var match,
-		pl     = /\+/g,  // Regex for replacing addition symbol with a space
-		search = /([^&=]+)=?([^&]*)/g,
-		decode = function (s) { return decodeURIComponent(s.replace(pl, " ")); },
-		query  = window.location.search.substring(1);
-	
-		while (match = search.exec(query))
-			urlParams[decode(match[1])] = decode(match[2]);
-	})();
-	var requestType = urlParams["app_request_type"];
-	if (requestType == "user_to_user") 
-	{
-		var requestID = urlParams["request_ids"];  
-		FB.api(requestID, function(response) {
-          alert(response.message);
-          console.log("Response = " + response.message);
-          // If possible, redirect to /game/game_id/join
-          //if (response.data)
-          //  window.location = response.data;
-	    });
-        //delete_request(requestID);
-	}
-}
-
-function delete_request(requestID) {
-  FB.api(requestID, 'delete', function(response) {
-    console.log(response);
-  });
-}
 /* Handle response from Facebook login events. */
 function on_fb_login(res) 
 {
@@ -116,7 +87,6 @@ function on_fb_login(res)
 		if(!is_fb_auth() || auth.fb.uid != res.authResponse.userID) 
 		{
 			server_fb_login(res.authResponse);
-			process_incoming_request();
 		}
 	}
 	else if(is_fb_auth())

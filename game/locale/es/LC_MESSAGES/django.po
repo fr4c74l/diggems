@@ -1,15 +1,15 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
-# This file is distributed under the same license as the PACKAGE package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+# Diggems spanish translation
+# Copyright (C) DigGems 2013
+# This file is distributed under the same license as the game package.
+# Fynn <fynn@fr4c74l.com>, 2013.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PACKAGE VERSION\n"
+"Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-19 17:15-0300\n"
+"POT-Creation-Date: 2013-11-03 16:16-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Last-Translator: Fynn <fynn@fr4c74l.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
@@ -17,23 +17,23 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: models.py:29
+#: models.py:31
 msgid "guest"
 msgstr "visitante"
 
 #. Translators: see locales that Facebook supports: https://www.facebook.com/translations/FacebookLocales.xml
-#: views.py:77 templates/base.html:38
+#: views.py:74 templates/base.html:40
 msgctxt "Facebook"
 msgid "en_US"
 msgstr "es_LA"
 
-#: ws_handlers.py:91
+#: ws_handlers.py:96
 msgid "{} joined the chat"
-msgstr ""
+msgstr "{} se unió al chat"
 
-#: ws_handlers.py:93
+#: ws_handlers.py:98
 msgid "{} has left the chat"
-msgstr ""
+msgstr "{} salió del chat"
 
 #: templates/404.html:10 templates/game404.html:10
 msgid "Broken Link"
@@ -51,60 +51,91 @@ msgstr ""
 "Esta página no existe. Es posible que haya escrito mal la URL. Vuelva a la "
 "<a href=\"/\">página principal</a>."
 
+#: templates/accept_invite.html:11
+msgid "Challenge Acceptance"
+msgstr "Aceptación del Desafío"
+
+#: templates/accept_invite.html:15
+msgid "Oponent is waiting for you!"
+msgstr "¡El Oponente te está esperando!"
+
+#: templates/accept_invite.html:16
+msgid ""
+"is waiting right now for an oponent on a DigGems match.\n"
+"\tAre you the one to accept the challenge? Please be considerate and only "
+"join in if you\n"
+"\tintent to play through the game. A match hardly lasts more than 15 minutes."
+msgstr ""
+"está esperando en este momento para una partida de DigGems.\n"
+"\t¿Eres tú el que aceptará el desafío? Por favor considere solamente si "
+"estás dispuesto a jugar todo el juego, un partido raramente tarda más que 15 "
+"minutos."
+
+#: templates/accept_invite.html:21
+msgid "I will not chicken out! Let me in!"
+msgstr "¡No voy a acobardarme! ¡Déjame jugar!"
+
+#: templates/accept_invite.html:25
+msgid ""
+"Or you may <a id=\"cancel_btn\">cancel</a> this request if you do not want "
+"to play."
+msgstr ""
+"O puedes <a id=\"cancel_btn\"> cancelar </a> este pedido si no queires jugar."
+
 #. Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for explanation of these codes.
 #: templates/base.html:8
 msgctxt "XHTML"
 msgid "en"
 msgstr "es"
 
-#: templates/base.html:63
+#: templates/base.html:65
 msgid "Score"
 msgstr "Pontuación"
 
-#: templates/base.html:67
+#: templates/base.html:70
 msgid "Logout"
 msgstr "Desconectar"
 
-#: templates/base.html:99
+#: templates/base.html:106
 msgid "Play it now!"
 msgstr "¡Juege ahora!"
 
-#: templates/base.html:100
+#: templates/base.html:107
 msgid "About the game"
 msgstr "Sobre el juego"
 
-#: templates/base.html:101
+#: templates/base.html:108
 msgid "How to play"
 msgstr "Como jugar"
 
-#: templates/base.html:102
+#: templates/base.html:109
 msgid "Source code"
 msgstr "Código fuente"
 
-#: templates/base.html:106
-msgid "Policy"
-msgstr ""
-
-#: templates/base.html:108
-msgid "Terms of service"
-msgstr ""
-
-#: templates/base.html:109
-msgid "Privacy policy"
-msgstr ""
-
 #: templates/base.html:113
-msgid "About Us"
-msgstr ""
+msgid "Policy"
+msgstr "Política"
 
 #: templates/base.html:115
-msgid "Contact us"
-msgstr ""
+msgid "Terms of service"
+msgstr "Términos de servicio"
 
-#: templates/base.html:119 templates/donate.html:11
+#: templates/base.html:116
+msgid "Privacy policy"
+msgstr "Política de privacidad"
+
+#: templates/base.html:120
+msgid "About Us"
+msgstr "Sobre nossotros"
+
+#: templates/base.html:122
+msgid "Contact us"
+msgstr "Contáctanos"
+
+#: templates/base.html:126 templates/donate.html:11
 #: templates/donate.html.py:17
 msgid "Patronage"
-msgstr "Mecenazgo"
+msgstr "Contribución"
 
 #: templates/donate.html:18
 msgid ""
@@ -118,10 +149,19 @@ msgid ""
 "amount you can spare (greater\n"
 "\tthan PayPal transaction fees) will be appreciated."
 msgstr ""
+"Este juego es gratis y <a href=\"/info/sourcecode\"> software libre</a>. "
+"Nosotros también\n"
+"no sentimos ser justo cobrar por ventaja competitiva de algunos jugadores "
+"sobre otros. Dedicamos \n"
+"gran parte de nuestro tiempo para desarrollar este juego, y tenemos nuestros "
+"costos en mantenerlo en funcionamento en\n"
+"\tsu constante desarollo. Por lo tanto, nosotros, sin vergüenza pedimos por "
+"tu patrocinio: cualquier candidad que puedas compartir (mayor\n"
+"\tque las comisiones de PayPal) será apreciada."
 
 #: templates/donate.html:23
 msgid "Thanks!"
-msgstr ""
+msgstr "Gracias!"
 
 #: templates/donate.html:30
 msgid "DigGems Patronage"
@@ -150,59 +190,91 @@ msgstr "Donar Bitcoin"
 msgid "Game %(game_id)s"
 msgstr "Juego %(game_id)s"
 
-#: templates/game.html:40
-msgid "Terminate Game"
-msgstr "Terminar el juego"
+#: templates/game.html:44
+msgid "Waiting for oponent"
+msgstr "Esperando oponente"
 
-#: templates/game.html:41
-msgid "Take Player's Turn"
-msgstr "Tomar el turno"
+#: templates/game.html:46
+msgid "This game mode is private. You need to invite someone!"
+msgstr "Este juego es privado. ¡Tienes que convidar alguien!"
+
+#: templates/game.html:48
+msgid "Invite a friend"
+msgstr "Convidar un amigo"
+
+#: templates/game.html:49 templates/game.html.py:71
+msgid "Or"
+msgstr "O"
 
 #: templates/game.html:51
-msgid "Abort"
-msgstr "Abortar"
-
-#: templates/game.html:55
-msgid "Give Up"
-msgstr ""
-
-#: templates/game.html:69
-msgid "Empty!"
-msgstr "Vazio!"
-
-#: templates/game.html:69
-msgid "Wait..."
-msgstr "Espere..."
-
-#: templates/game.html:72 templates/index.html:55
-msgid "Join!"
-msgstr "Unirse!"
-
-#: templates/game.html:77
-msgid "You"
-msgstr "Usted"
-
-#: templates/game.html:77
-msgid "Your opponent"
-msgstr "Tu adversario"
-
-#: templates/game.html:85
 msgid "Copy the link to your adversary"
 msgstr "Copie este link para tu oponente"
 
-#: templates/game.html:98
+#: templates/game.html:64
 msgid "Accept the challenge and play immediately!"
-msgstr ""
+msgstr "¡Acepte el desafio y juege imediatamente!"
 
-#: templates/game.html:115
-msgid "Ready"
-msgstr "Listo"
+#: templates/game.html:72
+msgid "Wait for someone to connect."
+msgstr "Espere que alguien se conecte."
 
-#: templates/game.html:119
+#: templates/game.html:77
+msgid "Cancel"
+msgstr "Cancelar"
+
+#: templates/game.html:88
+msgid "Give Up"
+msgstr "Desistir"
+
+#: templates/game.html:89
 msgid "Rematch"
 msgstr "Revancha"
 
-#: templates/game.html:124
+#: templates/game.html:93
+msgid "Terminate Game"
+msgstr "Terminar el juego"
+
+#: templates/game.html:94
+msgid "Take Player's Turn"
+msgstr "Tomar el turno"
+
+#: templates/game.html:103
+msgid "Ready for a rematch?"
+msgstr "¿Listo para una revancha?"
+
+#: templates/game.html:111
+msgid "Ready"
+msgstr "Listo"
+
+#: templates/game.html:117
+msgid "Close"
+msgstr "Cerrar"
+
+#: templates/game.html:118
+msgid "Accept"
+msgstr "Aceptar"
+
+#: templates/game.html:133
+msgid "Empty!"
+msgstr "¡Vazio!"
+
+#: templates/game.html:134
+msgid "Join!"
+msgstr "¡Unirse!"
+
+#: templates/game.html:136
+msgid "Wait..."
+msgstr "Espere..."
+
+#: templates/game.html:141
+msgid "You"
+msgstr "Tú"
+
+#: templates/game.html:141
+msgid "Your opponent"
+msgstr "Tú adversario"
+
+#: templates/game.html:154
 #, python-format
 msgid "Game %(game_id)s chat room"
 msgstr "Chat del Juego %(game_id)s"
@@ -220,20 +292,23 @@ msgid ""
 "You can not play this game anymore, because someone else is already playing "
 "it. You may instead:"
 msgstr ""
+"No puedes jugar este juego, porque alguien ya lo está jugando. Aun puedes:"
 
 #: templates/game403.html:18
 msgid "Watch that match <a href=\"../\">here</a>;"
-msgstr ""
+msgstr "Ver el partido <a href=\"../\">aqui</a>;"
 
 #: templates/game403.html:19
 msgid "Find another match to join in the <a href=\"/\">index</a>;"
-msgstr ""
+msgstr "Encontrar otro partido para unirse en el <a href=\"/\">index</a>;"
 
 #: templates/game403.html:20
 msgid ""
 "Create a <a href=\"/new_game/\">new match</a> and invite your friends to "
 "play."
 msgstr ""
+"Crie un <a href=\"/new_game/\"> nuevo juego</a> y convide sus amigos para "
+"jugar"
 
 #: templates/game404.html:15
 msgid "Error 404: This game has expired!"
@@ -246,57 +321,95 @@ msgid ""
 msgstr ""
 "...o nunca existió. Crie uno nuevo en la <a href =\"/\">página principal</a>."
 
-#: templates/index.html:25
-msgid "New game"
-msgstr "Nuevo juego"
-
-#: templates/index.html:27
-msgid "Private game"
-msgstr "Juego privado"
-
 #: templates/index.html:28
-msgid "Create!"
-msgstr "Crear!"
+msgid "Return to game"
+msgstr "Retornar al juego"
 
-#: templates/index.html:32
-msgid "Your games"
-msgstr "Sus juegos"
+#: templates/index.html:30
+msgid "Your running games"
+msgstr "Sus juegos corrientes"
 
-#: templates/index.html:37 templates/index.html.py:58
+#: templates/index.html:35
 msgid "Game"
 msgstr "Juego"
 
-#: templates/index.html:38
+#: templates/index.html:37
 msgid "Private"
 msgstr "Privado"
 
-#: templates/index.html:38
+#: templates/index.html:37
 msgid "Public"
 msgstr "Público"
 
-#: templates/index.html:39
+#: templates/index.html:38
 msgid "Waiting the other player"
 msgstr "Esperando el otro jugador"
 
-#: templates/index.html:40
+#: templates/index.html:39
 msgid "In progress"
 msgstr "En curso"
 
-#: templates/index.html:44 templates/index.html.py:62
-msgid "No game found!"
-msgstr "Ningún juego encontrado!"
+#: templates/index.html:41
+msgid "Return to game!"
+msgstr "¡Retornar al juego!"
 
-#: templates/index.html:50
-msgid "Games to start"
-msgstr "Juegos por empezar"
+#: templates/index.html:51
+msgid "Play!"
+msgstr "¡Jugar!"
 
-#: templates/index.html:59
-msgid "Versus"
-msgstr "Versus"
+#: templates/index.html:58
+msgid "Play with a friend!"
+msgstr "¡Juege con un amigo!"
+
+#: templates/index.html:63
+msgid "Accept challenge!"
+msgstr "¡Aceptar desafío!"
 
 #: templates/index.html:67
-msgid "Global chat room"
-msgstr "Chat Global"
+msgid "Game statistics"
+msgstr "Estadísticas"
+
+#: templates/index.html:74
+msgid "Global Chat Room "
+msgstr "Chat Global "
+
+#: templates/request_fb_auth.html:11
+msgid "Private Challenge Acceptance"
+msgstr "Aceptación del Desafío privado"
+
+#: templates/request_fb_auth.html:25
+msgid "You were invited to a private game."
+msgstr "Te invitaron a una partida privada."
+
+#: templates/request_fb_auth.html:26
+msgid ""
+"The game you were invited for is private. Please,\n"
+"        <a onclick=\"FB.login();\">authorize</a> this application in order "
+"for us to confirm\n"
+"        your identity."
+msgstr ""
+"El juego que te invitaron es privado, por favor,\n"
+"        <a onclick=\"FB.login();\">autorice</a> la aplicación para que "
+"podamos confirmar\n"
+"        tu identidad."
+
+#~ msgid "Abort"
+#~ msgstr "Abortar"
+
+#~ msgid "New game"
+#~ msgstr "Nuevo juego"
+
+#~ msgid "Private game"
+#~ msgstr "Juego privado"
+
+#~ msgid "Create!"
+#~ msgstr "Crear!"
+
+#~ msgid "No game found!"
+#~ msgstr "Ningún juego encontrado!"
+
+#~ msgid "Versus"
+#~ msgstr "Versus"
 
 #~ msgid "Guest"
 #~ msgstr "Visitante"

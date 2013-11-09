@@ -5,91 +5,100 @@ Copyright 2011 Lucas Clemente Vella
 Software under Affero GPL license, see LICENSE.txt
 
 {% endcomment %}
-
 {% load i18n %}
-
 {% block title %}Index{% endblock %}
 {% block header_extra %}
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/index.css" />
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
-	<script src="/static/js/event.js" />
-	<script src="/static/js/jquery-2.0.3.min.js"/>
-	<script src="/static/js/chat.js" />
 {% endblock %}
 {% block content %}
-<table>
-	<tbody>
-		<tr>
-			<td class="box" id="new_game">
-				<h1>{% trans "New game" %}</h1>
-				<form action="new_game/" method="post">
-				    {% trans "Private game" %} <input type="checkbox" name="private" value="1" />
-					<input class="button" type="submit" value="{% trans "Create!" %}"  style="float: right;"/>
-				</form>
-			</td>
-			<td class="box top" id="your_game" rowspan="2">
-			  <h1>{% trans "Your games" %}</h1>
-				{% if your_games %}
-				<ul>
-					{% for g in your_games %}
-					<li class="list_games">
-					<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
-						<div>{% if g.token %}{% trans "Private" %}{% else %}{% trans "Public" %}{% endif %}</div>{% if g.state = 0 %}
-						<div>{% trans "Waiting the other player" %}</div>{% else %}
-						<div>{% trans "In progress" %}</div>{% endif %}
-					</li>{% endfor %}
-				</ul>
-				{% else %}
-				<h4>{% trans "No game found!" %}</h4>
-				{% endif %}
-			</td>
-		</tr>
-		<tr>
-			<td class="box top" id="join_game">
-			  <h1>{% trans "Games to start" %}</h1>
-				{% if new_games %}{% for g in new_games %}
-				<ul>
-					<li class="list_games">
-							<div style="float:left; padding: 0px 5px 5px 0px;">
-								<form action="game/{{ g.id }}/join/" method="post"><input class="button" type="submit" value="{% trans "Join!" %}" /></form>
-							</div>
-							<img style="float:right;" class="middle thumb box" src="{{ g.user.pic_url }} " />
-							<a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a>:
-							{% trans "Versus" %} {{ g.user.name }}
-					</li>
-				</ul>
-				{% endfor %}{% else %}<h4>{% trans "No game found!" %}</h4>{% endif %}
-			</td>
-		</tr>
-		<tr class="chat">
-			<td class="box" colspan="2">
-				<h3>{% trans "Global chat room" %}</h3>
-				<ul id="chat_textfield" />
-				<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" maxlength="255" />
-				{# <input id="send_button" class="button" type="submit" value="{% trans 'Send' %}" /> #}
-			</td>
-		</tr>
-		<script>
-			<![CDATA[
-			var event = new Event((/^https/.test(location.protocol) ? "wss://" : "ws://") + location.hostname + (location.port ? (":" + location.port) : "") + '/main_chat/');
+<div class="box" id="your_games">
+	{% if your_games|length > 0 %}
+		<script type="text/javascript"> <![CDATA[ 
+			if ($("#your_games").is(":hidden")) {
+				$("#your_games").slideDown("slow"); 
+			}
+		]]> </script>
+		{% if your_games|length == 1 %}
+		<h1>{% trans "Return to game" %}</h1>
+		{% else %}
+		<h1>{% trans "Your running games" %}</h1>
+		{% endif %}
+		<ul>
+			{% for g in your_games %}
+			<li class="list_games {% if forloop.counter|divisibleby:2 %}even{% else %}odd{% endif %}">
+			<div style="float:left; padding: 0px 5px 5px 0px;" ><a class="undlin" href="game/{{ g.id }}/">{% trans "Game" %} {{ g.id }}</a></div>
+			<div>
+			<div>{% if g.token %}{% trans "Private" %}{% else %}{% trans "Public" %}{% endif %}</div>{% if g.state = 0 %}
+			<div>{% trans "Waiting the other player" %}</div>{% else %}
+			<div>{% trans "In progress" %}</div>{% endif %}
+			</div>
+			<div style="float:right;padding: 0px 5px 5px 0px;" ><a class="button" href="game/{{ g.id }}/">{% trans "Return to game!" %}</a></div>
+			</li>
+			{% endfor %}
+		</ul>
+	{% endif %}
+</div>
 
-			chat.init(
-				document.getElementById("chat_textfield"),
-				document.getElementById("input_field"),
-				document.getElementById("send_button"),
-				event
-			);
-			]]>
-		</script>
-		<tr>
-			<td class="box" colspan="2">
-				<div class="fb-like" style="display: inline-block;" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>
-				<div style="float: right; display: inline-block;"><script id='flattrbtn'>
-				<![CDATA[(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent('{{ like_url }}');f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');]]>
-				</script></div>
-			</td>
-		</tr>
-	</tbody>
-</table>
+<div class="game_buttons_menu" >
+	<div class="left_menu_button">
+		<form action="play_now/" method="post">
+			<input id="new_game_button" class="button game_button" type="submit" value="{% trans "Play!" %}" />
+		</form>
+	</div>
+
+	<div class="right_menu_button">
+		<div>
+			<form action="new_game/?private=True" method="post">
+				<input id="play_with_friends" class="button game_button" type="submit" value="{% trans "Play with a friend!" %}" />
+			</form>
+		</div>
+		<div style="margin: 2px 0px;">
+			<form action="join_any/" method="post">
+              <input name="accept_challenge" id="accept_challenge" class="button game_button" {% if not game_ready %} disabled="disabled" {% endif %} type="submit" value="{% trans "Accept challenge!" %}"/>
+			</form>
+		</div>
+		<div class="box" id="game_statistics">
+			<h4> {% trans "Game statistics" %}</h4>
+		</div>
+	</div>
+
+</div>
+
+<div class="chat box" style="margin-bottom:10px;">
+    <h3>{% trans "Global Chat Room " %}</h3>
+    <ul id="chat_textfield" />
+	<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" />
+</div>
+
+<script type="text/javascript">
+<![CDATA[
+	var event = new Event((/^https/.test(location.protocol) ? "wss://" : "ws://") + location.hostname + (location.port ? (":" + location.port) : "") + '/index_event/');
+	chat.init(
+		document.getElementById("chat_textfield"),
+		document.getElementById("input_field"),
+		document.getElementById("send_button"),
+		event
+	);
+
+	function index_event_handler(data) {
+		data = JSON.parse(data);
+		var challenge_btn = $("#accept_challenge");
+		if (data["game_ready"]) {
+            challenge_btn.removeAttr('disabled');
+          } else {
+			challenge_btn.attr('disabled', 'disabled');
+		}
+	}
+	event.register_handler('i', index_event_handler);
+]]>
+</script>
+
+<div class="likebox box" >
+	<div class="fb-like" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>
+	<div style="float: right; display: inline-block;"><script type="text/javascript" id='flattrbtn'>
+	<![CDATA[(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent('{{ like_url }}');f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');]]>
+	</script></div>
+</div>
 {% endblock %}

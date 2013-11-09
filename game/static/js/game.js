@@ -193,7 +193,7 @@ Tile.prototype.set_state = function(s) {
 function ActivityIndicator(tile) {
     this.tile = tile;
     if (tile.ai)
-	tile.ai.clear();
+		tile.ai.clear();
     tile.ai = this;
 
     this.start_time = (new Date()).getTime();
@@ -232,17 +232,18 @@ function update_points() {
     var p2 = 0;
 
     for(var i = 0; i < 16; ++i) 
-	for(var j = 0; j < 16; ++j){
-	    if(mine[i][j].s == 'r')
-		++p1;
-	    else if(mine[i][j].s == 'b')
-		++p2;
+	for(var j = 0; j < 16; ++j)
+	{
+		if(mine[i][j].s == 'r')
+			++p1;
+		else if(mine[i][j].s == 'b')
+			++p2;
 	}
 
-    if(params.player == 1)
-	tnt.allowed = p2 > p1;
-    else
-	tnt.allowed = p1 > p2;
+	if(params.player == 1)
+		tnt.allowed = p2 > p1;
+	else
+		tnt.allowed = p1 > p2;
 
     display_tnt();
 
@@ -267,6 +268,7 @@ function update_points() {
     var b = g + Math.round(prop2 * rem_total);
     var bg_color = 'rgba(' + r + ',' + g + ',' + b + ',0.25)'
     document.getElementById('game_box').style.background = bg_color;
+	return new Array(p1, p2);
 }
 
 // Class Title Blinker
@@ -309,14 +311,6 @@ function close_last_nt() {
 }
 
 function notify_state(msg) {
-    // Sound stuff
-    var ring = document.getElementById('ring');
-    try{
-        ring.play();
-    }
-    catch(e){
-    }
-
     // Notification stuff
     if(!nt
        || nt.checkPermission() != /* nt.PERMISSION_ALLOWED */ 0
@@ -342,104 +336,92 @@ States:
  X + 2 -> Player X won
  X + 4 -> Game ended abnormally and player X won
 */
-function set_state(state) 
-{
+function set_state(state) {
     var msg = '';
-    if(params.player)
-    {
-	      var cursor;
-	      var hover_indicator;
-	      if(state == params.player) 
-        {
-	          msg = gettext('Your turn! Play!');
-	      
-	          // Set shovel cursor in game_canvas area
-	          cursor = 'url(' + images['shovel'].src + '),auto';
+    if(params.player) {
+	    var cursor;
+	    var hover_indicator;
+	    if(state == params.player) {
+	        msg = gettext('Your turn! Play!');
+	    
+	    // Set shovel cursor in game_canvas area
+	    cursor = 'url(' + images['shovel'].src + '),auto';
 
-	          // Mark the to be affected tiles
-	          hover_indicator = highlight_tile;
-	      }
-	      else 
-        {
-	          // Not my turn, set default cursor...
-	          cursor = 'default';
-	      
-	          // Stop any tile that could be blinking
-	          ActivityIndicator.clear_all();
+	    // Mark the to be affected tiles
+	    hover_indicator = highlight_tile;
+	}
+	else {
+	    // Not my turn, set default cursor...
+	    cursor = 'default';
+	    
+	    // Stop any tile that could be blinking
+	    ActivityIndicator.clear_all();
 
-	          // and stop highlighting tiles:
-	          hover_indicator = null;
-	          highlight_tile.clear();
+	    // and stop highlighting tiles:
+	    hover_indicator = null;
+	    highlight_tile.clear();
 
-	          if(state == 1 || state == 2)
-            {
-		            msg = gettext('Wait for your turn.');
-	          }
-	          else 
-                if(state >= 3 && state <= 6) 
-                {
-		                msg = gettext('Game over, ');
-		                if(((state + 1) % 2) + 1 == params.player) 
-                    {
-		                    if(is_fb_auth()) 
-                        {
-		  	                    /*document.getElementById('brag_button')
-		  	                    .style.setProperty('visibility', 'visible', null);*/
-		                    }
-		                    msg += gettext('you win!');
-		                }
-		                else
-		                    msg += gettext('you lose.');
-                            
-			                document.getElementById("give_up").style.setProperty('visibility', 'hidden', null);
-	                    document.getElementById("rematch_box").style.display = 'block';
-		                document.getElementById("rematch_button").style.display = 'block';
-		                timer.rematch_time = Math.round(params.time_left);
-		                timer.id = window.setInterval(timer, 1000);
-		                timer();
-	              }
-	              else
-		                return; // What else can I do?
-	      }
+		if(state == 1 || state == 2) {
+		    msg = gettext('Wait for your turn.');
+		}
+		else if(state >= 3 && state <= 6) {
+			msg = gettext('Game over, ');
+			if(((state + 1) % 2) + 1 == params.player) {
+				if(is_fb_auth()) {
+				/*document.getElementById('brag_button')
+				.style.setProperty('visibility', 'visible', null);*/
+				}
+				msg += gettext('you win!');
+			}
+			else
+				msg += gettext('you lose.');
+            
+            document.getElementById("give_up").style.setProperty('visibility', 'hidden', null);
+            document.getElementById("rematch_button").style.display = 'block';
+            
+            //FIXME Remove this from here
+            timer.rematch_time = Math.round(params.time_left);
+            timer.id = window.setInterval(timer, 1000);
+            timer();
+
+			game_over_notification(msg);
+		}
+		else
+			return; // What else can I do?
+	}
 
     var canvas = document.getElementById('game_canvas');
-	  canvas.style.cursor = cursor;
-	  canvas.onmousemove = hover_indicator;
+	canvas.style.cursor = cursor;
+	canvas.onmousemove = hover_indicator;
+	// Blink title to alert user, if its turn.
+	your_turn_blinker.setBlinking(state == params.player);
+	if(params.state != state && (state == params.player || state > 2))
+		notify_state(msg);
+	} else {
+		// Spectator mode.
+		var state_msgs =
+			['',
+			 gettext("Red's turn."),
+			 gettext("Blue's turn."),
+			 gettext('Game is over, red player won.'),
+			 gettext('Game is over, blue player won.'),
+			 gettext('Game is over, red player won by resignation.'),
+			 gettext('Game is over, blue player won by resignation.')];
+		msg = state_msgs[state];
+	}
+	var msg_box = document.getElementById('message');
 
-	  // Blink title to alert user, if its turn.
-	  your_turn_blinker.setBlinking(state == params.player);
+    if (!params.state && state) {
+		if(params.player)
+			document.getElementById("chat_interact").style.display="block";
+		// Just started the game, prepare box for messages
+		msg_box.className += " big";
+	    document.getElementById("give_up").style.display="block";
+	}
 
-	  if(params.state != state && (state == params.player || state > 2))
-		    notify_state(msg);
-	  } 
-    else 
-    {
-		    // Spectator mode.
-		    var state_msgs =
-			  ['',
-			    gettext("Red's turn."),
-			    gettext("Blue's turn."),
-			    gettext('Game is over, red player won.'),
-			    gettext('Game is over, blue player won.'),
-			    gettext('Game is over, red player won by resignation.'),
-			    gettext('Game is over, blue player won by resignation.')];
-		    msg = state_msgs[state];
-	  }
-	  var msg_box = document.getElementById('message');
+	msg_box.innerHTML = msg;
 
-    if (!params.state && state) 
-    {
-		    if(params.player)
-			      document.getElementById("chat_interact").style.display="block";
-		    // Just started the game, prepare box for messages
-		    msg_box.className += " big";
-
-		    document.getElementById("abort_button").style.display="none";
-		    document.getElementById("give_up").style.display="block";
-	  }
-	  msg_box.innerHTML = msg;
-
-	  params.state = state;
+    params.state = state;
 }
 
 /* In case updated user information came from the async
@@ -503,62 +485,159 @@ function handle_event_rematch(msg)
   }
 }
 
+// FIXME Rename this functions, it works only for rematch.
+// Use only one timer function for all timers in game (rematch and players turn).
 function timer()
 {
   timer.rematch_time = timer.rematch_time - 1;
-  document.getElementById('rematch_button').innerHTML = gettext("Rematch ") + "(" + timer.rematch_time+ ")";
+  $("#rematch_timer").text(timer.rematch_time);
+  $("#display_rematch").text(gettext("Rematch ") + "(" + timer.rematch_time + ")");
   if (timer.rematch_time <= 0)
   {
+    document.getElementById('rematch_timer').style.display = 'none';
     document.getElementById("rematch_button").style.display = 'none';
+    document.getElementById("display_rematch").style.display = 'none';
     clearInterval(timer.id);
     return;
   }
 }
 
+//TODO: Implement a library for all game animations
+function hide_rematch_window(){
+  $("#game_over").animate({
+    width: '64px',
+    height: '15px',
+    bottom: '109%'
+    }, 300, function() {
+      $("#game_over").hide();
+      if (timer.rematch_time > 0)
+        $("#display_rematch").css("display", "block");
+  });
+  return false;
+}
+
+function show_rematch_window() {
+  $("#game_over").show().animate({
+    width: '416px',
+    height: '270px',
+    bottom: '83%'
+  }, 300);
+  $("#display_rematch").css("display", "none");
+  return false;
+}
+
+function game_over_notification(msg) {
+  var go_msg = document.getElementById('game_over_msg');
+  show_rematch_window();
+  go_msg.innerHTML = msg;
+}
+
+function load_text_animation(text_id) {
+	var text = $(text_id).text()
+	setInterval(function(){
+		for (i = 1; i <= 3; i++) {
+			setTimeout(function() {
+				$(text_id).append(".");
+			}, i * 500);
+		}
+		$(text_id).html(text);
+	}, 2000);
+}
+
+function hide_invite_menu() {
+	$('#load_menu').animate({'top':'-50%'},500,function(){
+		$('#overlay').fadeOut('fast', function(){ 
+          $("#load_menu").css('display', 'none')
+        });
+	});
+	return false;
+}
+
 function handle_event(msg, seq_num) {
-	var lines = msg.split('\n');
+    var lines = msg.split('\n');
 
-	if(seq_num <= params.seq_num) {
-		return;
+    if(seq_num <= params.seq_num)
+	    return;
+    params.seq_num = seq_num;
+
+    var new_state = parseInt(lines[0]);
+    set_state(new_state);
+
+	if (new_state != 0 && params.seq_num == 2 ){
+		hide_invite_menu();
+		// show message box
+		document.getElementById('message').style.setProperty('display', 'block', null);
 	}
-	params.seq_num = seq_num;
-
-	var new_state = parseInt(lines[0]);
-	set_state(new_state);
-
-	if (lines.length > 2){
-		var player = parseInt(lines[1]);
-		var lclick = last_click_decode(player, lines[2]);
-		
-		if (player == params.player && lclick.bombed) {
-			params.tnt_used = true;
-			tnt.active = false;
+    if (lines.length > 2){
+        var player = parseInt(lines[1]);
+        var lclick = last_click_decode(player, lines[2]);
+        
+        if (player == params.player && lclick.bombed) {
+	        params.tnt_used = true;
+	        tnt.active = false;
+        }
+        
+        var parser = /(\d+),(\d+):(.)/;
+		var mined = 0;
+		for(var i = 3; i < lines.length; ++i) 
+		{
+			var res = parser.exec(lines[i]);
+			if (!lclick.bombed)
+			{
+				try
+				{
+					if ((res[3] == 'b') || (res[3] == 'r'))
+						AllAudio.hitAudio.play();
+					else if ((res[3] > '0') || (res[3] < '9'))
+						AllAudio.digAudio.play();
+				}
+				catch (e)
+				{
+	
+				}
+			}
+			if(res) 
+			{
+				if ((res[3] == 'b') || (res[3] == 'r'))
+					++mined;
+				var m = parseInt(res[1]);
+				var n = parseInt(res[2]);
+				// Just assume correct valid values were delivered...
+				mine[m][n].set_state(res[3]);
+				if (mine[m][n].ai)
+					mine[m][n].ai.clear();
+				else
+					mine[m][n].draw();
+			}
 		}
-		
-		var parser = /(\d+),(\d+):(.)/;
-		for(var i = 3; i < lines.length; ++i) {
-		var res = parser.exec(lines[i]);
-		if(res) {
-			var m = parseInt(res[1]);
-			var n = parseInt(res[2]);
-			// Just assume correct valid values were delivered...
-			mine[m][n].set_state(res[3]);
-		if (mine[m][n].ai) {
-			mine[m][n].ai.clear();
-		} else {
-			mine[m][n].draw();
-		}
-		}
-		}
-
 		if(last_click[player-1])
-		last_click[player-1].clear();
+			last_click[player-1].clear();
 		last_click[player-1] = lclick;
 		lclick.draw();
 	}
-
-	update_points();
+	else if (new_state <= 2)
+	{
+		try{
+			AllAudio.ring.play();
+		}
+		catch(e){
+		}
+	}
+	var pts = update_points();
 	reset_counter();
+	try{
+	if (lclick.bombed)
+	{
+		if (!mined)
+			AllAudio.explosionFail.play();
+		else if (pts[0] > 26 || pts[1] > 26)
+		{
+			AllAudio.explosionWin.play();
+		}
+		else
+			AllAudio.explosion.play();
+	}}
+	catch(e){}
 }
 
 function register_event() {
@@ -724,21 +803,62 @@ highlight_tile.clear = function() {
     highlight_tile.redraw_hidden(to_redraw);
 }
 
-function init() 
+function Audio(n, name)
 {
-    // TODO: find a better way to deal with sound
-    // Bogus browsers won't allow me to play the sound repeatedely
-    // without reloading it.
-    var ring = document.getElementById('ring');
-    ring.addEventListener('ended', function() { ring.load(); }, false);
+	this.formatN = 0;
+	this.files = new Array(n);
+	var audio = document.createElement('audio');
+    audio.setAttribute('preload', 'auto');
+	var support = audio.canPlayType('audio/' + Audio.formats[this.formatN]);
+	while(1)
+	{
+		if (support != "")
+		{
+			for (var i = 0; i < this.files.length; ++i)
+			{
+				this.files[i] = document.createElement('audio');
+				this.files[i].setAttribute('src', '/static/sound/' + name + '/' + name + i + '.' + ((Audio.formats[this.formatN] == 'mpeg') ? 'mp3' : Audio.formats[this.formatN]));
+				this.files[i].addEventListener('ended', function() { this.load(); }, false);
+			}
+			break;
+		}
+		if (this.formatN > this.formatN.length)
+			break;
+		support = audio.canPlayType('audio/' + Audio.formats[this.formatN]);
+		this.formatN++;
+	}
+}
+Audio.formats = ['mpeg', 'ogg', 'wav'];
 
+Audio.prototype.load = function()
+{
+	for (var i = 0; i < this.files.length; ++i)
+		this.files[i].load;
+}
+
+Audio.prototype.play = function()
+{
+	this.files[Math.floor(Math.random()*this.files.length)].play();
+}
+
+function AllAudio()
+{
+}
+
+AllAudio.digAudio       = new Audio(4, 'dig');
+AllAudio.ring           = new Audio(1, 'ring');
+AllAudio.hitAudio       = new Audio(17,'stone');
+AllAudio.explosion      = new Audio(3, 'explosion');
+AllAudio.explosionWin   = new Audio(1, 'explosionWin');
+AllAudio.explosionFail  = new Audio(1, 'explosionFail');
+
+function init() {
     var canvas = document.getElementById('game_canvas');
-    
     if (!canvas || !canvas.getContext) 
-    {
-	    // Panic return
-	    // TODO: add friendly message explaining why IE sucks
-	    return;
+	{
+		// Panic return
+		// TODO: add friendly message explaining why IE sucks
+		return;
     }
 
     mine = new Array(16);
@@ -819,12 +939,25 @@ function init()
     
     // Everything is setup, show the canvas
     canvas.style.setProperty('visibility', 'visible', null);
-    if ((params.state == 1) || (params.state == 2))
-    {
-      turn_timeout.start_time = (new Date()).getTime();
-      reset_counter.int = window.setInterval(turn_timeout, 1000);
-      turn_timeout();
+    if ((params.state == 1) || (params.state == 2)){
+        turn_timeout.start_time = (new Date()).getTime();
+        reset_counter.int = window.setInterval(turn_timeout, 1000);
+        turn_timeout();
     }
+
+	// loading game menu
+    $('#overlay').fadeIn('fast',function(){
+        $('#load_menu').animate({'top':'160px'},500);
+    });
+    load_text_animation("#loading");
+
+    //Load Audios
+	AllAudio.digAudio.load();
+	AllAudio.hitAudio.load();
+	AllAudio.explosion.load();
+	AllAudio.explosionWin.load();
+	AllAudio.explosionFail.load();
+    AllAudio.ring.load();
 }
 
 function load_img(name)
@@ -845,11 +978,11 @@ function turn_timeout()
 		timeleft = 0;
 		if (params.player && (params.player != params.state) && (params.state == 1 || params.state == 2)) {
 			document.getElementById("timer_box").style.setProperty('visibility', 'hidden', null);
-//			document.getElementById("timeout_buttons").style.display = 'block';
-			$("#timeout_buttons").animate({
-			height: "toggle",
-			width: "toggle",
-			opacity: "toggle"}, 200);
+		    $("#timeout_buttons").animate({
+			  width: "toggle",
+			  left: "126px",
+			  opacity: "toggle"
+            }, 200);
 		}
 	}
 	document.getElementById("clock").innerHTML = Math.round(timeleft);

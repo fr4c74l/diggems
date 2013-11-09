@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2013-10-19 17:06-0300\n"
+"POT-Creation-Date: 2013-11-03 16:05-0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -17,57 +17,65 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
-#: static/js/game.js:302 static/js/game.js.c:354
+#: static/js/game.js:304 static/js/game.js.c:345
 msgid "Your turn! Play!"
 msgstr "¡Tú turno! ¡Juege!"
 
-#: static/js/game.js:329
+#: static/js/game.js:323
 msgid "DigGems: Game "
 msgstr "DigGems: Juego "
 
-#: static/js/game.js:376
+#: static/js/game.js:365
 msgid "Wait for your turn."
 msgstr "Espere tu turno."
 
-#: static/js/game.js:381
+#: static/js/game.js:368
 msgid "Game over, "
 msgstr "Juego terminado, "
 
-#: static/js/game.js:389
+#: static/js/game.js:374
 msgid "you win!"
 msgstr "¡tú ganaste!"
 
-#: static/js/game.js:392
+#: static/js/game.js:377
 msgid "you lose."
 msgstr "tú perdiste."
 
-#: static/js/game.js:420
+#: static/js/game.js:403
 msgid "Red's turn."
 msgstr "Turno del rojo."
 
-#: static/js/game.js:421
+#: static/js/game.js:404
 msgid "Blue's turn."
 msgstr "Turno del azul"
 
-#: static/js/game.js:422
+#: static/js/game.js:405
 msgid "Game is over, red player won."
 msgstr "Juego terminó, el rojo ganó."
 
-#: static/js/game.js:423
+#: static/js/game.js:406
 msgid "Game is over, blue player won."
 msgstr "Juego terminó, el azul ganó."
 
-#: static/js/game.js:424
+#: static/js/game.js:407
 msgid "Game is over, red player won by resignation."
 msgstr "Juego terminó, el rojo ganó por renuncia."
 
-#: static/js/game.js:425
+#: static/js/game.js:408
 msgid "Game is over, blue player won by resignation."
 msgstr "Juego terminó, el azul ganó por renuncia."
 
-#: static/js/game.js:509
+#: static/js/game.js:493
 msgid "Rematch "
 msgstr "Revancha "
+
+#: static/js/game.js:1028
+msgid "Challenge friends!"
+msgstr ""
+
+#: static/js/game.js:1029
+msgid "Choose your possible oponents."
+msgstr ""
 
 #~ msgid " seconds."
 #~ msgstr " segundos."

@@ -13,7 +13,7 @@
    height="275"
    id="svg8382"
    version="1.1"
-   inkscape:version="0.48.4 r9939"
+   inkscape:version="0.48.2 r9819"
    sodipodi:docname="crate.svg"
    sodipodi:version="0.32"
    inkscape:output_extension="org.inkscape.output.svg.inkscape"
@@ -83,16 +83,16 @@
      borderopacity="1.0"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:zoom="2.8364203"
-     inkscape:cx="151.42848"
-     inkscape:cy="162.86411"
+     inkscape:zoom="2.005652"
+     inkscape:cx="228.7556"
+     inkscape:cy="107.78216"
      inkscape:document-units="px"
      inkscape:current-layer="layer1"
      showgrid="true"
-     inkscape:window-width="1280"
-     inkscape:window-height="977"
-     inkscape:window-x="-3"
-     inkscape:window-y="-3"
+     inkscape:window-width="1920"
+     inkscape:window-height="996"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
      objecttolerance="20"
      inkscape:snap-nodes="true"
@@ -655,29 +655,29 @@
     </g>
     <text
        xml:space="preserve"
-       style="font-size:62.21603394px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#800000;fill-opacity:1;stroke:none;font-family:Sans"
-       x="1432.3839"
+       style="font-size:49.16932678px;font-style:normal;font-weight:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#800000;fill-opacity:1;stroke:none;font-family:Sans"
+       x="1432.3457"
        y="1420.2347"
        id="text3100"
        sodipodi:linespacing="125%"
        transform="matrix(0.94762459,-0.68498495,0,1.0552702,0,0)"><tspan
          sodipodi:role="line"
          id="tspan3102"
-         x="1432.3839"
+         x="1432.3457"
          y="1420.2347"
-         style="font-size:62.21603394px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#800000;font-family:Misdemeanor;-inkscape-font-specification:Misdemeanor">TNT</tspan></text>
+         style="font-size:49.16932678px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;fill:#800000;font-family:Misdemeanor;-inkscape-font-specification:Misdemeanor">TNT</tspan></text>
     <text
        xml:space="preserve"
-       style="font-size:49.90927124px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#550000;fill-opacity:1;stroke:none;font-family:Shotgun Wedding;-inkscape-font-specification:Shotgun Wedding Bold"
-       x="669.83148"
-       y="666.46381"
+       style="font-size:38.93450928px;font-style:normal;font-variant:normal;font-weight:bold;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#550000;fill-opacity:1;stroke:none;font-family:Shotgun Wedding;-inkscape-font-specification:Shotgun Wedding Bold"
+       x="700.78387"
+       y="666.24615"
        id="text3103"
        sodipodi:linespacing="125%"
        transform="matrix(1.0882305,-0.18966822,0.80460466,0.77868804,0,0)"><tspan
          sodipodi:role="line"
          id="tspan3105"
-         x="669.83148"
-         y="666.46381">T.N.T</tspan></text>
+         x="700.78387"
+         y="666.24615">T.N.T</tspan></text>
   </g>
   <metadata
      id="metadata123">
@@ -694,7 +694,7 @@
             <dc:title>Open Clip Art Library</dc:title>
           </cc:Agent>
         </dc:publisher>
-        <dc:title></dc:title>
+        <dc:title />
         <dc:date>2010-05-25T19:05:47</dc:date>
         <dc:description>Minor change so that parallel lines converge in the distance.</dc:description>
         <dc:source>http://openclipart.org/detail/62857/perspective-wooden-crate-by-eady</dc:source>

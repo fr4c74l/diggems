@@ -235,8 +235,8 @@ def fb_request_redirect(request):
     user_id = getattr(profile.facebook, 'uid', None)
     request_ids = request.GET["request_ids"].split(',')
 
-    must_authenticate = False
     found = False
+    must_authenticate = False
 
     # This will try to validate each request id received, stopping at the first
     # valid one, and using it to build the user response.
@@ -260,11 +260,9 @@ def fb_request_redirect(request):
             # If this is a private game, we must ensure the user has
             # indeed received that request...
             if game.token:
-                if user_id is None:
+                if user_id is None or not is_targeted:
                     must_authenticate = True
                     continue
-                if not is_targeted:
-                    raise ObjectDoesNotExist()
 
             # Just for consistency, we ensure the stored request targets this user
             if user_id is not None and not is_targeted:
@@ -283,10 +281,13 @@ def fb_request_redirect(request):
                 game_id = response['data']
                 game = Game.objects.get(pk=game_id)
                 fb_user = game.p1.user.facebook
-                if game.state != 1:
+                if game.state != 0:
                     raise ObjectDoesNotExist()
                 
                 if game.token:
+                    # We must assert the game request is consistent, to ensure it is
+                    # not a forgery, thus we check if player 1 is indeed the author
+                    # of the request.
                     if fb_user is None or fb_user.uid != response['from']['id']:
                         raise ObjectDoesNotExist()
                     if user_id is None:
@@ -297,34 +298,38 @@ def fb_request_redirect(request):
                 # The request was completely invalid, just ignore it.
                 continue
             except ObjectDoesNotExist:
-                # The request is invalid, delete it from Facebook.
-                start_cancel_request(FacebookRequest(id=request_id, targets=(user_id,)))
+                # The request is invalid, delete it from Facebook if user exists.
+                if user_id:
+                    start_cancel_request(FacebookRequest(id=request_id, targets=(user_id,)))
                 continue
 
-            fb_request, created = FacebookRequest.objects.get_or_create(id=request_id, defaults={'targets': [user_id]})
-            if not created:
-                fb_request.targets.append(user_id)
+            fb_request, created = FacebookRequest.objects.get_or_create(id=request_id, defaults={'targets': [user_id], 'game': game})
+            if user_id:
+                if not created:
+                    fb_request.targets.append(user_id)
+                fb_request.save()
 
-            fb_request.save()
-
-        # The request is valid, break out to proceed to handle it:
+        # The request is valid, break out and proceed to handle it:
         found = True
         break
 
     if found:
         return render_with_extra('accept_invite.html', profile, {'g': game, 'request_id': fb_request.id})
     if must_authenticate:
-        pass # TODO: return a page asking user to authorize us with Facebook
+        # User must authenticate to join private games...
+        return render_with_extra('request_fb_auth.html', profile)
     return render_with_extra('game404.html', profile, status=404) 
 
 def index(request):
-    if request.method == 'POST' and request.in_fb and "request_ids" in request.GET:
+    if "request_ids" in request.GET:
         return fb_request_redirect(request)
 
     profile = UserProfile.get(request.session)
-    playing_now = Game.objects.filter(Q(p1__user=profile) | Q(p2__user=profile)).exclude(state__gte=3)
+    playing_now = Game.objects.filter(Q(p1__user=profile) |
+                                      Q(p2__user=profile)).exclude(state__gte=3)
 
-    chosen = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:5]
+    chosen = Game.objects.filter(state__exact=0,
+                                 token__isnull=True).exclude(p1__user__exact=profile).order_by('?')[:1]
     new_games = []
     for game in chosen:
         info = {'id': game.id,
@@ -332,8 +337,20 @@ def index(request):
                }
         new_games.append(info)
 
-    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.FB_LIKE_URL}
+    game_ready = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user=profile).exists()
+
+    context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.MAIN_URL, 'game_ready': game_ready}
     return render_with_extra('index.html', profile, context)
+
+@transaction.commit_on_success
+def play_now(request, join_only=False):
+    profile = UserProfile.get(request.session)
+    game_found = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile)[:1]
+    if len(game_found) > 0:
+        return join_game(request, game_found[0].id)
+    if join_only:
+        return HttpResponseRedirect('/')
+    return new_game(request)
 
 @transaction.commit_on_success
 def new_game(request):
@@ -363,8 +380,11 @@ def new_game(request):
 
     game = Game()
     game.mine = mine_encode(mine)
+
     if request.REQUEST.get('private', default=False):
         game.token = gen_token()
+    else:
+        notify_open_game(True)
     game.p1 = p1
     game.save()
     
@@ -409,6 +429,8 @@ def join_game(request, game_id):
 
     # Ivalidate all facebook requests on this game...
     game.facebookrequest_set.all().delete()
+    if not game.token:
+        notify_open_game()
 
     transaction.commit()
 
@@ -421,7 +443,7 @@ def join_game(request, game_id):
     outdata = '2\n' + json.dumps(get_user_info(profile))
     channel.post_update(ch_id, 'p', outdata)
 
-    return HttpResponseRedirect('/game/' + game_id)
+    return HttpResponseRedirect('/game/' + str(game_id))
 
 @transaction.commit_on_success
 def abort_game(request, game_id):
@@ -539,8 +561,7 @@ def game(request, game_id):
         me.save()
 
         if game.state == 0:
-            protocol = 'https' if request.is_secure() else 'http'
-            data['base_url'] = '{}://{}'.format(protocol, request.get_host())
+            data['base_url'] = settings.MAIN_URL[:-1] if settings.MAIN_URL[-1] == '/' else settings.MAIN_URL
 
     if game.state == 0 and game.token: # Uninitialized private game
         data['token'] = game.token
@@ -689,13 +710,13 @@ def move(request, game_id):
 
     # ... and then publish the scores on FB, if game is over.
     if game.state >= 3: 
-        gevent.spawn(publish_score, game.p1.user)
-        gevent.spawn(publish_score, game.p2.user)
+        publish_score(game.p1.user)
+        publish_score(game.p2.user)
     return HttpResponse()
 
 def donate(request):
     profile = UserProfile.get(request.session)
-    return render_with_extra('donate.html', profile, {'like_url': settings.FB_LIKE_URL})
+    return render_with_extra('donate.html', profile, {'like_url': settings.MAIN_URL})
 
 def info(request, page):
     if page not in info.existing_pages:

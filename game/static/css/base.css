@@ -61,6 +61,20 @@ body {
 	text-decoration: inherit;
 }
 
+.notice {
+	padding: 5px;
+	margin: 5px 0;
+	text-align: center;
+	font-size: medium;
+	background-color: #ffebeb;
+	color: #cc3838;
+	font-weight: bold;
+	-moz-border-radius: 5px;
+	-o-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	border-radius: 5px;
+}
+
 .undlin:hover {
 	cursor: pointer;
 	text-decoration: underline;
@@ -97,8 +111,12 @@ body {
 }
 
 .box h1, h2, h3, h4, h5 {
+	margin: 3px 0 8px 0;
 	color: #333;
-	text-shadow: 0.05em 0.05em 0.05em #535353;
+}
+
+.box h1, h2 {
+	text-shadow: 0.03em 0.03em 0.03em #535353;
 }
 
 .button {
@@ -120,8 +138,14 @@ body {
 	text-align: center;
 }
 
+.small_inline_button {
+	width: 60px;
+	display: inline-block;
+}
+
 .button:hover {
 	color: #f9f9f9;
+	background-color: #6acd40;
 	cursor: pointer;
 }
 

@@ -59,7 +59,7 @@ If you need to login in Facebook for developing:
 3) Use the ddns nginx config (you may need edit the nginx.conf):
 $ cp APP_PATH/nginx/conf/nginx.conf.ddns APP_PATH/nginx/conf/nginx.conf
 
-4) Load the local-fb-iptables-rules to redirect:
+4) Load the local-fb-iptables-rules to redirect port 8080 and 4443:
 ** WARNING ** This will overwrite your original iptables rules, save them before:
 $ iptables-save > iptables-rules.bkp
 

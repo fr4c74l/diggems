@@ -1,6 +1,97 @@
 /* Copyright 2013 Fractal Jogos e Tecnologia
  * Software under Affero GPL license, see LICENSE.txt */
 
+/* GAME LOADING MENU */
+
+.overlay{
+	background:transparent url(/static/images/overlay.png) repeat top left;
+	position:fixed;
+	top:0px;
+	bottom:0px;
+	left:0px;
+	right:0px;
+	z-index:100;
+}
+
+#load_menu {
+	background: rgba(255,255,255,0.8);
+	margin: 0 auto;
+	width: 400px;
+	position:fixed;
+	top:-150%;
+	left:30%;
+	right:30%;
+	z-index:101;
+}
+
+#load_menu p {
+	text-align: center;
+	font-size: 20px;
+}
+
+#loading {
+	margin-bottom: 10px;
+	font-size: 17px;
+}
+
+#game_over {
+	background: rgba(255,255,255,0.95);
+	margin: 0 auto;
+	position:relative;
+    left: -3%;
+    right: 3%;
+	bottom: 109%;
+	display: none;
+	z-index:101;
+    width: 64px;
+    height: 15px;
+}
+
+h1#game_over_msg {
+    text-decoration: none;
+    text-align: center;
+	margin-bottom: 30px;
+}
+
+.fb_button {
+	width: 100%;
+	height: 100px;
+    background: #6079ab url(/static/images/fb.png) no-repeat bottom left;
+	-moz-border-radius: 8px;
+	-o-border-radius: 8px;
+	-webkit-border-radius: 8px;
+	border-radius: 8px;
+    border: 1px outset #3b5998;
+    text-shadow: #3b5998 -1px 0;
+	font-size: 30px;
+    text-align: center;
+    text-indent: 2.5em;
+}
+
+.fb_button:hover {
+    background-color: #3b5998;
+    text-shadow: #6079ab 0 -1px 0;
+}
+.fb_button:active {
+    background-color: #6079ab;
+    border: 1px inset #6079ab;
+}
+
+#invite_link {
+	margin:10px 0;
+}
+
+#join_link {
+    width: 390px;
+}
+
+.addthis {
+    width: 70px;
+    height: 35px;
+	margin: 5px auto; 
+}
+
+/* GAME */
 #main {
     display: block;
     position: relative;
@@ -45,23 +136,39 @@
 
 .pbox {
     text-align: center;
-    text-align: center;
-    display: block;
+	display:inline-block;
     width: 150px;
     height: 40px;
 }
 
+.box_container {
+	position: relative;
+	bottom:0;
+	left:0;
+	height: 70px;
+}
+
 #p1_box {
     background: rgba(255,0,0,0.25);
-    position: relative;
-    margin-bottom: 10px;
+    position: absolute;
+	bottom:0;
+	left:0;
 }
 
 #p2_box {
     background: rgba(0,0,255,0.25);
-    position: absolute;
-    bottom: 67px;
-    right: 0px;
+	position: absolute;
+	bottom: 0;
+	right:0;
+}
+
+#tnt_box {
+    padding: 9px;
+    width: 52px;
+    height: 52px;
+	position: absolute;
+	bottom: -4px;
+	right: 184px;
 }
 
 #p1_link:hover,
@@ -92,23 +199,16 @@
     text-overflow: ellipsis;
 }
 
-#tnt_box {
-    position: absolute;
-    padding: 9px;
-    bottom: 63px;
-    right: 184px;
-    width: 52px;
-    height: 52px;
+.big {
+	font-size: x-large;
 }
 
 #message {
-    text-align: center;
-    height: 35px;
+	display:none;
+	margin-top: 16px;
+	text-align: center;
 }
 
-#join_link {
-    width: 390px;
-}
 
 #timer_box {
 	margin: 5px 0;
@@ -117,9 +217,19 @@
 	width: 50px;
 }
 
-#give_up{
+#give_up,{
 	position: relative;
 	bottom: 0;
+    z-index: 1;
+}
+
+#display_rematch {
+  position: absolute;
+  left: -37%;
+  bottom: 0;
+  width: 120px;
+  display: none;
+  z-index: 2;
 }
 
 #timeout_terminate,
@@ -131,23 +241,34 @@
 #timeout_buttons {
 	display: none;
 	position: absolute;
-	top: -10px;
-	left: 36%;
+	top: -30px;
+	left: 183px;
 	padding: 3px;
 	width: 180px;
 	z-index: 101;
 }
 
+#rematch_timer {
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  font-size: 30px;
+}
+
+.confirmation_rematch_button {
+    width: 180px;
+    display: inline-block;
+}
+
 #rematch_button {
     display: none;
+    float: right;
 }
 
-#rematch_box {
-    width: 416px;
-    margin: 10px auto;
-    display: none;
+#rematch_ready_msg {
+    text-align: center;
+	margin-bottom: 20px;
 }
-
 .rematch_column {
     display: inline-block;
     width: 49%;
