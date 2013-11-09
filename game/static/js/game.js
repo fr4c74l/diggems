@@ -881,12 +881,12 @@ function claim_game(terminate)
 	var data = null;
 	if (terminate == 1)
 	{
-		data = "terminate=y";
+		data = "terminate=click_on_terminate";
 		button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
 	}
   if (terminate == 2)
   {
-    data = "terminate=z";
+    data = "terminate=gave_up";
     button_request.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
   }
 	button_request.send(data);

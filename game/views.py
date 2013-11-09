@@ -455,10 +455,11 @@ def claim_game(request, game_id):
         return HttpResponseForbidden()
 
     term = request.POST.get('terminate') 
-    if term != 'z' and (my_number == game.state or game.timeout_diff() > 0):
+    if term != 'gave_up' and (my_number == game.state or game.timeout_diff() > 0):
         return HttpResponseForbidden()
-    
-    if term == 'y':
+   
+    # If one of the players' round time ends and the other terminates the game
+    if term == 'click_on_terminate':
         points = game.mine.count(tile_encode(19)) + game.mine.count(tile_encode(20))
         profile.total_score += points
         profile.save()
@@ -467,10 +468,8 @@ def claim_game(request, game_id):
         game.p1.user.save()
         game.p2.user.save()
 
-    # If one of the players give up...
-    #TODO: You better fix this, lowlife fucking piece of , z? before was 
-    #Yes or No, now that YOU added a state, YOU FIX IT!!!
-    elif term == 'z':
+    # If one of the players gives up...
+    elif term == 'gave_up':
         for pnum,player in ((1,game.p1),(2,game.p2)):
             points = game.mine.count(tile_encode(pnum + 18))
             prof = player.user
@@ -492,9 +491,9 @@ def claim_game(request, game_id):
 
     channel.post_update(game.channel(), 'g', str(game.state), game.seq_num)
     
-    if term == 'y':
+    if term == 'click_on_terminate':
         gevent.spawn(publish_score, me.user)
-    elif term == 'z':
+    elif term == 'gave_up':
         gevent.spawn(publish_score, game.p1.user)
         gevent.spawn(publish_score, game.p2.user)
 
