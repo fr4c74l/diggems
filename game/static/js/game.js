@@ -379,6 +379,7 @@ function set_state(state) {
             document.getElementById("give_up").style.setProperty('visibility', 'hidden', null);
             document.getElementById("rematch_button").style.display = 'block';
             
+            //FIXME Remove this from here
             timer.rematch_time = Math.round(params.time_left);
             timer.id = window.setInterval(timer, 1000);
             timer();
@@ -616,9 +617,8 @@ function handle_event(msg, seq_num) {
 	}
 	else if (new_state <= 2)
 	{
-		var ring = document.getElementById('ring');
 		try{
-			ring.play();
+			AllAudio.ring.play();
 		}
 		catch(e){
 		}
@@ -808,6 +808,7 @@ function Audio(n, name)
 	this.formatN = 0;
 	this.files = new Array(n);
 	var audio = document.createElement('audio');
+    audio.setAttribute('preload', 'auto');
 	var support = audio.canPlayType('audio/' + Audio.formats[this.formatN]);
 	while(1)
 	{
@@ -844,21 +845,14 @@ function AllAudio()
 {
 }
 
-AllAudio.digAudio = new Audio(4, 'dig');
-AllAudio.hitAudio = new Audio(17, 'stone');
-AllAudio.explosion = new Audio(3, 'explosion');
-AllAudio.explosionWin = new Audio(1, 'explosionWin');
-AllAudio.explosionFail = new Audio(1, 'explosionFail');
+AllAudio.digAudio       = new Audio(4, 'dig');
+AllAudio.ring           = new Audio(1, 'ring');
+AllAudio.hitAudio       = new Audio(17,'stone');
+AllAudio.explosion      = new Audio(3, 'explosion');
+AllAudio.explosionWin   = new Audio(1, 'explosionWin');
+AllAudio.explosionFail  = new Audio(1, 'explosionFail');
 
 function init() {
-	//Load Audios
-	AllAudio.digAudio.load();
-	AllAudio.hitAudio.load();
-	AllAudio.explosion.load();
-	AllAudio.explosionWin.load();
-	AllAudio.explosionFail.load();
-	var ring = document.getElementById('ring');
-	ring.addEventListener('ended', function() { ring.load(); }, false);
     var canvas = document.getElementById('game_canvas');
     if (!canvas || !canvas.getContext) 
 	{
@@ -956,6 +950,14 @@ function init() {
         $('#load_menu').animate({'top':'160px'},500);
     });
     load_text_animation("#loading");
+
+    //Load Audios
+	AllAudio.digAudio.load();
+	AllAudio.hitAudio.load();
+	AllAudio.explosion.load();
+	AllAudio.explosionWin.load();
+	AllAudio.explosionFail.load();
+    AllAudio.ring.load();
 }
 
 function load_img(name)
