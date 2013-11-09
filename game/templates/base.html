@@ -9,15 +9,17 @@ Translators: see http://www.w3.org/TR/html401/struct/dirlang.html#langcodes for 
 <head>
 	<title>DigGems: {% block title %}{% endblock %}</title>
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/base.css" />
-	<script src="/static/js/jquery-2.0.3.min.js"/>
+    <script type="text/javascript" src="/static/js/jquery-2.0.3.min.js"/>
+  	<script type="text/javascript" src="/static/js/event.js" />
+	<script type="text/javascript" src="/static/js/chat.js" />
 	{% block header_extra %}{% endblock %}
 </head>
 <body>
 	<div class="wrap">
 		<div id="fb-root" />
-		<script src="/static/js/login.js" />
+		<script type="text/javascript" src="/static/js/login.js" />
 		{% block pre_facebook_load %}{% endblock %}
-		<script>
+		<script type="text/javascript">
 		<![CDATA[
 		var auth = {% if user.auth %}{{ user.auth|json_dump }}{% else %}null{% endif %};
 

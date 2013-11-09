@@ -24,7 +24,7 @@ Software under Affero GPL license, see LICENSE.txt
 		<input type="hidden" name="request_id" value="{{ request_id }}" />
 		<p>{% blocktrans %}Or you may <a id="cancel_btn">cancel</a> this request if you do not want to play.{% endblocktrans %}</p>
 	</form>
-	<script>
+	<script type="text/javascript">
 	<![CDATA[
 		document.getElementById("cancel_btn").addEventListener("click", function () {
 			document.getElementById("cancel_form").submit();

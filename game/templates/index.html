@@ -11,10 +11,6 @@ Software under Affero GPL license, see LICENSE.txt
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/index.css" />
 	<link rel="stylesheet" media="screen" type="text/css" href="/static/css/chat.css" />
 	<meta property="fb:app_id" content="{{ FB_APP_ID }}" />
-	<script src="/static/js/jquery-2.0.3.min.js"/>
-	<script src="/static/js/event.js" />
-	<script src="/static/js/jquery-2.0.3.min.js"/>
-	<script src="/static/js/chat.js" />
 {% endblock %}
 {% block content %}
 <div class="box" id="your_games">
@@ -76,7 +72,7 @@ Software under Affero GPL license, see LICENSE.txt
 	<span id="chat_username"> {{ user.name|capfirst }} : </span><input type="text" name="input_message" id="input_field" />
 </div>
 
-<script>
+<script type="text/javascript">
 <![CDATA[
 	var event = new Event((/^https/.test(location.protocol) ? "wss://" : "ws://") + location.hostname + (location.port ? (":" + location.port) : "") + '/index_event/');
 	chat.init(
@@ -101,7 +97,7 @@ Software under Affero GPL license, see LICENSE.txt
 
 <div class="likebox box" >
 	<div class="fb-like" data-href="{{ like_url }}" data-send="true" data-show-faces="true"></div>
-	<div style="float: right; display: inline-block;"><script id='flattrbtn'>
+	<div style="float: right; display: inline-block;"><script type="text/javascript" id='flattrbtn'>
 	<![CDATA[(function(i){var f,s=document.getElementById(i);f=document.createElement('iframe');f.src='//api.flattr.com/button/view/?uid=fr4c74l&button=compact&url='+encodeURIComponent('{{ like_url }}');f.title='Flattr';f.height=20;f.width=110;f.style.borderWidth=0;s.parentNode.insertBefore(f,s);})('flattrbtn');]]>
 	</script></div>
 </div>

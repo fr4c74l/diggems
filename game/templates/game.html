@@ -15,7 +15,7 @@ Software under Affero GPL license, see LICENSE.txt
 {% endblock %}
 {% block content %}
 <script type="text/javascript" src="{% url "django.views.i18n.javascript_catalog" %}" />
-<script>
+<script type="text/javascript">
 	<![CDATA[
 	var params = {
 	"game_id": {{ game_id }},
@@ -32,9 +32,7 @@ Software under Affero GPL license, see LICENSE.txt
 	};
 	]]>
 </script>
-<script src="/static/js/event.js" />
-<script src="/static/js/game.js" />
-<script src="/static/js/chat.js" />
+<script type="text/javascript" src="/static/js/game.js" />
 
 {% if player and state == 0 %}
 <div class="overlay" id="overlay" style="display:none;"/>
@@ -55,7 +53,7 @@ Software under Affero GPL license, see LICENSE.txt
 			  <a class="addthis_button_twitter" />
 			  <a class="addthis_button_google_plusone_share" />
             </div>
-            <script>
+            <script type="text/javascript">
 	        <![CDATA[
 	          var addthis_config = { data_track_clickback: false };
 	          var addthis_share = {
@@ -65,7 +63,7 @@ Software under Affero GPL license, see LICENSE.txt
 	          };
 	        ]]>
 	        </script> 
-	        <script src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e" />
+	        <script type="text/javascript" src="//s7.addthis.com/js/300/addthis_widget.js#pubid=xa-51df479d2a95600e" />
 		</div>
 		{% if not token %}
 			<p> {% trans "Or" %} </p>
@@ -170,11 +168,12 @@ Software under Affero GPL license, see LICENSE.txt
 
 {% comment %}
 TODO: Place this together with the enable/disable sound button.
-<script>
+<script type="text/javascript">
 <![CDATA[
 if(nt && nt.checkPermission() == 1)
 document.write('<span onclick=\"nt.requestPermission();\">Clique para permitir notificação.</span>');
 ]]>
 </script>
 {% endcomment %}
+
 {% endblock %}
