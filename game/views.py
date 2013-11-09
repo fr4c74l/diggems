@@ -464,9 +464,6 @@ def claim_game(request, game_id):
         profile.total_score += points
         profile.save()
         game.state = my_number + 4 
-        endgame(game.p1.user, game.p2.user, game.state)
-        game.p1.user.save()
-        game.p2.user.save()
 
     # If one of the players gives up...
     elif term == 'gave_up':

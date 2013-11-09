@@ -77,23 +77,19 @@ def update_elo_rank(winner, loser):
     rank_diff = winner_rank - loser_rank
     expectation = (rank_diff * -1) / 400
     winner_odds = 1 / (1 + 10**expectation)
-    loser_odds = 1 - winner_odds
     
-    # FIDE uses the following kfactor ranges
-
-    # For a player new to the rating list until s/he has completed events with a total of at least 30 games
-    if winner.games_finished <= 30:
-        kfactor = 30
-    elif winner.elo >= 2400:
-        kfactor = 10
+    # IECC uses the following kfactor ranges
+    if winner_rank <= 2100:
+        kfactor = 32
+    elif winner_rank > 2100 and winner_rank < 2400:
+        kfactor = 24
     else:
-        kfactor = 15
+        kfactor = 16
 
     # Rnew = Roriginal + Kfactor(score - expectations)
-    # for each subject, their score is 1 for a win 0 for a loss, there is no draw
-
     new_winner_rank = int(round(winner_rank + (kfactor * (1 - winner_odds))))
-    new_loser_rank  = int(round(loser_rank + (kfactor * (0 - loser_odds))))
+    new_rank_diff = new_winner_rank - winner_rank
+    new_loser_rank  = loser_rank - new_rank_diff
 
     if new_loser_rank < 1:
         new_loser_rank = 1
