@@ -380,7 +380,11 @@ function set_state(state) {
             document.getElementById("rematch_button").style.display = 'block';
             
             //FIXME Remove this from here
-            timer.rematch_time = Math.round(params.time_left);
+            if (Math.round(params.time_left) == 0)
+                timer.rematch_time = 45
+            else
+                timer.rematch_time = Math.round(params.time_left);
+
             timer.id = window.setInterval(timer, 1000);
             timer();
 
