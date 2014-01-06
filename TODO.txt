@@ -1,4 +1,5 @@
 Priority:
+- Consider ELO when merging user accounts.
 - Give feedback to user about succesfull Facebook invite.
 - Real-time update of index page.
   - Accept challenge (fix this)
