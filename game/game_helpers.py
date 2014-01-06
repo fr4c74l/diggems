@@ -76,8 +76,8 @@ def for_each_surrounding(m, n, func):
 def update_elo_rank(winner, loser):
     winner_rank, loser_rank = winner.elo, loser.elo
     rank_diff = winner_rank - loser_rank
-    expectation = (rank_diff * -1) / 400
-    winner_odds = 1 / (1 + 10**expectation)
+    expectation = -(rank_diff / 400.0)
+    winner_odds = 1.0 / (1 + (10**expectation))
     
     # IECC uses the following kfactor ranges
     if winner_rank <= 2100:
