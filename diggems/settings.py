@@ -19,7 +19,8 @@ MAIN_URL = 'http://my.main.url/'
 ## Ads settings
 ADS_IDS = {
     'a-ads': 'XXXXXXXXXX',
-    'coinurl': 'XXXXXXXXXX'
+    'coinurl': 'XXXXXXXXXX',
+    'exoclick': 'XXXXXXXXXX'
 }
 
 # Django settings:
