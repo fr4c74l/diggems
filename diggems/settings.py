@@ -16,10 +16,11 @@ FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
 ## and used to build invite links
 MAIN_URL = 'http://my.main.url/'
 
-## Google ads settings
-GOOGLE_AD_ID = 'place_google_ads_id_here'
-
-GOOGLE_AD_SLOTS = ['slot1_placeholder', 'slot2_placeholder']
+## Ads settings
+ADS_IDS = {
+    'a-ads': 'XXXXXXXXXX',
+    'coinurl': 'XXXXXXXXXX'
+}
 
 # Django settings:
 DEBUG = True
