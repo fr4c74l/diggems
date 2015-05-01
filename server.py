@@ -2,7 +2,7 @@
 
 # Just in case I forgot something, but we should use
 # gevent explicity wherever we can
-from gevent import monkey; monkey.patch_all()
+import guv; guv.monkey_patch()
 
 import os
 import sys
@@ -12,38 +12,33 @@ import traceback
 import signal
 import setproctitle
 
-import gevent
 import gipc
 
 from psycopg2 import extensions
-
-from gevent import pywsgi
-from geventwebsocket.handler import WebSocketHandler
-from gevent import socket
-
-from gevent_fastcgi.server import FastCGIServer
-from gevent_fastcgi.wsgi import WSGIRequestHandler
 
 from diggems import wsgi
 from async_events import channel, ws_dispatcher
 
 # Patch to make psycopg2 green
-def gevent_wait_callback(conn, timeout=None):
-    """A wait callback useful to allow gevent to work with Psycopg."""
+def green_wait_callback(conn, timeout=None):
+    """A greenlet aware wait callback for Psycopg to work with guv."""
 
     while True:
         state = conn.poll()
-        if state == extensions.POLL_OK:
-            break
-        elif state == extensions.POLL_READ:
-            #print 'Greenlet waiting on READ'
-            socket.wait_read(conn.fileno(), timeout=timeout)
-        elif state == extensions.POLL_WRITE:
-            #print 'Greenlet waiting on WRITE'
-            socket.wait_write(conn.fileno(), timeout=timeout)
-        else:
-            raise psycopg2.OperationalError(
-                "Bad result from poll: %r" % state)
+        try:
+            if state == extensions.POLL_OK:
+                break
+            elif state == extensions.POLL_READ:
+                #print 'Greenlet waiting on READ'
+                guv.hubs.switch.trampoline(conn.fileno(), guv.const.READ, timeout)
+            elif state == extensions.POLL_WRITE:
+                #print 'Greenlet waiting on WRITE'
+                guv.hubs.switch.trampoline(conn.fileno(), guv.const.WRITE, timeout)
+            else:
+                raise psycopg2.OperationalError(
+                    "Bad result from poll: %r" % state)
+        except guv.timeout.Timeout:
+            pass
 
 def watcher(func):
     try:
@@ -52,7 +47,7 @@ def watcher(func):
     except:
         traceback.print_exc()
         # Must quit the process so the watcher process can restart
-        print 'Quiting the faulty process...'
+        print('Quiting the faulty process...')
         sys.exit(1)
 
 sock_dir = 'sockets'
@@ -75,7 +70,7 @@ def server(worker_id):
     # Serve the Django application
     http_server = FastCGIServer(http_sockname, WSGIRequestHandler(wsgi.application), max_conns=5000)
 
-    print 'Worker {} serving...'.format(worker_id)
+    print('Worker {} serving...'.format(worker_id))
     gevent.spawn(watcher, ws_server.serve_forever)
     watcher(http_server.serve_forever)
 
@@ -88,11 +83,11 @@ channel_mngr = None
 def reloader(i):
     global running, workers
     while running:
-        print 'Starting worker {}.'.format(i)
+        print('Starting worker {}.'.format(i))
         workers[i] = gipc.start_process(server, (i,), daemon=True, name='worker{}'.format(i))
         workers[i].join()
-        print 'Worker {} has just quit!'.format(i)
-    print 'Done with worker {}'.format(i)
+        print('Worker {} has just quit!'.format(i))
+    print('Done with worker {}'.format(i))
 
 def sig_quit():
     global running, workers, channel_mngr
@@ -107,7 +102,7 @@ def main():
     global running, channel_mngr, workers
 
     # Make green psycopg:
-    extensions.set_wait_callback(gevent_wait_callback)
+    extensions.set_wait_callback(green_wait_callback)
 
     # Decide how many processes to use
     try:
@@ -133,14 +128,14 @@ def main():
 
     # Channel manager process reloader:
     while running:
-        print 'Starting channel manager process.'
+        print('Starting channel manager process.')
         proc = gipc.start_process(channel.rpc_dispatcher, daemon=True, name='channel_mngr')
         proc.join()
-        print 'Channel manager process has quit.'
-    print 'Done with channel manager'
+        print('Channel manager process has quit.')
+    print('Done with channel manager')
 
     gevent.joinall(reloaders)
-    print 'All done, quiting'
+    print('All done, quiting')
 
 if __name__ == "__main__":
     main()

@@ -16,13 +16,6 @@ FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
 ## and used to build invite links
 MAIN_URL = 'http://my.main.url/'
 
-## Ads settings
-ADS_IDS = {
-    'a-ads': 'XXXXXXXXXX',
-    'coinurl': 'XXXXXXXXXX',
-    'exoclick': 'XXXXXXXXXX'
-}
-
 # Django settings:
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -173,11 +166,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'south',
     'game',
 )
-
-SOUTH_DATABASE_ADAPTERS = {'default':'south.db.postgresql_psycopg2'}
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
