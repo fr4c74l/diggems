@@ -3,7 +3,7 @@
 
 import itertools
 import datetime
-import game_helpers
+from . import game_helpers
 from diggems.utils import true_random, gen_token
 from game_helpers import for_each_surrounding, mine_encode
 from django.db import models

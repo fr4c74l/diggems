@@ -1,6 +1,6 @@
 For development:
 
-1) Install Postgres, libpq-dev and python2.7-dev
+1) Install Postgres, libpq-dev and python3.4-dev
 $> su -c 'apt-get install postgresql libpq-dev'
 $> su -c 'zypper install postgresql libpqxx-devel'
 
@@ -10,8 +10,8 @@ $> createuser <user>
 $> createdb -O <user> diggems
 
 3) Install some OS dependencies
-DEBIAN: su -c 'apt-get install libev-dev'
-OPENSUSE: su -c 'zypper install libev-devel'
+DEBIAN: su -c 'apt-get install libuv1-dev'
+OPENSUSE: su -c 'zypper install libuv1-devel'
 
 
 4) Configure the virtual environment: {optional}
