@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 # Just in case I forgot something, but we should use
-# gevent explicity wherever we can
+# guv explicity wherever we can
 import guv; guv.monkey_patch()
 
 import os
@@ -12,33 +12,8 @@ import traceback
 import signal
 import setproctitle
 
-import gipc
-
-from psycopg2 import extensions
-
 from diggems import wsgi
 from async_events import channel, ws_dispatcher
-
-# Patch to make psycopg2 green
-def green_wait_callback(conn, timeout=None):
-    """A greenlet aware wait callback for Psycopg to work with guv."""
-
-    while True:
-        state = conn.poll()
-        try:
-            if state == extensions.POLL_OK:
-                break
-            elif state == extensions.POLL_READ:
-                #print 'Greenlet waiting on READ'
-                guv.hubs.switch.trampoline(conn.fileno(), guv.const.READ, timeout)
-            elif state == extensions.POLL_WRITE:
-                #print 'Greenlet waiting on WRITE'
-                guv.hubs.switch.trampoline(conn.fileno(), guv.const.WRITE, timeout)
-            else:
-                raise psycopg2.OperationalError(
-                    "Bad result from poll: %r" % state)
-        except guv.timeout.Timeout:
-            pass
 
 def watcher(func):
     try:
@@ -94,7 +69,7 @@ def sig_quit():
     running = False
     for w in workers:
         os.kill(w.pid, signal.SIGINT)
-    
+
     if channel_mngr:
         os.kill(channel_mngr.pid, signal.SIGINT)
 
@@ -102,7 +77,8 @@ def main():
     global running, channel_mngr, workers
 
     # Make green psycopg:
-    extensions.set_wait_callback(green_wait_callback)
+    from guv.support.psycopg2_patcher import make_psycopg_green
+    make_psycopg_gree()
 
     # Decide how many processes to use
     try:
@@ -113,10 +89,10 @@ def main():
     workers = [None] * proc_count
 
     channel.init(proc_count)
-    
+
     gevent.signal(signal.SIGINT, sig_quit)
     gevent.signal(signal.SIGTERM, sig_quit)
-    
+
     # Remove the sockets directory
     shutil.rmtree(sock_dir, True)
     os.mkdir(sock_dir)
