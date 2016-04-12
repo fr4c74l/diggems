@@ -1,7 +1,7 @@
 # Copyright 2013 Fractal Jogos e Tecnologia
 # Software under Affero GPL license, see LICENSE.txt
 
-import gevent
+import guv
 import gipc
 import weakref
 import inspect
@@ -12,7 +12,7 @@ import fd_trick
 import struct
 import setproctitle
 
-from gevent import socket
+from guv import socket
 from decorator import FunctionMaker
 from geventwebsocket.websocket import WebSocket, WebSocketError
 from geventwebsocket.logging import create_logger
