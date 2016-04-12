@@ -78,7 +78,7 @@ def update_elo_rank(winner, loser):
     rank_diff = winner_rank - loser_rank
     expectation = -(rank_diff / 400.0)
     winner_odds = 1.0 / (1 + (10**expectation))
-    
+
     # IECC uses the following kfactor ranges
     if winner_rank <= 2100:
         kfactor = 32
