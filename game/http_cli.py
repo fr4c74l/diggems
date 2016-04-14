@@ -1,9 +1,19 @@
 # Copyright 2013 Lucas Clemente Vella
 # Software under Affero GPL license, see LICENSE.txt
 
-from geventhttpclient.client import HTTPClientPool
-import ssl
+import requests
+from diggems.settings import MAX_REQS_CONNS
 
-pool = HTTPClientPool(ssl_options=dict(ssl_version=ssl.PROTOCOL_TLSv1), connection_timeout=60, network_timeout=60, concurrency=5)
+class Session(requests.Session):
+    def request(self, *args, **kargs):
+        r = self.request(*args, **kargs)
+        r.raise_for_status()
+        return r
 
-get_conn = pool.get_client
+session = Session()
+session.mount('https://',
+    requests.adapters.HTTPAdapter(pool_connections=2,
+        pool_maxsize=MAX_REQS_CONNS))
+session.mount('http://',
+    requests.adapters.HTTPAdapter(pool_connections=2,
+        pool_maxsize=MAX_REQS_CONNS))

@@ -7,7 +7,6 @@ import datetime
 import json
 import ssl
 import gevent
-import http_cli
 import hashlib
 import locale
 import gevent
@@ -33,6 +32,7 @@ from diggems.utils import gen_token, true_random
 from django.utils.translation import to_locale, get_language
 from game_helpers import *
 from async_events import channel
+from http_cli import session
 
 def get_user_info(user, with_private=False):
     if user.facebook:
@@ -87,13 +87,9 @@ def fb_login(request):
     if not token:
         return HttpResponseBadRequest()
 
-    try:
-        with http_cli.get_conn('https://graph.facebook.com/').get('me?' + urlencode({'access_token': token})) as res:
-            fb_user = json.load(res)
-    except ssl.SSLError:
-        # TODO: Log this error? What to do when Facebook
-        # connection has been compromised?
-        return HttpResponseServerError()
+    params = {'access_token': token}
+    res = session.get('https://graph.facebook.com/me', params=params)
+    fb_user = res.json()
 
     fb, created = FacebookCache.objects.get_or_create(uid=fb_user['id'])
     fb.name = fb_user['name']
@@ -162,9 +158,10 @@ def adhack(request, ad_id):
                  'GOOGLE_AD_SLOT': settings.GOOGLE_AD_SLOTS[ad_id]}),
         content_type='text/html; charset=utf-8')
 
-def get_fb_request(request_id, conn, app_token):
-    with conn.get('?'.join((request_id, app_token))) as res:
-        return json.load(res)
+def get_fb_request(request_id, params):
+    res = session.get('https://graph.facebook.com/' + request_id,
+        params=params)
+    return res.json()
 
 def fb_notify_request(request, game_id):
     @transaction.commit_on_success
@@ -283,7 +280,7 @@ def fb_request_redirect(request):
                 fb_user = game.p1.user.facebook
                 if game.state != 0:
                     raise ObjectDoesNotExist()
-                
+
                 if game.token:
                     # We must assert the game request is consistent, to ensure it is
                     # not a forgery, thus we check if player 1 is indeed the author
@@ -709,7 +706,7 @@ def move(request, game_id):
     channel.post_update(game.channel(), 'g', result, game.seq_num)
 
     # ... and then publish the scores on FB, if game is over.
-    if game.state >= 3: 
+    if game.state >= 3:
         publish_score(game.p1.user)
         publish_score(game.p2.user)
     return HttpResponse()
