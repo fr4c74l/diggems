@@ -4,6 +4,9 @@
 # gevent explicity wherever we can
 from gevent import monkey; monkey.patch_all()
 
+from psycopg2cffi import compat
+compat.register()
+
 import os
 import sys
 import shutil
