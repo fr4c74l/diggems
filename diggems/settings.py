@@ -11,7 +11,7 @@ MAX_REQS_CONNS = 20
 
 ## Facebook app settings
 FB_APP_ID = '676057105742978'
-FB_APP_KEY = 'b7313db851640b75d58bf07680d63ce9'
+FB_APP_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 ## URL that will be refered when someone clicks FB "Like",
 ## and used to build invite links
