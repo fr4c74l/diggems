@@ -7,6 +7,7 @@ INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
 
 # Diggems specific settings:
 DB_POOL_MAX_CONN = 40
+MAX_REQS_CONNS = 20
 
 ## Facebook app settings
 FB_APP_ID = '676057105742978'
