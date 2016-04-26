@@ -11,7 +11,7 @@ from django.db.models import F
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext as _
-from djorm_pgarray.fields import ArrayField
+from django.contrib.postgres.fields import ArrayField
 
 class FacebookCache(models.Model):
     uid = models.CharField(max_length=30, unique=True)
@@ -42,7 +42,7 @@ class UserProfile(models.Model):
 
         # Can't allow someone to play against itself, delete those games
         Game.objects.filter(p1__user__exact=F('p2__user')).delete()
-        
+
         # Update scores
         self.games_finished += other.games_finished
         self.games_won += other.games_won
@@ -73,7 +73,7 @@ class UserProfile(models.Model):
         # Must always save, to update timestamp
         prof.save()
         return prof
-    
+
 class Player(models.Model):
     has_tnt = models.BooleanField(default=True)
     last_seen = models.DateTimeField(auto_now=True)
@@ -110,7 +110,7 @@ class Game(models.Model):
             return (2, self.p2)
         else:
             return None
-            
+
     def timeout_diff(self):
         return 45.0 - (datetime.datetime.now() - self.last_move_time).total_seconds()
 
@@ -120,7 +120,7 @@ class Game(models.Model):
         mine = [[0] * 16 for i in xrange(16)]
         indexes = list(itertools.product(xrange(16), repeat=2))
         gems = true_random.sample(indexes, 51)
-        
+
         for (m, n) in gems:
             mine[m][n] = 9
 
@@ -150,7 +150,7 @@ class Rematch(models.Model):
 class FacebookRequest(models.Model):
     id = models.CharField(max_length=30, primary_key=True)
     game = models.ForeignKey(Game, db_index=True)
-    targets = ArrayField(dbtype='text')
+    targets = ArrayField(models.CharField(max_length=256))
 
 def clear_game_requests(sender, **kwargs):
     fb_request = kwargs['instance']
