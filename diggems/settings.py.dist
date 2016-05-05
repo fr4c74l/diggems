@@ -3,37 +3,53 @@
 from psycopg2cffi import compat
 compat.register()
 
+# This is the Django settings file, and every Django app needs one. This is a
+# model of what I use in development stage. The specific setting you need to set
+# will be commented bellow.
+
+from psycopg2cffi import compat
+compat.register()
+
 # Django settings for diggems project.
 import os.path
-
 INSTALATION_DIR = os.path.split(os.path.split(__file__)[0])[0] + '/'
 
 # Diggems specific settings:
+
+# Maximum number of connections in database pool.
+# Be sure to configure PostgreSQL to accept that many
+# of simultaneous connections
 DB_POOL_MAX_CONN = 40
+
+# Maximum number of simultaneously open HTTP requests to
+# Facebook in requests connection pool. To make login requests
+# and such.
 MAX_REQS_CONNS = 20
 
 ## Facebook app settings
-FB_APP_ID = '676057105742978'
-FB_APP_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
+# You need to set those parameters with your own configured Facebook app.
+#FB_APP_ID = 'XXXXXXXXXXXX'
+#FB_APP_KEY = 'XXXXXXXXXXXXXXXXXXXXXXXXXXXX'
 
 ## URL that will be refered when someone clicks FB "Like",
 ## and used to build invite links
-MAIN_URL = 'http://my.main.url/'
+#MAIN_URL = 'http://my.main.url/'
 
 ## Ads settings
-ADS_IDS = {
-    'a-ads': 'XXXXXXXXXX',
-    'coinurl': 'XXXXXXXXXX',
-    'exoclick': 'XXXXXXXXXX'
-}
+#ADS_IDS = {
+#    'a-ads': 'XXXXXXXXXX',
+#    'coinurl': 'XXXXXXXXXX',
+#    'exoclick': 'XXXXXXXXXX'
+#}
 
 # Django settings:
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
-ADMINS = (
-    ('Lucas Clemente Vella', 'lvella@gmail.com'),
-)
+## Set your own name and email below in order to be contatec via e-mail by Django
+#ADMINS = (
+#    ('Jonh Smit', 'admin@my.main.url'),
+#)
 
 MANAGERS = ADMINS
 
@@ -41,13 +57,19 @@ DEFAULT_CONTENT_TYPE = 'application/xhtml+xml'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'diggems.green_pool_psql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'diggems',  # Or path to database file if using sqlite3.
-        # The following settings are not used with sqlite3:
+		# PostgreSQL engine is needed. This is a specialization of default
+		# psycopg2 engine so it will have a connection pool to share multiple
+		# connections among the green threads. This was done to make Diggems
+		# a proprer gevent-wise green application.
+        'ENGINE': 'diggems.green_pool_psql', # PostgreSQL is needed
+
+		## Set bellow the configuration to connect to your own PostgreSQL database:
+		#
+        'NAME': 'diggems', # Database name
         'USER': '',
         'PASSWORD': '',
-        'HOST': '',                      # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
-        'PORT': '',                      # Set to empty string for default.
+        'HOST': '', # Empty for localhost through domain sockets or '127.0.0.1' for localhost through TCP.
+        'PORT': '', # Set to empty string for default.
     }
 }
 
@@ -125,8 +147,8 @@ STATICFILES_FINDERS = (
 
 STATICFILES_STORAGE = 'diggems.nginx_staticgzip_storage.NginxStaticGZIPStorage'
 
-# Make this unique, and don't share it with anybody.
-SECRET_KEY = '$z_2d_$-r-gmzvk4z0d*eo-1b5wi8$2_dxueukhihhpfx2+1s1'
+## Make this unique, and don't share it with anybody.
+#SECRET_KEY = 'THIS SEEMS IMPORTANT! BE SURE TO CREATE A NEW STRING'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
