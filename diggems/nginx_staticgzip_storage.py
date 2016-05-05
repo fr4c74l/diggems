@@ -42,17 +42,17 @@ class NginxStaticGZIPStorage(StaticFilesStorage):
                 # Get original size, for comparision
                 orig_size = self.size(name)
 
-                print 'orig size:', orig_size, 'external gzip size:', cmd_size, 'internal gzip size:', embed_size
+                print '"name" -', 'orig size:', orig_size, 'external gzip size:', cmd_size, 'internal gzip size:', embed_size
                 min_size = min(orig_size, cmd_size, embed_size)
                 if min_size == orig_size:
-                    print 'Using original'
+                    print ' Using original'
                     self.delete(gz_name)
                     gzipped = False
                 elif min_size == cmd_size:
-                    print 'Using command line gzip'
+                    print ' Using command line gzip'
                     gzipped = True
                 else:
-                    print "Using python's gzip"
+                    print " Using python's gzip"
                     self.delete(gz_name)
                     self.save(gz_name, ContentFile(zcontents))
                     subprocess.call(['touch', '-r', orig_path, gz_path])

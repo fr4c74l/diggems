@@ -1,6 +1,6 @@
 import django
 import django.views.defaults
-from django.conf.urls import include, url, i18n
+from django.conf.urls import include, url
 from . import views
 
 _in_game = [
@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^fb/', include(_in_fb)),
     url(r'^info/(?P<page>.*)/$', views.info),
     url(r'^donate/$', views.donate),
-    url(r'^i18n/', i18n),
+    url(r'^i18n/', include('django.conf.urls.i18n')),
     url(r'^jsi18n/$', django.views.i18n.javascript_catalog, _js_info_dict, name='javascript-catalog'),
 
     # Error views:

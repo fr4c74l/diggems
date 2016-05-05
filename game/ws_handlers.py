@@ -34,7 +34,7 @@ _logger = logging.getLogger(__name__)
 class DBReleaser(object):
     __slots__ = ('_commiter',)
     def __init__(self):
-        self._commiter = django.db.transaction.commit_on_success()
+        self._commiter = django.db.transaction.atomic()
 
     def __enter__(self):
         self._commiter.__enter__()
@@ -43,6 +43,7 @@ class DBReleaser(object):
         try:
             return self._commiter.__exit__(exc_type, exc_value, traceback)
         finally:
+            # TODO: fix this; close_connection has been removed...
             django.db.close_connection()
 
 class ChannelRegisterer(object):
