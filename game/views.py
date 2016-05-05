@@ -81,7 +81,7 @@ def fb_channel(request):
     resp['Expires'] = format_date_time(mktime(far_future.timetuple()))
     return resp
 
-@transaction.commit_on_success
+@transaction.atomic
 def fb_login(request):
     token = request.POST.get('token')
     if not token:
@@ -139,7 +139,7 @@ def fb_login(request):
     user_info = json.dumps(get_user_info(profile, True))
     return HttpResponse(user_info, content_type='application/json')
 
-@transaction.commit_on_success
+@transaction.atomic
 def fb_logout(request):
     profile = UserProfile.get(request.session)
     if profile.user or profile.facebook:
@@ -164,7 +164,7 @@ def get_fb_request(request_id, params):
     return res.json()
 
 def fb_notify_request(request, game_id):
-    @transaction.commit_on_success
+    @transaction.atomic
     def real_work(request_info, user_id, game_id):
         try:
             user = UserProfile.objects.get(pk=user_id)
@@ -226,7 +226,7 @@ def fb_cancel_request(request):
 
     return HttpResponseRedirect('/')
 
-@transaction.commit_on_success
+@transaction.atomic
 def fb_request_redirect(request):
     profile = UserProfile.get(request.session)
     user_id = getattr(profile.facebook, 'uid', None)
@@ -339,7 +339,7 @@ def index(request):
     context = {'your_games': playing_now, 'new_games': new_games, 'like_url': settings.MAIN_URL, 'game_ready': game_ready}
     return render_with_extra('index.html', profile, context)
 
-@transaction.commit_on_success
+@transaction.atomic
 def play_now(request, join_only=False):
     profile = UserProfile.get(request.session)
     game_found = Game.objects.filter(state__exact=0, token__isnull=True).exclude(p1__user__exact=profile)[:1]
@@ -349,7 +349,7 @@ def play_now(request, join_only=False):
         return HttpResponseRedirect('/')
     return new_game(request)
 
-@transaction.commit_on_success
+@transaction.atomic
 def new_game(request):
     if request.method != 'POST':
         c = Context({'url': '/new_game/'})
@@ -361,10 +361,10 @@ def new_game(request):
 
     indexes = list(itertools.product(xrange(16), repeat=2))
     gems = true_random.sample(indexes, 51)
-    
+
     for (m, n) in gems:
         mine[m][n] = 9
-    
+
     for m, n in indexes:
         if mine[m][n] == 0:
             def inc_count(x, y):
@@ -384,55 +384,53 @@ def new_game(request):
         notify_open_game(True)
     game.p1 = p1
     game.save()
-    
+
     return HttpResponseRedirect('/game/' + str(game.id))
 
-@transaction.commit_on_success
 def join_game(request, game_id):
-    profile = UserProfile.get(request.session)
+    with transaction.atomic():
+        profile = UserProfile.get(request.session)
 
-    # If game is too old, render 404 game error screen
-    try:
-        game = Game.objects.get(pk=int(game_id))
-    except ObjectDoesNotExist:
-        return render_with_extra('game404.html', profile, status=404)
+        # If game is too old, render 404 game error screen
+        try:
+            game = Game.objects.get(pk=int(game_id))
+        except ObjectDoesNotExist:
+            return render_with_extra('game404.html', profile, status=404)
 
-    # If already playing this game, redirect to game screen
-    if game.what_player(profile):
-        return HttpResponseRedirect('/game/' + str(game.id))
+        # If already playing this game, redirect to game screen
+        if game.what_player(profile):
+            return HttpResponseRedirect('/game/' + str(game.id))
 
-    # If user cannot start this game, then 403
-    token = request.REQUEST.get('token')
-    if game.state != 0 or (game.token and
-                           token != game.token):
-        return render_with_extra('game403.html', profile, status=403)
+        # If user cannot start this game, then 403
+        token = request.REQUEST.get('token')
+        if game.state != 0 or (game.token and
+                               token != game.token):
+            return render_with_extra('game403.html', profile, status=403)
 
-    # If we got here via GET, return a page that will make the client/user
-    # retry via POST. Done so that Facebook and other robots do not join
-    # the game in place of a real user.
-    if request.method != 'POST':
-        url = '/game/{}/join/'.format(game_id)
-        if token:
-            url = '{}?token={}'.format(url, token)
-        c = Context({'url': url})
-        return render_to_response('post_redirect.html', c)
+        # If we got here via GET, return a page that will make the client/user
+        # retry via POST. Done so that Facebook and other robots do not join
+        # the game in place of a real user.
+        if request.method != 'POST':
+            url = '/game/{}/join/'.format(game_id)
+            if token:
+                url = '{}?token={}'.format(url, token)
+            c = Context({'url': url})
+            return render_to_response('post_redirect.html', c)
 
-    p2 = Player(user=profile)
-    p2.save()
+        p2 = Player(user=profile)
+        p2.save()
 
-    game.p2 = p2
-    game.state = 1
-    game.save()
+        game.p2 = p2
+        game.state = 1
+        game.save()
 
-    # Ivalidate all facebook requests on this game...
-    game.facebookrequest_set.all().delete()
-    if not game.token:
-        notify_open_game()
-
-    transaction.commit()
+        # Ivalidate all facebook requests on this game...
+        game.facebookrequest_set.all().delete()
+        if not game.token:
+            notify_open_game()
 
     ch_id = game.channel()
-    
+
     # Game state change
     channel.post_update(ch_id, 'g', str(game.state), game.seq_num)
 
@@ -442,7 +440,7 @@ def join_game(request, game_id):
 
     return HttpResponseRedirect('/game/' + str(game_id))
 
-@transaction.commit_on_success
+@transaction.atomic
 def abort_game(request, game_id):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
@@ -456,57 +454,56 @@ def abort_game(request, game_id):
             game.delete()
             return HttpResponseRedirect('/')
 
-    return HttpResponseForbidden()    
+    return HttpResponseForbidden()
 
-@transaction.commit_on_success
 def claim_game(request, game_id):
-    if request.method != 'POST':
-        return HttpResponseNotAllowed(['POST'])
-    game = get_object_or_404(Game, pk=game_id)
-    if game.state not in (1,2):
-        return HttpResponseForbidden()
-    
-    profile = UserProfile.get(request.session)
-    pdata = game.what_player(profile)
-    if pdata:
-        my_number, me = pdata
-    else:
-        return HttpResponseForbidden()
+    with transaction.atomic():
+        if request.method != 'POST':
+            return HttpResponseNotAllowed(['POST'])
+        game = get_object_or_404(Game, pk=game_id)
+        if game.state not in (1,2):
+            return HttpResponseForbidden()
 
-    term = request.POST.get('terminate') 
-    if term != 'gave_up' and (my_number == game.state or game.timeout_diff() > 0):
-        return HttpResponseForbidden()
-   
-    # If one of the players' round time ends and the other terminates the game
-    if term == 'click_on_terminate':
-        points = game.mine.count(tile_encode(19)) + game.mine.count(tile_encode(20))
-        profile.total_score += points
-        profile.save()
-        game.state = my_number + 4 
+        profile = UserProfile.get(request.session)
+        pdata = game.what_player(profile)
+        if pdata:
+            my_number, me = pdata
+        else:
+            return HttpResponseForbidden()
 
-    # If one of the players gives up...
-    elif term == 'gave_up':
-        for pnum,player in ((1,game.p1),(2,game.p2)):
-            points = game.mine.count(tile_encode(pnum + 18))
-            prof = player.user
-            prof.total_score += points
-            prof.games_finished += 1
-            if pnum != my_number:
-                prof.games_won += 1
-                game.state = pnum + 4
-            prof.save()
-        endgame(game.p1.user, game.p2.user, game.state)
-        game.p1.user.save()
-        game.p2.user.save()
-    else:
-        # take players turn
-        game.state = my_number;
+        term = request.POST.get('terminate')
+        if term != 'gave_up' and (my_number == game.state or game.timeout_diff() > 0):
+            return HttpResponseForbidden()
 
-    game.save()
-    transaction.commit()
+        # If one of the players' round time ends and the other terminates the game
+        if term == 'click_on_terminate':
+            points = game.mine.count(tile_encode(19)) + game.mine.count(tile_encode(20))
+            profile.total_score += points
+            profile.save()
+            game.state = my_number + 4
+
+        # If one of the players gives up...
+        elif term == 'gave_up':
+            for pnum,player in ((1,game.p1),(2,game.p2)):
+                points = game.mine.count(tile_encode(pnum + 18))
+                prof = player.user
+                prof.total_score += points
+                prof.games_finished += 1
+                if pnum != my_number:
+                    prof.games_won += 1
+                    game.state = pnum + 4
+                prof.save()
+            endgame(game.p1.user, game.p2.user, game.state)
+            game.p1.user.save()
+            game.p2.user.save()
+        else:
+            # take players turn
+            game.state = my_number;
+
+        game.save()
 
     channel.post_update(game.channel(), 'g', str(game.state), game.seq_num)
-    
+
     if term == 'click_on_terminate':
         gevent.spawn(publish_score, me.user)
     elif term == 'gave_up':
@@ -515,7 +512,7 @@ def claim_game(request, game_id):
 
     return HttpResponse()
 
-@transaction.commit_on_success
+@transaction.atomic
 def game(request, game_id):
     # TODO: maybe control who can watch a game
     profile = UserProfile.get(request.session)
@@ -570,7 +567,7 @@ def game(request, game_id):
     return render_with_extra('game.html', profile, data)
 
 
-@transaction.commit_on_success
+@transaction.atomic
 def rematch(request, game_id):
     if request.method != 'POST':
         return HttpResponseNotAllowed(['POST'])
@@ -582,7 +579,7 @@ def rematch(request, game_id):
     pdata = game.what_player(UserProfile.get(request.session))
     if not pdata:
         return HttpResponseForbidden()
-    
+
     obj, created = Rematch.objects.get_or_create(game=game)
     me, player = pdata
     if me == 1:
@@ -606,101 +603,98 @@ def rematch(request, game_id):
         ready_state['game_id'] = cg.id
 
     channel.post_update(game.channel(), 'r', json.dumps(ready_state))
-    
+
     return HttpResponse()
 
-@transaction.commit_on_success
 def move(request, game_id):
-    if request.method != 'POST':
-        return HttpResponseForbidden()
+    with transaction.atomic():
+        if request.method != 'POST':
+            return HttpResponseForbidden()
 
-    game = get_object_or_404(Game, pk=game_id)
+        game = get_object_or_404(Game, pk=game_id)
 
-    pdata = game.what_player(UserProfile.get(request.session))
-    if not pdata or pdata[0] != game.state:
-        return HttpResponseForbidden()
+        pdata = game.what_player(UserProfile.get(request.session))
+        if not pdata or pdata[0] != game.state:
+            return HttpResponseForbidden()
 
-    player, me = pdata
+        player, me = pdata
 
-    try:
-        m = int(request.REQUEST['m'])
-        n = int(request.REQUEST['n'])
-        if not (0 <= m <= 15 and 0 <= n <= 15):
-            raise ValueError
-    except:
-        return HttpResponseBadRequest()
-
-    mine = mine_decode(game.mine)
-
-    to_reveal = [(m, n)]
-    tnt_used = False
-
-    if request.REQUEST.get('tnt') == 'y':
-        if not me.has_tnt:
+        try:
+            m = int(request.REQUEST['m'])
+            n = int(request.REQUEST['n'])
+            if not (0 <= m <= 15 and 0 <= n <= 15):
+                raise ValueError
+        except:
             return HttpResponseBadRequest()
-        me.has_tnt = False
-        to_reveal = itertools.product(xrange(max(m-2, 0),
-                                             min(m+3, 16)),
-                                      xrange(max(n-2, 0),
-                                             min(n+3, 16)))
-        tnt_used = True
 
-    revealed = []
-    def reveal(m, n):
-        if mine[m][n] >= 10:
-            return
+        mine = mine_decode(game.mine)
 
-        old = mine[m][n]
-        mine[m][n] += 10
-        if mine[m][n] == 19 and player == 2:
-            mine[m][n] = 20
-        revealed.append((m, n, tile_mask(mine[m][n])))
-        if old == 0:
-            for_each_surrounding(m, n, reveal)
+        to_reveal = [(m, n)]
+        tnt_used = False
 
-    for x, y in to_reveal:
-        reveal(x, y)
+        if request.REQUEST.get('tnt') == 'y':
+            if not me.has_tnt:
+                return HttpResponseBadRequest()
+            me.has_tnt = False
+            to_reveal = itertools.product(xrange(max(m-2, 0),
+                                                 min(m+3, 16)),
+                                          xrange(max(n-2, 0),
+                                                 min(n+3, 16)))
+            tnt_used = True
 
-    if not revealed:
-        return HttpResponseBadRequest()
+        revealed = []
+        def reveal(m, n):
+            if mine[m][n] >= 10:
+                return
 
-    if mine[m][n] <= 18 or tnt_used:
-        game.state = (game.state % 2) + 1
+            old = mine[m][n]
+            mine[m][n] += 10
+            if mine[m][n] == 19 and player == 2:
+                mine[m][n] = 20
+            revealed.append((m, n, tile_mask(mine[m][n])))
+            if old == 0:
+                for_each_surrounding(m, n, reveal)
 
-    new_mine = mine_encode(mine)
-    points = [new_mine.count(tile_encode(19)), new_mine.count(tile_encode(20))]
+        for x, y in to_reveal:
+            reveal(x, y)
 
-    if points[0] >= 26 or points[1] >= 26:
-        game.state = player + 2
+        if not revealed:
+            return HttpResponseBadRequest()
 
-    coded_move = '%s%x%x' % ('b' if tnt_used else 'd', m, n)
-    me.last_move = coded_move
-    game.mine = new_mine
-    game.save()
-    me.save()
+        if mine[m][n] <= 18 or tnt_used:
+            game.state = (game.state % 2) + 1
 
-    if game.state >= 3: # Game is over
-        endgame(game.p1.user, game.p2.user, game.state)
-        remaining = 51 - points[0] - points[1]
-        points[0 if points[0] > points[1] else 1] += remaining
+        new_mine = mine_encode(mine)
+        points = [new_mine.count(tile_encode(19)), new_mine.count(tile_encode(20))]
 
-        for user, idx in ((game.p1.user, 0), (game.p2.user, 1)):
-            user.games_finished = F('games_finished') + 1
-            user.total_score = F('total_score') + points[idx]
-            if game.state == (idx + 3):
-                user.games_won = F('games_won') + 1
+        if points[0] >= 26 or points[1] >= 26:
+            game.state = player + 2
 
-            user.save()
+        coded_move = '%s%x%x' % ('b' if tnt_used else 'd', m, n)
+        me.last_move = coded_move
+        game.mine = new_mine
+        game.save()
+        me.save()
 
-        for m, n in itertools.product(xrange(0, 16), xrange(0, 16)):
-             if mine[m][n] == 9:
-                 revealed.append((m, n, 'x'))
+        if game.state >= 3: # Game is over
+            endgame(game.p1.user, game.p2.user, game.state)
+            remaining = 51 - points[0] - points[1]
+            points[0 if points[0] > points[1] else 1] += remaining
 
-    result = itertools.chain((str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
-    result = '\n'.join(result)
+            for user, idx in ((game.p1.user, 0), (game.p2.user, 1)):
+                user.games_finished = F('games_finished') + 1
+                user.total_score = F('total_score') + points[idx]
+                if game.state == (idx + 3):
+                    user.games_won = F('games_won') + 1
 
-    # Everything is OK until now, so commit DB transaction
-    transaction.commit()
+                user.save()
+
+            for m, n in itertools.product(xrange(0, 16), xrange(0, 16)):
+                 if mine[m][n] == 9:
+                     revealed.append((m, n, 'x'))
+
+        result = itertools.chain((str(game.state), str(player), coded_move), ['%d,%d:%c' % x for x in revealed])
+        result = '\n'.join(result)
 
     # Post the update to the users...
     channel.post_update(game.channel(), 'g', result, game.seq_num)

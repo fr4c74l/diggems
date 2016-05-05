@@ -1,40 +1,42 @@
-from django.conf.urls import include, patterns, url
-#from django.conf.urls.i18n import i18n_patterns
+import django
+import django.views.defaults
+from django.conf.urls import include, url, i18n
+from . import views
 
-_in_game = patterns('game.views',
-    (r'^move/$', 'move'),
-    (r'^join/$', 'join_game'),
-    (r'^abort/$', 'abort_game'),
-    (r'^claim/$', 'claim_game'),
-    (r'^rematch/$', 'rematch'),
-    (r'^fb_notify_request/$', 'fb_notify_request'),
-    (r'^$', 'game'),
-)
+_in_game = [
+    url(r'^move/$', views.move),
+    url(r'^join/$', views.join_game),
+    url(r'^abort/$', views.abort_game),
+    url(r'^claim/$', views.claim_game),
+    url(r'^rematch/$', views.rematch),
+    url(r'^fb_notify_request/$', views.fb_notify_request),
+    url(r'^$', views.game),
+]
 
-_in_fb = patterns('game.views',
-    (r'^channel/$', 'fb_channel'),
-    (r'^login/$', 'fb_login'),
-    (r'^logout/$', 'fb_logout'),
-    (r'^cancel_request/$', 'fb_cancel_request')
-)
+_in_fb = [
+    url(r'^channel/$', views.fb_channel),
+    url(r'^login/$', views.fb_login),
+    url(r'^logout/$', views.fb_logout),
+    url(r'^cancel_request/$', views.fb_cancel_request),
+]
 
 _js_info_dict = {
     'packages': ('game',),
 }
 
-urlpatterns = patterns('',
-    (r'^game/(?P<game_id>\d+)/', include(_in_game)),
-    (r'^new_game/$', 'game.views.new_game'),
-    (r'^play_now/$', 'game.views.play_now'),
-    (r'^join_any/$', 'game.views.play_now', {'join_only': True}),
-    (r'^$', 'game.views.index'),
-    (r'^fb/', include(_in_fb)),
-    (r'^info/(?P<page>.*)/$', 'game.views.info'),
-    (r'^donate/$','game.views.donate'),
-    (r'^i18n/', include('django.conf.urls.i18n')),
-    (r'^jsi18n/$', 'django.views.i18n.javascript_catalog', _js_info_dict),
+urlpatterns = [
+    url(r'^game/(?P<game_id>\d+)/', include(_in_game)),
+    url(r'^new_game/$', views.new_game),
+    url(r'^play_now/$', views.play_now),
+    url(r'^join_any/$', views.play_now, {'join_only': True}),
+    url(r'^$', views.index),
+    url(r'^fb/', include(_in_fb)),
+    url(r'^info/(?P<page>.*)/$', views.info),
+    url(r'^donate/$', views.donate),
+    url(r'^i18n/', i18n),
+    url(r'^jsi18n/$', django.views.i18n.javascript_catalog, _js_info_dict, name='javascript-catalog'),
 
     # Error views:
-    (r'^error/404$', 'django.views.defaults.page_not_found'),
-    (r'^error/500$', 'django.views.defaults.server_error'),
-)
+    url(r'^error/404$', django.views.defaults.page_not_found),
+    url(r'^error/500$', django.views.defaults.server_error),
+]

@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 
+from psycopg2cffi import compat
+compat.register()
+
 # Django settings for diggems project.
 import os.path
 

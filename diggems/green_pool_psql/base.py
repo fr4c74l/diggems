@@ -17,6 +17,7 @@ class GreenConnectionPool(psycopg2.pool.AbstractConnectionPool):
         # Turns close into putconn
         conn.orig_close = conn.close
         conn.close = lambda : self.putconn(conn)
+        return conn
 
     def putconn(self, conn):
         # Revert close to default behavior
