@@ -1,8 +1,9 @@
-from django.conf.urls import patterns
+from django.conf.urls import url
+from . import ws_handlers
 
 # The URLS in this file will select the handlers for websockets.
-urlpatterns = patterns('',
-    (r'^game/(?P<game_id>\d+)/event/$', 'game.ws_handlers.game_event'),
-    (r'^index_event/$', 'game.ws_handlers.index_event'),
-)
-    
+urlpatterns = [
+    url(r'^game/(?P<game_id>\d+)/event/$', ws_handlers.game_event),
+    url(r'^index_event/$', ws_handlers.index_event),
+]
+

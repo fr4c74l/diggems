@@ -35,7 +35,7 @@ class DBReleaser(object):
     __slots__ = ('_commiter',)
     def __init__(self):
         self._commiter = django.db.transaction.commit_on_success()
-    
+
     def __enter__(self):
         self._commiter.__enter__()
 
@@ -48,7 +48,7 @@ class DBReleaser(object):
 class ChannelRegisterer(object):
     __slots__ = ('chname', 'types', 'ws')
     """
-    ws stands for websocket, name is the unique channel's name and 
+    ws stands for websocket, name is the unique channel's name and
     types is a sequence of channel types to register
     """
     def __init__(self, ws, name, types):
